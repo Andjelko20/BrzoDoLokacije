@@ -2,7 +2,7 @@
 
 ## Description
 
-Android aplikacija koja predstavlja drustvenu mrezu baziranu na deljenju realisticnih slika turistickih lokacija.
+Android aplikacija koja predstavlja drustvenu mrezu cija je ideja deljenje realisticnih slika turistickih lokacija.
 
 ## Demo
 
