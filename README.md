@@ -6,5 +6,6 @@ Android aplikacija koja predstavlja drustvenu mrezu baziranu na deljenju realist
 
 ## Demo
 
-Demo aplikacije mozete naci na ___.
+Demo aplikacije mozete naci na ___
+
 Sifra za pristup je ___
