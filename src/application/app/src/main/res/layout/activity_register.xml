@@ -25,13 +25,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginStart="25dp"
             android:layout_marginEnd="25dp"
-            android:layout_marginTop="25dp">
+            android:layout_marginTop="25dp"
+            android:textColorHint="@color/light_text">
 
             <EditText
                 android:id="@+id/editEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Email" />
+                android:hint="Email"
+                android:background="@color/light_blue"
+                android:textColor="@color/light_text"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -44,13 +47,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginStart="25dp"
             android:layout_marginEnd="25dp"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:textColorHint="@color/light_text">
 
             <EditText
                 android:id="@+id/editUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Username" />
+                android:hint="Username"
+                android:background="@color/light_blue"
+                android:textColor="@color/light_text"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -63,13 +69,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginStart="25dp"
             android:layout_marginEnd="25dp"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:textColorHint="@color/light_text">
 
             <EditText
                 android:id="@+id/editPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Password" />
+                android:hint="Password"
+                android:background="@color/light_blue"
+                android:textColor="@color/light_text"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -82,17 +91,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginStart="25dp"
             android:layout_marginEnd="25dp"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:textColorHint="@color/light_text">
 
             <EditText
                 android:id="@+id/editConfirmPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Confirm Password" />
+                android:hint="Confirm Password"
+                android:background="@color/light_blue"
+                android:textColor="@color/light_text"/>
 
         </com.google.android.material.textfield.TextInputLayout>
     </RelativeLayout>
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
