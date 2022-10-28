@@ -8,6 +8,7 @@
     tools:context=".RegisterActivity">
 
     <RelativeLayout
+        android:id="@+id/forma"
         android:layout_width="320dp"
         android:layout_height="300dp"
         android:background="@drawable/shape"
@@ -26,14 +27,14 @@
             android:layout_marginStart="25dp"
             android:layout_marginEnd="25dp"
             android:layout_marginTop="25dp"
-            android:textColorHint="@color/light_text">
+            android:textColorHint="@color/dark_blue">
 
             <EditText
                 android:id="@+id/editEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Email"
-                android:background="@color/light_blue"
+                android:backgroundTint="@color/light_blue"
                 android:textColor="@color/light_text"/>
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -48,14 +49,14 @@
             android:layout_marginStart="25dp"
             android:layout_marginEnd="25dp"
             android:layout_marginTop="10dp"
-            android:textColorHint="@color/light_text">
+            android:textColorHint="@color/dark_blue">
 
             <EditText
                 android:id="@+id/editUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Username"
-                android:background="@color/light_blue"
+                android:backgroundTint="@color/light_blue"
                 android:textColor="@color/light_text"/>
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -70,15 +71,15 @@
             android:layout_marginStart="25dp"
             android:layout_marginEnd="25dp"
             android:layout_marginTop="10dp"
-            android:textColorHint="@color/light_text">
+            android:textColorHint="@color/dark_blue">
 
             <EditText
                 android:id="@+id/editPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Password"
-                android:background="@color/light_blue"
-                android:textColor="@color/light_text"/>
+                android:backgroundTint="@color/light_blue"
+                android:textColorHint="@color/dark_blue"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -92,17 +93,29 @@
             android:layout_marginStart="25dp"
             android:layout_marginEnd="25dp"
             android:layout_marginTop="10dp"
-            android:textColorHint="@color/light_text">
+            android:textColorHint="@color/dark_blue">
 
             <EditText
                 android:id="@+id/editConfirmPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Confirm Password"
-                android:background="@color/light_blue"
+                android:backgroundTint="@color/light_blue"
                 android:textColor="@color/light_text"/>
 
         </com.google.android.material.textfield.TextInputLayout>
     </RelativeLayout>
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/forma"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/forma"
+        android:layout_marginTop="30dp"
+        android:text="Sign up"
+        android:textAllCaps="false"
+        android:backgroundTint="@color/light_blue">
+    </Button>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
