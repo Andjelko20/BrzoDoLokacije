@@ -24,7 +24,7 @@ namespace backend.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<User>> registerUser(RegisterDto request)
+        public async Task<ActionResult<string>> register(RegisterDto request)
         {
             User user = new User();
             user.Email = request.Email;
@@ -33,6 +33,26 @@ namespace backend.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
             return Ok("Done");
+        }
+
+        [HttpPost("login")]
+        public async Task<ActionResult<string>> login(LoginDto request)
+        {
+            User user = await _context.Users.FirstOrDefaultAsync(u =>
+                u.Username == request.UsernameOrEmail || u.Email == request.UsernameOrEmail);
+            if (user == null)
+            {
+                return NotFound("not exist");
+            }
+
+            if (BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
+            {
+                return Ok("succesful login");
+            }
+            else
+            {
+                return BadRequest("wrong password");
+            }
         }
 
         [HttpGet]
