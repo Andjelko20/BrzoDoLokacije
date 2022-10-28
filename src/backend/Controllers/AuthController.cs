@@ -55,7 +55,21 @@ namespace backend.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpDelete("delete")]
+        public async Task<ActionResult<string>> deleteUser(string username)
+        {
+            User user = await _context.Users.FirstOrDefaultAsync(u=>u.Username == username);
+            if (user == null)
+            {
+                return NotFound("not found");
+            }
+
+            _context.Users.Remove(user);
+            _context.SaveChangesAsync();
+            return Ok("deleted " + username);
+        }
+
+        [HttpGet("getAll")]
         public async Task<ActionResult<List<User>>> getAllUsers()
         {
             return Ok(await _context.Users.ToListAsync());
