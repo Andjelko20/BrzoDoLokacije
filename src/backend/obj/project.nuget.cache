@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "U4t6JGRiwqopGRScJIw5HEUcr9lufsfrG545unQaShd5jmARQg5IBmgIoI3ZrkCC5d4hzaANgJLeXqngNRE85w==",
+  "dgSpecHash": "sQ7Qz3sQgMk40wacawo0n5ELEX88FfAJqxuLBzPCJM0oyuRwuUBGZ8LQof0gPoqlsf01V3c/44X1XHzCIRYYSw==",
   "success": true,
   "projectFilePath": "/home/dragan/Desktop/brzodolokacije/src/backend/backend.csproj",
   "expectedPackageFiles": [
+    "/home/dragan/.nuget/packages/bcrypt.net-next/4.0.3/bcrypt.net-next.4.0.3.nupkg.sha512",
     "/home/dragan/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
     "/home/dragan/.nuget/packages/messagepack/2.1.152/messagepack.2.1.152.nupkg.sha512",
     "/home/dragan/.nuget/packages/messagepack.annotations/2.1.152/messagepack.annotations.2.1.152.nupkg.sha512",
