@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">BrzoDoLokacije</string>
+    <string name="return_to_login"><u>Return to login</u></string>
 </resources>
