@@ -106,6 +106,7 @@
         </com.google.android.material.textfield.TextInputLayout>
     </RelativeLayout>
     <Button
+        android:id="@+id/signupButton"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/forma"
@@ -117,5 +118,18 @@
         android:textAllCaps="false"
         android:backgroundTint="@color/light_blue">
     </Button>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signupButton"
+        android:text="Return to login"
+        android:textAlignment="center"
+        android:textColor="@color/dark_blue"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp">
+    </TextView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
