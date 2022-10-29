@@ -48,7 +48,8 @@
                 android:layout_height="wrap_content"
                 android:hint="Email"
                 android:backgroundTint="@color/light_blue"
-                android:textColor="@color/light_text"/>
+                android:textColor="@color/light_text"
+                android:inputType="textEmailAddress"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -92,7 +93,8 @@
                 android:layout_height="wrap_content"
                 android:hint="Password"
                 android:backgroundTint="@color/light_blue"
-                android:textColor="@color/light_text"/>
+                android:textColor="@color/light_text"
+                android:inputType="textPassword"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -114,7 +116,8 @@
                 android:layout_height="wrap_content"
                 android:hint="Confirm Password"
                 android:backgroundTint="@color/light_blue"
-                android:textColor="@color/light_text"/>
+                android:textColor="@color/light_text"
+                android:inputType="textPassword"/>
 
         </com.google.android.material.textfield.TextInputLayout>
     </RelativeLayout>
