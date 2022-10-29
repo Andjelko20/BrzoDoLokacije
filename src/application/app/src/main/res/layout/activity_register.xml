@@ -6,6 +6,19 @@
     android:layout_height="match_parent"
     android:background="@drawable/register"
     tools:context=".RegisterActivity">
+    <TextView
+        android:id="@+id/signupText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/signup_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/forma"
+        android:textColor="@color/dark_blue"
+        android:textAlignment="center"
+        android:layout_marginBottom="15dp"
+        android:textSize="17dp">
+    </TextView>
 
     <RelativeLayout
         android:id="@+id/forma"
