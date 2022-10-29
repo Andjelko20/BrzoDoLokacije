@@ -134,15 +134,15 @@
 
         <Button
             android:id="@+id/loginBtn"
-            style="@style/Widget.AppCompat.Button"
-            android:layout_width="120dp"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/loginbtn"
-            android:backgroundTint="@color/gradient_darker"
-            android:paddingTop="10dp"
+            android:backgroundTint="@color/light_blue"
+            android:backgroundTintMode="src_atop"
             android:text="Login"
-            android:textAlignment="center" />
+            android:textColor="@color/text_light"
+            android:textAlignment="center"
+            />
     </RelativeLayout>
 
     <TextView
