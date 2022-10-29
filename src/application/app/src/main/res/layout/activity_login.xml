@@ -68,8 +68,7 @@
         android:layout_height="230dp"
         android:layout_centerInParent="true"
         android:background="@drawable/register"
-        android:translationY="50dp"
-        >
+        android:translationY="50dp">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/usernameWrap"
@@ -78,13 +77,16 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginStart="20dp"
+            android:layout_marginTop="50dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginTop="50dp">
+            app:boxBackgroundColor="@color/light_blue">
+
             <EditText
                 android:id="@+id/username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Username"/>
+                android:hint="Username"
+                android:textColor="@color/text_light" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -95,7 +97,8 @@
             android:layout_alignParentStart="true"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp">
+            android:layout_marginEnd="20dp"
+            app:boxBackgroundColor="@color/light_blue">
 
             <EditText
                 android:id="@+id/password"
@@ -111,6 +114,7 @@
             android:layout_below="@id/passwordWrap"
             android:layout_marginLeft="15dp"
             android:clickable="true"
+            android:focusable="true"
             android:linksClickable="true"
             android:paddingLeft="5dp"
             android:paddingTop="2dp"
@@ -122,22 +126,23 @@
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/btnWrapper"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/rvForma"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp">
+
         <Button
             android:id="@+id/loginBtn"
-            android:layout_width="wrap_content"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:background="@color/light_blue"
-            android:shadowDx="10"
-            android:shadowDy="20"
-            android:shadowRadius="5"
+            android:background="@drawable/loginbtn"
+            android:backgroundTint="@color/gradient_darker"
+            android:paddingTop="10dp"
             android:text="Login"
-            android:backgroundTint="@color/light_blue"/>
+            android:textAlignment="center" />
     </RelativeLayout>
 
     <TextView
@@ -147,6 +152,7 @@
         android:layout_below="@id/btnWrapper"
         android:layout_centerHorizontal="true"
         android:clickable="true"
+        android:focusable="true"
         android:lines="2"
         android:text="Don't have an account? Create one!"
         android:textColor="@color/text_dark"
