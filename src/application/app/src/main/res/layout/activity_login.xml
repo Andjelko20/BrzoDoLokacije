@@ -117,9 +117,9 @@
             android:focusable="true"
             android:linksClickable="true"
             android:paddingLeft="5dp"
-            android:paddingTop="2dp"
+            android:paddingTop="7dp"
             android:paddingRight="5dp"
-            android:paddingBottom="5dp"
+            android:paddingBottom="21dp"
             android:text="Forgot password?"
             android:textColor="@color/text_light" />
 
