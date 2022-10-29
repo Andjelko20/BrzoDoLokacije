@@ -141,7 +141,9 @@
         app:layout_constraintTop_toBottomOf="@+id/signupButton"
         android:text="@string/return_to_login"
         android:textAlignment="center"
-        android:textColor="@color/dark_blue"
+        android:textColor="@drawable/link_style"
+        android:clickable="true"
+        android:focusable="true"
         android:textStyle="bold"
         android:layout_marginTop="10dp">
     </TextView>
