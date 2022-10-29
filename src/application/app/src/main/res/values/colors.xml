@@ -9,4 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="gradient_darker">#739AFF</color>
     <color name="gradient_lighter">#F1F2CB</color>
+    <color name="light_blue">#7EABC5</color>
+    <color name="text_dark">#3C5E7D</color>
+    <color name="text_light">#ECF1FF</color>
 </resources>
