@@ -60,6 +60,7 @@
         android:layout_centerHorizontal="true"
         android:text="Login to see locations from all over the world"
         android:textColor="@color/text_dark"
+        android:textStyle="italic"
         android:textSize="16dp" />
 
     <RelativeLayout
@@ -154,7 +155,7 @@
         android:clickable="true"
         android:focusable="true"
         android:lines="2"
-        android:text="Don't have an account? Create one!"
+        android:text="@string/no_account"
         android:textColor="@color/text_dark"
         android:textSize="15dp"
         android:layout_marginTop="5dp"
