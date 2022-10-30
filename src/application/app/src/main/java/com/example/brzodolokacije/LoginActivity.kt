@@ -26,7 +26,9 @@ class LoginActivity : AppCompatActivity() {
 
         val goToRegister=findViewById<TextView>(R.id.createAccountLink)
         goToRegister.setOnClickListener{
-            Toast.makeText(this,"Go to register",Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this,"Go to register",Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
         }
     }
 }
