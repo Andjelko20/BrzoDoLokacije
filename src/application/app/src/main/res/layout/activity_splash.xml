@@ -18,7 +18,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginStart="0dp"
         android:layout_marginLeft="0dp"
-        android:layout_marginTop="-5dp"
+        android:layout_marginTop="-10dp"
         android:layout_marginEnd="0dp"
         android:layout_marginBottom="0dp"
         android:padding="0dp"
@@ -39,10 +39,9 @@
         app:srcCompat="@drawable/mountains" />
 
     <ImageView
-        android:layout_width="150dp"
-        android:layout_height="80dp"
+        android:layout_width="180dp"
+        android:layout_height="110dp"
         android:layout_centerInParent="true"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="213dp"
         android:padding="0dp"
         app:srcCompat="@drawable/waves" />
