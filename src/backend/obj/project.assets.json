@@ -10118,30 +10118,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Andjelko\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "/home/dragan/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\brzodolokacije\\src\\backend\\backend.csproj",
+      "projectUniqueName": "/home/dragan/Desktop/brzodolokacije/src/backend/backend.csproj",
       "projectName": "backend",
-      "projectPath": "D:\\brzodolokacije\\src\\backend\\backend.csproj",
-      "packagesPath": "C:\\Users\\Andjelko\\.nuget\\packages\\",
-      "outputPath": "D:\\brzodolokacije\\src\\backend\\obj\\",
+      "projectPath": "/home/dragan/Desktop/brzodolokacije/src/backend/backend.csproj",
+      "packagesPath": "/home/dragan/.nuget/packages/",
+      "outputPath": "/home/dragan/Desktop/brzodolokacije/src/backend/obj/",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Andjelko\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/home/dragan/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -10201,7 +10195,8 @@
           "net47",
           "net471",
           "net472",
-          "net48"
+          "net48",
+          "net481"
         ],
         "assetTargetFallback": true,
         "warn": true,
@@ -10213,7 +10208,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.300\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/6.0.401/RuntimeIdentifierGraph.json"
       }
     }
   }
