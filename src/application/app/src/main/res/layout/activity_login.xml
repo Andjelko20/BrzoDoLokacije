@@ -84,9 +84,10 @@
 
             <EditText
                 android:id="@+id/username"
+                android:inputType="text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Username"
+                android:hint="Username or E-mail"
                 android:textColor="@color/text_light" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -103,6 +104,7 @@
 
             <EditText
                 android:id="@+id/password"
+                android:inputType="textPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Password" />
