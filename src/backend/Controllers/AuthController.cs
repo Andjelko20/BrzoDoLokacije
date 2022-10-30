@@ -38,6 +38,24 @@ namespace backend.Controllers
             return Ok("Done");
         }
 
+        [HttpGet("check-email")]
+        public async Task<ActionResult<bool>> checkIfEmailExists(string email)
+        {
+            User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null)
+                return false;
+            return true;
+        }
+        
+        [HttpGet("check-username")]
+        public async Task<ActionResult<bool>> checkIfUsernameExists(string username)
+        {
+            User user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+            if (user == null)
+                return false;
+            return true;
+        }
+
         [HttpPost("login")]
         public async Task<ActionResult<string>> login(LoginDto request)
         {
