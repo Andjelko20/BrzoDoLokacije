@@ -12,6 +12,7 @@ import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.RegisterDto
 import kotlinx.android.synthetic.main.activity_register.*
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,6 +37,7 @@ class RegisterActivity : AppCompatActivity() {
             var password = editPassword.text.toString().trim()
             var confpass = editConfirmPassword.text.toString().trim()
 
+            val retrofit = Client.buildService(Api::class.java)
 
             //email check
             if(email.isEmpty()){
@@ -50,6 +52,23 @@ class RegisterActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            retrofit.checkIfEmailExists(email).enqueue(object : Callback<Boolean>{
+                override fun onResponse(
+                    call: Call<Boolean>,
+                    response: Response<Boolean>
+                ) {
+                    if(response.body().toString() == "true")
+                        Log.d("Postoji", response.body().toString())
+                    else
+                        Log.d("Ne postoji", response.body().toString())
+                }
+
+                override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                    TODO("Not yet implemented")
+                }
+
+
+            })
 
             //username check
             if(username.isEmpty()){
@@ -85,7 +104,6 @@ class RegisterActivity : AppCompatActivity() {
 
             val userData = RegisterDto(username,email,password)
             Log.d("UserData", userData.toString())
-            val retrofit = Client.buildService(Api::class.java)
             retrofit.createUser(userData).enqueue(object : Callback<DefaultResponse>{
                 override fun onResponse(
                     call: Call<DefaultResponse>,
