@@ -22,6 +22,7 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(R.layout.activity_register)
 
         supportActionBar?.hide()
+        val validation = Validation()
 
         backToLogin.setOnClickListener{
             val intent = Intent(this, LoginActivity::class.java)
@@ -35,21 +36,47 @@ class RegisterActivity : AppCompatActivity() {
             var password = editPassword.text.toString().trim()
             var confpass = editConfirmPassword.text.toString().trim()
 
+
+            //email check
             if(email.isEmpty()){
                 editEmail.error = "Email required"
                 editEmail.requestFocus()
                 return@setOnClickListener
             }
+
+            if(!validation.checkEmail(email)){
+                editEmail.error = "Please enter a valid email address"
+                editEmail.requestFocus()
+                return@setOnClickListener
+            }
+
+
+            //username check
             if(username.isEmpty()){
                 editUsername.error = "Username required"
                 editUsername.requestFocus()
                 return@setOnClickListener
             }
+            if(!validation.checkUsername(username)){
+                editUsername.error = "Username must contain at least 6 characters (lowercase letters, numbers and _ only)"
+                editUsername.requestFocus()
+                return@setOnClickListener
+            }
+
+
+            //password check
             if(password.isEmpty()){
                 editPassword.error = "Password required"
                 editPassword.requestFocus()
                 return@setOnClickListener
             }
+            if(!validation.checkPassword(password)){
+                editPassword.error = "Password must contain minimum 8 characters, at least one uppercase letter, one lowercase letter and one number"
+                editPassword.requestFocus()
+                return@setOnClickListener
+            }
+
+            //check if passwords match
             if(confpass != password){
                 editConfirmPassword.error = "Passwords don't match"
                 editConfirmPassword.requestFocus()
