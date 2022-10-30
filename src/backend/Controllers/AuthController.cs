@@ -33,13 +33,24 @@ namespace backend.Controllers
             user.Email = request.Email;
             user.Username = request.Username;
             user.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-            return Ok(new
+            try
             {
-                error = false,
-                message = "Success"
-            });
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
+                return Ok(new
+                {
+                    error = false,
+                    message = "Success"
+                });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new
+                {
+                    error = true,
+                    message = "Error occuried"
+                });
+            }
         }
 
         [HttpGet("check-email")]
