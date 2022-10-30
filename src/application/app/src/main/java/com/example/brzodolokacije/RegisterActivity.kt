@@ -51,7 +51,7 @@ class RegisterActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             if(confpass != password){
-                editConfirmPassword.error = "Not the same password"
+                editConfirmPassword.error = "Passwords don't match"
                 editConfirmPassword.requestFocus()
                 return@setOnClickListener
             }
