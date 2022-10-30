@@ -35,7 +35,11 @@ namespace backend.Controllers
             user.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
-            return Ok("Done");
+            return Ok(new
+            {
+                error = false,
+                message = "Success"
+            });
         }
 
         [HttpGet("check-email")]
