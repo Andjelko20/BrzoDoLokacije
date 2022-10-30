@@ -46,9 +46,11 @@
                 android:id="@+id/editEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:focusable="true"
                 android:hint="Email"
                 android:backgroundTint="@color/light_blue"
-                android:textColor="@color/light_text"/>
+                android:textColor="@color/light_text"
+                android:inputType="textEmailAddress"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -92,7 +94,8 @@
                 android:layout_height="wrap_content"
                 android:hint="Password"
                 android:backgroundTint="@color/light_blue"
-                android:textColorHint="@color/dark_blue"/>
+                android:textColor="@color/light_text"
+                android:inputType="textPassword"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -114,7 +117,8 @@
                 android:layout_height="wrap_content"
                 android:hint="Confirm Password"
                 android:backgroundTint="@color/light_blue"
-                android:textColor="@color/light_text"/>
+                android:textColor="@color/light_text"
+                android:inputType="textPassword"/>
 
         </com.google.android.material.textfield.TextInputLayout>
     </RelativeLayout>
@@ -134,6 +138,7 @@
     </Button>
 
     <TextView
+        android:id="@+id/backToLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
@@ -141,7 +146,9 @@
         app:layout_constraintTop_toBottomOf="@+id/signupButton"
         android:text="@string/return_to_login"
         android:textAlignment="center"
-        android:textColor="@color/dark_blue"
+        android:textColor="@drawable/link_style"
+        android:clickable="true"
+        android:focusable="true"
         android:textStyle="bold"
         android:layout_marginTop="10dp">
     </TextView>

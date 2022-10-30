@@ -33,9 +33,42 @@ namespace backend.Controllers
             user.Email = request.Email;
             user.Username = request.Username;
             user.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-            return Ok("Done");
+            try
+            {
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
+                return Ok(new
+                {
+                    error = false,
+                    message = "Success"
+                });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new
+                {
+                    error = true,
+                    message = "Error occuried"
+                });
+            }
+        }
+
+        [HttpGet("check-email")]
+        public async Task<ActionResult<bool>> checkIfEmailExists(string email)
+        {
+            User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null)
+                return false;
+            return true;
+        }
+        
+        [HttpGet("check-username")]
+        public async Task<ActionResult<bool>> checkIfUsernameExists(string username)
+        {
+            User user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+            if (user == null)
+                return false;
+            return true;
         }
 
         [HttpPost("login")]

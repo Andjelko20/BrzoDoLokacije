@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="@drawable/loginregisterstyle"
+    android:padding="0dp"
+    android:layout_margin="0dp">
+
+
+    <ImageView
+        android:id="@+id/imageViewClouds"
+        android:layout_width="match_parent"
+        android:layout_height="277dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="-10dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="0dp"
+        android:padding="0dp"
+        android:paddingStart="0dp"
+        android:paddingLeft="0dp"
+        android:paddingTop="0dp"
+        android:paddingEnd="0dp"
+        android:paddingRight="0dp"
+        android:paddingBottom="0dp"
+        app:srcCompat="@drawable/clouds" />
+
+    <ImageView
+        android:id="@+id/imageViewMountains"
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="-15dp"
+        android:padding="0dp"
+        app:srcCompat="@drawable/mountains" />
+
+    <ImageView
+        android:id="@+id/imageViewLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/imageViewClouds"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="74dp"
+        android:translationY="163dp"
+        app:srcCompat="@drawable/logologinregister" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/rvForma"
+        android:layout_centerHorizontal="true"
+        android:text="Login to see locations from all over the world"
+        android:textColor="@color/text_dark"
+        android:textStyle="italic"
+        android:textSize="16dp" />
+
+    <RelativeLayout
+        android:id="@+id/rvForma"
+        android:layout_width="320dp"
+        android:layout_height="230dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/shape"
+        android:translationY="50dp">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/usernameWrap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="20dp"
+            app:boxBackgroundColor="@color/light_blue">
+
+            <EditText
+                android:id="@+id/username"
+                android:inputType="text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Username or E-mail"
+                android:textColor="@color/light_text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passwordWrap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/usernameWrap"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            app:boxBackgroundColor="@color/light_blue">
+
+            <EditText
+                android:id="@+id/password"
+                android:textColor="@color/light_text"
+                android:inputType="textPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Password" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/forgotPasswordLink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/passwordWrap"
+            android:layout_marginLeft="15dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:linksClickable="true"
+            android:paddingLeft="5dp"
+            android:paddingTop="7dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="21dp"
+            android:text="Forgot password?"
+            android:textColor="@color/light_text" />
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/btnWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rvForma"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp">
+
+        <Button
+            android:id="@+id/loginBtn"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:backgroundTint="@color/light_blue"
+            android:backgroundTintMode="src_atop"
+            android:text="Login"
+            android:textColor="@color/light_text"
+            android:textAlignment="center"
+            />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/createAccountLink"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnWrapper"
+        android:layout_centerHorizontal="true"
+        android:clickable="true"
+        android:focusable="true"
+        android:lines="2"
+        android:text="@string/no_account"
+        android:textSize="15dp"
+        android:layout_marginTop="5dp"
+        android:linksClickable="true"
+        android:paddingLeft="5dp"
+        android:paddingTop="5dp"
+        android:paddingRight="5dp"
+        android:paddingBottom="5dp"
+        android:textAlignment="center"
+        android:textColor="@drawable/link_style"
+        android:textStyle="bold"/>
+
+
+</RelativeLayout>
