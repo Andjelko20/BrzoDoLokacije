@@ -23,6 +23,11 @@ class RegisterActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
+        backToLogin.setOnClickListener{
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
+
         signupButton.setOnClickListener{
 
             var email = editEmail.text.toString().trim()
