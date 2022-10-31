@@ -3,6 +3,7 @@ package com.example.brzodolokacije
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
@@ -49,10 +50,15 @@ class LoginActivity : AppCompatActivity() {
                     response: Response<DefaultResponse>
                 ) {
                     var token=Token(response.body()?.message.toString())
-                    if(token.content=="null"){
-                        Toast.makeText(this@LoginActivity,"Incorrect user or password",Toast.LENGTH_SHORT).show()
+                    if(token.content=="user does not exists"){
+                        Toast.makeText(this@LoginActivity,"Incorrect username or E-mail",Toast.LENGTH_SHORT).show()
+                    }
+                    else if(token.content=="wrong password")
+                    {
+                        Toast.makeText(this@LoginActivity,"Incorrect password",Toast.LENGTH_SHORT).show()
                     }
                     else{
+                        Toast.makeText(this@LoginActivity,token.content,Toast.LENGTH_SHORT).show()
                         val intent = Intent(this@LoginActivity, MainActivity::class.java)
                         startActivity(intent)
                     }
