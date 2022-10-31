@@ -5,5 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_centerHorizontal="true"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@drawable/loginregisterstyle">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Welcome!"
+        android:textSize="30sp"
+        android:textAlignment="center"
+        android:textColor="@color/light_text"
+        android:layout_marginTop="70dp"/>
 </FrameLayout>
