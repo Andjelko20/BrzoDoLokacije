@@ -1,6 +1,7 @@
 package com.example.brzodolokacije.API
 
 import com.example.brzodolokacije.Models.DefaultResponse
+import com.example.brzodolokacije.Models.LoginDto
 import com.example.brzodolokacije.Models.RegisterDto
 import retrofit2.Call
 import retrofit2.http.Body
@@ -12,4 +13,7 @@ interface Api {
 
     @POST("register")
     fun createUser(@Body userData:RegisterDto):Call<DefaultResponse>
+
+    @POST("login")
+    fun loginUser(@Body userData : LoginDto) : Call<DefaultResponse>
 }

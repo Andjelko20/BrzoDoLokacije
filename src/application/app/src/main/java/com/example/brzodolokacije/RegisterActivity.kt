@@ -70,7 +70,10 @@ class RegisterActivity : AppCompatActivity() {
             })
 
         }
-
+        backToLogin.setOnClickListener{
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
 
     }
 

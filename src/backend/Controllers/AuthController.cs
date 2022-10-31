@@ -78,16 +78,25 @@ namespace backend.Controllers
                 u.Username == request.UsernameOrEmail || u.Email == request.UsernameOrEmail);
             if (user == null)
             {
-                return NotFound("not exist");
+                return NotFound(new {
+                    error = true,
+                    message = "not exists"
+                });
             }
 
             if (BCrypt.Net.BCrypt.Verify(request.Password, user.Password)== false)
             {
-                return BadRequest("wrong password");
+                return BadRequest(new {
+                    error = true,
+                    message = "wrong password"
+                });
             }
             
             string token = CreateToken(user);
-            return Ok(token);
+            return Ok(new {
+                error = false,
+                message = token
+            });
 
         }
 
