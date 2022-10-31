@@ -195,7 +195,8 @@
         android:textStyle="bold"
         android:layout_marginTop="5dp"
         android:paddingBottom="15dp"
-        android:paddingTop="5dp">
+        android:paddingTop="5dp"
+        android:textSize="15dp">
     </TextView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

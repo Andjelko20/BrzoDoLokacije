@@ -118,6 +118,7 @@ class RegisterActivity : AppCompatActivity() {
                                             reset()
                                             val intent = Intent(this@RegisterActivity, MainActivity::class.java)
                                             startActivity(intent)
+                                            finish()
                                         }
 
                                         override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {

@@ -60,6 +60,7 @@ class LoginActivity : AppCompatActivity() {
                         reset()
                         val intent = Intent(this@LoginActivity, MainActivity::class.java)
                         startActivity(intent)
+                        finish()
                     }
                 }
 
