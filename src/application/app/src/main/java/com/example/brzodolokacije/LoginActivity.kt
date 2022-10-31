@@ -11,6 +11,7 @@ import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.LoginDto
 import com.example.brzodolokacije.Models.Token
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_register.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -56,7 +57,7 @@ class LoginActivity : AppCompatActivity() {
                     }
                     else{
                         var token=Token(response.body()?.message.toString())
-                        //Toast.makeText(this@LoginActivity,token.content,Toast.LENGTH_SHORT).show()
+                        reset()
                         val intent = Intent(this@LoginActivity, MainActivity::class.java)
                         startActivity(intent)
                     }
@@ -78,6 +79,11 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    private fun reset() {
+        username.text.clear()
+        password.text.clear()
     }
 
 }
