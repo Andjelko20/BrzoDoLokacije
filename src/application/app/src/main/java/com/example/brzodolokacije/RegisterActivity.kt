@@ -114,8 +114,10 @@ class RegisterActivity : AppCompatActivity() {
                                             call: Call<DefaultResponse>,
                                             response: Response<DefaultResponse>
                                         ) {
-                                            Toast.makeText(this@RegisterActivity, response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
+                                            //Toast.makeText(this@RegisterActivity, response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
                                             reset()
+                                            val intent = Intent(this@RegisterActivity, MainActivity::class.java)
+                                            startActivity(intent)
                                         }
 
                                         override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
