@@ -3,7 +3,7 @@ package com.example.brzodolokacije
 class Validation {
     fun checkEmail(email: String): Boolean
     {
-        val emailPattern = Regex("^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})\$")
+        val emailPattern = Regex("^([a-z0-9](\\.?\\-?_?[a-zA-Z0-9]+){1,})@([a-z]+)(\\.([a-z]{2,5})){1,}\$")
         if(email.matches(emailPattern))
             return true
         return false

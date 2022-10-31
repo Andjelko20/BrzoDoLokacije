@@ -52,24 +52,6 @@ class RegisterActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            retrofit.checkIfEmailExists(email).enqueue(object : Callback<DefaultResponse>{
-                override fun onResponse(call: Call<DefaultResponse>, response: Response<DefaultResponse>) {
-                    if(response.body()?.message.toString() == "true")
-                    {
-                        Log.d("Postoji email", response.body()?.message.toString())
-                        editEmail.error = "This email is already linked to another account"
-                        editEmail.requestFocus()
-                    }
-
-                    else {
-                        Log.d("Ne postoji email", response.body()?.message.toString())
-                    }
-                }
-
-                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                    Log.e("Failed email", "")
-                }
-            })
 
             //username check
             if(username.isEmpty()){
@@ -82,25 +64,6 @@ class RegisterActivity : AppCompatActivity() {
                 editUsername.requestFocus()
                 return@setOnClickListener
             }
-
-            retrofit.checkIfUsernemeExists(username).enqueue(object : Callback<DefaultResponse>{
-                override fun onResponse(call: Call<DefaultResponse>, response: Response<DefaultResponse>){
-                    if(response.body()?.message.toString() == "true")
-                    {
-                        Log.d("Postoji username", response.body()?.message.toString())
-                        editUsername.error = "This username is already taken"
-                        editUsername.requestFocus()
-                    }
-                    else
-                    {
-                        Log.d("Ne postoji username", response.body()?.message.toString())
-                    }
-                }
-
-                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                    Log.e("Failed username", "")
-                }
-            })
 
 
             //password check
@@ -122,21 +85,57 @@ class RegisterActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val userData = RegisterDto(username,email,password)
-            Log.d("UserData", userData.toString())
-            retrofit.createUser(userData).enqueue(object : Callback<DefaultResponse>{
-                override fun onResponse(
-                    call: Call<DefaultResponse>,
-                    response: Response<DefaultResponse>
-                ) {
-                    Toast.makeText(this@RegisterActivity, response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
-                    reset()
+            retrofit.checkIfEmailExists(email).enqueue(object : Callback<DefaultResponse>{
+                override fun onResponse(call: Call<DefaultResponse>, response: Response<DefaultResponse>) {
+                    if(response.body()?.message.toString() == "true")
+                    {
+                        Log.d("Postoji email", response.body()?.message.toString())
+                        editEmail.error = "This email is already linked to another account"
+                        editEmail.requestFocus()
+                    }
+
+                    else {
+                        Log.d("Ne postoji email", response.body()?.message.toString())
+                        retrofit.checkIfUsernemeExists(username).enqueue(object : Callback<DefaultResponse>{
+                            override fun onResponse(call: Call<DefaultResponse>, response: Response<DefaultResponse>){
+                                if(response.body()?.message.toString() == "true")
+                                {
+                                    Log.d("Postoji username", response.body()?.message.toString())
+                                    editUsername.error = "This username is already taken"
+                                    editUsername.requestFocus()
+                                }
+                                else
+                                {
+                                    Log.d("Ne postoji username", response.body()?.message.toString())
+                                    val userData = RegisterDto(username,email,password)
+                                    Log.d("UserData", userData.toString())
+                                    retrofit.createUser(userData).enqueue(object : Callback<DefaultResponse>{
+                                        override fun onResponse(
+                                            call: Call<DefaultResponse>,
+                                            response: Response<DefaultResponse>
+                                        ) {
+                                            Toast.makeText(this@RegisterActivity, response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
+                                            reset()
+                                        }
+
+                                        override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                                            Toast.makeText(this@RegisterActivity,t.toString(),Toast.LENGTH_SHORT).show()
+                                        }
+
+                                    })
+                                }
+                            }
+
+                            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                                Log.e("Failed username", "")
+                            }
+                        })
+                    }
                 }
 
                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                    Toast.makeText(this@RegisterActivity,t.toString(),Toast.LENGTH_SHORT).show()
+                    Log.e("Failed email", "")
                 }
-
             })
 
         }
