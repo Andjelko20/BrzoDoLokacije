@@ -56,22 +56,19 @@ class RegisterActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<DefaultResponse>, response: Response<DefaultResponse>) {
                     if(response.body()?.message.toString() == "true")
                     {
-                        Log.d("Postoji", response.toString())
-                        editEmail.error = "This email is already taken"
+                        Log.d("Postoji", response.body()?.message.toString())
+                        editEmail.error = "This email is already linked to another account"
                         editEmail.requestFocus()
                     }
 
                     else {
-                        Log.d("Ne postoji", response.toString())
-                        Log.d("Ne posoji CALL", call.toString())
+                        Log.d("Ne postoji", response.body()?.message.toString())
                     }
                 }
 
                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                     Log.e("failed", "")
                 }
-
-
             })
 
             //username check
