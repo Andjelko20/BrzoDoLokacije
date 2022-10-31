@@ -69,13 +69,20 @@ namespace backend.Controllers
             });
         }
         
-        [HttpGet("check-username")]
-        public async Task<ActionResult<bool>> checkIfUsernameExists(string username)
+        [HttpPost("check-username/{username}")]
+        public async Task<ActionResult<string>> checkIfUsernameExists(string username)
         {
             User user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
             if (user == null)
-                return false;
-            return true;
+                return Ok(new
+                {
+                    error = false,
+                    message = "false"
+                });
+            return Ok(new {
+                error = false,
+                message = "true"
+            });
         }
 
         [HttpPost("login")]
