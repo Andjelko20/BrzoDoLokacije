@@ -52,19 +52,23 @@ class RegisterActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            retrofit.checkIfEmailExists(email).enqueue(object : Callback<Boolean>{
-                override fun onResponse(
-                    call: Call<Boolean>,
-                    response: Response<Boolean>
-                ) {
-                    if(response.body().toString() == "true")
-                        Log.d("Postoji", response.body().toString())
-                    else
-                        Log.d("Ne postoji", response.body().toString())
+            retrofit.checkIfEmailExists(email).enqueue(object : Callback<DefaultResponse>{
+                override fun onResponse(call: Call<DefaultResponse>, response: Response<DefaultResponse>) {
+                    if(response.body()?.message.toString() == "true")
+                    {
+                        Log.d("Postoji", response.toString())
+                        editEmail.error = "This email is already taken"
+                        editEmail.requestFocus()
+                    }
+
+                    else {
+                        Log.d("Ne postoji", response.toString())
+                        Log.d("Ne posoji CALL", call.toString())
+                    }
                 }
 
-                override fun onFailure(call: Call<Boolean>, t: Throwable) {
-                    TODO("Not yet implemented")
+                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                    Log.e("failed", "")
                 }
 
 

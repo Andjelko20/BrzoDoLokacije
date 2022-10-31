@@ -11,6 +11,6 @@ interface Api {
     @POST("register")
     fun createUser(@Body userData:RegisterDto):Call<DefaultResponse>
 
-    @GET("check-email/{email}")
-    fun checkIfEmailExists(@Path("email") email:String):Call<Boolean>
+    @POST("check-email/{email}")
+    fun checkIfEmailExists(@Path("email") email:String):Call<DefaultResponse>
 }
