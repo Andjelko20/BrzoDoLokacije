@@ -43,22 +43,20 @@ class LoginActivity : AppCompatActivity() {
             val retrofit = Client.buildService(Api::class.java)
             retrofit.loginUser(userData).enqueue(object : Callback<DefaultResponse>
             {
-
-
                 override fun onResponse(
                     call: Call<DefaultResponse>,
                     response: Response<DefaultResponse>
                 ) {
-                    var token=Token(response.body()?.message.toString())
-                    if(token.content=="user does not exists"){
+                    if(response.body()?.message.toString()=="user does not exists"){
                         Toast.makeText(this@LoginActivity,"Incorrect username or E-mail",Toast.LENGTH_SHORT).show()
                     }
-                    else if(token.content=="wrong password")
+                    else if(response.body()?.message.toString()=="wrong password")
                     {
                         Toast.makeText(this@LoginActivity,"Incorrect password",Toast.LENGTH_SHORT).show()
                     }
                     else{
-                        Toast.makeText(this@LoginActivity,token.content,Toast.LENGTH_SHORT).show()
+                        var token=Token(response.body()?.message.toString())
+                        //Toast.makeText(this@LoginActivity,token.content,Toast.LENGTH_SHORT).show()
                         val intent = Intent(this@LoginActivity, MainActivity::class.java)
                         startActivity(intent)
                     }
