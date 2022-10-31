@@ -12,6 +12,7 @@ import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.RegisterDto
 import kotlinx.android.synthetic.main.activity_register.*
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,6 +23,12 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(R.layout.activity_register)
 
         supportActionBar?.hide()
+        val validation = Validation()
+
+        backToLogin.setOnClickListener{
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
 
         signupButton.setOnClickListener{
 
@@ -30,43 +37,108 @@ class RegisterActivity : AppCompatActivity() {
             var password = editPassword.text.toString().trim()
             var confpass = editConfirmPassword.text.toString().trim()
 
+            val retrofit = Client.buildService(Api::class.java)
+
+            //email check
             if(email.isEmpty()){
                 editEmail.error = "Email required"
                 editEmail.requestFocus()
                 return@setOnClickListener
             }
+
+            if(!validation.checkEmail(email)){
+                editEmail.error = "Please enter a valid email address"
+                editEmail.requestFocus()
+                return@setOnClickListener
+            }
+
+
+            //username check
             if(username.isEmpty()){
                 editUsername.error = "Username required"
                 editUsername.requestFocus()
                 return@setOnClickListener
             }
+            if(!validation.checkUsername(username)){
+                editUsername.error = "Username must contain at least 6 characters (lowercase letters, numbers and _ only)"
+                editUsername.requestFocus()
+                return@setOnClickListener
+            }
+
+
+            //password check
             if(password.isEmpty()){
                 editPassword.error = "Password required"
                 editPassword.requestFocus()
                 return@setOnClickListener
             }
+            if(!validation.checkPassword(password)){
+                editPassword.error = "Password must contain minimum 8 characters, at least one uppercase letter, one lowercase letter and one number"
+                editPassword.requestFocus()
+                return@setOnClickListener
+            }
+
+            //check if passwords match
             if(confpass != password){
-                editConfirmPassword.error = "Not the same password"
+                editConfirmPassword.error = "Passwords don't match"
                 editConfirmPassword.requestFocus()
                 return@setOnClickListener
             }
 
-            val userData = RegisterDto(username,email,password)
-            Log.d("UserData", userData.toString())
-            val retrofit = Client.buildService(Api::class.java)
-            retrofit.createUser(userData).enqueue(object : Callback<DefaultResponse>{
-                override fun onResponse(
-                    call: Call<DefaultResponse>,
-                    response: Response<DefaultResponse>
-                ) {
-                    Toast.makeText(this@RegisterActivity, response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
-                    reset()
+            retrofit.checkIfEmailExists(email).enqueue(object : Callback<DefaultResponse>{
+                override fun onResponse(call: Call<DefaultResponse>, response: Response<DefaultResponse>) {
+                    if(response.body()?.message.toString() == "true")
+                    {
+                        Log.d("Postoji email", response.body()?.message.toString())
+                        editEmail.error = "This email is already linked to another account"
+                        editEmail.requestFocus()
+                    }
+
+                    else {
+                        Log.d("Ne postoji email", response.body()?.message.toString())
+                        retrofit.checkIfUsernemeExists(username).enqueue(object : Callback<DefaultResponse>{
+                            override fun onResponse(call: Call<DefaultResponse>, response: Response<DefaultResponse>){
+                                if(response.body()?.message.toString() == "true")
+                                {
+                                    Log.d("Postoji username", response.body()?.message.toString())
+                                    editUsername.error = "This username is already taken"
+                                    editUsername.requestFocus()
+                                }
+                                else
+                                {
+                                    Log.d("Ne postoji username", response.body()?.message.toString())
+                                    val userData = RegisterDto(username,email,password)
+                                    Log.d("UserData", userData.toString())
+                                    retrofit.createUser(userData).enqueue(object : Callback<DefaultResponse>{
+                                        override fun onResponse(
+                                            call: Call<DefaultResponse>,
+                                            response: Response<DefaultResponse>
+                                        ) {
+                                            //Toast.makeText(this@RegisterActivity, response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
+                                            reset()
+                                            val intent = Intent(this@RegisterActivity, MainActivity::class.java)
+                                            startActivity(intent)
+                                            finish()
+                                        }
+
+                                        override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                                            Toast.makeText(this@RegisterActivity,t.toString(),Toast.LENGTH_SHORT).show()
+                                        }
+
+                                    })
+                                }
+                            }
+
+                            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                                Log.e("Failed username", "")
+                            }
+                        })
+                    }
                 }
 
                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                    Toast.makeText(this@RegisterActivity,t.toString(),Toast.LENGTH_SHORT).show()
+                    Log.e("Failed email", "")
                 }
-
             })
 
         }

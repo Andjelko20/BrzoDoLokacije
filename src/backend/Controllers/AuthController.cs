@@ -53,22 +53,36 @@ namespace backend.Controllers
             }
         }
 
-        [HttpGet("check-email")]
-        public async Task<ActionResult<bool>> checkIfEmailExists(string email)
+        [HttpPost("check-email/{email}")]
+        public async Task<ActionResult<string>> checkIfEmailExists(string email)
         {
             User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
             if (user == null)
-                return false;
-            return true;
+                return Ok(new
+                {
+                    error = false,
+                    message = "false"
+                });
+            return Ok(new {
+                error = false,
+                message = "true"
+            });
         }
         
-        [HttpGet("check-username")]
-        public async Task<ActionResult<bool>> checkIfUsernameExists(string username)
+        [HttpPost("check-username/{username}")]
+        public async Task<ActionResult<string>> checkIfUsernameExists(string username)
         {
             User user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
             if (user == null)
-                return false;
-            return true;
+                return Ok(new
+                {
+                    error = false,
+                    message = "false"
+                });
+            return Ok(new {
+                error = false,
+                message = "true"
+            });
         }
 
         [HttpPost("login")]
@@ -78,16 +92,25 @@ namespace backend.Controllers
                 u.Username == request.UsernameOrEmail || u.Email == request.UsernameOrEmail);
             if (user == null)
             {
-                return NotFound("not exist");
+                return Ok(new {
+                    error = true,
+                    message = "user does not exists"
+                });
             }
 
             if (BCrypt.Net.BCrypt.Verify(request.Password, user.Password)== false)
             {
-                return BadRequest("wrong password");
+                return Ok(new {
+                    error = true,
+                    message = "wrong password"
+                });
             }
             
             string token = CreateToken(user);
-            return Ok(token);
+            return Ok(new {
+                error = false,
+                message = token
+            });
 
         }
 

@@ -4,8 +4,51 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/register"
+    android:background="@drawable/loginregisterstyle"
     tools:context=".RegisterActivity">
+
+    <ImageView
+        android:id="@+id/imageViewClouds"
+        android:layout_width="match_parent"
+        android:layout_height="277dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:padding="0dp"
+        android:paddingStart="0dp"
+        android:paddingLeft="0dp"
+        android:paddingTop="0dp"
+        android:paddingEnd="0dp"
+        android:paddingRight="0dp"
+        android:paddingBottom="0dp"
+        android:layout_marginTop="-10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/clouds" />
+
+    <ImageView
+        android:id="@+id/imageViewLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/imageViewClouds"
+        app:layout_constraintBottom_toTopOf="@+id/signupText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="15dp"
+        app:srcCompat="@drawable/logologinregister"/>
+
+    <ImageView
+        android:id="@+id/imageViewMountains"
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:layout_alignParentBottom="true"
+        android:padding="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="-15dp"
+        app:srcCompat="@drawable/mountains" />
+
     <TextView
         android:id="@+id/signupText"
         android:layout_width="match_parent"
@@ -134,7 +177,7 @@
         android:text="Sign up"
         android:textAllCaps="false"
         android:backgroundTint="@color/light_blue"
-        android:textSize="18dp">
+        android:textSize="18sp">
     </Button>
 
     <TextView
@@ -150,7 +193,10 @@
         android:clickable="true"
         android:focusable="true"
         android:textStyle="bold"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="5dp"
+        android:paddingBottom="15dp"
+        android:paddingTop="5dp"
+        android:textSize="15dp">
     </TextView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
