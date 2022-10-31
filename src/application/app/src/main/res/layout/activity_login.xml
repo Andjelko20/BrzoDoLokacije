@@ -43,17 +43,18 @@
         android:id="@+id/imageViewLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/imageViewClouds"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="74dp"
+        android:layout_alignTop="@+id/imageViewClouds"
+        android:layout_marginTop="20dp"
         android:translationY="163dp"
         app:srcCompat="@drawable/logologinregister" />
 
     <TextView
+        android:id="@+id/textUnderLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/rvForma"
@@ -134,16 +135,18 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/rvForma"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp">
+        android:layout_marginTop="68dp">
 
         <Button
             android:id="@+id/loginBtn"
-            android:layout_width="140dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:backgroundTint="@color/light_blue"
             android:backgroundTintMode="src_atop"
             android:text="Login"
+            android:textAllCaps="false"
+            android:textSize="18sp"
             android:textColor="@color/light_text"
             android:textAlignment="center"
             />
