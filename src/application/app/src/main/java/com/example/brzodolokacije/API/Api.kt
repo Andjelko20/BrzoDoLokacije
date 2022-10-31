@@ -13,4 +13,7 @@ interface Api {
 
     @POST("check-email/{email}")
     fun checkIfEmailExists(@Path("email") email:String):Call<DefaultResponse>
+
+    @POST("check-username/{username}")
+    fun checkIfUsernemeExists(@Path("username") email:String):Call<DefaultResponse>
 }

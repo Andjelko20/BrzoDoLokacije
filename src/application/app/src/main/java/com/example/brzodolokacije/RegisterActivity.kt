@@ -56,18 +56,18 @@ class RegisterActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<DefaultResponse>, response: Response<DefaultResponse>) {
                     if(response.body()?.message.toString() == "true")
                     {
-                        Log.d("Postoji", response.body()?.message.toString())
+                        Log.d("Postoji email", response.body()?.message.toString())
                         editEmail.error = "This email is already linked to another account"
                         editEmail.requestFocus()
                     }
 
                     else {
-                        Log.d("Ne postoji", response.body()?.message.toString())
+                        Log.d("Ne postoji email", response.body()?.message.toString())
                     }
                 }
 
                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                    Log.e("failed", "")
+                    Log.e("Failed email", "")
                 }
             })
 
@@ -82,6 +82,25 @@ class RegisterActivity : AppCompatActivity() {
                 editUsername.requestFocus()
                 return@setOnClickListener
             }
+
+            retrofit.checkIfUsernemeExists(username).enqueue(object : Callback<DefaultResponse>{
+                override fun onResponse(call: Call<DefaultResponse>, response: Response<DefaultResponse>){
+                    if(response.body()?.message.toString() == "true")
+                    {
+                        Log.d("Postoji username", response.body()?.message.toString())
+                        editUsername.error = "This username is already taken"
+                        editUsername.requestFocus()
+                    }
+                    else
+                    {
+                        Log.d("Ne postoji username", response.body()?.message.toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                    Log.e("Failed username", "")
+                }
+            })
 
 
             //password check
