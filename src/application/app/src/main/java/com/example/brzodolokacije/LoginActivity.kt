@@ -48,12 +48,8 @@ class LoginActivity : AppCompatActivity() {
                     call: Call<DefaultResponse>,
                     response: Response<DefaultResponse>
                 ) {
-                    if(response.body()?.message.toString()=="user does not exists"){
-                        Toast.makeText(this@LoginActivity,"Incorrect username or E-mail",Toast.LENGTH_SHORT).show()
-                    }
-                    else if(response.body()?.message.toString()=="wrong password")
-                    {
-                        Toast.makeText(this@LoginActivity,"Incorrect password",Toast.LENGTH_SHORT).show()
+                    if(response.body()?.error.toString()=="true"){
+                        Toast.makeText(this@LoginActivity,response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
                     }
                     else{
                         var token=Token(response.body()?.message.toString())

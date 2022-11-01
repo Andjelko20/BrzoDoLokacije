@@ -94,7 +94,7 @@ namespace backend.Controllers
             {
                 return Ok(new {
                     error = true,
-                    message = "user does not exists"
+                    message = "Incorrect username or E-mail"
                 });
             }
 
@@ -102,7 +102,7 @@ namespace backend.Controllers
             {
                 return Ok(new {
                     error = true,
-                    message = "wrong password"
+                    message = "Incorrect password"
                 });
             }
             
