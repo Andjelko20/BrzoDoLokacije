@@ -21,7 +21,7 @@ class ResetPasswordActivity : AppCompatActivity() {
             var email=findViewById<EditText>(R.id.registeredEmail).text.toString().trim()
 
             if(email.isEmpty()){
-                registeredEmail.error = "Username or Email required"
+                registeredEmail.error = "Email required"
                 registeredEmail.requestFocus()
                 return@setOnClickListener
             }
