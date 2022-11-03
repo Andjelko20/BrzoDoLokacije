@@ -48,7 +48,7 @@ class LoginActivity : AppCompatActivity() {
                     call: Call<DefaultResponse>,
                     response: Response<DefaultResponse>
                 ) {
-                    if(response.body()?.error.toString()=="true"){
+                    if(response.body()?.error.toString() == "true"){
                         Toast.makeText(this@LoginActivity,response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
                     }
                     else{

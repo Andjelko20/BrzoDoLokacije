@@ -10,7 +10,6 @@ import android.widget.Toast
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Models.DefaultResponse
-import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.android.synthetic.main.activity_resetpassword.*
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -47,15 +46,37 @@ class ResetPasswordActivity : AppCompatActivity() {
                     if(response.body()?.message.toString() == "true")
                     {
                         Toast.makeText(this@ResetPasswordActivity,"valid E-mail",Toast.LENGTH_SHORT).show()
+                        retrofit.resetPassword(email).enqueue(object : Callback<DefaultResponse>
+                        {
+                            override fun onResponse(
+                                call: Call<DefaultResponse>,
+                                response: Response<DefaultResponse>
+                            ) {
+                                if(response.body()?.error.toString() == "false")
+                                {
+                                    Toast.makeText(this@ResetPasswordActivity,"E-mail sent",Toast.LENGTH_SHORT).show()
+                                }
+                                else
+                                {
+                                    Toast.makeText(this@ResetPasswordActivity,"E-mail wasn't sent",Toast.LENGTH_SHORT).show()
+                                }
+                            }
+
+                            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                                Toast.makeText(this@ResetPasswordActivity,t.toString(),Toast.LENGTH_SHORT).show()
+                            }
+
+                        }
+                        )
                     }
                     else
                     {
-                        Toast.makeText(this@ResetPasswordActivity,"not valid E-mail",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@ResetPasswordActivity,"E-mail not valid",Toast.LENGTH_SHORT).show()
                     }
                 }
 
                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                    Toast.makeText(this@ResetPasswordActivity,"Unexpected error occured",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@ResetPasswordActivity,t.toString(),Toast.LENGTH_SHORT).show()
                 }
 
             })
