@@ -1,5 +1,6 @@
 package com.example.brzodolokacije
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -50,7 +51,11 @@ class LoginActivity : AppCompatActivity() {
                         Toast.makeText(this@LoginActivity,response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
                     }
                     else{
-                        var token=Token(response.body()?.message.toString())
+
+                        var token=response.body()?.message.toString()
+                        val sharedPreferences = getSharedPreferences("STORAGE", Context.MODE_PRIVATE)
+                        sharedPreferences.edit().putString("token", token).apply()
+
                         reset()
                         val intent = Intent(this@LoginActivity, MainActivity::class.java)
                         startActivity(intent)
