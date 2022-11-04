@@ -15,4 +15,7 @@
     <color name="gradient_lighter">#F1F2CB</color>
     <color name="text_dark">#3C5E7D</color>
     <color name="text_light">#ECF1FF</color>
+    <color name="mint_chip">#85C2D8</color>
+    <color name="lavender">#917BBC</color>
+    <color name="light_pink">#F7B0DB</color>
 </resources>
