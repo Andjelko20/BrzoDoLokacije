@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using backend.Models;
 using backend.ModelsDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -118,7 +119,8 @@ namespace backend.Controllers
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.Username)
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.Role, "korisnik")
             };
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
                 _configuration.GetSection("AppSettings:Token").Value));
@@ -152,6 +154,13 @@ namespace backend.Controllers
         public async Task<ActionResult<List<User>>> getAllUsers()
         {
             return Ok(await _context.Users.ToListAsync());
+        }
+
+        [HttpGet("loggedInfo"), Authorize(Roles = "korisnik")]
+        public async Task<ActionResult<string>> loggedInfo([FromHeader]string authorization)
+        {
+            
+            return Ok("");
         }
     }
 }

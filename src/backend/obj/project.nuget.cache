@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "XZvtsyaFewrVbyl29mPG0WumuGvX/JYjg/PZJvy6RUL13+1ow7ZbrzepY9/ryQtW1zr8Dy63NDr/Tc+7ySq8Aw==",
+  "dgSpecHash": "YcAvFb9wcOqV+a5lVgEPrKnhFincVxgYnHAXHAAoksopW495ASqRP+tGc1rrLIf+Q3qVkdeCkK8eoO3I8MnDaA==",
   "success": true,
   "projectFilePath": "/home/dragan/Desktop/brzodolokacije/src/backend/backend.csproj",
   "expectedPackageFiles": [
@@ -9,6 +9,7 @@
     "/home/dragan/.nuget/packages/messagepack/2.1.152/messagepack.2.1.152.nupkg.sha512",
     "/home/dragan/.nuget/packages/messagepack.annotations/2.1.152/messagepack.annotations.2.1.152.nupkg.sha512",
     "/home/dragan/.nuget/packages/messagepackanalyzer/2.1.152/messagepackanalyzer.2.1.152.nupkg.sha512",
+    "/home/dragan/.nuget/packages/microsoft.aspnetcore.authentication.jwtbearer/6.0.10/microsoft.aspnetcore.authentication.jwtbearer.6.0.10.nupkg.sha512",
     "/home/dragan/.nuget/packages/microsoft.aspnetcore.razor.language/6.0.0/microsoft.aspnetcore.razor.language.6.0.0.nupkg.sha512",
     "/home/dragan/.nuget/packages/microsoft.bcl.asyncinterfaces/5.0.0/microsoft.bcl.asyncinterfaces.5.0.0.nupkg.sha512",
     "/home/dragan/.nuget/packages/microsoft.build/17.0.0/microsoft.build.17.0.0.nupkg.sha512",
@@ -50,6 +51,8 @@
     "/home/dragan/.nuget/packages/microsoft.identitymodel.abstractions/6.25.0/microsoft.identitymodel.abstractions.6.25.0.nupkg.sha512",
     "/home/dragan/.nuget/packages/microsoft.identitymodel.jsonwebtokens/6.25.0/microsoft.identitymodel.jsonwebtokens.6.25.0.nupkg.sha512",
     "/home/dragan/.nuget/packages/microsoft.identitymodel.logging/6.25.0/microsoft.identitymodel.logging.6.25.0.nupkg.sha512",
+    "/home/dragan/.nuget/packages/microsoft.identitymodel.protocols/6.10.0/microsoft.identitymodel.protocols.6.10.0.nupkg.sha512",
+    "/home/dragan/.nuget/packages/microsoft.identitymodel.protocols.openidconnect/6.10.0/microsoft.identitymodel.protocols.openidconnect.6.10.0.nupkg.sha512",
     "/home/dragan/.nuget/packages/microsoft.identitymodel.tokens/6.25.0/microsoft.identitymodel.tokens.6.25.0.nupkg.sha512",
     "/home/dragan/.nuget/packages/microsoft.net.stringtools/1.0.0/microsoft.net.stringtools.1.0.0.nupkg.sha512",
     "/home/dragan/.nuget/packages/microsoft.netcore.platforms/2.1.2/microsoft.netcore.platforms.2.1.2.nupkg.sha512",
