@@ -23,4 +23,7 @@ interface Api {
 
     @POST("reset-password/{email}")
     fun resetPassword(@Path("email") email:String):Call<DefaultResponse>
+
+    @PUT("new-password/{email}")
+    fun saveChanges(@Path("email") email:String):Call<DefaultResponse>
 }
