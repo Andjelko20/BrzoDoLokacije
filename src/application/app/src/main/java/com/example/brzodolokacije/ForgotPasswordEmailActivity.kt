@@ -43,7 +43,7 @@ class ForgotPasswordEmailActivity : AppCompatActivity() {
                     if(response.body()?.message.toString() == "true")
                     {
                         Toast.makeText(this@ForgotPasswordEmailActivity,"valid E-mail",Toast.LENGTH_SHORT).show()
-                        retrofit.resetPassword(email).enqueue(object : Callback<DefaultResponse>
+                        /*retrofit.resetPassword(email).enqueue(object : Callback<DefaultResponse>
                         {
                             override fun onResponse(
                                 call: Call<DefaultResponse>,
@@ -64,7 +64,7 @@ class ForgotPasswordEmailActivity : AppCompatActivity() {
                             }
 
                         }
-                        )
+                        )*/
                     }
                     else
                     {

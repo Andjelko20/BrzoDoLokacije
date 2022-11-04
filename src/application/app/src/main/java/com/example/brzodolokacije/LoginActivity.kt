@@ -78,6 +78,13 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle)
+    {
+        super.onSaveInstanceState(outState)
+
+
+    }
+
     private fun reset() {
         username.text.clear()
         password.text.clear()
