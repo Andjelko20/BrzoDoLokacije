@@ -20,7 +20,7 @@ namespace backend.Controllers
     {
         private readonly UserContext _context;
         private readonly IConfiguration _configuration;
-        
+
         public AuthController(UserContext context, IConfiguration configuration)
         {
             _context = context;
@@ -156,11 +156,12 @@ namespace backend.Controllers
             return Ok(await _context.Users.ToListAsync());
         }
 
-        [HttpGet("loggedInfo"), Authorize(Roles = "korisnik")]
-        public async Task<ActionResult<string>> loggedInfo([FromHeader]string authorization)
+        [Authorize(Roles = "korisnik")]
+        [HttpGet("loggedInfo")]
+        public ActionResult<string> loggedInfo()
         {
-            
-            return Ok("");
+
+            return Ok(User?.Identity?.Name);
         }
     }
 }
