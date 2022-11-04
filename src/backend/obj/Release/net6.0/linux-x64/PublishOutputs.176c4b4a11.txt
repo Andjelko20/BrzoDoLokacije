@@ -1,0 +1,4 @@
+/home/dragan/Desktop/brzodolokacije/src/backend/bin/Release/net6.0/linux-x64/publish/appsettings.Development.json
+/home/dragan/Desktop/brzodolokacije/src/backend/bin/Release/net6.0/linux-x64/publish/appsettings.json
+/home/dragan/Desktop/brzodolokacije/src/backend/bin/Release/net6.0/linux-x64/publish/backend.pdb
+/home/dragan/Desktop/brzodolokacije/src/backend/bin/Release/net6.0/linux-x64/publish/backend
