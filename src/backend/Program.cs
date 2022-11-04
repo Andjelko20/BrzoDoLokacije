@@ -1,4 +1,6 @@
 global using backend.Data;
+using backend.Services;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 
 var MyAllowSpecificOrigins = "MyAllowSpecificOrigins";
@@ -27,6 +29,8 @@ builder.Services.AddDbContext<UserContext>(options =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 var app = builder.Build();
 
