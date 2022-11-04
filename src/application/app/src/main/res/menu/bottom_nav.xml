@@ -3,13 +3,19 @@
 
     <item android:title="Explore"
         android:id="@+id/explore"
-        android:icon="@drawable/ic_travel_explore"/>
+        android:icon="@drawable/ic_travel_explore"
+        android:iconTint="@color/dark_blue"
+        android:tooltipText="@color/dark_blue"/>
 
     <item android:title="Home"
         android:id="@+id/home"
-        android:icon="@drawable/ic_home"/>
+        android:icon="@drawable/ic_home"
+        android:iconTint="@color/dark_blue"
+        android:tooltipText="@color/dark_blue"/>
 
     <item android:title="Profile"
         android:id="@+id/profile"
-        android:icon="@drawable/ic_person"/>
+        android:icon="@drawable/ic_person"
+        android:iconTint="@color/dark_blue"
+        android:tooltipText="@color/dark_blue"/>
 </menu>
