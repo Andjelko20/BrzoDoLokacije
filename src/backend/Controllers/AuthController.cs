@@ -157,11 +157,13 @@ namespace backend.Controllers
         }
 
         [Authorize(Roles = "korisnik")]
-        [HttpGet("loggedInfo")]
-        public ActionResult<string> loggedInfo()
+        [HttpGet("check-session")]
+        public ActionResult<string> checkSession()
         {
-
-            return Ok(User?.Identity?.Name);
+            return Ok(new {
+                error = false,
+                message = "Valid"
+            });
         }
     }
 }
