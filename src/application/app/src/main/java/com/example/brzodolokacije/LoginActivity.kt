@@ -1,9 +1,9 @@
 package com.example.brzodolokacije
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
@@ -11,7 +11,6 @@ import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.LoginDto
 import com.example.brzodolokacije.Models.Token
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.activity_register.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -48,11 +47,15 @@ class LoginActivity : AppCompatActivity() {
                     call: Call<DefaultResponse>,
                     response: Response<DefaultResponse>
                 ) {
-                    if(response.body()?.error.toString()=="true"){
+                    if(response.body()?.error.toString() == "true"){
                         Toast.makeText(this@LoginActivity,response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
                     }
                     else{
-                        var token=Token(response.body()?.message.toString())
+
+                        var token=response.body()?.message.toString()
+                        val sharedPreferences = getSharedPreferences("STORAGE", Context.MODE_PRIVATE)
+                        sharedPreferences.edit().putString("token", token).apply()
+
                         reset()
                         val intent = Intent(this@LoginActivity, MainActivity::class.java)
                         startActivity(intent)
@@ -69,13 +72,22 @@ class LoginActivity : AppCompatActivity() {
         }
 
         forgotPasswordLink.setOnClickListener{
-            Toast.makeText(this,"Forgotten password",Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this,"Forgotten password",Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, ForgotPasswordEmailActivity::class.java)
+            startActivity(intent)
         }
 
         createAccountLink.setOnClickListener{
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle)
+    {
+        super.onSaveInstanceState(outState)
+
+
     }
 
     private fun reset() {
