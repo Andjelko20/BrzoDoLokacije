@@ -7,9 +7,9 @@ import android.os.Bundle
 import android.widget.Toast
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
+import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.LoginDto
-import com.example.brzodolokacije.Models.Token
 import kotlinx.android.synthetic.main.activity_login.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -39,7 +39,7 @@ class LoginActivity : AppCompatActivity() {
             }
 
             var userData = LoginDto(usernameOrEmail,userPassword)
-
+            val sessionManager = SessionManager(this)
             val retrofit = Client.buildService(Api::class.java)
             retrofit.loginUser(userData).enqueue(object : Callback<DefaultResponse>
             {
@@ -53,8 +53,9 @@ class LoginActivity : AppCompatActivity() {
                     else{
 
                         var token=response.body()?.message.toString()
-                        val sharedPreferences = getSharedPreferences("STORAGE", Context.MODE_PRIVATE)
-                        sharedPreferences.edit().putString("token", token).apply()
+                        sessionManager.saveAuthToken(token)
+                        //val sharedPreferences = getSharedPreferences("STORAGE", Context.MODE_PRIVATE)
+                        //sharedPreferences.edit().putString("token", token).apply()
 
                         reset()
                         val intent = Intent(this@LoginActivity, MainActivity::class.java)

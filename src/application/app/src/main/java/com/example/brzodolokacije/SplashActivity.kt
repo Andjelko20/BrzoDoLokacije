@@ -8,6 +8,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.WindowManager
 import android.widget.Toast
+import com.example.brzodolokacije.Managers.SessionManager
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,9 +37,10 @@ class SplashActivity : AppCompatActivity() {
     }
     private fun isLogedin() : Boolean
     {
-        val sharedPreferences = getSharedPreferences("STORAGE", Context.MODE_PRIVATE)
-        val token: String? = sharedPreferences.getString("token", "notFound")
+        //val sharedPreferences = getSharedPreferences("STORAGE", Context.MODE_PRIVATE)
+        val sessionManager = SessionManager(this)
+        val token: String? = sessionManager.fetchAuthToken()
         //Toast.makeText(this@SplashActivity,token, Toast.LENGTH_LONG).show()
-        return token.toString()!="notFound"
+        return token!=null
     }
 }
