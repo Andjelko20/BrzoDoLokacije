@@ -15,6 +15,7 @@
     <color name="gradient_lighter">#F1F2CB</color>
     <color name="text_dark">#3C5E7D</color>
     <color name="text_light">#ECF1FF</color>
-    <color name="purple">#C39665EA</color>
-    <color name="teal">#E439A9B8</color>
+    <color name="purple">#C36D18FF</color>
+    <color name="teal">#E4007497</color>
+    <color name="blue">#1F5CFF</color>
 </resources>
