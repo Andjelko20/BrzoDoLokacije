@@ -8,8 +8,8 @@ public class EmailSender : IEmailSender
 {
     public EmailSender() { }
     public async Task SendEmailAsync(string email, string subject, string htmlMessage)
-    { // TODO prebaciti ove informacije u config fajl
-        string fromMail = "brzodolokacije@gmail.com"; 
+    {
+        string fromMail = "kakodolokacije@gmail.com"; 
         string fromPassword = "xarucsqhtaeomxty";
         MailMessage message = new MailMessage();
         message.From = new MailAddress(fromMail);
