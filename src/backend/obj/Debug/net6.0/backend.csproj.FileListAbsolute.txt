@@ -1070,3 +1070,6 @@ D:\Katarina-pmu\brzodolokacije\src\backend\obj\Debug\net6.0\refint\backend.dll
 D:\Katarina-pmu\brzodolokacije\src\backend\obj\Debug\net6.0\backend.pdb
 D:\Katarina-pmu\brzodolokacije\src\backend\obj\Debug\net6.0\backend.genruntimeconfig.cache
 D:\Katarina-pmu\brzodolokacije\src\backend\obj\Debug\net6.0\ref\backend.dll
+C:\Users\ivana\OneDrive\Documents\GitHub\brzodolokacije\src\backend\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\ivana\OneDrive\Documents\GitHub\brzodolokacije\src\backend\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\ivana\OneDrive\Documents\GitHub\brzodolokacije\src\backend\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
