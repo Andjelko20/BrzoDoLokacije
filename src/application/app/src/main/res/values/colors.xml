@@ -18,4 +18,10 @@
     <color name="mint_chip">#85C2D8</color>
     <color name="lavender">#917BBC</color>
     <color name="light_pink">#F7B0DB</color>
+    <color name="purple">#C36D18FF</color>
+    <color name="teal">#E4007497</color>
+    <color name="blue">#1F5CFF</color>
+    <color name="light_yellow_navbar">#FCFFD5</color>
+    <color name="light_green_navbar">#D9FFE0</color>
+    <color name="light_mint_navbar">#C1F8FF</color>
 </resources>
