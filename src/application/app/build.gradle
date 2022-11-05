@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.brzodolokacije"
-        minSdk 23
+        minSdk 21
         targetSdk 32
         versionCode 1
         versionName "1.0"
@@ -46,6 +46,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.1.0'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
-    implementation 'com.ismaeldivita.chipnavigation:chip-navigation-bar:1.3.2'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.4.31'
+    implementation 'io.ak1:bubbletabbar:1.0.8'
 }
+
