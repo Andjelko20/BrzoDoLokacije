@@ -3,9 +3,9 @@ package com.example.brzodolokacije.API
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.LoginDto
 import com.example.brzodolokacije.Models.RegisterDto
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
+
 
 interface Api {
 
@@ -26,4 +26,7 @@ interface Api {
 
     @PUT("new-password/{email}")
     fun saveChanges(@Path("email") email:String):Call<DefaultResponse>
+
+    @GET("check-session")
+    fun authorization(@Header("Authorization") token: String?): Call<DefaultResponse>
 }

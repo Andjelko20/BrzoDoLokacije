@@ -1,6 +1,8 @@
 package com.example.brzodolokacije.Client
 
+import android.content.Context
 import com.example.brzodolokacije.API.Api
+import com.example.brzodolokacije.Managers.AuthInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -17,12 +19,20 @@ object Client {
     private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
-        .addConverterFactory(ScalarsConverterFactory.create())
         .client(client)
+        //.client(okhttpClient(this)) // Add our Okhttp client
         .build()
 
     fun<T> buildService(service: Class<T>): T{
         return retrofit.create(service)
     }
 
+    /**
+     * Initialize OkhttpClient with our interceptor
+     */
+   /* private fun okhttpClient(context: Context): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(AuthInterceptor(context))
+            .build()
+    }*/
 }
