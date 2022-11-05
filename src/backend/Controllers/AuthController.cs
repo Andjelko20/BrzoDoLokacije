@@ -25,6 +25,8 @@ namespace backend.Controllers
             _context = context;
             _configuration = configuration;
         }
+        
+        Services.EmailSender _emailSender = new Services.EmailSender();
 
         [HttpPost("register")]
         public async Task<ActionResult<string>> register(RegisterDto request)
@@ -63,12 +65,13 @@ namespace backend.Controllers
                     error = false,
                     message = "false"
                 });
-            return Ok(new {
+            return Ok(new
+            {
                 error = false,
                 message = "true"
             });
         }
-        
+
         [HttpPost("check-username/{username}")]
         public async Task<ActionResult<string>> checkIfUsernameExists(string username)
         {
@@ -83,6 +86,41 @@ namespace backend.Controllers
                 error = false,
                 message = "true"
             });
+        }
+
+        [HttpPost("reset-password/{email}")]
+        public async Task<ActionResult<string>> sendForgotPasswdEmail(string email)
+        {
+            User user = _context.Users.FirstOrDefault(x => x.Email == email);
+            if (user == null)
+            {
+                return Ok(new
+                {
+                    error = true,
+                    message = "User with that email not exists"
+                });
+            }
+            else
+            {
+                string message = @"Hello, <b>" + user.Username 
+                                               + @"</b>.<br> Reset your password 
+                                    <a href='"
+                                               +
+                                               _configuration["Addresses:Frontend"]
+                                               +
+                                               "/verifyEmail?email="
+                                               + user.Email
+                                               + "&token=" //GenerateMyToken(user.Email)
+                                               + @"'>here</a>.";
+
+                await _emailSender.SendEmailAsync(user.Email, "Confirm Account", message);
+
+                return Ok(new
+                {
+                    error = true,
+                    message = "Success"
+                });
+            }
         }
 
         [HttpPost("login")]
