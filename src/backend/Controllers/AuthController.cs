@@ -162,7 +162,7 @@ namespace backend.Controllers
         {
             return Ok(new {
                 error = false,
-                message = "Valid"
+                message = User?.Identity?.Name
             });
         }
     }
