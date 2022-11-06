@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Models.DefaultResponse
+import com.example.brzodolokacije.Models.RegisterDto
+import com.example.brzodolokacije.Models.ResetPasswordDto
 import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.android.synthetic.main.activity_resetpassword.*
 import retrofit2.Call
@@ -73,7 +75,8 @@ class ResetPasswordActivity : AppCompatActivity() {
                                 editPassword.requestFocus()
                                 return@setOnClickListener
                             }
-                            retrofit.resetPassword(response.body()?.message.toString(),password).enqueue(object : Callback<DefaultResponse>{
+                            val changeData = ResetPasswordDto(response.body()?.message.toString(),password)
+                            retrofit.resetPassword(changeData).enqueue(object : Callback<DefaultResponse>{
                                 override fun onResponse(
                                     call: Call<DefaultResponse>,
                                     response: Response<DefaultResponse>
