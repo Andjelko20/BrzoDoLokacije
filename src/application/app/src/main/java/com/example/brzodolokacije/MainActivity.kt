@@ -32,9 +32,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        logoutButton.setOnClickListener{
-//            logOut()
-//        }
+        dugmence.setOnClickListener{
+            logOut()
+        }
 
         replaceFragment(HomeFragment())
 
@@ -53,6 +53,15 @@ class MainActivity : AppCompatActivity() {
         })
 
     }
+
+
+    private fun replaceFragment(fragment: Fragment) {
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.fragment_container, fragment)
+        fragmentTransaction.commit()
+    }
+
     private fun logOut()
     {
         val sessionManager = SessionManager(this)
@@ -64,38 +73,33 @@ class MainActivity : AppCompatActivity() {
                 call: Call<DefaultResponse>,
                 response: Response<DefaultResponse>
             ) {
-                if(response.body()?.error.toString() == "true")
+                if(response.body()?.error.toString() == "false")
                 {
                     sessionManager.deleteAuthToken()
                     sessionManager.deleteUsername()
 
-                    val intent = Intent(this@MainActivity, LoginActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                }
-                else
-                {
-                    var username=response.body()?.message.toString()
-                    sessionManager.saveUsername(username)
+//                    Log.d("Auth", sessionManager.fetchAuthToken().toString())
+
 
                     val intent = Intent(this@MainActivity, LoginActivity::class.java)
                     startActivity(intent)
                     finish()
                 }
+//                else
+//                {
+//                    var username=response.body()?.message.toString()
+//                    sessionManager.saveUsername(username)
+//
+//                    val intent = Intent(this@MainActivity, LoginActivity::class.java)
+//                    startActivity(intent)
+//                    finish()
+//                }
             }
 
             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                Toast.makeText(this@MainActivity,t.toString(),Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity,t.toString(), Toast.LENGTH_SHORT).show()
             }
 
         })
     }
-
-    private fun replaceFragment(fragment: Fragment) {
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.fragment_container, fragment)
-        fragmentTransaction.commit()
-    }
-
 }

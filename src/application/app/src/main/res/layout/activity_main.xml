@@ -7,6 +7,14 @@
     android:layout_centerHorizontal="true"
     tools:context=".MainActivity"
     android:background="@drawable/loginregisterstyle">
+    <Button
+        android:id="@+id/dugmence"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:text="Dugme koje radi nesto"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
         android:id="@+id/fragment_container"
@@ -16,6 +24,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="@+id/bubbleTabBar"/>
+
 
     <io.ak1.BubbleTabBar
         android:id="@+id/bubbleTabBar"
