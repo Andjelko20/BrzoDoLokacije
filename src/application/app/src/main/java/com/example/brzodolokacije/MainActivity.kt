@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
     {
         val sessionManager = SessionManager(this)
         val retrofit = Client.buildService(Api::class.java)
-        retrofit.authorization(token = "Bearer ${sessionManager.fetchAuthToken()}").enqueue(object:
+        retrofit.authentication(token = "Bearer ${sessionManager.fetchAuthToken()}").enqueue(object:
             Callback<DefaultResponse>
         {
             override fun onResponse(

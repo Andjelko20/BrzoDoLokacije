@@ -54,8 +54,6 @@ class LoginActivity : AppCompatActivity() {
 
                         var token=response.body()?.message.toString()
                         sessionManager.saveAuthToken(token)
-                        //val sharedPreferences = getSharedPreferences("STORAGE", Context.MODE_PRIVATE)
-                        //sharedPreferences.edit().putString("token", token).apply()
 
                         reset()
                         val intent = Intent(this@LoginActivity, MainActivity::class.java)

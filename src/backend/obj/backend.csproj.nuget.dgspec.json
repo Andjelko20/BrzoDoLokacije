@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/home/dragan/Desktop/brzodolokacije/src/backend/backend.csproj": {}
+    "D:\\Katarina-pmu\\brzodolokacije\\src\\backend\\backend.csproj": {}
   },
   "projects": {
-    "/home/dragan/Desktop/brzodolokacije/src/backend/backend.csproj": {
+    "D:\\Katarina-pmu\\brzodolokacije\\src\\backend\\backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/dragan/Desktop/brzodolokacije/src/backend/backend.csproj",
+        "projectUniqueName": "D:\\Katarina-pmu\\brzodolokacije\\src\\backend\\backend.csproj",
         "projectName": "backend",
-        "projectPath": "/home/dragan/Desktop/brzodolokacije/src/backend/backend.csproj",
-        "packagesPath": "/home/dragan/.nuget/packages/",
-        "outputPath": "/home/dragan/Desktop/brzodolokacije/src/backend/obj/",
+        "projectPath": "D:\\Katarina-pmu\\brzodolokacije\\src\\backend\\backend.csproj",
+        "packagesPath": "C:\\Users\\Win10\\.nuget\\packages\\",
+        "outputPath": "D:\\Katarina-pmu\\brzodolokacije\\src\\backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/dragan/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Win10\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -100,7 +100,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/6.0.401/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
         }
       }
     }

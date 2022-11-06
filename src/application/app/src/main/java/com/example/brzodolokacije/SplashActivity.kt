@@ -38,7 +38,7 @@ class SplashActivity : AppCompatActivity() {
     {
         val sessionManager = SessionManager(this)
         val retrofit = Client.buildService(Api::class.java)
-        retrofit.authorization(token = "Bearer ${sessionManager.fetchAuthToken()}").enqueue(object: Callback<DefaultResponse>
+        retrofit.authentication(token = "Bearer ${sessionManager.fetchAuthToken()}").enqueue(object: Callback<DefaultResponse>
         {
             override fun onResponse(
                 call: Call<DefaultResponse>,
