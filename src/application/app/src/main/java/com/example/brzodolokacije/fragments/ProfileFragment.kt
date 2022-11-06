@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.Toast
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
@@ -50,6 +51,14 @@ class ProfileFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val button = view.findViewById<Button>(R.id.logoutButton)
+        button.setOnClickListener { view ->
+            Log.d("btnLogout", "Selected")
+        }
     }
 
     companion object {
