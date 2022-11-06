@@ -32,10 +32,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        dugmence.setOnClickListener{
-            logOut()
-        }
-
         replaceFragment(HomeFragment())
 
         bubbleTabBar.addBubbleListener(object : OnBubbleClickListener{
@@ -62,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.commit()
     }
 
-    private fun logOut()
+    fun logOut()
     {
         val sessionManager = SessionManager(this)
         val retrofit = Client.buildService(Api::class.java)

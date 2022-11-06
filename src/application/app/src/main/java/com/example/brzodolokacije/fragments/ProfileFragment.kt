@@ -12,6 +12,7 @@ import android.widget.Toast
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.LoginActivity
+import com.example.brzodolokacije.MainActivity
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.R
@@ -57,7 +58,8 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val button = view.findViewById<Button>(R.id.logoutButton)
         button.setOnClickListener { view ->
-            Log.d("btnLogout", "Selected")
+            val mainActivity = activity as MainActivity
+            mainActivity.logOut()
         }
     }
 
