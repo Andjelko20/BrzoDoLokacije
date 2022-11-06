@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace backend.Models;
 
@@ -12,4 +13,5 @@ public class User
     public string Email { get; set; }
     [Required]
     public string Password { get; set; }
+    public string PasswordResetToken { get; set; } = string.Empty;
 }

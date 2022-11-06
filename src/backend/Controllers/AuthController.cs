@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using backend.Models;
 using backend.ModelsDto;
@@ -40,10 +41,10 @@ namespace backend.Controllers
             {
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
-                return Ok(new
-                {
+                string token = CreateToken(user);
+                return Ok(new {
                     error = false,
-                    message = "Success"
+                    message = token
                 });
             }
             catch (Exception e)
@@ -103,23 +104,48 @@ namespace backend.Controllers
             }
             else
             {
+                string token = CreateRandomToken();
+                var userDB = await _context.Users.FirstOrDefaultAsync(u => u.PasswordResetToken == token);
+                while (userDB != null)
+                {
+                    token = CreateRandomToken();
+                    userDB = await _context.Users.FirstOrDefaultAsync(u => u.PasswordResetToken == token);
+                }
+                user.PasswordResetToken = token;
+                await _context.SaveChangesAsync();
                 string message = @"Hello, <b>" + user.Username 
                                                + @"</b>.<br> Reset your password 
-                                    <a href='"
-                                               +
-                                               _configuration["Addresses:Frontend"]
-                                               +
-                                               "/verifyEmail?email="
-                                               + user.Email
-                                               + "&token=" //GenerateMyToken(user.Email)
+                                    <a href='http://brzodolokacije.reset_password/"+user.PasswordResetToken
                                                + @"'>here</a>.";
 
-                await _emailSender.SendEmailAsync(user.Email, "Confirm Account", message);
+                await _emailSender.SendEmailAsync(user.Email, "Reset Password", message);
 
                 return Ok(new
                 {
-                    error = true,
+                    error = false,
                     message = "Success"
+                });
+            }
+        }
+        
+        [HttpPost("check-token/{token}")]
+        public async Task<ActionResult<string>> checkEmailToken(string token)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.PasswordResetToken == token);
+            if (user == null)
+            {
+                return Ok(new
+                {
+                    error = true,
+                    message = "Token not valid"
+                });
+            }
+            else
+            {
+                return Ok(new
+                {
+                    error = false,
+                    message = user.Username
                 });
             }
         }
@@ -165,7 +191,7 @@ namespace backend.Controllers
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddDays(1),
+                expires: DateTime.Now.AddDays(30),
                 signingCredentials: creds
                 );
 
@@ -202,6 +228,11 @@ namespace backend.Controllers
                 error = false,
                 message = User?.Identity?.Name
             });
+        }
+
+        private string CreateRandomToken()
+        {
+            return Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
         }
     }
 }
