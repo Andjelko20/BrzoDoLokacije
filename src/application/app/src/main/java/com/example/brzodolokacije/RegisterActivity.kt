@@ -39,7 +39,7 @@ class RegisterActivity : AppCompatActivity() {
             var password = editPassword.text.toString().trim()
             var confpass = editConfirmPassword.text.toString().trim()
 
-            val retrofit = Client.buildService(Api::class.java)
+            val retrofit = Client(this).buildService(Api::class.java)
 
             //email check
             if(email.isEmpty()){
@@ -113,6 +113,24 @@ class RegisterActivity : AppCompatActivity() {
                                         ) {
                                             var token=response.body()?.message.toString()
                                             sessionManager.saveAuthToken(token)
+
+                                            retrofit.authentication().enqueue(object: Callback<DefaultResponse>
+                                            {
+                                                override fun onResponse(
+                                                    call: Call<DefaultResponse>,
+                                                    response: Response<DefaultResponse>
+                                                ) {
+                                                    if(response.body()?.error.toString() == "false") {
+                                                        var username = response.body()?.message.toString()
+                                                        sessionManager.saveUsername(username)
+                                                    }
+                                                }
+
+                                                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                                                    Toast.makeText(this@RegisterActivity,t.toString(),Toast.LENGTH_SHORT).show()
+                                                }
+
+                                            })
                                             
                                             reset()
                                             val intent = Intent(this@RegisterActivity, MainActivity::class.java)

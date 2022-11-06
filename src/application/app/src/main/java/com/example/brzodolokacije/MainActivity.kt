@@ -61,8 +61,8 @@ class MainActivity : AppCompatActivity() {
     fun logOut()
     {
         val sessionManager = SessionManager(this)
-        val retrofit = Client.buildService(Api::class.java)
-        retrofit.authentication(token = "Bearer ${sessionManager.fetchAuthToken()}").enqueue(object:
+        val retrofit = Client(this).buildService(Api::class.java)
+        retrofit.authentication().enqueue(object:
             Callback<DefaultResponse>
         {
             override fun onResponse(
@@ -74,22 +74,10 @@ class MainActivity : AppCompatActivity() {
                     sessionManager.deleteAuthToken()
                     sessionManager.deleteUsername()
 
-//                    Log.d("Auth", sessionManager.fetchAuthToken().toString())
-
-
                     val intent = Intent(this@MainActivity, LoginActivity::class.java)
                     startActivity(intent)
                     finish()
                 }
-//                else
-//                {
-//                    var username=response.body()?.message.toString()
-//                    sessionManager.saveUsername(username)
-//
-//                    val intent = Intent(this@MainActivity, LoginActivity::class.java)
-//                    startActivity(intent)
-//                    finish()
-//                }
             }
 
             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {

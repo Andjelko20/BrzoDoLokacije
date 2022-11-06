@@ -32,5 +32,5 @@ interface Api {
     fun checkIfTokenExists(@Path("token") token:String):Call<DefaultResponse>
 
     @GET("check-session")
-    fun authentication(@Header("Authorization") token: String?): Call<DefaultResponse>
+    fun authentication(): Call<DefaultResponse>
 }
