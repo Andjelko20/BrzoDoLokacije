@@ -17,6 +17,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="@+id/bubbleTabBar"/>
 
+
     <io.ak1.BubbleTabBar
         android:id="@+id/bubbleTabBar"
         android:layout_width="0dp"
