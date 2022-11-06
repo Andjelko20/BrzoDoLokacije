@@ -1,0 +1,4 @@
+/home/dragan/Documents/PMU/backend/production/appsettings.Development.json
+/home/dragan/Documents/PMU/backend/production/appsettings.json
+/home/dragan/Documents/PMU/backend/production/backend.pdb
+/home/dragan/Documents/PMU/backend/production/backend
