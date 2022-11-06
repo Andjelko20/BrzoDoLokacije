@@ -21,9 +21,8 @@ interface Api {
     @POST("login")
     fun loginUser(@Body userData : LoginDto) : Call<DefaultResponse>
 
-    @POST("reset-password/{username}")
+    @PUT("reset-password/{username}")
     fun resetPassword(@Path("username") email:String,@Field("password") password: String):Call<DefaultResponse>
-
 
     @POST("check-token/{token}")
     fun checkIfTokenExists(@Path("token") token:String):Call<DefaultResponse>

@@ -31,31 +31,16 @@ class ResetPasswordActivity : AppCompatActivity() {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
+        uri = intent.data
 
 
-        saveChangesBtn.setOnClickListener{
-            uri = intent.data
+
 
             var password = resetPassword.text.toString().trim()
             var confpass = resetConfPassword.text.toString().trim()
 
 
-            if(password.isEmpty()){
-                editPassword.error = "Password required"
-                editPassword.requestFocus()
-                return@setOnClickListener
-            }
 
-            if(confpass != password){
-                editConfirmPassword.error = "Passwords don't match"
-                editConfirmPassword.requestFocus()
-                return@setOnClickListener
-            }
-            if(!validation.checkPassword(password)){
-                editPassword.error = "Password must contain minimum 8 characters, at least one uppercase letter, one lowercase letter and one number"
-                editPassword.requestFocus()
-                return@setOnClickListener
-            }
 
             if (uri != null) {
 
@@ -63,28 +48,47 @@ class ResetPasswordActivity : AppCompatActivity() {
 
 
                 val param = parameters[parameters.size - 1]
-
                 Log.d("Token",param)
+
 
                 retrofit.checkIfTokenExists(param).enqueue(object : Callback<DefaultResponse>{
                     override fun onResponse(
                         call: Call<DefaultResponse>,
                         response: Response<DefaultResponse>
                     ) {
-                        retrofit.resetPassword(response.body()?.message.toString(),password).enqueue(object : Callback<DefaultResponse>{
-                            override fun onResponse(
-                                call: Call<DefaultResponse>,
-                                response: Response<DefaultResponse>
-                            ) {
-                                val intent = Intent(this@ResetPasswordActivity, MainActivity::class.java)
-                                startActivity(intent)
-                                finish()
+                        saveChangesBtn.setOnClickListener{
+                            if(password.isEmpty()){
+                                editPassword.error = "Password required"
+                                editPassword.requestFocus()
+                                return@setOnClickListener
                             }
 
-                            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                                Toast.makeText(this@ResetPasswordActivity,t.toString(), Toast.LENGTH_SHORT).show()
+                            if(confpass != password){
+                                editConfirmPassword.error = "Passwords don't match"
+                                editConfirmPassword.requestFocus()
+                                return@setOnClickListener
                             }
-                        })
+                            if(!validation.checkPassword(password)){
+                                editPassword.error = "Password must contain minimum 8 characters, at least one uppercase letter, one lowercase letter and one number"
+                                editPassword.requestFocus()
+                                return@setOnClickListener
+                            }
+                            retrofit.resetPassword(response.body()?.message.toString(),password).enqueue(object : Callback<DefaultResponse>{
+                                override fun onResponse(
+                                    call: Call<DefaultResponse>,
+                                    response: Response<DefaultResponse>
+                                ) {
+                                    val intent = Intent(this@ResetPasswordActivity, LoginActivity::class.java)
+                                    startActivity(intent)
+                                    finish()
+                                }
+
+                                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                                    Toast.makeText(this@ResetPasswordActivity,t.toString(), Toast.LENGTH_SHORT).show()
+                                }
+                            })
+                        }
+
                     }
 
                     override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
@@ -99,5 +103,4 @@ class ResetPasswordActivity : AppCompatActivity() {
 
 
 
-    }
 }

@@ -21,6 +21,19 @@ class SessionManager (context: Context) {
         editor.apply()
     }
 
+    fun deleteAuthToken()
+    {
+        val editor = prefs.edit()
+        editor.putString(USER_TOKEN, null)
+        editor.apply()
+    }
+    fun deleteUsername()
+    {
+        val editor = prefs.edit()
+        editor.putString(USERNAME, null)
+        editor.apply()
+    }
+
     fun saveUsername(username: String) {
         val editor = prefs.edit()
         editor.putString(USERNAME, username)
