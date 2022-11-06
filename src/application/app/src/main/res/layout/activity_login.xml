@@ -56,7 +56,7 @@
         android:id="@+id/LoginText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login to see locations from all over the world"
+        android:text="@string/login_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/formaLogin"
