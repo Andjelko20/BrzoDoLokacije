@@ -3,9 +3,10 @@ package com.example.brzodolokacije.API
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.LoginDto
 import com.example.brzodolokacije.Models.RegisterDto
-import okhttp3.ResponseBody
+import com.example.brzodolokacije.Models.ResetPasswordDto
 import retrofit2.Call
 import retrofit2.http.*
+
 
 interface Api {
 
@@ -20,4 +21,16 @@ interface Api {
     
     @POST("login")
     fun loginUser(@Body userData : LoginDto) : Call<DefaultResponse>
+
+    @POST("reset-password/{email}")
+    fun sendEmailtoResetPassword(@Path("email") email:String):Call<DefaultResponse>
+
+    @PUT("reset-password")
+    fun resetPassword(@Body changeData : ResetPasswordDto):Call<DefaultResponse>
+
+    @POST("check-token/{token}")
+    fun checkIfTokenExists(@Path("token") token:String):Call<DefaultResponse>
+
+    @GET("check-session")
+    fun authorization(@Header("Authorization") token: String?): Call<DefaultResponse>
 }

@@ -11,8 +11,8 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(UserContext))]
-    [Migration("20221029005714_UserMigration")]
-    partial class UserMigration
+    [Migration("20221106162750_userMigration")]
+    partial class userMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,6 +37,10 @@ namespace backend.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PasswordResetToken")
                         .IsRequired()
                         .HasColumnType("text");
 

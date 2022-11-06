@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/ic_home"
+        android:title="Home"
+        android:checked="true"
+        android:color="@color/light_green_navbar"/>
+
+    <item
+        android:id="@+id/explore"
+        android:icon="@drawable/ic_travel_explore"
+        android:title="Explore"
+        android:color="@color/light_yellow_navbar"/>
+
+    <item
+        android:id="@+id/profile"
+        android:icon="@drawable/ic_profile"
+        android:title="Profile"
+        android:color="@color/light_mint_navbar"/>
+</menu>

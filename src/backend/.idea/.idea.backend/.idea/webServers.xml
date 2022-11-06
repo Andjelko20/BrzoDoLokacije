@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="321b9a05-3fe7-41b3-a7fe-67d5668e58d8" name="PMU" url="http://softeng.pmg.kg.ac.rs:10051">
+        <fileTransfer accessType="LOCAL" port="0" />
+      </webServer>
+    </option>
+  </component>
+</project>

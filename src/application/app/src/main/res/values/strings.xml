@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">BrzoDoLokacije</string>
     <string name="return_to_login"><u>Return to login</u></string>
+    <string name="login_text"><i>Login to see locations from all over the world</i></string>
     <string name="signup_text"><i>Sign up to see locations from all over the world</i></string>
     <string name="no_account"><u>Don\'t have an account? Create one!</u></string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
