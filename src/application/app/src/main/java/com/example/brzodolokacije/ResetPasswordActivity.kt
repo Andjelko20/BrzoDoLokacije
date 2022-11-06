@@ -35,26 +35,33 @@ class ResetPasswordActivity : AppCompatActivity() {
         }
         uri = intent.data
 
-            var password = resetPassword.text.toString().trim()
-            var confpass = resetConfPassword.text.toString().trim()
 
-            if (uri != null) {
 
-                val parameters = uri!!.pathSegments
-                val param = parameters[parameters.size - 1]
-                Log.d("Token",param)
+        if (uri != null) {
 
-                retrofit.checkIfTokenExists(param).enqueue(object : Callback<DefaultResponse>{
-                    override fun onResponse(
-                        call: Call<DefaultResponse>,
-                        response: Response<DefaultResponse>
+            val parameters = uri!!.pathSegments
+
+
+            val param = parameters[parameters.size - 1]
+            Log.d("Token",param)
+
+
+            retrofit.checkIfTokenExists(param).enqueue(object : Callback<DefaultResponse>{
+                override fun onResponse(
+                    call: Call<DefaultResponse>,
+                    response: Response<DefaultResponse>
                     ) {
                         saveChangesBtn.setOnClickListener{
+
+                            var password = resetPassword.text.toString().trim()
+                            var confpass = resetConfPassword.text.toString().trim()
+
                             if(password.isEmpty()){
                                 editPassword.error = "Password required"
                                 editPassword.requestFocus()
                                 return@setOnClickListener
                             }
+
                             if(confpass != password){
                                 editConfirmPassword.error = "Passwords don't match"
                                 editConfirmPassword.requestFocus()
@@ -71,10 +78,18 @@ class ResetPasswordActivity : AppCompatActivity() {
                                     call: Call<DefaultResponse>,
                                     response: Response<DefaultResponse>
                                 ) {
-                                    val intent = Intent(this@ResetPasswordActivity, LoginActivity::class.java)
-                                    startActivity(intent)
-                                    finish()
+                                    if(response.body()?.error.toString()=="false")
+                                    {
+                                        val intent = Intent(this@ResetPasswordActivity, LoginActivity::class.java)
+                                        startActivity(intent)
+                                        finish()
+                                    }
+                                    else
+                                    {
+                                        Toast.makeText(this@ResetPasswordActivity,response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
+                                    }
                                 }
+
                                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                                     Toast.makeText(this@ResetPasswordActivity,t.toString(), Toast.LENGTH_SHORT).show()
                                 }
@@ -87,8 +102,12 @@ class ResetPasswordActivity : AppCompatActivity() {
                         Toast.makeText(this@ResetPasswordActivity,t.toString(),Toast.LENGTH_SHORT).show()
                     }
 
+
                 })
             }
         }
+
+
+
 
 }
