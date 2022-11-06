@@ -21,11 +21,12 @@ interface Api {
     @POST("login")
     fun loginUser(@Body userData : LoginDto) : Call<DefaultResponse>
 
-    @POST("reset-password/{email}")
-    fun resetPassword(@Path("email") email:String):Call<DefaultResponse>
+    @POST("reset-password/{username}")
+    fun resetPassword(@Path("username") email:String,@Field("password") password: String):Call<DefaultResponse>
 
-    @PUT("new-password/{email}")
-    fun saveChanges(@Path("email") email:String):Call<DefaultResponse>
+
+    @POST("check-token/{token}")
+    fun checkIfTokenExists(@Path("token") token:String):Call<DefaultResponse>
 
     @GET("check-session")
     fun authorization(@Header("Authorization") token: String?): Call<DefaultResponse>
