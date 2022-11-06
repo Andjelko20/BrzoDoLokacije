@@ -128,6 +128,31 @@ namespace backend.Controllers
             }
         }
         
+        [HttpPut("reset-password")]
+        public async Task<ActionResult<string>> sendForgotPasswdDto(ResetPasswordDto request)
+        {
+            User userDB = _context.Users.FirstOrDefault(x => x.Username == request.Username);
+            if (userDB == null)
+            {
+                return Ok(new
+                {
+                    error = true,
+                    message = "User with that username not exists"
+                });
+            }
+            else
+            {
+                userDB.PasswordResetToken = string.Empty;
+                userDB.Password=BCrypt.Net.BCrypt.HashPassword(request.Password);
+                await _context.SaveChangesAsync();
+                return Ok(new
+                {
+                    error = false,
+                    message = "Password changed successfully"
+                });
+            }
+        }
+        
         [HttpPost("check-token/{token}")]
         public async Task<ActionResult<string>> checkEmailToken(string token)
         {

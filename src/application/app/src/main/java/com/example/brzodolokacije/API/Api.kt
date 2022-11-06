@@ -25,7 +25,7 @@ interface Api {
     @POST("reset-password/{email}")
     fun sendEmailtoResetPassword(@Path("email") email:String):Call<DefaultResponse>
 
-    @PUT("reset-password/{username}")
+    @PUT("reset-password")
     fun resetPassword(@Body changeData : ResetPasswordDto):Call<DefaultResponse>
 
     @POST("check-token/{token}")

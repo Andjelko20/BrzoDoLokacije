@@ -61,7 +61,7 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data
-                    android:host="reset_password"
+                    android:host="brzodolokacije.reset_password"
                     android:scheme="http" />
             </intent-filter>
         </activity>
