@@ -51,50 +51,81 @@ class ResetPasswordActivity : AppCompatActivity() {
                     call: Call<DefaultResponse>,
                     response: Response<DefaultResponse>
                     ) {
-                        saveChangesBtn.setOnClickListener{
+                    if(response.body()?.error.toString()=="false") {
+                        saveChangesBtn.setOnClickListener {
 
                             var password = resetPassword.text.toString().trim()
                             var confpass = resetConfPassword.text.toString().trim()
 
-                            if(password.isEmpty()){
+                            if (password.isEmpty()) {
                                 editPassword.error = "Password required"
                                 editPassword.requestFocus()
                                 return@setOnClickListener
                             }
 
-                            if(confpass != password){
+                            if (confpass != password) {
                                 editConfirmPassword.error = "Passwords don't match"
                                 editConfirmPassword.requestFocus()
                                 return@setOnClickListener
                             }
-                            if(!validation.checkPassword(password)){
-                                editPassword.error = "Password must contain minimum 8 characters, at least one uppercase letter, one lowercase letter and one number"
+                            if (!validation.checkPassword(password)) {
+                                editPassword.error =
+                                    "Password must contain minimum 8 characters, at least one uppercase letter, one lowercase letter and one number"
                                 editPassword.requestFocus()
                                 return@setOnClickListener
                             }
-                            val changeData = ResetPasswordDto(response.body()?.message.toString(),password)
-                            retrofit.resetPassword(changeData).enqueue(object : Callback<DefaultResponse>{
-                                override fun onResponse(
-                                    call: Call<DefaultResponse>,
-                                    response: Response<DefaultResponse>
-                                ) {
-                                    if(response.body()?.error.toString()=="false")
-                                    {
-                                        val intent = Intent(this@ResetPasswordActivity, LoginActivity::class.java)
-                                        startActivity(intent)
-                                        finish()
+                            //Log.d("Username",response.body()?.message.toString())
+                            val changeData =
+                                ResetPasswordDto(response.body()?.message.toString(), password)
+                            retrofit.resetPassword(changeData)
+                                .enqueue(object : Callback<DefaultResponse> {
+                                    override fun onResponse(
+                                        call: Call<DefaultResponse>,
+                                        response: Response<DefaultResponse>
+                                    ) {
+                                        if (response.body()?.error.toString() == "false") {
+                                            val intent = Intent(
+                                                this@ResetPasswordActivity,
+                                                LoginActivity::class.java
+                                            )
+                                            startActivity(intent)
+                                            finish()
+                                        } else {
+                                            Toast.makeText(
+                                                this@ResetPasswordActivity,
+                                                response.body()?.message.toString(),
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
                                     }
-                                    else
-                                    {
-                                        Toast.makeText(this@ResetPasswordActivity,response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
-                                    }
-                                }
 
-                                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                                    Toast.makeText(this@ResetPasswordActivity,t.toString(), Toast.LENGTH_SHORT).show()
-                                }
-                            })
+                                    override fun onFailure(
+                                        call: Call<DefaultResponse>,
+                                        t: Throwable
+                                    ) {
+                                        Toast.makeText(
+                                            this@ResetPasswordActivity,
+                                            t.toString(),
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                })
                         }
+                    }
+                    else
+                    {
+                        Toast.makeText(
+                            this@ResetPasswordActivity,
+                            "Token not valid",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        val intent = Intent(
+                            this@ResetPasswordActivity,
+                            LoginActivity::class.java
+                        )
+                        startActivity(intent)
+                        finish()
+                    }
 
                     }
 
