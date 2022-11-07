@@ -53,9 +53,9 @@
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/birds"
-        android:layout_width="250dp"
+        android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_marginBottom="250dp"
+        android:layout_marginBottom="260dp"
         android:src="@drawable/birds"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

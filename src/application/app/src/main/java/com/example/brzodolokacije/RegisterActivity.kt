@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.Toast
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
+import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.RegisterDto
 import kotlinx.android.synthetic.main.activity_register.*
@@ -24,6 +25,7 @@ class RegisterActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
         val validation = Validation()
+        val sessionManager = SessionManager(this)
 
         backToLogin.setOnClickListener{
             val intent = Intent(this, LoginActivity::class.java)
@@ -37,7 +39,7 @@ class RegisterActivity : AppCompatActivity() {
             var password = editPassword.text.toString().trim()
             var confpass = editConfirmPassword.text.toString().trim()
 
-            val retrofit = Client.buildService(Api::class.java)
+            val retrofit = Client(this).buildService(Api::class.java)
 
             //email check
             if(email.isEmpty()){
@@ -89,32 +91,47 @@ class RegisterActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<DefaultResponse>, response: Response<DefaultResponse>) {
                     if(response.body()?.message.toString() == "true")
                     {
-                        Log.d("Postoji email", response.body()?.message.toString())
                         editEmail.error = "This email is already linked to another account"
                         editEmail.requestFocus()
                     }
 
                     else {
-                        Log.d("Ne postoji email", response.body()?.message.toString())
                         retrofit.checkIfUsernemeExists(username).enqueue(object : Callback<DefaultResponse>{
                             override fun onResponse(call: Call<DefaultResponse>, response: Response<DefaultResponse>){
                                 if(response.body()?.message.toString() == "true")
                                 {
-                                    Log.d("Postoji username", response.body()?.message.toString())
                                     editUsername.error = "This username is already taken"
                                     editUsername.requestFocus()
                                 }
                                 else
                                 {
-                                    Log.d("Ne postoji username", response.body()?.message.toString())
                                     val userData = RegisterDto(username,email,password)
-                                    Log.d("UserData", userData.toString())
                                     retrofit.createUser(userData).enqueue(object : Callback<DefaultResponse>{
                                         override fun onResponse(
                                             call: Call<DefaultResponse>,
                                             response: Response<DefaultResponse>
                                         ) {
-                                            //Toast.makeText(this@RegisterActivity, response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
+                                            var token=response.body()?.message.toString()
+                                            sessionManager.saveAuthToken(token)
+
+                                            retrofit.authentication().enqueue(object: Callback<DefaultResponse>
+                                            {
+                                                override fun onResponse(
+                                                    call: Call<DefaultResponse>,
+                                                    response: Response<DefaultResponse>
+                                                ) {
+                                                    if(response.body()?.error.toString() == "false") {
+                                                        var username = response.body()?.message.toString()
+                                                        sessionManager.saveUsername(username)
+                                                    }
+                                                }
+
+                                                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                                                    Toast.makeText(this@RegisterActivity,t.toString(),Toast.LENGTH_SHORT).show()
+                                                }
+
+                                            })
+                                            
                                             reset()
                                             val intent = Intent(this@RegisterActivity, MainActivity::class.java)
                                             startActivity(intent)

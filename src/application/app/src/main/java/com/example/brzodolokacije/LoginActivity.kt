@@ -40,7 +40,7 @@ class LoginActivity : AppCompatActivity() {
 
             var userData = LoginDto(usernameOrEmail,userPassword)
             val sessionManager = SessionManager(this)
-            val retrofit = Client.buildService(Api::class.java)
+            val retrofit = Client(this).buildService(Api::class.java)
             retrofit.loginUser(userData).enqueue(object : Callback<DefaultResponse>
             {
                 override fun onResponse(
@@ -54,8 +54,24 @@ class LoginActivity : AppCompatActivity() {
 
                         var token=response.body()?.message.toString()
                         sessionManager.saveAuthToken(token)
-                        //val sharedPreferences = getSharedPreferences("STORAGE", Context.MODE_PRIVATE)
-                        //sharedPreferences.edit().putString("token", token).apply()
+
+                        retrofit.authentication().enqueue(object: Callback<DefaultResponse>
+                        {
+                            override fun onResponse(
+                                call: Call<DefaultResponse>,
+                                response: Response<DefaultResponse>
+                            ) {
+                                if(response.body()?.error.toString() == "false") {
+                                    var username = response.body()?.message.toString()
+                                    sessionManager.saveUsername(username)
+                                }
+                            }
+
+                            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                                Toast.makeText(this@LoginActivity,t.toString(),Toast.LENGTH_SHORT).show()
+                            }
+
+                        })
 
                         reset()
                         val intent = Intent(this@LoginActivity, MainActivity::class.java)

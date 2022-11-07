@@ -6,7 +6,9 @@ Android aplikacija koja predstavlja drustvenu mrezu cija je ideja deljenje reali
 
 ## Demo
 
-Demo aplikacije mozete naci na ___
+Demo aplikacije mozete naci na sledecem [linku](http://softeng.pmf.kg.ac.rs:10051/).
+
+Lozinka za pristup je `123passwd123`
 
 ## Ideas and prototypes
 

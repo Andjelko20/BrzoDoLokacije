@@ -1,4 +1,4 @@
-namespace backend.Models;
+namespace backend.ModelsDto;
 
 public class ResetPasswordDto
 {

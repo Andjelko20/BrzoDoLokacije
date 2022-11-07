@@ -33,7 +33,7 @@ class ForgotPasswordEmailActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val retrofit = Client.buildService(Api::class.java)
+            val retrofit = Client(this).buildService(Api::class.java)
             retrofit.checkIfEmailExists(email).enqueue(object : Callback<DefaultResponse>
             {
                 override fun onResponse(
