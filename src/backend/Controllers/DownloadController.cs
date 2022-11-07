@@ -24,7 +24,7 @@ namespace backend.Controllers
         {
             if(password == "123passwd123")
             {
-                string filePath = @"../downloadable/proba.txt";
+                string filePath = @"../downloadable/brzodolokacije.apk";
                 var provider = new FileExtensionContentTypeProvider();
                 if (!provider.TryGetContentType(filePath, out var contentType))
                 {
