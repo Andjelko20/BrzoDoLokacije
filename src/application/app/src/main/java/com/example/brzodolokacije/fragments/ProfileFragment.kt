@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
@@ -60,6 +61,10 @@ class ProfileFragment : Fragment() {
         button.setOnClickListener { view ->
             val mainActivity = activity as MainActivity
             mainActivity.logOut()
+        }
+        val sessionManager= this.context?.let { SessionManager(it) }
+        if (sessionManager != null) {
+            view.findViewById<TextView>(R.id.profile).text="Welcome to profile, ${sessionManager.fetchUsername()}!"
         }
     }
 
