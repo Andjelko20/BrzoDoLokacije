@@ -27,7 +27,7 @@ class ResetPasswordActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_resetpassword)
 
-        val retrofit = Client.buildService(Api::class.java)
+        val retrofit = Client(this).buildService(Api::class.java)
         val validation = Validation()
         resetToLogin.setOnClickListener{
             val intent = Intent(this, LoginActivity::class.java)
