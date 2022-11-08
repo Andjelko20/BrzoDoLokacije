@@ -8,7 +8,7 @@ import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
-import com.example.brzodolokacije.Models.LoginDto
+import com.example.brzodolokacije.ModelsDto.LoginDto
 import com.example.brzodolokacije.R
 import kotlinx.android.synthetic.main.activity_login.*
 import retrofit2.Call

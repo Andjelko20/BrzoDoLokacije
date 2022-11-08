@@ -1,9 +1,9 @@
 package com.example.brzodolokacije.API
 
 import com.example.brzodolokacije.Models.DefaultResponse
-import com.example.brzodolokacije.Models.LoginDto
-import com.example.brzodolokacije.Models.RegisterDto
-import com.example.brzodolokacije.Models.ResetPasswordDto
+import com.example.brzodolokacije.ModelsDto.LoginDto
+import com.example.brzodolokacije.ModelsDto.RegisterDto
+import com.example.brzodolokacije.ModelsDto.ResetPasswordDto
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -11,7 +11,7 @@ import retrofit2.http.*
 interface Api {
 
     @POST("register")
-    fun createUser(@Body userData:RegisterDto):Call<DefaultResponse>
+    fun createUser(@Body userData: RegisterDto):Call<DefaultResponse>
 
     @POST("check-email/{email}")
     fun checkIfEmailExists(@Path("email") email:String):Call<DefaultResponse>

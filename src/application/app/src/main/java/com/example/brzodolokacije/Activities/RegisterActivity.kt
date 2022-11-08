@@ -9,7 +9,7 @@ import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
-import com.example.brzodolokacije.Models.RegisterDto
+import com.example.brzodolokacije.ModelsDto.RegisterDto
 import com.example.brzodolokacije.R
 import com.example.brzodolokacije.Models.Validation
 import kotlinx.android.synthetic.main.activity_register.*
