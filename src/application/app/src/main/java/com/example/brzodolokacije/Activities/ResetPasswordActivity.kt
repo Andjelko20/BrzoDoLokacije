@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Models.DefaultResponse
-import com.example.brzodolokacije.Models.ResetPasswordDto
+import com.example.brzodolokacije.ModelsDto.ResetPasswordDto
 import com.example.brzodolokacije.R
 import com.example.brzodolokacije.Models.Validation
 import kotlinx.android.synthetic.main.activity_register.*

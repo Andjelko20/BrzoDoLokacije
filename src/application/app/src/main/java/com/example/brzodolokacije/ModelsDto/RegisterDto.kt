@@ -1,4 +1,4 @@
-package com.example.brzodolokacije.Models
+package com.example.brzodolokacije.ModelsDto
 
 import com.google.gson.annotations.SerializedName
 
