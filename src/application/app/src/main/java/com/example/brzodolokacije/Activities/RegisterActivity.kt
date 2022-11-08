@@ -1,19 +1,18 @@
-package com.example.brzodolokacije
+package com.example.brzodolokacije.Activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.RegisterDto
+import com.example.brzodolokacije.R
+import com.example.brzodolokacije.Models.Validation
 import kotlinx.android.synthetic.main.activity_register.*
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

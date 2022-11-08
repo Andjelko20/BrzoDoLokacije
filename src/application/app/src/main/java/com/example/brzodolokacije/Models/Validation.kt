@@ -1,4 +1,4 @@
-package com.example.brzodolokacije
+package com.example.brzodolokacije.Models
 
 class Validation {
     fun checkEmail(email: String): Boolean

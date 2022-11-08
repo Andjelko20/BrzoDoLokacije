@@ -1,6 +1,5 @@
-package com.example.brzodolokacije
+package com.example.brzodolokacije.Activities
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -12,13 +11,12 @@ import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.databinding.ActivityMainBinding
-import com.example.brzodolokacije.fragments.ExploreFragment
-import com.example.brzodolokacije.fragments.HomeFragment
-import com.example.brzodolokacije.fragments.ProfileFragment
-import io.ak1.BubbleTabBar
+import com.example.brzodolokacije.Fragments.ExploreFragment
+import com.example.brzodolokacije.Fragments.HomeFragment
+import com.example.brzodolokacije.Fragments.ProfileFragment
+import com.example.brzodolokacije.R
 import io.ak1.OnBubbleClickListener
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_profile.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
