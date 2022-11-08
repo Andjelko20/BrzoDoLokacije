@@ -1,4 +1,4 @@
-package com.example.brzodolokacije
+package com.example.brzodolokacije.Activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +8,7 @@ import android.widget.Toast
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Models.DefaultResponse
+import com.example.brzodolokacije.R
 import kotlinx.android.synthetic.main.activity_forgotpasswordemail.*
 import retrofit2.Call
 import retrofit2.Callback

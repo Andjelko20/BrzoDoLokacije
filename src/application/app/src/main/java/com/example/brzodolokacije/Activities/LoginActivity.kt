@@ -1,6 +1,5 @@
-package com.example.brzodolokacije
+package com.example.brzodolokacije.Activities
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,6 +9,7 @@ import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.LoginDto
+import com.example.brzodolokacije.R
 import kotlinx.android.synthetic.main.activity_login.*
 import retrofit2.Call
 import retrofit2.Callback

@@ -1,17 +1,17 @@
-package com.example.brzodolokacije
+package com.example.brzodolokacije.Activities
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Models.DefaultResponse
-import com.example.brzodolokacije.Models.RegisterDto
 import com.example.brzodolokacije.Models.ResetPasswordDto
+import com.example.brzodolokacije.R
+import com.example.brzodolokacije.Models.Validation
 import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.android.synthetic.main.activity_resetpassword.*
 import retrofit2.Call
