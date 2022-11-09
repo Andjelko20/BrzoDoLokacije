@@ -4,6 +4,7 @@ import java.util.Date
 
 data class Photo (
     var postID : String,
+    var path : String,
     var owner : String,
     var ownerID : String,
     var dateTime : Date,
