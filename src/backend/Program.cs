@@ -23,9 +23,8 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddControllers();
 
-builder.Services.AddDbContext<UserContext>(options =>
+builder.Services.AddDbContext<DataContext>(options =>
 {
-    // User
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 

@@ -19,10 +19,10 @@ namespace backend.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly UserContext _context;
+        private readonly DataContext _context;
         private readonly IConfiguration _configuration;
 
-        public AuthController(UserContext context, IConfiguration configuration)
+        public AuthController(DataContext context, IConfiguration configuration)
         {
             _context = context;
             _configuration = configuration;
