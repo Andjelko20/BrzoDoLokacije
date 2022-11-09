@@ -239,12 +239,6 @@ namespace backend.Controllers
             return Ok("deleted " + username);
         }
 
-        [HttpGet("getAll")]
-        public async Task<ActionResult<List<User>>> getAllUsers()
-        {
-            return Ok(await _context.Users.ToListAsync());
-        }
-
         [Authorize(Roles = "korisnik")]
         [HttpGet("check-session")]
         public ActionResult<string> checkSession()

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using backend.Models;
 using backend.ModelsDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ namespace backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "korisnik")]
     public class PostController : ControllerBase
     {
         private readonly DataContext _context;
@@ -33,7 +35,7 @@ namespace backend.Controllers
         [HttpPost("addNew")]
         public async Task<ActionResult<string>> addNew(AddPostDto request)
         {
-            User user = await _context.Users.FindAsync(request.UserId);
+            User user = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
             Post post = new Post
             {
                 Description = request.Description,
