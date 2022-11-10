@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,7 +15,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/drugiDeo"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="70dp">
 
         <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/profilePicture"
@@ -140,7 +141,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/prviDeo"
-        app:layout_constraintBottom_toTopOf="@+id/logoutButton">
+        app:layout_constraintBottom_toTopOf="@+id/logoutButton"
+        android:layout_below="@+id/prviDeo"
+        android:layout_marginTop="20dp">
 
         <TextView
             android:id="@+id/imeprezime"
@@ -174,7 +177,9 @@
         android:text="Log out"
         android:textAllCaps="false"
         android:backgroundTint="@color/light_blue"
-        android:textSize="18sp"/>
+        android:textSize="18sp"
+        android:layout_below="@+id/drugiDeo"
+        android:layout_marginTop="150dp"
+        android:layout_centerHorizontal="true"/>
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
