@@ -28,7 +28,20 @@ namespace backend.Controllers
         [HttpGet("getAll")]
         public async Task<ActionResult<List<Post>>> getAll()
         {
-            var posts = await _context.Posts.ToListAsync();
+            var posts = await _context.Posts.OrderByDescending(p => p.Date).ToListAsync();
+            return Ok(posts);
+        }
+        
+        [HttpGet("getPostsFromUser/{username}")]
+        public async Task<ActionResult<List<Post>>> getAll(string username)
+        {
+            User user = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
+            if (user == null)
+                return BadRequest("User not found");
+            var posts = await _context.Posts
+                .Where(p => p.UserId == user.Id)
+                .OrderByDescending(p => p.Date)
+                .ToListAsync();
             return Ok(posts);
         }
 
@@ -36,11 +49,13 @@ namespace backend.Controllers
         public async Task<ActionResult<string>> addNew(AddPostDto request)
         {
             User user = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
+            if (user == null)
+                return BadRequest("User not found");
             Post post = new Post
             {
                 Description = request.Description,
                 Location = request.Location,
-                UserId = request.UserId,
+                UserId = user.Id,
                 User = user
             };
             _context.Posts.Add(post);
@@ -52,6 +67,8 @@ namespace backend.Controllers
         public async Task<ActionResult<string>> delete(int id)
         {
             Post post = await _context.Posts.FindAsync(id);
+            if (post == null)
+                return BadRequest("Post not found");
             _context.Posts.Remove(post);
             await _context.SaveChangesAsync();
             return Ok("ok");
