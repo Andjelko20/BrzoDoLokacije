@@ -33,7 +33,8 @@ namespace backend.Controllers
                 Username = user.Username,
                 Name = user.Name,
                 Description = user.Description,
-                Avatar = user.Avatar
+                Avatar = user.Avatar,
+                Posts = await _context.Posts.Where(p => p.UserId == user.Id).OrderByDescending(p => p.Date).ToListAsync()
             };
             return Ok(upd);
         }
