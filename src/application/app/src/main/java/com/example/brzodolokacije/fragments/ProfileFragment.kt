@@ -51,10 +51,10 @@ class ProfileFragment : Fragment() {
             val mainActivity = activity as MainActivity
             mainActivity.logOut()
         }
-//        val sessionManager= this.context?.let { SessionManager(it) }
-//        if (sessionManager != null) {
-//            view.findViewById<TextView>(R.id.profile).text="Welcome to profile, ${sessionManager.fetchUsername()}!"
-//        }
+        val sessionManager= this.context?.let { SessionManager(it) }
+        if (sessionManager != null) {
+            view.findViewById<TextView>(R.id.username).text="${sessionManager.fetchUsername()}"
+        }
     }
 
     companion object {

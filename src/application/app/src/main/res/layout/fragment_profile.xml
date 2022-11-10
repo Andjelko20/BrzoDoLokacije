@@ -15,7 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/logoutButton"
+        app:layout_constraintBottom_toTopOf="@+id/username"
         app:civ_border_width="3dp"
         app:civ_border_color="@color/light_blue"
         app:civ_shadow="true"
@@ -23,13 +23,25 @@
         app:civ_shadow_color="@color/dark_blue"
         app:civ_shadow_gravity="center"/>
 
+    <TextView
+        android:id="@+id/username"
+        android:text="username"
+        android:textSize="30dp"
+        android:textColor="@color/dark_blue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profilePicture"
+        app:layout_constraintBottom_toTopOf="@+id/logoutButton"/>
+
     <Button
         android:id="@+id/logoutButton"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profilePicture"
+        app:layout_constraintTop_toBottomOf="@+id/username"
         app:layout_constraintBottom_toBottomOf="parent"
         android:text="Log out"
         android:textAllCaps="false"
