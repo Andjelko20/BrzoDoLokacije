@@ -14,7 +14,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/logoutButton"
+        app:layout_constraintBottom_toTopOf="@id/drugiDeo"
         android:orientation="horizontal">
 
         <com.mikhaellopez.circularimageview.CircularImageView
@@ -30,14 +30,136 @@
             app:civ_shadow_gravity="center"
             android:layout_gravity="left"/>
 
+        <LinearLayout
+            android:id="@+id/prviDeoDesno"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="right"
+            android:layout_marginStart="10dp">
+
+            <TextView
+                android:id="@+id/username"
+                android:text="username"
+                android:textSize="25dp"
+                android:textColor="@color/dark_blue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="20dp"/>
+
+            <LinearLayout
+                android:id="@+id/prviDeoDesnoIspod"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp">
+
+                <LinearLayout
+                    android:id="@+id/prviDeoPosts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginEnd="20dp">
+
+                    <TextView
+                        android:id="@+id/postsNum"
+                        android:text="0"
+                        android:textSize="20dp"
+                        android:textColor="@color/dark_blue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:id="@+id/wordPosts"
+                        android:text="Posts"
+                        android:textSize="20dp"
+                        android:textColor="@color/dark_blue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/prviDeoFollowers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginEnd="20dp">
+
+                    <TextView
+                        android:id="@+id/followersNum"
+                        android:text="0"
+                        android:textSize="20dp"
+                        android:textColor="@color/dark_blue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:id="@+id/wordFollowers"
+                        android:text="Followers"
+                        android:textSize="20dp"
+                        android:textColor="@color/dark_blue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/prviDeoTotalLikes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/likesNum"
+                        android:text="0"
+                        android:textSize="20dp"
+                        android:textColor="@color/dark_blue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:id="@+id/wordLikes"
+                        android:text="Likes"
+                        android:textSize="20dp"
+                        android:textColor="@color/dark_blue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/drugiDeo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/prviDeo"
+        app:layout_constraintBottom_toTopOf="@+id/logoutButton">
+
         <TextView
-            android:id="@+id/username"
-            android:text="username"
-            android:textSize="25dp"
-            android:textColor="@color/dark_blue"
+            android:id="@+id/imeprezime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"/>
+            android:text="Ime Prezime"
+            android:textSize="25dp"
+            android:textColor="@color/dark_blue"
+            android:layout_marginStart="15dp"/>
+
+        <TextView
+            android:id="@+id/opis"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Opis"
+            android:textSize="20dp"
+            android:textColor="@color/dark_blue"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"/>
 
     </LinearLayout>
 
@@ -47,7 +169,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/prviDeo"
+        app:layout_constraintTop_toBottomOf="@+id/drugiDeo"
         app:layout_constraintBottom_toBottomOf="parent"
         android:text="Log out"
         android:textAllCaps="false"
