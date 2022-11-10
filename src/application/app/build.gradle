@@ -54,5 +54,6 @@ dependencies {
     implementation 'androidx.preference:preference:1.1.1'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.4.31'
     implementation 'io.ak1:bubbletabbar:1.0.8'
+    implementation("androidx.cardview:cardview:1.0.0")
 }
 
