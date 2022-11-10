@@ -204,6 +204,16 @@ namespace backend.Controllers
 
         }
 
+        [Authorize(Roles = "korisnik")]
+        [HttpGet("check-session")]
+        public ActionResult<string> checkSession()
+        {
+            return Ok(new {
+                error = false,
+                message = User?.Identity?.Name
+            });
+        }
+
         private string CreateToken(User user)
         {
             List<Claim> claims = new List<Claim>
@@ -224,31 +234,7 @@ namespace backend.Controllers
 
             return jwt;
         }
-
-        [HttpDelete("delete")]
-        public async Task<ActionResult<string>> deleteUser(string username)
-        {
-            User user = await _context.Users.FirstOrDefaultAsync(u=>u.Username == username);
-            if (user == null)
-            {
-                return NotFound("not found");
-            }
-
-            _context.Users.Remove(user);
-            _context.SaveChangesAsync();
-            return Ok("deleted " + username);
-        }
-
-        [Authorize(Roles = "korisnik")]
-        [HttpGet("check-session")]
-        public ActionResult<string> checkSession()
-        {
-            return Ok(new {
-                error = false,
-                message = User?.Identity?.Name
-            });
-        }
-
+        
         private string CreateRandomToken()
         {
             return Convert.ToHexString(RandomNumberGenerator.GetBytes(64));

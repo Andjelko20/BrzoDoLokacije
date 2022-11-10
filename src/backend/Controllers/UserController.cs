@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using backend.Models;
 using backend.ModelsDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -38,5 +39,20 @@ namespace backend.Controllers
             };
             return Ok(upd);
         }
+        
+        [HttpDelete("delete/{username}")]
+        public async Task<ActionResult<string>> deleteUser(string username)
+        {
+            User user = await _context.Users.FirstOrDefaultAsync(u=>u.Username == username);
+            if (user == null)
+            {
+                return NotFound("not found");
+            }
+
+            _context.Users.Remove(user);
+            _context.SaveChangesAsync();
+            return Ok("deleted " + username);
+        }
+        
     }
 }
