@@ -5,70 +5,32 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.ProfileFragment"
-    android:background="@drawable/loginregisterstyle">
+    android:background="@color/backgroundLightTheme">
 
-    <ImageView
-        android:id="@+id/imageViewClouds"
-        android:layout_width="match_parent"
-        android:layout_height="277dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:padding="0dp"
-        android:paddingStart="0dp"
-        android:paddingLeft="0dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="0dp"
-        android:paddingRight="0dp"
-        android:paddingBottom="0dp"
-        android:layout_marginTop="-10dp"
-        app:layout_constraintEnd_toEndOf="parent"
+    <com.mikhaellopez.circularimageview.CircularImageView
+        android:id="@+id/profilePicture"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/nopfp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/clouds" />
-
-    <ImageView
-        android:id="@+id/imageViewMountains"
-        android:layout_width="match_parent"
-        android:layout_height="280dp"
-        android:layout_alignParentBottom="true"
-        android:padding="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginBottom="-15dp"
-        app:srcCompat="@drawable/mountains" />
-
-    <TextView
-        android:id="@+id/profile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Welcome to Profile!"
-        android:layout_marginTop="260dp"
-        android:textAlignment="center"
-        android:textSize="30sp"
-        android:textColor="@color/light_mint_navbar"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
-
-    <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/birds"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_marginBottom="260dp"
-        android:src="@drawable/birds"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintBottom_toTopOf="@+id/logoutButton"
+        app:civ_border_width="3dp"
+        app:civ_border_color="@color/light_blue"
+        app:civ_shadow="true"
+        app:civ_shadow_radius="7dp"
+        app:civ_shadow_color="@color/dark_blue"
+        app:civ_shadow_gravity="center"/>
 
     <Button
         android:id="@+id/logoutButton"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/birds"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/birds"
+        app:layout_constraintTop_toBottomOf="@+id/profilePicture"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:text="Log out"
         android:textAllCaps="false"
         android:backgroundTint="@color/light_blue"
