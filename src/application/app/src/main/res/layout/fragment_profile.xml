@@ -73,7 +73,7 @@
                         <TextView
                             android:id="@+id/postsNum"
                             android:text="0"
-                            android:textSize="20dp"
+                            android:textSize="23dp"
                             android:textAlignment="center"
                             android:textColor="@color/dark_blue"
                             android:layout_width="match_parent"
@@ -102,7 +102,7 @@
                             android:text="0"
                             android:textAlignment="center"
                             android:textColor="@color/dark_blue"
-                            android:textSize="20dp" />
+                            android:textSize="23dp" />
 
                         <TextView
                             android:id="@+id/wordFollowers"
@@ -122,7 +122,7 @@
                         <TextView
                             android:id="@+id/likesNum"
                             android:text="0"
-                            android:textSize="20dp"
+                            android:textSize="23dp"
                             android:textAlignment="center"
                             android:textColor="@color/dark_blue"
                             android:layout_width="match_parent"
@@ -157,7 +157,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Ime Prezime"
-                android:textSize="25dp"
+                android:textSize="23dp"
                 android:textColor="@color/dark_blue"
                 android:layout_marginStart="20dp"/>
 
