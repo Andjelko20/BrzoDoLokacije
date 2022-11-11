@@ -80,21 +80,12 @@ namespace backend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Followers")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Following")
-                        .HasColumnType("integer");
-
                     b.Property<bool>("HasAvatar")
                         .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<int>("NumberOfLikes")
-                        .HasColumnType("integer");
 
                     b.Property<string>("Password")
                         .IsRequired()

@@ -24,10 +24,7 @@ namespace backend.Migrations
                     Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
                     Avatar = table.Column<string>(type: "text", nullable: false),
-                    HasAvatar = table.Column<bool>(type: "boolean", nullable: false),
-                    Followers = table.Column<int>(type: "integer", nullable: false),
-                    Following = table.Column<int>(type: "integer", nullable: false),
-                    NumberOfLikes = table.Column<int>(type: "integer", nullable: false)
+                    HasAvatar = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {

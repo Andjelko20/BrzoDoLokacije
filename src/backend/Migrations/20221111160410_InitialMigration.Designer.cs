@@ -11,7 +11,7 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221111155110_InitialMigration")]
+    [Migration("20221111160410_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -83,21 +83,12 @@ namespace backend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Followers")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Following")
-                        .HasColumnType("integer");
-
                     b.Property<bool>("HasAvatar")
                         .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<int>("NumberOfLikes")
-                        .HasColumnType("integer");
 
                     b.Property<string>("Password")
                         .IsRequired()
