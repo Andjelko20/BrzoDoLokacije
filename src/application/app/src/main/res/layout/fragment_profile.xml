@@ -27,8 +27,8 @@
 
             <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/profilePicture"
-                android:layout_width="140dp"
-                android:layout_height="140dp"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
                 android:src="@drawable/nopfp"
                 app:civ_border_width="3dp"
                 app:civ_border_color="@color/light_blue"
@@ -54,7 +54,7 @@
                     android:layout_marginTop="15dp"
                     android:text="username"
                     android:textColor="@color/dark_blue"
-                    android:textSize="25dp" />
+                    android:textSize="22dp" />
 
                 <LinearLayout
                     android:id="@+id/prviDeoDesnoIspod"
@@ -73,7 +73,7 @@
                         <TextView
                             android:id="@+id/postsNum"
                             android:text="0"
-                            android:textSize="23dp"
+                            android:textSize="20dp"
                             android:textAlignment="center"
                             android:textColor="@color/dark_blue"
                             android:layout_width="match_parent"
@@ -82,7 +82,7 @@
                         <TextView
                             android:id="@+id/wordPosts"
                             android:text="Posts"
-                            android:textSize="20dp"
+                            android:textSize="18dp"
                             android:textColor="@color/dark_blue"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
@@ -102,7 +102,7 @@
                             android:text="0"
                             android:textAlignment="center"
                             android:textColor="@color/dark_blue"
-                            android:textSize="23dp" />
+                            android:textSize="20dp" />
 
                         <TextView
                             android:id="@+id/wordFollowers"
@@ -110,7 +110,7 @@
                             android:layout_height="wrap_content"
                             android:text="Followers"
                             android:textColor="@color/dark_blue"
-                            android:textSize="20dp" />
+                            android:textSize="18dp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -122,7 +122,7 @@
                         <TextView
                             android:id="@+id/likesNum"
                             android:text="0"
-                            android:textSize="23dp"
+                            android:textSize="20dp"
                             android:textAlignment="center"
                             android:textColor="@color/dark_blue"
                             android:layout_width="match_parent"
@@ -131,7 +131,7 @@
                         <TextView
                             android:id="@+id/wordLikes"
                             android:text="Likes"
-                            android:textSize="20dp"
+                            android:textSize="18dp"
                             android:textColor="@color/dark_blue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
@@ -156,7 +156,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Ime Prezime"
-                android:textSize="23dp"
+                android:textSize="20dp"
                 android:textColor="@color/dark_blue"
                 android:layout_marginStart="20dp"/>
 
@@ -165,7 +165,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Opis"
-                android:textSize="20dp"
+                android:textSize="18dp"
                 android:textColor="@color/dark_blue"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"/>
