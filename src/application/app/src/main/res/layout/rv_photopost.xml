@@ -8,7 +8,6 @@
     android:weightSum="1">
 
     <androidx.cardview.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/cardViewPost"
@@ -68,8 +67,8 @@
                 android:id="@+id/postImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxHeight="500dp"
-                android:minHeight="200dp"
+                android:minHeight="100dp"
+                android:scaleType="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/postHeader" />
@@ -78,18 +77,20 @@
                 android:id="@+id/locationWrapper"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:drawable/divider_horizontal_textfield"
+                android:background="#99748c8c"
                 android:clickable="true"
                 android:focusable="true"
                 app:layout_constraintBottom_toBottomOf="@+id/postImage"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
+                <!-- A6 ili B3 ako je previse transparentno -->
 
                 <ImageView
                     android:id="@+id/locationImg"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginStart="18dp"
+                    android:backgroundTint="#66748c8c"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -103,7 +104,8 @@
                     android:padding="10dp"
                     android:textColor="@color/text_light"
                     android:textSize="23sp"
-                    android:textStyle="italic"
+                    android:textStyle="bold"
+                    android:background="#33748c8c"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/locationImg"
                     app:layout_constraintTop_toTopOf="parent"

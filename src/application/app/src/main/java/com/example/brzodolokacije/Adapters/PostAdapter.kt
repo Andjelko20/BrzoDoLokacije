@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Looper
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,15 +37,21 @@ class PostAdapter(val photoList : List<Photo>, val context : Context) :
                 Toast.makeText(context,"Owner ID: ${photo.ownerID}",Toast.LENGTH_SHORT).show()
             }
             date.text = photo.dateTime.toString()
-            location.text = photo.location
+
+            val text= Html.fromHtml("<i>"+photo.location+"</i>")
+            location.text = text //=photo.location
+
             caption.text = photo.caption
+
             likes.text = photo.numOfLikes.toString()
             likes.setOnClickListener{
                 Toast.makeText(context,"Post ID: ${photo.postID} - likes",Toast.LENGTH_SHORT).show()
             }
+
             itemView.findViewById<ImageView>(R.id.likeBtn).setOnClickListener{
                 Toast.makeText(context,"Liked post with ID: ${photo.postID} - likes",Toast.LENGTH_SHORT).show()
             }
+
             loadImage(image,photo.path)
         }
     }
