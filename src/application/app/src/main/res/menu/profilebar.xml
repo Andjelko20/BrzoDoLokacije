@@ -6,7 +6,7 @@
         android:icon="@drawable/ic_posts"
         android:title="Posts"
         android:checked="true"
-        android:color="@color/light_mint_navbar"/>
+        android:color="@color/light_green_navbar"/>
 
     <item
         android:id="@+id/visitedLocations"

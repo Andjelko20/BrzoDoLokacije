@@ -8,165 +8,170 @@
     android:background="@color/backgroundLightTheme">
 
     <LinearLayout
-        android:id="@+id/prviDeo"
+        android:id="@+id/podaci"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/drugiDeo"
-        android:orientation="horizontal"
-        android:layout_marginTop="70dp">
-
-        <com.mikhaellopez.circularimageview.CircularImageView
-            android:id="@+id/profilePicture"
-            android:layout_width="140dp"
-            android:layout_height="140dp"
-            android:src="@drawable/nopfp"
-            app:civ_border_width="3dp"
-            app:civ_border_color="@color/light_blue"
-            app:civ_shadow="true"
-            app:civ_shadow_radius="7dp"
-            app:civ_shadow_color="@color/dark_blue"
-            app:civ_shadow_gravity="center"
-            android:layout_gravity="left"/>
+        android:orientation="vertical"
+        android:background="@color/pastel_blue">
 
         <LinearLayout
-            android:id="@+id/prviDeoDesno"
+            android:id="@+id/prviDeo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="right"
-            android:layout_marginStart="10dp">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/drugiDeo"
+            android:orientation="horizontal"
+            android:layout_marginTop="70dp">
 
-            <TextView
-                android:id="@+id/username"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="15dp"
-                android:text="username"
-                android:textColor="@color/dark_blue"
-                android:textSize="25dp" />
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/profilePicture"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:src="@drawable/nopfp"
+                app:civ_border_width="3dp"
+                app:civ_border_color="@color/light_blue"
+                app:civ_shadow="true"
+                app:civ_shadow_radius="7dp"
+                app:civ_shadow_color="@color/dark_blue"
+                app:civ_shadow_gravity="center"
+                android:layout_gravity="left"/>
 
             <LinearLayout
-                android:id="@+id/prviDeoDesnoIspod"
+                android:id="@+id/prviDeoDesno"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="20dp">
+                android:orientation="vertical"
+                android:layout_gravity="right"
+                android:layout_marginStart="10dp">
 
-                <LinearLayout
-                    android:id="@+id/prviDeoPosts"
+                <TextView
+                    android:id="@+id/username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginEnd="20dp">
-
-                    <TextView
-                        android:id="@+id/postsNum"
-                        android:text="0"
-                        android:textSize="20dp"
-                        android:textAlignment="center"
-                        android:textColor="@color/dark_blue"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-
-                    <TextView
-                        android:id="@+id/wordPosts"
-                        android:text="Posts"
-                        android:textSize="20dp"
-                        android:textColor="@color/dark_blue"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-                </LinearLayout>
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="15dp"
+                    android:text="username"
+                    android:textColor="@color/dark_blue"
+                    android:textSize="25dp" />
 
                 <LinearLayout
-                    android:id="@+id/prviDeoFollowers"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/prviDeoDesnoIspod"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
-                    android:orientation="vertical">
+                    android:orientation="horizontal"
+                    android:layout_marginTop="20dp">
 
-                    <TextView
-                        android:id="@+id/followersNum"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textAlignment="center"
-                        android:textColor="@color/dark_blue"
-                        android:textSize="20dp" />
-
-                    <TextView
-                        android:id="@+id/wordFollowers"
+                    <LinearLayout
+                        android:id="@+id/prviDeoPosts"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Followers"
-                        android:textColor="@color/dark_blue"
-                        android:textSize="20dp" />
-                </LinearLayout>
+                        android:orientation="vertical"
+                        android:layout_marginEnd="20dp">
 
-                <LinearLayout
-                    android:id="@+id/prviDeoTotalLikes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/postsNum"
+                            android:text="0"
+                            android:textSize="20dp"
+                            android:textAlignment="center"
+                            android:textColor="@color/dark_blue"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
 
-                    <TextView
-                        android:id="@+id/likesNum"
-                        android:text="0"
-                        android:textSize="20dp"
-                        android:textAlignment="center"
-                        android:textColor="@color/dark_blue"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        <TextView
+                            android:id="@+id/wordPosts"
+                            android:text="Posts"
+                            android:textSize="20dp"
+                            android:textColor="@color/dark_blue"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/wordLikes"
-                        android:text="Likes"
-                        android:textSize="20dp"
-                        android:textColor="@color/dark_blue"
+                    <LinearLayout
+                        android:id="@+id/prviDeoFollowers"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/followersNum"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textAlignment="center"
+                            android:textColor="@color/dark_blue"
+                            android:textSize="20dp" />
+
+                        <TextView
+                            android:id="@+id/wordFollowers"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Followers"
+                            android:textColor="@color/dark_blue"
+                            android:textSize="20dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/prviDeoTotalLikes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/likesNum"
+                            android:text="0"
+                            android:textSize="20dp"
+                            android:textAlignment="center"
+                            android:textColor="@color/dark_blue"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:id="@+id/wordLikes"
+                            android:text="Likes"
+                            android:textSize="20dp"
+                            android:textColor="@color/dark_blue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/drugiDeo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/prviDeo"
-        app:layout_constraintBottom_toTopOf="@+id/bubbleTabBarProfile"
-        android:layout_below="@+id/prviDeo"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp">
-
-        <TextView
-            android:id="@+id/imeprezime"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/drugiDeo"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ime Prezime"
-            android:textSize="25dp"
-            android:textColor="@color/dark_blue"
-            android:layout_marginStart="20dp"/>
+            android:orientation="vertical"
+            android:layout_below="@+id/prviDeo"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp">
 
-        <TextView
-            android:id="@+id/opis"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Opis"
-            android:textSize="20dp"
-            android:textColor="@color/dark_blue"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"/>
+            <TextView
+                android:id="@+id/imeprezime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ime Prezime"
+                android:textSize="25dp"
+                android:textColor="@color/dark_blue"
+                android:layout_marginStart="20dp"/>
+
+            <TextView
+                android:id="@+id/opis"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Opis"
+                android:textSize="20dp"
+                android:textColor="@color/dark_blue"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -184,17 +189,13 @@
         app:bubbletab_icon_padding="5sp"
         app:bubbletab_vertical_padding="10dp"
         app:bubbletab_tab_corner_radius="25dp"
-        android:layout_below="@+id/drugiDeo">
+        android:layout_below="@+id/podaci">
     </io.ak1.BubbleTabBar>
 
     <Button
         android:id="@+id/logoutButton"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/drugiDeo"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:text="Log out"
         android:textAllCaps="false"
         android:backgroundTint="@color/light_blue"

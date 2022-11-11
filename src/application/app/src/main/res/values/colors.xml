@@ -25,4 +25,5 @@
     <color name="light_yellow_navbar">#E6FCFFD5</color>
     <color name="light_green_navbar">#D9FFE0</color>
     <color name="light_mint_navbar">#C1F8FF</color>
+    <color name="pastel_blue">#C3E2FF</color>
 </resources>
