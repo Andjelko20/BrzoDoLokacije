@@ -55,5 +55,6 @@ dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.4.31'
     implementation 'io.ak1:bubbletabbar:1.0.8'
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
 }
 
