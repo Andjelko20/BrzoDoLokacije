@@ -8,13 +8,12 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
+import com.example.brzodolokacije.Fragments.*
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.databinding.ActivityMainBinding
-import com.example.brzodolokacije.Fragments.ExploreFragment
-import com.example.brzodolokacije.Fragments.HomeFragment
-import com.example.brzodolokacije.Fragments.ProfileFragment
 import com.example.brzodolokacije.R
+import io.ak1.BubbleTabBar
 import io.ak1.OnBubbleClickListener
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
@@ -45,9 +44,7 @@ class MainActivity : AppCompatActivity() {
 
             }
         })
-
     }
-
 
     private fun replaceFragment(fragment: Fragment) {
         val fragmentManager = supportFragmentManager

@@ -1,6 +1,7 @@
 package com.example.brzodolokacije.Fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,8 @@ import android.widget.TextView
 import com.example.brzodolokacije.Activities.MainActivity
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.R
+import io.ak1.BubbleTabBar
+import io.ak1.OnBubbleClickListener
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -46,15 +49,40 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        replaceFragmentOnProfile(PostsFragment())
+
         val button = view.findViewById<Button>(R.id.logoutButton)
+        val bubbleTabBarProfile = view.findViewById<BubbleTabBar>(R.id.bubbleTabBarProfile);
+
         button.setOnClickListener { view ->
             val mainActivity = activity as MainActivity
             mainActivity.logOut()
         }
+
+        bubbleTabBarProfile.addBubbleListener(object : OnBubbleClickListener {
+            override fun onBubbleClick(id: Int) {
+                when(id){
+                    R.id.posts -> replaceFragmentOnProfile(PostsFragment())
+                    R.id.visitedLocations -> replaceFragmentOnProfile(LocationsFragment())
+
+                    else -> {}
+                }
+
+            }
+        })
+
         val sessionManager= this.context?.let { SessionManager(it) }
         if (sessionManager != null) {
             view.findViewById<TextView>(R.id.username).text="${sessionManager.fetchUsername()}"
         }
+    }
+
+    private fun replaceFragmentOnProfile(fragment: Fragment) {
+        val fragmentManager = getParentFragmentManager()
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.fragment_container_profile, fragment)
+        fragmentTransaction.commit()
     }
 
     companion object {
