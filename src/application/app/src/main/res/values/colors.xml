@@ -21,7 +21,9 @@
     <color name="purple">#C36D18FF</color>
     <color name="teal">#E4007497</color>
     <color name="blue">#1F5CFF</color>
+    <color name="backgroundLightTheme">#edf7f8</color>
     <color name="light_yellow_navbar">#E6FCFFD5</color>
     <color name="light_green_navbar">#D9FFE0</color>
     <color name="light_mint_navbar">#C1F8FF</color>
+    <color name="pastel_blue">#C3E2FF</color>
 </resources>

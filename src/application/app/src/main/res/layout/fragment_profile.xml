@@ -1,78 +1,214 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.ProfileFragment"
-    android:background="@drawable/loginregisterstyle">
+    android:background="@color/backgroundLightTheme">
 
-    <ImageView
-        android:id="@+id/imageViewClouds"
+    <LinearLayout
+        android:id="@+id/podaci"
         android:layout_width="match_parent"
-        android:layout_height="277dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:padding="0dp"
-        android:paddingStart="0dp"
-        android:paddingLeft="0dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="0dp"
-        android:paddingRight="0dp"
-        android:paddingBottom="0dp"
-        android:layout_marginTop="-10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/clouds" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/pastel_blue">
 
-    <ImageView
-        android:id="@+id/imageViewMountains"
+        <LinearLayout
+            android:id="@+id/prviDeo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/drugiDeo"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/profilePicture"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:src="@drawable/nopfp"
+                app:civ_border_width="3dp"
+                app:civ_border_color="@color/light_blue"
+                app:civ_shadow="true"
+                app:civ_shadow_radius="7dp"
+                app:civ_shadow_color="@color/dark_blue"
+                app:civ_shadow_gravity="center"
+                android:layout_gravity="left"/>
+
+            <LinearLayout
+                android:id="@+id/prviDeoDesno"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="right"
+                android:layout_marginStart="10dp">
+
+                <TextView
+                    android:id="@+id/username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:text="username"
+                    android:textColor="@color/dark_blue"
+                    android:textSize="22dp" />
+
+                <LinearLayout
+                    android:id="@+id/prviDeoDesnoIspod"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="20dp">
+
+                    <LinearLayout
+                        android:id="@+id/prviDeoPosts"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginEnd="20dp">
+
+                        <TextView
+                            android:id="@+id/postsNum"
+                            android:text="0"
+                            android:textSize="20dp"
+                            android:textAlignment="center"
+                            android:textColor="@color/dark_blue"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:id="@+id/wordPosts"
+                            android:text="Posts"
+                            android:textSize="18dp"
+                            android:textColor="@color/dark_blue"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/prviDeoFollowers"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/followersNum"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textAlignment="center"
+                            android:textColor="@color/dark_blue"
+                            android:textSize="20dp" />
+
+                        <TextView
+                            android:id="@+id/wordFollowers"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Followers"
+                            android:textColor="@color/dark_blue"
+                            android:textSize="18dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/prviDeoTotalLikes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/likesNum"
+                            android:text="0"
+                            android:textSize="20dp"
+                            android:textAlignment="center"
+                            android:textColor="@color/dark_blue"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:id="@+id/wordLikes"
+                            android:text="Likes"
+                            android:textSize="18dp"
+                            android:textColor="@color/dark_blue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/drugiDeo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@+id/prviDeo"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:id="@+id/imeprezime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ime Prezime"
+                android:textSize="20dp"
+                android:textColor="@color/dark_blue"
+                android:layout_marginStart="20dp"/>
+
+            <TextView
+                android:id="@+id/opis"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Opis"
+                android:textSize="18dp"
+                android:textColor="@color/dark_blue"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"/>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/logoutButton"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="Log out"
+            android:textAllCaps="false"
+            android:backgroundTint="@color/light_blue"
+            android:textSize="18sp"
+            android:layout_below="@+id/bubbleTabBarProfile"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_marginBottom="15dp"/>
+
+    </LinearLayout>
+
+    <io.ak1.BubbleTabBar
+        android:id="@+id/bubbleTabBarProfile"
         android:layout_width="match_parent"
-        android:layout_height="280dp"
-        android:layout_alignParentBottom="true"
-        android:padding="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginBottom="-15dp"
-        app:srcCompat="@drawable/mountains" />
-
-    <TextView
-        android:id="@+id/profile"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome to Profile!"
-        android:layout_marginTop="260dp"
-        android:textAlignment="center"
-        android:textSize="30sp"
-        android:textColor="@color/light_mint_navbar"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        android:background="@color/light_blue"
+        android:padding="7dp"
+        app:bubbletab_menuResource="@menu/profilebar"
+        app:bubbletab_disabled_icon_color="@color/dark_blue"
+        app:bubbletab_horizontal_padding="20dp"
+        app:bubbletab_icon_size="30dp"
+        app:bubbletab_title_size="16sp"
+        app:bubbletab_icon_padding="5sp"
+        app:bubbletab_vertical_padding="10dp"
+        app:bubbletab_tab_corner_radius="25dp"
+        android:layout_below="@+id/podaci">
+    </io.ak1.BubbleTabBar>
 
-    <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/birds"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_marginBottom="260dp"
-        android:src="@drawable/birds"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+    <FrameLayout
+        android:id="@+id/fragment_container_profile"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/bubbleTabBarProfile">
+    </FrameLayout>
 
-    <Button
-        android:id="@+id/logoutButton"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/birds"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/birds"
-        android:text="Log out"
-        android:textAllCaps="false"
-        android:backgroundTint="@color/light_blue"
-        android:textSize="18sp"/>
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
