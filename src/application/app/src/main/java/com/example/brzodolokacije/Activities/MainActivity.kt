@@ -24,6 +24,7 @@ import retrofit2.Response
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private var backPressedTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +48,15 @@ class MainActivity : AppCompatActivity() {
         })
 
     }
-
+    override fun onBackPressed() {
+        if (backPressedTime + 3000 > System.currentTimeMillis()) {
+            super.onBackPressed()
+            finish()
+        } /*else {
+            Toast.makeText(this, "Press back again to leave the app.", Toast.LENGTH_SHORT).show()
+        }*/
+        backPressedTime = System.currentTimeMillis()
+    }
 
     private fun replaceFragment(fragment: Fragment) {
         val fragmentManager = supportFragmentManager
