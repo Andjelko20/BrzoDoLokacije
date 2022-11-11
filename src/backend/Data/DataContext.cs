@@ -3,11 +3,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace backend.Data;
 
-public class UserContext : DbContext
+public class DataContext : DbContext
 {
-    public UserContext(DbContextOptions<UserContext> options) : base(options) { }
+    public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
     public DbSet<User> Users { get; set; }
+    public DbSet<Post> Posts { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
