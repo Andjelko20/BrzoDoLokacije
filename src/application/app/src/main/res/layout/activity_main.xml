@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:layout_centerHorizontal="true"
     tools:context=".Activities.MainActivity"
-    android:background="@color/backgroundLightTheme">
+    android:background="@drawable/loginregisterstyle"
+    android:orientation="vertical">
 
     <FrameLayout
         android:id="@+id/fragment_container"
@@ -14,9 +15,8 @@
         android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/bubbleTabBar"/>
-
+        app:layout_constraintTop_toBottomOf="@+id/bubbleTabBarTop"
+        app:layout_constraintBottom_toTopOf="@+id/bubbleTabBar"/>
     <io.ak1.BubbleTabBar
         android:id="@+id/bubbleTabBarTop"
         android:layout_width="0dp"
