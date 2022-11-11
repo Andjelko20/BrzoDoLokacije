@@ -149,8 +149,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_below="@+id/prviDeo"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp">
+            android:layout_marginTop="20dp">
 
             <TextView
                 android:id="@+id/imeprezime"
@@ -173,6 +172,19 @@
 
         </LinearLayout>
 
+        <Button
+            android:id="@+id/logoutButton"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="Log out"
+            android:textAllCaps="false"
+            android:backgroundTint="@color/light_blue"
+            android:textSize="18sp"
+            android:layout_below="@+id/bubbleTabBarProfile"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_marginBottom="15dp"/>
+
     </LinearLayout>
 
     <io.ak1.BubbleTabBar
@@ -192,16 +204,11 @@
         android:layout_below="@+id/podaci">
     </io.ak1.BubbleTabBar>
 
-    <Button
-        android:id="@+id/logoutButton"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:text="Log out"
-        android:textAllCaps="false"
-        android:backgroundTint="@color/light_blue"
-        android:textSize="18sp"
-        android:layout_below="@+id/bubbleTabBarProfile"
-        android:layout_marginTop="120dp"
-        android:layout_centerHorizontal="true"/>
+    <FrameLayout
+        android:id="@+id/fragment_container_profile"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/bubbleTabBarProfile">
+    </FrameLayout>
 
 </RelativeLayout>
