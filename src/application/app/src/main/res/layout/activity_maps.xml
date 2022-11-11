@@ -6,14 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".Activities.ActivityMaps">
 
+    <SearchView
+        android:id="@+id/searchMap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape"
+        android:backgroundTint="#edf7f8"
+        app:layout_constraintTop_toTopOf="@+id/maps"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:queryHint="Search..."
+        android:iconifiedByDefault="false"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="60dp"
+        android:elevation="5dp"
+        />
+    
     <androidx.fragment.app.FragmentContainerView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:id="@+id/maps"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:name="com.google.android.gms.maps.SupportMapFragment">
 
     </androidx.fragment.app.FragmentContainerView>

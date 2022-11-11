@@ -1,22 +1,19 @@
 package com.example.brzodolokacije.Fragments
 
 import android.Manifest
-import android.app.Activity
-import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
+import android.widget.SearchView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import com.example.brzodolokacije.Activities.ActivityMaps
-import com.example.brzodolokacije.Activities.LoginActivity
-import com.example.brzodolokacije.Activities.MainActivity
-import com.example.brzodolokacije.Managers.SessionManager
+import androidx.fragment.app.Fragment
 import com.example.brzodolokacije.R
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -27,6 +24,8 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.android.synthetic.main.activity_maps.*
+import java.io.IOException
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -64,15 +63,43 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
             .add(R.id.maps, mapFragment)
             .commit()
 
+
+        searchMap.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+
+                val location: String = searchMap.getQuery().toString().trim()
+                var addressList: List<Address>? = null
+                Log.d("Lokacija",location)
+                if (location != null || location == "") {
+                    val geocoder = Geocoder(activity)
+                    try {
+                        addressList = geocoder.getFromLocationName(location, 1)
+                        val address: Address = addressList!![0]
+                        val latLng = LatLng(address.getLatitude(), address.getLongitude())
+                        mMap.addMarker(MarkerOptions().position(latLng).title(location))
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10f))
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        Toast.makeText(activity,"Location misspelled",Toast.LENGTH_SHORT).show()
+                       // Log.d("Adress", e.printStackTrace().toString())
+                    }
+                }
+                return false
+            }
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+        })
         mapFragment.getMapAsync(this)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this.requireActivity())
+
+
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.activity_maps, container, false)
     }
 
