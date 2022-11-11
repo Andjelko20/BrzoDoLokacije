@@ -24,7 +24,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/bubbleTabBar"
         android:background="@color/light_blue"
         android:elevation="16dp"
         android:padding="3dp"
