@@ -8,5 +8,7 @@ public class UserProfileDto
     public string Name { get; set; }
     public string Description { get; set; }
     public string Avatar { get; set; }
-    public List<Post> Posts { get; set; }
+    public int Followers { get; set; }
+    public int Following { get; set; }
+    public int NumberOfLikes { get; set; }
 }

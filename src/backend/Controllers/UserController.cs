@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using backend.Models;
 using backend.ModelsDto;
@@ -35,9 +36,17 @@ namespace backend.Controllers
                 Name = user.Name,
                 Description = user.Description,
                 Avatar = user.Avatar,
-                Posts = await _context.Posts.Where(p => p.UserId == user.Id).OrderByDescending(p => p.Date).ToListAsync()
+                Followers = 100,
+                Following = 50,
+                NumberOfLikes = 300
+                //Posts = await _context.Posts.Where(p => p.UserId == user.Id).OrderByDescending(p => p.Date).ToListAsync()
             };
-            return Ok(upd);
+            //string json = JsonSerializer.Serialize(upd);
+            return Ok(new
+            {
+                error = false,
+                message = upd
+            });
         }
         
         [HttpDelete("delete/{username}")]
@@ -46,12 +55,20 @@ namespace backend.Controllers
             User user = await _context.Users.FirstOrDefaultAsync(u=>u.Username == username);
             if (user == null)
             {
-                return NotFound("not found");
+                return NotFound(new
+                {
+                    error = false,
+                    message = "User not found"
+                });
             }
 
             _context.Users.Remove(user);
             _context.SaveChangesAsync();
-            return Ok("deleted " + username);
+            return Ok(new
+            {
+                error = false,
+                message = "deleted" + username
+            });
         }
         
     }

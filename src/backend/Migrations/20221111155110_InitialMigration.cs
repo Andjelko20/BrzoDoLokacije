@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace backend.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigratio : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -24,7 +24,10 @@ namespace backend.Migrations
                     Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
                     Avatar = table.Column<string>(type: "text", nullable: false),
-                    HasAvatar = table.Column<bool>(type: "boolean", nullable: false)
+                    HasAvatar = table.Column<bool>(type: "boolean", nullable: false),
+                    Followers = table.Column<int>(type: "integer", nullable: false),
+                    Following = table.Column<int>(type: "integer", nullable: false),
+                    NumberOfLikes = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -38,10 +41,12 @@ namespace backend.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Location = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: false),
+                    Caption = table.Column<string>(type: "text", nullable: false),
                     ImagePath = table.Column<string>(type: "text", nullable: false),
                     Date = table.Column<long>(type: "bigint", nullable: false),
-                    UserId = table.Column<int>(type: "integer", nullable: false)
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    NumberOfLikes = table.Column<int>(type: "integer", nullable: false),
+                    NumberOfComments = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {

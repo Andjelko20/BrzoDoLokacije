@@ -16,7 +16,10 @@ public class User
     public string PasswordResetToken { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
-    public string Avatar { get; set; } = string.Empty;
+    public string Avatar { get; set; } = "../miscellaneous/avatars/default.png";
     public bool HasAvatar { get; set; } = false;
     public List<Post> Posts { get; set; }
+    public int Followers { get; set; }
+    public int Following { get; set; }
+    public int NumberOfLikes { get; set; }
 }

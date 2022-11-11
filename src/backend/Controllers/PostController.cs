@@ -37,7 +37,11 @@ namespace backend.Controllers
         {
             User user = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
             if (user == null)
-                return BadRequest("User not found");
+                return BadRequest(new
+                {
+                    error = false,
+                    message = "User not found"
+                });
             var posts = await _context.Posts
                 .Where(p => p.UserId == user.Id)
                 .OrderByDescending(p => p.Date)
@@ -50,17 +54,25 @@ namespace backend.Controllers
         {
             User user = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
             if (user == null)
-                return BadRequest("User not found");
+                return BadRequest(new
+                {
+                    error = false,
+                    message = "User not found"
+                });
             Post post = new Post
             {
-                Description = request.Description,
+                Caption = request.Caption,
                 Location = request.Location,
                 UserId = user.Id,
                 User = user
             };
             _context.Posts.Add(post);
             await _context.SaveChangesAsync();
-            return Ok("fine");
+            return Ok(new
+            {
+                error = false,
+                message = "Success"
+            });
         }
 
         [HttpDelete("delete/{id}")]
@@ -71,7 +83,11 @@ namespace backend.Controllers
                 return BadRequest("Post not found");
             _context.Posts.Remove(post);
             await _context.SaveChangesAsync();
-            return Ok("ok");
+            return Ok(new
+            {
+                error = false,
+                message = "Post deleted"
+            });
         }
 
     }

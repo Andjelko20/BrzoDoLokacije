@@ -11,8 +11,8 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221109225339_InitialMigratio")]
-    partial class InitialMigratio
+    [Migration("20221111155110_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,12 +32,12 @@ namespace backend.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<long>("Date")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Description")
+                    b.Property<string>("Caption")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<long>("Date")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("ImagePath")
                         .IsRequired()
@@ -46,6 +46,12 @@ namespace backend.Migrations
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("NumberOfComments")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("NumberOfLikes")
+                        .HasColumnType("integer");
 
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
@@ -77,12 +83,21 @@ namespace backend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("Followers")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Following")
+                        .HasColumnType("integer");
+
                     b.Property<bool>("HasAvatar")
                         .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("NumberOfLikes")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Password")
                         .IsRequired()
