@@ -38,7 +38,8 @@ namespace backend.Controllers
                 Avatar = user.Avatar,
                 Followers = 100,
                 Following = 50,
-                NumberOfLikes = 300
+                NumberOfLikes = 300,
+                NumberOfPosts = 6
                 //Posts = await _context.Posts.Where(p => p.UserId == user.Id).OrderByDescending(p => p.Date).ToListAsync()
             };
             //string json = JsonSerializer.Serialize(upd);
