@@ -3,18 +3,24 @@ package com.example.brzodolokacije.Adapters
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
+import android.graphics.drawable.BitmapDrawable
 import android.os.Looper
 import android.text.Html
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.example.brzodolokacije.Posts.Photo
 import com.example.brzodolokacije.R
 import java.util.concurrent.Executors
+
 
 class PostAdapter(val photoList : List<Photo>, val context : Context) :
     RecyclerView.Adapter<PostAdapter.MainViewHolder>() {
@@ -76,6 +82,7 @@ class PostAdapter(val photoList : List<Photo>, val context : Context) :
 
     private fun loadImage(image : ImageView, path : String)
     {
+        //image.layoutParams.height=Constants.screenHeight
         val executor = Executors.newSingleThreadExecutor()
 
         val handler = android.os.Handler(Looper.getMainLooper())
@@ -90,6 +97,7 @@ class PostAdapter(val photoList : List<Photo>, val context : Context) :
                 i = BitmapFactory.decodeStream(`in`)
                 handler.post {
                     image.setImageBitmap(i)
+                    //image.layoutParams.height= Constants.screenHeight
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

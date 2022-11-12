@@ -68,7 +68,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="100dp"
-                android:scaleType="center"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:padding="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/postHeader" />
