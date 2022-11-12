@@ -1,5 +1,6 @@
 package com.example.brzodolokacije.Fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,11 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import com.example.brzodolokacije.Activities.ActivityAddPost
+import com.example.brzodolokacije.Activities.LoginActivity
 import com.example.brzodolokacije.Activities.MainActivity
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.R
 import io.ak1.BubbleTabBar
 import io.ak1.OnBubbleClickListener
+import kotlinx.android.synthetic.main.fragment_profile.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -54,7 +58,13 @@ class ProfileFragment : Fragment() {
 
         val button = view.findViewById<Button>(R.id.logoutButton)
         val bubbleTabBarProfile = view.findViewById<BubbleTabBar>(R.id.bubbleTabBarProfile);
+        addPost.setOnClickListener{
+            activity?.let{
+                val intent = Intent (it, ActivityAddPost::class.java)
+                it.startActivity(intent)
+            }
 
+        }
         button.setOnClickListener { view ->
             val mainActivity = activity as MainActivity
             mainActivity.logOut()
