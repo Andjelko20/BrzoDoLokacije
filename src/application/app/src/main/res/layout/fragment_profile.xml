@@ -218,13 +218,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|bottom"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="20dp"
             android:backgroundTint="@color/light_blue"
-            android:src="@drawable/addphoto"
-            app:maxImageSize="50dp"
-            app:fabCustomSize="70dp"
-
-            >
+            android:hapticFeedbackEnabled="false"
+            android:src="@drawable/camera"
+            app:fabCustomSize="80dp"
+            app:maxImageSize="60dp"
+            app:tint="@color/backgroundLightTheme">
 
         </com.google.android.material.floatingactionbutton.FloatingActionButton>
     </FrameLayout>
