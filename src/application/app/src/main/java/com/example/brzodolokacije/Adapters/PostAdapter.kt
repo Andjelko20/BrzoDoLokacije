@@ -40,7 +40,7 @@ class PostAdapter(val photoList : List<Photo>, val context : Context) :
 
             owner.text = photo.owner
             owner.setOnClickListener{
-                Toast.makeText(context,"Owner ID: ${photo.ownerID}",Toast.LENGTH_SHORT).show()
+                Toast.makeText(context,"Owner: ${photo.owner}",Toast.LENGTH_SHORT).show()
             }
             date.text = photo.dateTime.toString()
 
