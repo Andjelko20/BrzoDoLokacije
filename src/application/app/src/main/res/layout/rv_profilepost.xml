@@ -10,7 +10,7 @@
         android:id="@+id/cardViewProfilePost"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_margin="4dp"
+        android:layout_margin="2dp"
         card_view:cardUseCompatPadding="false">
 
         <ImageView
