@@ -1,14 +1,30 @@
 package com.example.brzodolokacije.Posts
 
+import com.google.gson.annotations.SerializedName
 import java.util.Date
 
 data class Photo (
-    val postID : String,
-    val path : String,
+    @SerializedName("Id")
+    val id : String,
+
+    @SerializedName("Image")
+    val image : String,
+
+    @SerializedName("Owner")
     val owner : String,
-    val dateTime : String, //Long - sekunde da prebacim u datum
+
+    @SerializedName("Date")
+    val date : Long, //Long - sekunde da prebacim u datum
+
+    @SerializedName("Location")
     val location : String, //za sad je string, mozda se menja
+
+    @SerializedName("Caption")
     val caption : String,
-    val numOfLikes : Int,
-    val numOfComments : Int
+
+    @SerializedName("NumberOfLikes")
+    val numberOfLikes : Int,
+
+    @SerializedName("NumberOfComments")
+    val numberOfComments : Int
 )

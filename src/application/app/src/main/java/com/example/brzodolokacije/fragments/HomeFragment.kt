@@ -6,16 +6,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Adapters.PostAdapter
 import com.example.brzodolokacije.Client.Client
-import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Posts.Photo
-import com.example.brzodolokacije.Posts.PrivremeneSlike
 import com.example.brzodolokacije.R
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.fragment_home.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -39,6 +40,7 @@ class HomeFragment : Fragment() {
     private var myAdapter : RecyclerView.Adapter<PostAdapter.MainViewHolder>? = null
     private var mylayoutManager : RecyclerView.LayoutManager? = null
     private lateinit var recyclerView : RecyclerView
+    private var photos : List<Photo>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,34 +59,43 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        homePostsRv.apply {
-            mylayoutManager = LinearLayoutManager(context) //activity
-            recyclerView=view.findViewById(R.id.homePostsRv)
-            recyclerView.layoutManager=mylayoutManager
-            recyclerView.setHasFixedSize(true)
-            myAdapter = this.context?.let { PostAdapter(PrivremeneSlike.getPhotos(),it) }
-            recyclerView.adapter=myAdapter
-        }
-        val sessionManager = this.context?.let { SessionManager(it) }
+//        homePostsRv.apply {
+//            mylayoutManager = LinearLayoutManager(context) //activity
+//            recyclerView=view.findViewById(R.id.homePostsRv)
+//            recyclerView.layoutManager=mylayoutManager
+//            recyclerView.setHasFixedSize(true)
+//            myAdapter = this.context?.let { PostAdapter(PrivremeneSlike.getPhotos(),it) }
+//            recyclerView.adapter=myAdapter
+//        }
         val retrofit = Client(requireActivity()).buildService(Api::class.java)
         retrofit.getAllPosts().enqueue(object: Callback<DefaultResponse>
         {
-            override fun onResponse(
-                call: Call<DefaultResponse>,
-                response: Response<DefaultResponse>
-            ) {
+
+            override fun onResponse(call: Call<DefaultResponse>, response: Response<DefaultResponse>) {
                 if(response.body()?.error.toString()=="false")
                 {
-                    Log.d("slike",response.body()?.message.toString())
+                    val listOfPhotosStr: String = response.body()?.message.toString();
+                    val typeToken = object : TypeToken<List<Photo>>() {}.type
+                    val photosList = Gson().fromJson<List<Photo>>(listOfPhotosStr, typeToken)
+                    photos=photosList
+                    homePostsRv.apply {
+                        mylayoutManager = LinearLayoutManager(context) //activity
+                        recyclerView=view.findViewById(R.id.homePostsRv)
+                        recyclerView.layoutManager=mylayoutManager
+                        recyclerView.setHasFixedSize(true)
+                        myAdapter = this.context?.let { PostAdapter(photosList,it) }
+                        recyclerView.adapter=myAdapter
+                    }
                 }
                 else
                 {
                     Log.d("slike","neuspesno ucitane")
+                    Toast.makeText(requireActivity(),"Error loading images",Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                Log.d("griska",t.message.toString())
+                Toast.makeText(requireActivity(),"Error loading images",Toast.LENGTH_SHORT).show()
             }
 
         })

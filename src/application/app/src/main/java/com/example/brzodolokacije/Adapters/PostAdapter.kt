@@ -7,6 +7,7 @@ import android.graphics.Matrix
 import android.graphics.drawable.BitmapDrawable
 import android.os.Looper
 import android.text.Html
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -31,6 +32,7 @@ class PostAdapter(val photoList : List<Photo>, val context : Context) :
 
         fun bindData(photo : Photo, index : Int)
         {
+            Log.d("slikeA",dataList.toString())
             val owner = itemView.findViewById<TextView>(R.id.postOwner)
             val date = itemView.findViewById<TextView>(R.id.postDate)
             val location = itemView.findViewById<TextView>(R.id.location)
@@ -42,23 +44,23 @@ class PostAdapter(val photoList : List<Photo>, val context : Context) :
             owner.setOnClickListener{
                 Toast.makeText(context,"Owner: ${photo.owner}",Toast.LENGTH_SHORT).show()
             }
-            date.text = photo.dateTime.toString()
+            date.text = photo.date.toString()
 
             val text= Html.fromHtml("<i>"+photo.location+"</i>")
             location.text = text //=photo.location
 
             caption.text = photo.caption
 
-            likes.text = photo.numOfLikes.toString()
+            likes.text = photo.numberOfLikes.toString()
             likes.setOnClickListener{
-                Toast.makeText(context,"Post ID: ${photo.postID} - likes",Toast.LENGTH_SHORT).show()
+                Toast.makeText(context,"Post ID: ${photo.id} - likes",Toast.LENGTH_SHORT).show()
             }
 
             itemView.findViewById<ImageView>(R.id.likeBtn).setOnClickListener{
-                Toast.makeText(context,"Liked post with ID: ${photo.postID} - likes",Toast.LENGTH_SHORT).show()
+                Toast.makeText(context,"Liked post with ID: ${photo.id} - likes",Toast.LENGTH_SHORT).show()
             }
 
-            loadImage(image,photo.path)
+            loadImage(image,photo.image)
         }
     }
 
@@ -82,26 +84,29 @@ class PostAdapter(val photoList : List<Photo>, val context : Context) :
 
     private fun loadImage(image : ImageView, path : String)
     {
+        val imageBytes = Base64.decode(path, Base64.DEFAULT)
+        val decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+        image.setImageBitmap(decodedImage)
         //image.layoutParams.height=Constants.screenHeight
-        val executor = Executors.newSingleThreadExecutor()
-
-        val handler = android.os.Handler(Looper.getMainLooper())
-
-        var i: Bitmap? = null
-        executor.execute {
-
-            // Image URL
-            val imageURL = path
-            try {
-                val `in` = java.net.URL(imageURL).openStream()
-                i = BitmapFactory.decodeStream(`in`)
-                handler.post {
-                    image.setImageBitmap(i)
-                    //image.layoutParams.height= Constants.screenHeight
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
+//        val executor = Executors.newSingleThreadExecutor()
+//
+//        val handler = android.os.Handler(Looper.getMainLooper())
+//
+//        var i: Bitmap? = null
+//        executor.execute {
+//
+//            // Image URL
+//            val imageURL = path
+//            try {
+//                val `in` = java.net.URL(imageURL).openStream()
+//                i = BitmapFactory.decodeStream(`in`)
+//                handler.post {
+//                    image.setImageBitmap(i)
+//                    //image.layoutParams.height= Constants.screenHeight
+//                }
+//            } catch (e: Exception) {
+//                e.printStackTrace()
+//            }
+//        }
     }
 }

@@ -1,7 +1,6 @@
 package com.example.brzodolokacije.API
 
 import com.example.brzodolokacije.Models.DefaultResponse
-import com.example.brzodolokacije.Models.UserResponse
 import com.example.brzodolokacije.ModelsDto.LoginDto
 import com.example.brzodolokacije.ModelsDto.RegisterDto
 import com.example.brzodolokacije.ModelsDto.ResetPasswordDto
