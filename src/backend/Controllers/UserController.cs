@@ -30,6 +30,12 @@ namespace backend.Controllers
         public async Task<ActionResult<UserProfileDto>> getProfileInfo()
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
+            if (user == null)
+                return BadRequest(new
+                {
+                    error = true,
+                    message = "User don't exist"
+                });
             UserProfileDto upd = new UserProfileDto
             {
                 Username = user.Username,
@@ -48,6 +54,16 @@ namespace backend.Controllers
                 error = false,
                 message = json
             });
+        }
+        
+        [HttpGet("avatar/{username}")]
+        public async Task<IActionResult> GetAvatar(string username)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+            Byte[] b = System.IO.File.ReadAllBytes(user.Avatar);
+            string[] types = user.Avatar.Split(".");
+            string type =types[types.Length-1];
+            return File(b, "image/"+type);
         }
         
         [HttpDelete("delete/{username}")]
