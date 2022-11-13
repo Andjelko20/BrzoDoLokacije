@@ -36,6 +36,6 @@ interface Api {
     fun authentication(): Call<DefaultResponse>
 
     @GET("User/profileInfo")
-    fun fetchUserProfileInfo(): Call<UserResponse>
+    fun fetchUserProfileInfo(): Call<DefaultResponse>
 
 }

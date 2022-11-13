@@ -20,6 +20,7 @@ import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.UserProfile
 import com.example.brzodolokacije.Models.UserResponse
 import com.example.brzodolokacije.R
+import com.google.gson.Gson
 import io.ak1.BubbleTabBar
 import io.ak1.OnBubbleClickListener
 import kotlinx.android.synthetic.main.fragment_profile.*
@@ -97,27 +98,18 @@ class ProfileFragment : Fragment() {
         }
 
         val retrofit = Client(requireActivity()).buildService(Api::class.java)
-        retrofit.fetchUserProfileInfo().enqueue(object: Callback<UserResponse>{
+        retrofit.fetchUserProfileInfo().enqueue(object: Callback<DefaultResponse>{
             override fun onResponse(
-                call: Call<UserResponse>,
-                response: Response<UserResponse>
+                call: Call<DefaultResponse>,
+                response: Response<DefaultResponse>
             ) {
                 if(response.body()?.error.toString() == "false")
                 {
-                    var userInfo: UserProfile = response.body()!!.message;
-                    if(userInfo == null)
-                    {
-                        Log.d("User info je null", "")
-                    }
-                    else
-                    {
-                        Log.d("User info nije null", "")
-                        Log.d(userInfo.username + "     ", "username")
-//                        Log.d(userInfo.name, "name")
-//                        Log.d(userInfo.description, "description")
-//                        Log.d(userInfo.profilePicture, "avatar")
-
-                    }
+                    Log.d(response.body()?.error.toString(), response.body()?.message.toString());
+                    val userProfileInfoStr: String = response.body()?.message.toString();
+                    val gson = Gson()
+                    val userProfileInfo: UserProfile = gson.fromJson(userProfileInfoStr, UserProfile::class.java)
+                    Log.d(userProfileInfo.name, "proba");
                 }
                 else
                 {
@@ -125,7 +117,7 @@ class ProfileFragment : Fragment() {
                 }
             }
 
-            override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                 Log.d("failed","");
             }
 
