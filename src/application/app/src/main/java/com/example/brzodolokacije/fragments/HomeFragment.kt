@@ -1,18 +1,25 @@
 package com.example.brzodolokacije.Fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Adapters.PostAdapter
+import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Managers.SessionManager
+import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Posts.Photo
 import com.example.brzodolokacije.Posts.PrivremeneSlike
 import com.example.brzodolokacije.R
 import kotlinx.android.synthetic.main.fragment_home.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -58,6 +65,29 @@ class HomeFragment : Fragment() {
             myAdapter = this.context?.let { PostAdapter(PrivremeneSlike.getPhotos(),it) }
             recyclerView.adapter=myAdapter
         }
+        val sessionManager = this.context?.let { SessionManager(it) }
+        val retrofit = Client(requireActivity()).buildService(Api::class.java)
+        retrofit.getAllPosts().enqueue(object: Callback<DefaultResponse>
+        {
+            override fun onResponse(
+                call: Call<DefaultResponse>,
+                response: Response<DefaultResponse>
+            ) {
+                if(response.body()?.error.toString()=="false")
+                {
+                    Log.d("slike",response.body()?.message.toString())
+                }
+                else
+                {
+                    Log.d("slike","neuspesno ucitane")
+                }
+            }
+
+            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                Log.d("griska",t.message.toString())
+            }
+
+        })
     }
 
     companion object {
