@@ -1,6 +1,7 @@
 package com.example.brzodolokacije.API
 
 import com.example.brzodolokacije.Models.DefaultResponse
+import com.example.brzodolokacije.Models.UserResponse
 import com.example.brzodolokacije.ModelsDto.LoginDto
 import com.example.brzodolokacije.ModelsDto.RegisterDto
 import com.example.brzodolokacije.ModelsDto.ResetPasswordDto
@@ -35,6 +36,6 @@ interface Api {
     fun authentication(): Call<DefaultResponse>
 
     @GET("User/profileInfo")
-    fun fetchUserProfileInfo(): Call<DefaultResponse>
+    fun fetchUserProfileInfo(): Call<UserResponse>
 
 }

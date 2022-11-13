@@ -42,11 +42,11 @@ namespace backend.Controllers
                 NumberOfPosts = 6
                 //Posts = await _context.Posts.Where(p => p.UserId == user.Id).OrderByDescending(p => p.Date).ToListAsync()
             };
-            string json = JsonSerializer.Serialize(upd);
+            //string json = JsonSerializer.Serialize(upd);
             return Ok(new
             {
                 error = false,
-                message = json
+                message = upd
             });
         }
         

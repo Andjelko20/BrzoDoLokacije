@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Activities.ActivityAddPost
 import com.example.brzodolokacije.Activities.LoginActivity
@@ -16,6 +17,8 @@ import com.example.brzodolokacije.Activities.MainActivity
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
+import com.example.brzodolokacije.Models.UserProfile
+import com.example.brzodolokacije.Models.UserResponse
 import com.example.brzodolokacije.R
 import io.ak1.BubbleTabBar
 import io.ak1.OnBubbleClickListener
@@ -94,15 +97,35 @@ class ProfileFragment : Fragment() {
         }
 
         val retrofit = Client(requireActivity()).buildService(Api::class.java)
-        retrofit.fetchUserProfileInfo().enqueue(object: Callback<DefaultResponse>{
+        retrofit.fetchUserProfileInfo().enqueue(object: Callback<UserResponse>{
             override fun onResponse(
-                call: Call<DefaultResponse>,
-                response: Response<DefaultResponse>
+                call: Call<UserResponse>,
+                response: Response<UserResponse>
             ) {
-                Log.d(response.body()?.error.toString(), response.body()?.message.toString());
+                if(response.body()?.error.toString() == "false")
+                {
+                    var userInfo: UserProfile = response.body()!!.message;
+                    if(userInfo == null)
+                    {
+                        Log.d("User info je null", "")
+                    }
+                    else
+                    {
+                        Log.d("User info nije null", "")
+                        Log.d(userInfo.username + "     ", "username")
+//                        Log.d(userInfo.name, "name")
+//                        Log.d(userInfo.description, "description")
+//                        Log.d(userInfo.profilePicture, "avatar")
+
+                    }
+                }
+                else
+                {
+                    Log.d("error not false", "");
+                }
             }
 
-            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+            override fun onFailure(call: Call<UserResponse>, t: Throwable) {
                 Log.d("failed","");
             }
 
