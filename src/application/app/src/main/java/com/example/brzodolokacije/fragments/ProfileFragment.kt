@@ -1,7 +1,9 @@
 package com.example.brzodolokacije.Fragments
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -98,56 +100,64 @@ class ProfileFragment : Fragment() {
             view.findViewById<TextView>(R.id.username).text="${sessionManager.fetchUsername()}"
         }
 
+        val usernameSm = sessionManager?.fetchUsername()
+
         val retrofit = Client(requireActivity()).buildService(Api::class.java)
-        retrofit.fetchUserProfileInfo().enqueue(object: Callback<DefaultResponse>{
-            override fun onResponse(
-                call: Call<DefaultResponse>,
-                response: Response<DefaultResponse>
-            ) {
-                if(response.body()?.error.toString() == "false")
-                {
-//                    Log.d(response.body()?.error.toString(), response.body()?.message.toString());
-                    val userProfileInfoStr: String = response.body()?.message.toString();
-                    val gson = Gson()
-                    val userProfileInfo: UserProfile = gson.fromJson(userProfileInfoStr, UserProfile::class.java)
-//                    Log.d(userProfileInfo.profilePicture, "proba");
+        if (usernameSm != null) {
+            retrofit.fetchUserProfileInfo(usernameSm).enqueue(object: Callback<DefaultResponse>{
+                override fun onResponse(
+                    call: Call<DefaultResponse>,
+                    response: Response<DefaultResponse>
+                ) {
+                    if(response.body()?.error.toString() == "false")
+                    {
+    //                    Log.d(response.body()?.error.toString(), response.body()?.message.toString());
+                        val userProfileInfoStr: String = response.body()?.message.toString();
+                        val gson = Gson()
+                        val userProfileInfo: UserProfile = gson.fromJson(userProfileInfoStr, UserProfile::class.java)
+    //                    Log.d(userProfileInfo.profilePicture, "proba");
 
-                    val username = view.findViewById<TextView>(R.id.username)
-                    val postsNum = view.findViewById<TextView>(R.id.postsNum)
-                    val followersNum = view.findViewById<TextView>(R.id.followersNum)
-                    val likesNum = view.findViewById<TextView>(R.id.likesNum)
-                    val imeprezime = view.findViewById<TextView>(R.id.imeprezime)
-                    val opis = view.findViewById<TextView>(R.id.opis)
-                    val pfp = view.findViewById<CircleImageView>(R.id.profilePicture)
+                        val username = view.findViewById<TextView>(R.id.username)
+                        val postsNum = view.findViewById<TextView>(R.id.postsNum)
+                        val followersNum = view.findViewById<TextView>(R.id.followersNum)
+                        val likesNum = view.findViewById<TextView>(R.id.likesNum)
+                        val imeprezime = view.findViewById<TextView>(R.id.imeprezime)
+                        val opis = view.findViewById<TextView>(R.id.opis)
+                        val pfp = view.findViewById<CircleImageView>(R.id.profilePicture)
 
-                    username.text = userProfileInfo.username
-                    postsNum.text = userProfileInfo.numOfPosts.toString()
-                    followersNum.text = userProfileInfo.numOfFollowers.toString()
-                    likesNum.text = userProfileInfo.totalNumOfLikes.toString();
-                    imeprezime.text = userProfileInfo.name;
-                    opis.text = userProfileInfo.description;
+                        username.text = userProfileInfo.username
+                        postsNum.text = userProfileInfo.numOfPosts.toString()
+                        followersNum.text = userProfileInfo.numOfFollowers.toString()
+                        likesNum.text = userProfileInfo.totalNumOfLikes.toString();
+                        imeprezime.text = userProfileInfo.name;
+                        opis.text = userProfileInfo.description;
 
-                    val imgPath = userProfileInfo.profilePicture;
+                        val avatarEncoded = userProfileInfo.profilePicture;
 
-//                    Log.d(imgPath, "path")
+                        Log.d(avatarEncoded, "avatar")
 
-                    Picasso.get()
-                        .load(R.drawable.nopfp)
-                        .resize(110, 110)
-                        .centerCrop()
-                        .into(pfp)
+                        val imageBytes = Base64.decode(avatarEncoded, Base64.DEFAULT)
+                        val decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                        pfp.setImageBitmap(decodedImage)
+
+//                        Picasso.get()
+//                            .load(R.drawable.nopfp)
+//                            .resize(110, 110)
+//                            .centerCrop()
+//                            .into(pfp)
+                    }
+                    else
+                    {
+                        Log.d("error not false", "");
+                    }
                 }
-                else
-                {
-                    Log.d("error not false", "");
+
+                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                    Log.d("failed","");
                 }
-            }
 
-            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                Log.d("failed","");
-            }
-
-        })
+            })
+        }
     }
 
     private fun replaceFragmentOnProfile(fragment: Fragment) {

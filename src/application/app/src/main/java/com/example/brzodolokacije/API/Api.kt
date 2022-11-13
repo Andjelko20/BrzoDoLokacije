@@ -35,7 +35,7 @@ interface Api {
     @GET("Auth/check-session")
     fun authentication(): Call<DefaultResponse>
 
-    @GET("User/profileInfo")
-    fun fetchUserProfileInfo(): Call<DefaultResponse>
+    @GET("User/profileInfo/{username}")
+    fun fetchUserProfileInfo(@Path("username") username:String): Call<DefaultResponse>
 
 }

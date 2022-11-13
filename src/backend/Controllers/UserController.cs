@@ -59,7 +59,7 @@ namespace backend.Controllers
             });
         }
         
-        [HttpGet("avatar/{username}")]
+        /*[HttpGet("avatar/{username}")]
         public async Task<IActionResult> GetAvatar(string username)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
@@ -67,7 +67,7 @@ namespace backend.Controllers
             string[] types = user.Avatar.Split(".");
             string type =types[types.Length-1];
             return File(b, "image/"+type);
-        }
+        }*/
         
         [HttpDelete("delete/{username}")]
         public async Task<ActionResult<string>> deleteUser(string username)
