@@ -105,11 +105,25 @@ class ProfileFragment : Fragment() {
             ) {
                 if(response.body()?.error.toString() == "false")
                 {
-                    Log.d(response.body()?.error.toString(), response.body()?.message.toString());
+//                    Log.d(response.body()?.error.toString(), response.body()?.message.toString());
                     val userProfileInfoStr: String = response.body()?.message.toString();
                     val gson = Gson()
                     val userProfileInfo: UserProfile = gson.fromJson(userProfileInfoStr, UserProfile::class.java)
-                    Log.d(userProfileInfo.name, "proba");
+//                    Log.d(userProfileInfo.name, "proba");
+
+                    val username = view.findViewById<TextView>(R.id.username)
+                    val postsNum = view.findViewById<TextView>(R.id.postsNum)
+                    val followersNum = view.findViewById<TextView>(R.id.followersNum)
+                    val likesNum = view.findViewById<TextView>(R.id.likesNum)
+                    val imeprezime = view.findViewById<TextView>(R.id.imeprezime)
+                    val opis = view.findViewById<TextView>(R.id.opis)
+
+                    username.text = userProfileInfo.username
+                    postsNum.text = userProfileInfo.numOfPosts.toString()
+                    followersNum.text = userProfileInfo.numOfFollowers.toString()
+                    likesNum.text = userProfileInfo.totalNumOfLikes.toString();
+                    imeprezime.text = userProfileInfo.name;
+                    opis.text = userProfileInfo.description;
                 }
                 else
                 {
