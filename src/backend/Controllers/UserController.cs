@@ -26,22 +26,25 @@ namespace backend.Controllers
             _configuration = configuration;
         }
 
-        [HttpGet("profileInfo")]
-        public async Task<ActionResult<UserProfileDto>> getProfileInfo()
+        [HttpGet("profileInfo/{username}")]
+        public async Task<ActionResult<UserProfileDto>> getProfileInfo(string username)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
             if (user == null)
                 return BadRequest(new
                 {
                     error = true,
                     message = "User don't exist"
                 });
+                
+            byte[] imageArray = await System.IO.File.ReadAllBytesAsync(user.Avatar);
+            string base64ImageRepresentation = Convert.ToBase64String(imageArray);
             UserProfileDto upd = new UserProfileDto
             {
                 Username = user.Username,
                 Name = user.Name,
                 Description = user.Description,
-                Avatar = user.Avatar,
+                Avatar = base64ImageRepresentation,
                 Followers = 100,
                 Following = 50,
                 NumberOfLikes = 300,
