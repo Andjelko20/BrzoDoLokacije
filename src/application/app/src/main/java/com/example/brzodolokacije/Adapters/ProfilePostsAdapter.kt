@@ -28,8 +28,6 @@ class ProfilePostsAdapter(val postsList : List<String>, val context : Context) :
             val image = itemView.findViewById<ImageView>(R.id.profilePost)
 
             Picasso.get().load(url).into(image);
-
-//            loadImage(image, url)
         }
     }
 
@@ -43,30 +41,5 @@ class ProfilePostsAdapter(val postsList : List<String>, val context : Context) :
 
     override fun getItemCount(): Int {
         return dataList.size
-    }
-
-    private fun loadImage(image : ImageView, path : String)
-    {
-        //image.layoutParams.height=Constants.screenHeight
-        val executor = Executors.newSingleThreadExecutor()
-
-        val handler = android.os.Handler(Looper.getMainLooper())
-
-        var i: Bitmap? = null
-        executor.execute {
-
-            // Image URL
-            val imageURL = path
-            try {
-                val `in` = java.net.URL(imageURL).openStream()
-                i = BitmapFactory.decodeStream(`in`)
-                handler.post {
-                    image.setImageBitmap(i)
-                    //image.layoutParams.height= Constants.screenHeight
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
     }
 }
