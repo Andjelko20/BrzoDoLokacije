@@ -9,14 +9,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Activities.ActivityAddPost
 import com.example.brzodolokacije.Activities.LoginActivity
 import com.example.brzodolokacije.Activities.MainActivity
+import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Managers.SessionManager
+import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.R
 import io.ak1.BubbleTabBar
 import io.ak1.OnBubbleClickListener
 import kotlinx.android.synthetic.main.fragment_profile.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -86,6 +92,21 @@ class ProfileFragment : Fragment() {
         if (sessionManager != null) {
             view.findViewById<TextView>(R.id.username).text="${sessionManager.fetchUsername()}"
         }
+
+        val retrofit = Client(requireActivity()).buildService(Api::class.java)
+        retrofit.fetchUserProfileInfo().enqueue(object: Callback<DefaultResponse>{
+            override fun onResponse(
+                call: Call<DefaultResponse>,
+                response: Response<DefaultResponse>
+            ) {
+                Log.d(response.body()?.error.toString(), response.body()?.message.toString());
+            }
+
+            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                Log.d("failed","");
+            }
+
+        })
     }
 
     private fun replaceFragmentOnProfile(fragment: Fragment) {

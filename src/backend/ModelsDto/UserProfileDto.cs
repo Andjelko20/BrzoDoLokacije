@@ -11,6 +11,5 @@ public class UserProfileDto
     public int Followers { get; set; }
     public int Following { get; set; }
     public int NumberOfLikes { get; set; }
-    
     public int NumberOfPosts { get; set; }
 }
