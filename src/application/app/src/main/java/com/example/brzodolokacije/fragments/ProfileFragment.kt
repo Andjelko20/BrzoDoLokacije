@@ -3,30 +3,31 @@ package com.example.brzodolokacije.Fragments
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Activities.ActivityAddPost
-import com.example.brzodolokacije.Activities.LoginActivity
 import com.example.brzodolokacije.Activities.MainActivity
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.UserProfile
-import com.example.brzodolokacije.Models.UserResponse
 import com.example.brzodolokacije.R
 import com.google.gson.Gson
+import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
 import io.ak1.BubbleTabBar
 import io.ak1.OnBubbleClickListener
 import kotlinx.android.synthetic.main.fragment_profile.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -109,7 +110,7 @@ class ProfileFragment : Fragment() {
                     val userProfileInfoStr: String = response.body()?.message.toString();
                     val gson = Gson()
                     val userProfileInfo: UserProfile = gson.fromJson(userProfileInfoStr, UserProfile::class.java)
-//                    Log.d(userProfileInfo.name, "proba");
+//                    Log.d(userProfileInfo.profilePicture, "proba");
 
                     val username = view.findViewById<TextView>(R.id.username)
                     val postsNum = view.findViewById<TextView>(R.id.postsNum)
@@ -117,6 +118,7 @@ class ProfileFragment : Fragment() {
                     val likesNum = view.findViewById<TextView>(R.id.likesNum)
                     val imeprezime = view.findViewById<TextView>(R.id.imeprezime)
                     val opis = view.findViewById<TextView>(R.id.opis)
+                    val pfp = view.findViewById<CircleImageView>(R.id.profilePicture)
 
                     username.text = userProfileInfo.username
                     postsNum.text = userProfileInfo.numOfPosts.toString()
@@ -124,6 +126,16 @@ class ProfileFragment : Fragment() {
                     likesNum.text = userProfileInfo.totalNumOfLikes.toString();
                     imeprezime.text = userProfileInfo.name;
                     opis.text = userProfileInfo.description;
+
+                    val imgPath = userProfileInfo.profilePicture;
+
+//                    Log.d(imgPath, "path")
+
+                    Picasso.get()
+                        .load(R.drawable.nopfp)
+                        .resize(110, 110)
+                        .centerCrop()
+                        .into(pfp)
                 }
                 else
                 {
