@@ -10,27 +10,27 @@ import retrofit2.http.*
 
 interface Api {
 
-    @POST("register")
+    @POST("Auth/register")
     fun createUser(@Body userData: RegisterDto):Call<DefaultResponse>
 
-    @POST("check-email/{email}")
+    @POST("Auth/check-email/{email}")
     fun checkIfEmailExists(@Path("email") email:String):Call<DefaultResponse>
 
-    @POST("check-username/{username}")
+    @POST("Auth/check-username/{username}")
     fun checkIfUsernemeExists(@Path("username") email:String):Call<DefaultResponse>
     
-    @POST("login")
+    @POST("Auth/login")
     fun loginUser(@Body userData : LoginDto) : Call<DefaultResponse>
 
-    @POST("reset-password/{email}")
+    @POST("Auth/reset-password/{email}")
     fun sendEmailtoResetPassword(@Path("email") email:String):Call<DefaultResponse>
 
-    @PUT("reset-password")
+    @PUT("Auth/reset-password")
     fun resetPassword(@Body changeData : ResetPasswordDto):Call<DefaultResponse>
 
-    @POST("check-token/{token}")
+    @POST("Auth/check-token/{token}")
     fun checkIfTokenExists(@Path("token") token:String):Call<DefaultResponse>
 
-    @GET("check-session")
+    @GET("Auth/check-session")
     fun authentication(): Call<DefaultResponse>
 }
