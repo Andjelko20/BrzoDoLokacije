@@ -44,12 +44,6 @@ namespace backend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("NumberOfComments")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("NumberOfLikes")
-                        .HasColumnType("integer");
-
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
 

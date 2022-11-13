@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using backend.Models;
 using backend.ModelsDto;
@@ -29,7 +31,31 @@ namespace backend.Controllers
         public async Task<ActionResult<List<Post>>> getAll()
         {
             var posts = await _context.Posts.OrderByDescending(p => p.Date).ToListAsync();
-            return Ok(posts);
+            
+            List<PostDto> postsDto = new List<PostDto>();
+            foreach (Post post in posts)
+            {
+                byte[] imageArray = await System.IO.File.ReadAllBytesAsync(post.ImagePath);
+                string base64ImageRepresentation = Convert.ToBase64String(imageArray);
+                postsDto.Add(new PostDto
+                {
+                    Id = post.Id,
+                    Image = base64ImageRepresentation,
+                    Owner = (await _context.Users.FindAsync(post.UserId)).Username,
+                    Date = post.Date,
+                    Location = post.Location,
+                    Caption = post.Caption,
+                    NumberOfLikes = 50,
+                    NumberOfComments = 15
+                });
+            }
+
+            string json = JsonSerializer.Serialize(postsDto);
+            return Ok(new
+            {
+                error = false,
+                message = json
+            });
         }
         
         [HttpGet("getPostsFromUser/{username}")]
@@ -46,7 +72,30 @@ namespace backend.Controllers
                 .Where(p => p.UserId == user.Id)
                 .OrderByDescending(p => p.Date)
                 .ToListAsync();
-            return Ok(posts);
+            List<PostDto> postsDto = new List<PostDto>();
+            foreach (Post post in posts)
+            {
+                byte[] imageArray = await System.IO.File.ReadAllBytesAsync(post.ImagePath);
+                string base64ImageRepresentation = Convert.ToBase64String(imageArray);
+                postsDto.Add(new PostDto
+                {
+                    Id = post.Id,
+                    Image = base64ImageRepresentation,
+                    Owner = username,
+                    Date = post.Date,
+                    Location = post.Location,
+                    Caption = post.Caption,
+                    NumberOfLikes = 50,
+                    NumberOfComments = 15
+                });
+            }
+
+            string json = JsonSerializer.Serialize(postsDto);
+            return Ok(new
+            {
+                error = false,
+                message = json
+            });
         }
 
         [HttpPost("addNew")]

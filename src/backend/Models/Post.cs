@@ -14,6 +14,4 @@ public class Post
     [JsonIgnore]
     public User User { get; set; }
     public int UserId { get; set; }
-    public int NumberOfLikes { get; set; }
-    public int NumberOfComments { get; set; }
 }

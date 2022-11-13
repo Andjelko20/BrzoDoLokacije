@@ -41,9 +41,7 @@ namespace backend.Migrations
                     Caption = table.Column<string>(type: "text", nullable: false),
                     ImagePath = table.Column<string>(type: "text", nullable: false),
                     Date = table.Column<long>(type: "bigint", nullable: false),
-                    UserId = table.Column<int>(type: "integer", nullable: false),
-                    NumberOfLikes = table.Column<int>(type: "integer", nullable: false),
-                    NumberOfComments = table.Column<int>(type: "integer", nullable: false)
+                    UserId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
