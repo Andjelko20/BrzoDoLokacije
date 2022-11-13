@@ -40,7 +40,6 @@ class HomeFragment : Fragment() {
     private var myAdapter : RecyclerView.Adapter<PostAdapter.MainViewHolder>? = null
     private var mylayoutManager : RecyclerView.LayoutManager? = null
     private lateinit var recyclerView : RecyclerView
-    private var photos : List<Photo>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,25 +58,19 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        homePostsRv.apply {
-//            mylayoutManager = LinearLayoutManager(context) //activity
-//            recyclerView=view.findViewById(R.id.homePostsRv)
-//            recyclerView.layoutManager=mylayoutManager
-//            recyclerView.setHasFixedSize(true)
-//            myAdapter = this.context?.let { PostAdapter(PrivremeneSlike.getPhotos(),it) }
-//            recyclerView.adapter=myAdapter
-//        }
+
         val retrofit = Client(requireActivity()).buildService(Api::class.java)
         retrofit.getAllPosts().enqueue(object: Callback<DefaultResponse>
         {
-
             override fun onResponse(call: Call<DefaultResponse>, response: Response<DefaultResponse>) {
                 if(response.body()?.error.toString()=="false")
                 {
                     val listOfPhotosStr: String = response.body()?.message.toString();
+
                     val typeToken = object : TypeToken<List<Photo>>() {}.type
                     val photosList = Gson().fromJson<List<Photo>>(listOfPhotosStr, typeToken)
-                    photos=photosList
+
+
                     homePostsRv.apply {
                         mylayoutManager = LinearLayoutManager(context) //activity
                         recyclerView=view.findViewById(R.id.homePostsRv)
@@ -89,7 +82,6 @@ class HomeFragment : Fragment() {
                 }
                 else
                 {
-                    Log.d("slike","neuspesno ucitane")
                     Toast.makeText(requireActivity(),"Error loading images",Toast.LENGTH_SHORT).show()
                 }
             }

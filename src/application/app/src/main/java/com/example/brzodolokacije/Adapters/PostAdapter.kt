@@ -1,5 +1,6 @@
 package com.example.brzodolokacije.Adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -20,6 +21,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.example.brzodolokacije.Posts.Photo
 import com.example.brzodolokacije.R
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.concurrent.Executors
 
 
@@ -44,7 +47,7 @@ class PostAdapter(val photoList : List<Photo>, val context : Context) :
             owner.setOnClickListener{
                 Toast.makeText(context,"Owner: ${photo.owner}",Toast.LENGTH_SHORT).show()
             }
-            date.text = photo.date.toString()
+            date.text = convertLongToTime(photo.date)
 
             val text= Html.fromHtml("<i>"+photo.location+"</i>")
             location.text = text //=photo.location
@@ -76,6 +79,7 @@ class PostAdapter(val photoList : List<Photo>, val context : Context) :
         return dataList.size
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun refreshPosts(items : List<Photo>)
     {
         dataList=items
@@ -87,26 +91,23 @@ class PostAdapter(val photoList : List<Photo>, val context : Context) :
         val imageBytes = Base64.decode(path, Base64.DEFAULT)
         val decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
         image.setImageBitmap(decodedImage)
-        //image.layoutParams.height=Constants.screenHeight
-//        val executor = Executors.newSingleThreadExecutor()
-//
-//        val handler = android.os.Handler(Looper.getMainLooper())
-//
-//        var i: Bitmap? = null
-//        executor.execute {
-//
-//            // Image URL
-//            val imageURL = path
-//            try {
-//                val `in` = java.net.URL(imageURL).openStream()
-//                i = BitmapFactory.decodeStream(`in`)
-//                handler.post {
-//                    image.setImageBitmap(i)
-//                    //image.layoutParams.height= Constants.screenHeight
-//                }
-//            } catch (e: Exception) {
-//                e.printStackTrace()
-//            }
-//        }
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun convertLongToTime(time: Long): String {
+        val date = Date(time)
+        Log.d("datum",time.toString())
+        val format = SimpleDateFormat("HH:mm  dd/MM/yyyy")
+        return format.format(date).dropLast(4)
+    }
+
+    private fun currentTimeToLong(): Long {
+        return System.currentTimeMillis()
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun convertDateToLong(date: String): Long {
+        val df = SimpleDateFormat("dd/MM/yyyy  HH:mm")
+        return df.parse(date).time
     }
 }
