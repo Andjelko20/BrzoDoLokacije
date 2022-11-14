@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Activities.ActivityAddPost
+import com.example.brzodolokacije.Activities.ActivityEditProfile
 import com.example.brzodolokacije.Activities.MainActivity
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Managers.SessionManager
@@ -74,6 +75,13 @@ class ProfileFragment : Fragment() {
         addPost.setOnClickListener{
             activity?.let{
                 val intent = Intent (it, ActivityAddPost::class.java)
+                it.startActivity(intent)
+            }
+
+        }
+        editProfileButton.setOnClickListener{
+            activity?.let{
+                val intent = Intent (it, ActivityEditProfile::class.java)
                 it.startActivity(intent)
             }
 

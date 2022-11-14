@@ -179,6 +179,18 @@
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
             android:layout_marginBottom="15dp"/>
+        <Button
+            android:id="@+id/editProfileButton"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="Edit profile"
+            android:textAllCaps="false"
+            android:backgroundTint="@color/light_blue"
+            android:textSize="18sp"
+            android:layout_below="@+id/bubbleTabBarProfile"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_marginBottom="15dp"/>
 
 
 
