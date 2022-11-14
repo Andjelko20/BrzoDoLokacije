@@ -16,6 +16,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -111,5 +112,4 @@ class LoginActivity : AppCompatActivity() {
         username.text.clear()
         password.text.clear()
     }
-
 }

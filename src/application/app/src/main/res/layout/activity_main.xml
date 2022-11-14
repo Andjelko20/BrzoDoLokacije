@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:layout_centerHorizontal="true"
     tools:context=".Activities.MainActivity"
-    android:background="@drawable/loginregisterstyle">
+    android:background="@drawable/loginregisterstyle"
+    android:orientation="vertical">
 
     <FrameLayout
         android:id="@+id/fragment_container"
@@ -14,9 +15,29 @@
         android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bubbleTabBarTop"
+        app:layout_constraintBottom_toTopOf="@+id/bubbleTabBar"/>
+    <io.ak1.BubbleTabBar
+        android:id="@+id/bubbleTabBarTop"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/bubbleTabBar"/>
-
+        android:background="@color/light_blue"
+        android:elevation="16dp"
+        android:padding="3dp"
+        app:bubbletab_horizontal_padding="20dp"
+        app:bubbletab_title_size="16sp"
+        app:bubbletab_icon_padding="5sp"
+        app:bubbletab_vertical_padding="10dp"
+        app:bubbletab_tab_corner_radius="25dp">
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/whitelogo"
+            android:layout_marginTop="4dp"/>
+    </io.ak1.BubbleTabBar>
 
     <io.ak1.BubbleTabBar
         android:id="@+id/bubbleTabBar"

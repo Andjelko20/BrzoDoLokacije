@@ -8,13 +8,12 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
+import com.example.brzodolokacije.Fragments.*
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.databinding.ActivityMainBinding
-import com.example.brzodolokacije.Fragments.ExploreFragment
-import com.example.brzodolokacije.Fragments.HomeFragment
-import com.example.brzodolokacije.Fragments.ProfileFragment
 import com.example.brzodolokacije.R
+import io.ak1.BubbleTabBar
 import io.ak1.OnBubbleClickListener
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
@@ -24,6 +23,7 @@ import retrofit2.Response
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private var backPressedTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,9 +45,16 @@ class MainActivity : AppCompatActivity() {
 
             }
         })
-
     }
-
+    override fun onBackPressed() {
+        if (backPressedTime + 3000 > System.currentTimeMillis()) {
+            super.onBackPressed()
+            finish()
+        } /*else {
+            Toast.makeText(this, "Press back again to leave the app.", Toast.LENGTH_SHORT).show()
+        }*/
+        backPressedTime = System.currentTimeMillis()
+    }
 
     private fun replaceFragment(fragment: Fragment) {
         val fragmentManager = supportFragmentManager
