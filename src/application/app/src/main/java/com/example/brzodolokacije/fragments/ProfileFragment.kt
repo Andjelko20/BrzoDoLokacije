@@ -142,17 +142,9 @@ class ProfileFragment : Fragment() {
 
                         val avatarEncoded = userProfileInfo.profilePicture;
 
-                        Log.d(avatarEncoded, "avatar")
-
                         val imageBytes = Base64.decode(avatarEncoded, Base64.DEFAULT)
                         val decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
                         pfp.setImageBitmap(decodedImage)
-
-//                        Picasso.get()
-//                            .load(R.drawable.nopfp)
-//                            .resize(110, 110)
-//                            .centerCrop()
-//                            .into(pfp)
                     }
                     else
                     {
