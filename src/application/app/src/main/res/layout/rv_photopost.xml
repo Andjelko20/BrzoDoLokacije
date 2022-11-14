@@ -153,7 +153,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="Likes" />
 
-                <!--      dodati komentare      -->
+                <!--      dodati komentare ikonicu po potrebi    -->
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -163,8 +163,8 @@
                 android:layout_height="match_parent"
                 android:maxHeight="50dp"
                 tools:text="Image caption"
-                android:textSize="16sp"
-                android:textStyle="italic"
+                android:textSize="17sp"
+                android:textStyle="bold"
                 android:textColor="@color/text_dark"
                 android:background="@color/backgroundLightTheme"
                 android:paddingTop="5dp"
@@ -173,6 +173,22 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/likesAndComments"/>
+
+            <TextView
+                android:id="@+id/postComments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/backgroundLightTheme"
+                android:paddingStart="15dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:textColor="@color/text_dark"
+                android:textSize="15sp"
+                android:textStyle="italic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/postCaption"
+                tools:text="View all comments" />
 
             <TextView
                 android:id="@+id/postDate"
@@ -187,8 +203,8 @@
                 android:textStyle="italic"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/postCaption"
-                tools:text="Datum objave" />
+                app:layout_constraintTop_toBottomOf="@+id/postComments"
+                tools:text="Date of the post" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

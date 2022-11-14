@@ -41,6 +41,7 @@ class PostAdapter(val photoList : List<Photo>, val context : Context) :
             val location = itemView.findViewById<TextView>(R.id.location)
             val caption = itemView.findViewById<TextView>(R.id.postCaption)
             val likes = itemView.findViewById<TextView>(R.id.numOfLikes)
+            val comments = itemView.findViewById<TextView>(R.id.postComments)
             val image = itemView.findViewById<ImageView>(R.id.postImage)
 
             owner.text = photo.owner
@@ -52,11 +53,16 @@ class PostAdapter(val photoList : List<Photo>, val context : Context) :
             val text= Html.fromHtml("<i>"+photo.location+"</i>")
             location.text = text //=photo.location
 
-            caption.text = photo.caption
+            caption.text = Html.fromHtml("<i>"+photo.caption+"</i>")
 
             likes.text = photo.numberOfLikes.toString()
             likes.setOnClickListener{
                 Toast.makeText(context,"Post ID: ${photo.id} - likes",Toast.LENGTH_SHORT).show()
+            }
+
+            comments.text="View all ${photo.numberOfComments} comments"
+            comments.setOnClickListener{
+                Toast.makeText(context,"Post ID: ${photo.id} - comments",Toast.LENGTH_SHORT).show()
             }
 
             itemView.findViewById<ImageView>(R.id.likeBtn).setOnClickListener{
