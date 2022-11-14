@@ -50,18 +50,18 @@ class PostsFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_posts, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val profilePostsRv = view.findViewById<RecyclerView>(R.id.profilePostsRv)
-
-        profilePostsRv.apply {
-            mylayoutManager = GridLayoutManager(context, 3)
-            recyclerView=view.findViewById(R.id.profilePostsRv)
-            recyclerView.layoutManager=mylayoutManager
-            myAdapter = this.context?.let { ProfilePostsAdapter(PrivremeneSlikeZaFeed.getPhotos(),it) }
-            recyclerView.adapter=myAdapter
-        }
-    }
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//        val profilePostsRv = view.findViewById<RecyclerView>(R.id.profilePostsRv)
+//
+//        profilePostsRv.apply {
+//            mylayoutManager = GridLayoutManager(context, 3)
+//            recyclerView=view.findViewById(R.id.profilePostsRv)
+//            recyclerView.layoutManager=mylayoutManager
+//            myAdapter = this.context?.let { ProfilePostsAdapter(PrivremeneSlikeZaFeed.getPhotos(),it) }
+//            recyclerView.adapter=myAdapter
+//        }
+//    }
 
     companion object {
         /**
