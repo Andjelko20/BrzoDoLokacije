@@ -167,32 +167,36 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/logoutButton"
-            android:layout_width="150dp"
+        <LinearLayout
+            android:id="@+id/dugmici"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Log out"
-            android:textAllCaps="false"
-            android:backgroundTint="@color/light_blue"
-            android:textSize="18sp"
-            android:layout_below="@+id/bubbleTabBarProfile"
+            android:orientation="horizontal"
+            android:layout_below="@+id/drugiDeo"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
-            android:layout_marginBottom="15dp"/>
-        <Button
-            android:id="@+id/editProfileButton"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:text="Edit profile"
-            android:textAllCaps="false"
-            android:backgroundTint="@color/light_blue"
-            android:textSize="18sp"
-            android:layout_below="@+id/bubbleTabBarProfile"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center"
-            android:layout_marginBottom="15dp"/>
+            android:layout_marginBottom="15dp">
 
+            <Button
+                android:id="@+id/editProfileButton"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="Edit profile"
+                android:textAllCaps="false"
+                android:backgroundTint="@color/light_blue"
+                android:textSize="18sp"
+                android:layout_marginEnd="15dp"/>
 
+            <Button
+                android:id="@+id/logoutButton"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="Log out"
+                android:textAllCaps="false"
+                android:backgroundTint="@color/light_blue"
+                android:textSize="18sp"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
