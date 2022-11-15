@@ -11,6 +11,7 @@ import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Fragments.*
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
+import com.example.brzodolokacije.Posts.PrivremeneSlikeZaFeed
 import com.example.brzodolokacije.databinding.ActivityMainBinding
 import com.example.brzodolokacije.R
 import io.ak1.BubbleTabBar
@@ -29,12 +30,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        PrivremeneSlikeZaFeed.addPhotos()
         replaceFragment(HomeFragment())
 
         bubbleTabBar.addBubbleListener(object : OnBubbleClickListener{
             override fun onBubbleClick(id: Int) {
-                Log.d("iddd", id.toString())
+
                 when(id){
                     R.id.explore -> replaceFragment(ExploreFragment())
                     R.id.home -> replaceFragment(HomeFragment())
