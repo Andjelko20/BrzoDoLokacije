@@ -21,15 +21,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/rv_photopost"/>
+
     <ProgressBar
+        android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/progressBar"
-        android:progressDrawable="@drawable/circular_progress_bar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_alignParentBottom="true"
+        android:outlineAmbientShadowColor="@color/light_blue"
+        android:outlineSpotShadowColor="@color/gradient_darker"
+        android:progressTint="@color/light_blue"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_alignParentBottom="true" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
