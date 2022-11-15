@@ -2,8 +2,7 @@ package com.example.brzodolokacije.Posts
 
 object PrivremeneSlikeZaFeed {
     private var posts= mutableListOf<String>()
-
-    public fun getPhotos() : MutableList<String>
+    public fun addPhotos()
     {
         posts.add("https://a.travel-assets.com/findyours-php/viewfinder/images/res70/84000/84621-Paris.jpg")
         posts.add("https://www.travelmagazine.rs/wp-content/uploads/2021/08/Berlin-kapija.jpg")
@@ -13,6 +12,9 @@ object PrivremeneSlikeZaFeed {
         posts.add("http://london.com/wp-content/uploads/2019/03/london_001.jpg")
         posts.add("https://www.gannett-cdn.com/-mm-/6cb0566daad6b8973e2c456e7a61df50f54939b5/c=0-117-1408-1994/local/-/media/2017/01/04/USATODAY/USATODAY/636191149244091355-GettyImages-537365893.jpg")
         posts.add("https://www.thomascook.com/.imaging/mte/thomascook-theme/og-image/dam/uk/holidays/city-breaks/paris-dekstop.jpg/jcr:content/paris-dekstop.jpg")
+    }
+    public fun getPhotos() : MutableList<String>
+    {
         return posts
     }
 }
