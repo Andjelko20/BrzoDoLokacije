@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -60,6 +61,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.VISIBLE)
+        view.findViewById<LinearLayout>(R.id.commentSection).setVisibility(View.INVISIBLE)
 
         val retrofit = Client(requireActivity()).buildService(Api::class.java)
         retrofit.getAllPosts().enqueue(object: Callback<DefaultResponse>
