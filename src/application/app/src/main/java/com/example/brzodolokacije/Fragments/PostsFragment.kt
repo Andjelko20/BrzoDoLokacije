@@ -51,10 +51,10 @@ class PostsFragment : Fragment() {
         val profilePostsRv = view.findViewById<RecyclerView>(R.id.profilePostsRv)
 
         profilePostsRv.apply {
-            mylayoutManager = GridLayoutManager(context, 3)
             recyclerView=view.findViewById(R.id.profilePostsRv)
-            recyclerView.layoutManager=mylayoutManager
+            layoutManager = GridLayoutManager(context, 3)
             myAdapter = this.context?.let { ProfilePostsAdapter(PrivremeneSlikeZaFeed.getPhotos(),it) }
+            recyclerView.layoutManager=layoutManager
             recyclerView.adapter=myAdapter
         }
     }
