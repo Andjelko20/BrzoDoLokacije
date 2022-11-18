@@ -39,12 +39,12 @@ class MainActivity : AppCompatActivity() {
 //        if (provera != null)
 //        {
 //            replaceFragment(ProfileFragment())
-//            val bubbleTab = findViewById<BubbleTabBar>(R.id.bubbleTabBar);
-//            bubbleTab.setSelected(2, false)
+//            bubbleTabBar.setSelected(2, false)
 //        }
 //        else
 //        {
 //            replaceFragment(HomeFragment())
+//            bubbleTabBar.setSelected(0, false)
 //        }
 
         replaceFragment(HomeFragment())
