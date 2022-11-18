@@ -42,14 +42,11 @@ namespace backend.Controllers
             List<PostDto> postsDto = new List<PostDto>();
             foreach (Post post in posts)
             {
-                byte[] imageArray = await System.IO.File.ReadAllBytesAsync(post.ImagePath);
-                string base64ImageRepresentation = Convert.ToBase64String(imageArray);
                 List<Like> likes = await _context.Likes.Where(l => l.PostId == post.Id).ToListAsync();
                 List<Comment> comments = await _context.Comments.Where(c => c.PostId == post.Id).ToListAsync();
                 postsDto.Add(new PostDto
                 {
                     Id = post.Id,
-                    Image = base64ImageRepresentation,
                     Owner = (await _context.Users.FindAsync(post.UserId)).Username,
                     Date = post.Date,
                     Location = post.Location,
@@ -66,6 +63,17 @@ namespace backend.Controllers
                 error = false,
                 message = json
             });
+        }
+        
+        [AllowAnonymous]
+        [HttpGet("postPhoto/{postId}")]
+        public async Task<IActionResult> GetAvatar(int postId)
+        {
+            var post = await _context.Posts.FindAsync(postId);
+            Byte[] b = System.IO.File.ReadAllBytes(post.ImagePath);
+            string[] types = post.ImagePath.Split(".");
+            string type =types[types.Length-1];
+            return File(b, "image/"+type);
         }
         
         [HttpGet("getPostsFromUser/{username}")]
@@ -85,14 +93,10 @@ namespace backend.Controllers
             List<PostDto> postsDto = new List<PostDto>();
             foreach (Post post in posts)
             {
-                byte[] imageArray = await System.IO.File.ReadAllBytesAsync(post.ImagePath);
-                string base64ImageRepresentation = Convert.ToBase64String(imageArray);
                 List<Like> likes = await _context.Likes.Where(l => l.PostId == post.Id).ToListAsync();
                 List<Comment> comments = await _context.Comments.Where(c => c.PostId == post.Id).ToListAsync();
                 postsDto.Add(new PostDto
                 {
-                    Id = post.Id,
-                    Image = base64ImageRepresentation,
                     Owner = username,
                     Date = post.Date,
                     Location = post.Location,

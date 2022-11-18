@@ -3,7 +3,6 @@ namespace backend.ModelsDto;
 public class PostDto
 {
     public int Id { get; set; }
-    public string Image { get; set; }
     public string Owner { get; set; }
     public long Date { get; set; }
     public string Location { get; set; }

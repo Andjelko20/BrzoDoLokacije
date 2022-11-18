@@ -36,15 +36,11 @@ namespace backend.Controllers
                     error = true,
                     message = "User don't exist"
                 });
-                
-            byte[] imageArray = await System.IO.File.ReadAllBytesAsync(user.Avatar);
-            string base64ImageRepresentation = Convert.ToBase64String(imageArray);
             UserProfileDto upd = new UserProfileDto
             {
                 Username = user.Username,
                 Name = user.Name,
                 Description = user.Description,
-                Avatar = base64ImageRepresentation,
                 Followers = 100,
                 Following = 50,
                 NumberOfLikes = 300,
