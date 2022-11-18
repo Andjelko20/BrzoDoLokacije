@@ -10,6 +10,7 @@ import android.provider.DocumentsContract
 import android.provider.MediaStore
 
 class URIPathHelper {
+
     fun getPath(context: Context, uri: Uri): String? {
         val isKitKatorAbove = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
 
@@ -70,7 +71,9 @@ class URIPathHelper {
             }
         }
         finally {
-            if (cursor != null) cursor.close()
+            if (cursor != null) {
+                cursor.close()
+            }
         }
         return null
     }
