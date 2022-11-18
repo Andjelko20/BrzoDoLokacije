@@ -33,6 +33,9 @@ namespace backend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<long>("Date")
+                        .HasColumnType("bigint");
+
                     b.Property<int>("PostId")
                         .HasColumnType("integer");
 

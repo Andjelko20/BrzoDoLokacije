@@ -11,8 +11,8 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221118020959_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20221118023138_IniialMigration")]
+    partial class IniialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,6 +35,9 @@ namespace backend.Migrations
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<long>("Date")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("PostId")
                         .HasColumnType("integer");

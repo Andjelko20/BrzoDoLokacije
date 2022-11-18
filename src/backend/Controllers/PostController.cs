@@ -45,6 +45,7 @@ namespace backend.Controllers
                 byte[] imageArray = await System.IO.File.ReadAllBytesAsync(post.ImagePath);
                 string base64ImageRepresentation = Convert.ToBase64String(imageArray);
                 List<Like> likes = await _context.Likes.Where(l => l.PostId == post.Id).ToListAsync();
+                List<Comment> comments = await _context.Comments.Where(c => c.PostId == post.Id).ToListAsync();
                 postsDto.Add(new PostDto
                 {
                     Id = post.Id,
@@ -54,7 +55,7 @@ namespace backend.Controllers
                     Location = post.Location,
                     Caption = post.Caption,
                     NumberOfLikes = likes.Count,
-                    NumberOfComments = 15,
+                    NumberOfComments = comments.Count,
                     LikedByMe = likes.Exists(l => l.UserId == me.Id)
                 });
             }
@@ -86,6 +87,8 @@ namespace backend.Controllers
             {
                 byte[] imageArray = await System.IO.File.ReadAllBytesAsync(post.ImagePath);
                 string base64ImageRepresentation = Convert.ToBase64String(imageArray);
+                List<Like> likes = await _context.Likes.Where(l => l.PostId == post.Id).ToListAsync();
+                List<Comment> comments = await _context.Comments.Where(c => c.PostId == post.Id).ToListAsync();
                 postsDto.Add(new PostDto
                 {
                     Id = post.Id,
@@ -94,8 +97,8 @@ namespace backend.Controllers
                     Date = post.Date,
                     Location = post.Location,
                     Caption = post.Caption,
-                    NumberOfLikes = 50,
-                    NumberOfComments = 15
+                    NumberOfLikes = likes.Count,
+                    NumberOfComments = comments.Count
                 });
             }
 
@@ -221,11 +224,22 @@ namespace backend.Controllers
         [HttpGet("comments/{postId}")]
         public async Task<ActionResult<string>> getComments(int postId)
         {
-            var comments = await _context.Comments.Where(c => c.PostId == postId).ToListAsync();
+            var comments = await _context.Comments.Where(c => c.PostId == postId).OrderByDescending(c=>c.Date).ToListAsync();
+            List<CommentDto> commentsDto = new List<CommentDto>();
+            foreach (Comment comment in comments)
+            {
+                var user = await _context.Users.FindAsync(comment.UserId);
+                commentsDto.Add(new CommentDto
+                {
+                    Id = comment.Id,
+                    Content = comment.Content,
+                    Owner = user.Username
+                });
+            }
             return Ok(new
             {
                 error = false,
-                message = comments
+                message = commentsDto
             });
         }
 
