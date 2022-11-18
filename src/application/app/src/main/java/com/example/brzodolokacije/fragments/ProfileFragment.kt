@@ -16,6 +16,7 @@ import com.example.brzodolokacije.Activities.ActivityAddPost
 import com.example.brzodolokacije.Activities.ActivityEditProfile
 import com.example.brzodolokacije.Activities.MainActivity
 import com.example.brzodolokacije.Client.Client
+import com.example.brzodolokacije.Constants.Constants
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.UserProfile
@@ -139,11 +140,12 @@ class ProfileFragment : Fragment() {
                         imeprezime.text = userProfileInfo.name;
                         opis.text = userProfileInfo.description;
 
-                        val avatarEncoded = userProfileInfo.profilePicture;
+//                        val avatarEncoded = userProfileInfo.profilePicture;
 
-                        val imageBytes = Base64.decode(avatarEncoded, Base64.DEFAULT)
-                        val decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-                        pfp.setImageBitmap(decodedImage)
+//                        val imageBytes = Base64.decode(avatarEncoded, Base64.DEFAULT)
+//                        val decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+
+                        Picasso.get().load(Constants.BASE_URL + "User/avatar/" + usernameSm).into(pfp)
                     }
                     else
                     {

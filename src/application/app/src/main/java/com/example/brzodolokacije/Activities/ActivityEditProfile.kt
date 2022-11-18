@@ -10,11 +10,13 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
+import com.example.brzodolokacije.Constants.Constants
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.UserProfile
 import com.example.brzodolokacije.R
 import com.google.gson.Gson
+import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_editprofile.*
 import retrofit2.Call
@@ -65,11 +67,13 @@ class ActivityEditProfile : AppCompatActivity() {
                         username.text = userProfileInfo.username
                         description.text = userProfileInfo.description;
 
-                        val avatarEncoded = userProfileInfo.profilePicture;
+//                        val avatarEncoded = userProfileInfo.profilePicture;
+//
+//                        val imageBytes = Base64.decode(avatarEncoded, Base64.DEFAULT)
+//                        val decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+//                        pfp.setImageBitmap(decodedImage)
 
-                        val imageBytes = Base64.decode(avatarEncoded, Base64.DEFAULT)
-                        val decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-                        pfp.setImageBitmap(decodedImage)
+                        Picasso.get().load(Constants.BASE_URL + "User/avatar/" + usernameSm).into(pfp)
                     }
                     else
                     {
