@@ -125,7 +125,7 @@
             app:boxBackgroundColor="@color/light_blue">
 
             <EditText
-                android:id="@+id/editProfileUsername"
+                android:id="@+id/editUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Username"
@@ -146,7 +146,7 @@
             app:boxBackgroundColor="@color/light_blue">
 
             <EditText
-                android:id="@+id/editProfileCaption"
+                android:id="@+id/editDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Description"

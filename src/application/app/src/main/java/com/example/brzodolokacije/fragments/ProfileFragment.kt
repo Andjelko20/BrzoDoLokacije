@@ -123,7 +123,6 @@ class ProfileFragment : Fragment() {
                         val userProfileInfoStr: String = response.body()?.message.toString();
                         val gson = Gson()
                         val userProfileInfo: UserProfile = gson.fromJson(userProfileInfoStr, UserProfile::class.java)
-    //                    Log.d(userProfileInfo.profilePicture, "proba");
 
                         val username = view.findViewById<TextView>(R.id.username)
                         val postsNum = view.findViewById<TextView>(R.id.postsNum)
