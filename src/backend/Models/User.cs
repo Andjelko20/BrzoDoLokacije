@@ -19,4 +19,5 @@ public class User
     public string Avatar { get; set; } = "../miscellaneous/avatars/default.png";
     public bool HasAvatar { get; set; } = false;
     public List<Post> Posts { get; set; }
+    public List<Like> Likes { get; set; }
 }

@@ -31,12 +31,20 @@ namespace backend.Controllers
         public async Task<ActionResult<List<Post>>> getAll()
         {
             var posts = await _context.Posts.OrderByDescending(p => p.Date).ToListAsync();
+            var me = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
+            if (me == null)
+                return BadRequest(new
+                {
+                    error = true,
+                    message = "Error"
+                });
             
             List<PostDto> postsDto = new List<PostDto>();
             foreach (Post post in posts)
             {
                 byte[] imageArray = await System.IO.File.ReadAllBytesAsync(post.ImagePath);
                 string base64ImageRepresentation = Convert.ToBase64String(imageArray);
+                List<Like> likes = await _context.Likes.Where(l => l.PostId == post.Id).ToListAsync();
                 postsDto.Add(new PostDto
                 {
                     Id = post.Id,
@@ -45,8 +53,9 @@ namespace backend.Controllers
                     Date = post.Date,
                     Location = post.Location,
                     Caption = post.Caption,
-                    NumberOfLikes = 50,
-                    NumberOfComments = 15
+                    NumberOfLikes = likes.Count,
+                    NumberOfComments = 15,
+                    LikedByMe = likes.Exists(l => l.UserId == me.Id)
                 });
             }
 
@@ -137,6 +146,48 @@ namespace backend.Controllers
                 error = false,
                 message = "Post deleted"
             });
+        }
+
+        [HttpPost("like/{postId}")]
+        public async Task<ActionResult<string>> likeDislike(int postId)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
+            var post = await _context.Posts.FindAsync(postId);
+            if (user == null || post == null)
+                return BadRequest(new
+                {
+                    error = true,
+                    message = "Error"
+                });
+            var like = await _context.Likes.FirstOrDefaultAsync(l => l.UserId == user.Id && l.PostId == postId);
+            if (like == null)
+            {
+                Like l = new Like
+                {
+                    User = user,
+                    UserId = user.Id,
+                    Post = post,
+                    PostId = postId
+                };
+                _context.Likes.Add(l);
+                await _context.SaveChangesAsync();
+                return Ok(new
+                {
+                    error = false,
+                    message = "liked"
+                });
+            }
+            else
+            {
+                _context.Likes.Remove(like);
+                await _context.SaveChangesAsync();
+                return Ok(new
+                {
+                    error = false,
+                    message = "unliked"
+                });
+            }
+
         }
 
     }
