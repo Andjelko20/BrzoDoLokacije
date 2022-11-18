@@ -52,12 +52,12 @@
         app:layout_constraintTop_toBottomOf="@+id/bubbleTabBarTopEditProfile"/>
 
     <TextView
-        android:id="@+id/username"
+        android:id="@+id/changePhotoLink"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="username"
+        android:text="@string/change_pfp"
         android:textColor="@color/dark_blue"
-        android:textSize="20dp"
+        android:textSize="18dp"
         android:layout_marginTop="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -86,7 +86,7 @@
         app:layout_constraintBottom_toTopOf="@+id/editAddPicture"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username">
+        app:layout_constraintTop_toBottomOf="@+id/changePhotoLink">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/nameAndSurnameWrap"

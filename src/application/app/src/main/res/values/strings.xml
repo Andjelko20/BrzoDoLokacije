@@ -4,6 +4,7 @@
     <string name="login_text"><i>Login to see locations from all over the world</i></string>
     <string name="signup_text"><i>Sign up to see locations from all over the world</i></string>
     <string name="no_account"><u>Don\'t have an account? Create one!</u></string>
+    <string name="change_pfp"><u>Change profile picture</u></string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
