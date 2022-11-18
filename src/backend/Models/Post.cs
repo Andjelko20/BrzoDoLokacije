@@ -14,4 +14,5 @@ public class Post
     [JsonIgnore]
     public User User { get; set; }
     public int UserId { get; set; }
+    public List<Like> Likes { get; set; }
 }
