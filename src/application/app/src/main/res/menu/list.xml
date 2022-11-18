@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/home"
+        android:checked="true"
         android:icon="@drawable/ic_home"
         android:title="Home"
-        android:checked="true"
         android:color="@color/light_green_navbar"/>
 
     <item
