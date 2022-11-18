@@ -190,5 +190,44 @@ namespace backend.Controllers
 
         }
 
+        [HttpPost("addComment")]
+        public async Task<ActionResult<string>> addComment(AddCommentDto request)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
+            var post = await _context.Posts.FindAsync(request.PostId);
+            if (user == null || post == null)
+                return BadRequest(new
+                {
+                    error = true,
+                    message = "Error"
+                });
+            Comment comment = new Comment
+            {
+                Content = request.Content,
+                Post = post,
+                PostId = request.PostId,
+                User = user,
+                UserId = user.Id
+            };
+            _context.Comments.Add(comment);
+            await _context.SaveChangesAsync();
+            return Ok(new
+            {
+                error = false,
+                message = "Success"
+            });
+        }
+
+        [HttpGet("comments/{postId}")]
+        public async Task<ActionResult<string>> getComments(int postId)
+        {
+            var comments = await _context.Comments.Where(c => c.PostId == postId).ToListAsync();
+            return Ok(new
+            {
+                error = false,
+                message = comments
+            });
+        }
+
     }
 }
