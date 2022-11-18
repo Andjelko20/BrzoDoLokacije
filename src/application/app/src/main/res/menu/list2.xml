@@ -2,7 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/home"
-        android:checked="true"
         android:icon="@drawable/ic_home"
         android:title="Home"
         android:color="@color/light_green_navbar"/>
@@ -17,5 +16,6 @@
         android:id="@+id/profile"
         android:icon="@drawable/ic_profile"
         android:title="Profile"
+        android:checked="true"
         android:color="@color/light_mint_navbar"/>
 </menu>

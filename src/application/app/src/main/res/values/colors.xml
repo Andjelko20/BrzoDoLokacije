@@ -27,4 +27,5 @@
     <color name="light_green_navbar">#D9FFE0</color>
     <color name="light_mint_navbar">#C1F8FF</color>
     <color name="pastel_blue">#C3E2FF</color>
+    <color name="transparent">#00C3E2FF</color>
 </resources>
