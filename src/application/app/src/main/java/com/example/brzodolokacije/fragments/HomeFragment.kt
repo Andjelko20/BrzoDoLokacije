@@ -61,7 +61,6 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.VISIBLE)
-        view.findViewById<LinearLayout>(R.id.commentSection).setVisibility(View.INVISIBLE)
 
         val retrofit = Client(requireActivity()).buildService(Api::class.java)
         retrofit.getAllPosts().enqueue(object: Callback<DefaultResponse>
@@ -79,7 +78,7 @@ class HomeFragment : Fragment() {
                         recyclerView=view.findViewById(R.id.homePostsRv)
                         recyclerView.layoutManager=mylayoutManager
                         recyclerView.setHasFixedSize(true)
-                        myAdapter = this.context?.let { PostAdapter(photosList,it) }
+                        myAdapter = this.context?.let { PostAdapter(photosList,it,requireActivity()) }
                         recyclerView.adapter=myAdapter
                     }
                     view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.GONE)

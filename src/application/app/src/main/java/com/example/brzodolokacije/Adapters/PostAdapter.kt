@@ -21,12 +21,14 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.example.brzodolokacije.Posts.Photo
 import com.example.brzodolokacije.R
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.Executors
 
 
-class PostAdapter(val photoList : List<Photo>, val context : Context) :
+class PostAdapter(val photoList : List<Photo>, val context : Context, val activity : Context) :
     RecyclerView.Adapter<PostAdapter.MainViewHolder>() {
 
     var dataList = photoList
@@ -62,7 +64,13 @@ class PostAdapter(val photoList : List<Photo>, val context : Context) :
 
             comments.text="View all ${photo.numberOfComments} comments"
             comments.setOnClickListener{
-                Toast.makeText(context,"Post ID: ${photo.id} - comments",Toast.LENGTH_SHORT).show()
+
+                val view : View = LayoutInflater.from(context).inflate(R.layout.fragment_comment,null)
+                val dialog = BottomSheetDialog(activity)
+                dialog.setContentView(view)
+                //poslati zahtev beku da vrati listu komentara i nekako da je ubacim u recyclerview u modal bottom sheet
+                dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                dialog.show()
             }
 
             itemView.findViewById<ImageView>(R.id.likeBtn).setOnClickListener{
