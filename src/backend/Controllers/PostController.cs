@@ -31,12 +31,20 @@ namespace backend.Controllers
         public async Task<ActionResult<List<Post>>> getAll()
         {
             var posts = await _context.Posts.OrderByDescending(p => p.Date).ToListAsync();
+            var me = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
+            if (me == null)
+                return BadRequest(new
+                {
+                    error = true,
+                    message = "Error"
+                });
             
             List<PostDto> postsDto = new List<PostDto>();
             foreach (Post post in posts)
             {
                 byte[] imageArray = await System.IO.File.ReadAllBytesAsync(post.ImagePath);
                 string base64ImageRepresentation = Convert.ToBase64String(imageArray);
+                List<Like> likes = await _context.Likes.Where(l => l.PostId == post.Id).ToListAsync();
                 postsDto.Add(new PostDto
                 {
                     Id = post.Id,
@@ -45,8 +53,9 @@ namespace backend.Controllers
                     Date = post.Date,
                     Location = post.Location,
                     Caption = post.Caption,
-                    NumberOfLikes = 50,
-                    NumberOfComments = 15
+                    NumberOfLikes = likes.Count,
+                    NumberOfComments = 15,
+                    LikedByMe = likes.Exists(l => l.UserId == me.Id)
                 });
             }
 

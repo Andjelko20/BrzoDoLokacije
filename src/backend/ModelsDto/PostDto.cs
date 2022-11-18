@@ -10,4 +10,5 @@ public class PostDto
     public string Caption { get; set; }
     public int NumberOfLikes { get; set; }
     public int NumberOfComments { get; set; }
+    public bool LikedByMe { get; set; }
 }
