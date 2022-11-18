@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
 using backend.Models;
@@ -9,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace backend.Controllers
 {
@@ -65,7 +68,39 @@ namespace backend.Controllers
             string type =types[types.Length-1];
             return File(b, "image/"+type);
         }
-        
+
+        [HttpPut("update")]
+        public async Task<ActionResult<string>> updateProfile(UpdateProfileDto request)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
+            if (user == null)
+                return BadRequest(new
+                {
+                    error = true,
+                    message = "Error"
+                });
+            if (user.Username != request.Username)
+            {
+                var userDB = await _context.Users.FirstOrDefaultAsync(u => u.Username == request.Username);
+                if (userDB != null)
+                    return Ok(new
+                    {
+                        error = true,
+                        message = "Someone else's using that username!"
+                    });
+            }
+
+            user.Username = request.Username;
+            user.Name = request.Name;
+            user.Description = request.Description;
+            await _context.SaveChangesAsync();
+            string token = CreateToken(user);
+            return Ok(new {
+                error = false,
+                message = token
+            });
+        }
+
         [HttpDelete("delete/{username}")]
         public async Task<ActionResult<string>> deleteUser(string username)
         {
@@ -86,6 +121,26 @@ namespace backend.Controllers
                 error = false,
                 message = "deleted" + username
             });
+        }
+        private string CreateToken(User user)
+        {
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.Role, "korisnik")
+            };
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
+                _configuration.GetSection("AppSettings:Token").Value));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            var token = new JwtSecurityToken(
+                claims: claims,
+                expires: DateTime.Now.AddDays(30),
+                signingCredentials: creds
+            );
+
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return jwt;
         }
         
     }
