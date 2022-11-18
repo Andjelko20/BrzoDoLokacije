@@ -208,6 +208,9 @@ namespace backend.Controllers
         [HttpGet("check-session")]
         public ActionResult<string> checkSession()
         {
+            var user = _context.Users.FirstOrDefault(u => u.Username == User.Identity.Name);
+            if (user == null)
+                return Unauthorized();
             return Ok(new {
                 error = false,
                 message = User?.Identity?.Name
