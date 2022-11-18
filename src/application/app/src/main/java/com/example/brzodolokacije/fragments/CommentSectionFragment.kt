@@ -5,6 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.example.brzodolokacije.Adapters.CommentsAdapter
+import com.example.brzodolokacije.Adapters.PostAdapter
 import com.example.brzodolokacije.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
@@ -12,6 +15,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+
+private var myAdapter : RecyclerView.Adapter<CommentsAdapter.MainViewHolder>? = null
+private var mylayoutManager : RecyclerView.LayoutManager? = null
+private lateinit var recyclerView : RecyclerView
 
 /**
  * A simple [Fragment] subclass.

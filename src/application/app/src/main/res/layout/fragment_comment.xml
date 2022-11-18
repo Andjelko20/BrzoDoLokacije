@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragments.CommentFragment">
+    android:layout_height="wrap_content"
+    style="@style/BottomSheetTheme"
+    tools:context=".fragments.CommentSectionFragment">
 
     <LinearLayout
         android:id="@+id/commentSection"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         app:behavior_peekHeight="800dp"
-        android:background="@drawable/commentsectiondesigne"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+        style="@style/BottomSheetTheme"
+        android:background="@color/postHeader"
+        android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/light_blue"
+            android:gravity="center"
             android:orientation="horizontal"
-            android:padding="16dp"
-            android:gravity="center">
+            android:padding="16dp">
 
             <TextView
                 android:id="@+id/commentSectionHeaderText"
@@ -34,7 +35,7 @@
                 android:text="Comment section"
                 android:textColor="@color/backgroundLightTheme"
                 android:textSize="19sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
         </RelativeLayout>
 
         <View
@@ -43,51 +44,60 @@
             android:background="@color/postHeader" />
 
 
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <EditText
                 android:id="@+id/addCommentText"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
+                android:layout_marginLeft="5dp"
                 android:layout_marginTop="7dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginLeft="5dp"
-                android:paddingRight="70dp"
-                android:paddingLeft="20dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:inputType="text"
-                android:textSize="18sp"
-                android:textColor="@color/text_dark"
                 android:background="@drawable/add_comment_field"
                 android:hint="Add Comment"
-                android:textColorHint="@color/text_dark"/>
+                android:inputType="text"
+                android:paddingLeft="20dp"
+                android:paddingTop="10dp"
+                android:paddingRight="70dp"
+                android:paddingBottom="10dp"
+                android:textColor="@color/text_dark"
+                android:textColorHint="@color/text_dark"
+                android:textSize="18sp" />
 
             <ImageView
                 android:id="@+id/addCommentBtn"
-                android:clickable="true"
-                android:focusable="true"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_alignParentEnd="true"
                 android:layout_alignTop="@id/addCommentText"
                 android:layout_alignBottom="@id/addCommentText"
-                android:src="@android:drawable/ic_menu_send"
-                android:layout_marginEnd="15dp"/>
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="15dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@android:drawable/ic_menu_send" />
 
         </RelativeLayout>
+
+        <!--        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout-->
+        <!--            android:id="@+id/refreshLayout"-->
+        <!--            android:layout_marginTop="10dp"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content">-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_comments"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="5dp"
             android:background="@color/postHeader"
+            android:padding="5dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/rv_comment"/>
+            tools:listitem="@layout/rv_comment"
+            android:layout_marginTop="10dp"/>
+
+        <!--        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>-->
 
     </LinearLayout>
 

@@ -20,6 +20,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.example.brzodolokacije.Posts.Photo
+import com.example.brzodolokacije.Posts.PrivremeniKomentar
 import com.example.brzodolokacije.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -65,11 +66,16 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
             comments.text="View all ${photo.numberOfComments} comments"
             comments.setOnClickListener{
 
+                //poslati zahtev beku da vrati listu komentara i nekako da je ubacim u recyclerview u modal bottom sheet
+                val comments=PrivremeniKomentar.getComments()
+
                 val view : View = LayoutInflater.from(context).inflate(R.layout.fragment_comment,null)
+                val rvComments = view.findViewById<RecyclerView>(R.id.rv_comments)
+                rvComments.adapter = CommentsAdapter(comments,context,activity)
+
                 val dialog = BottomSheetDialog(activity)
                 dialog.setContentView(view)
-                //poslati zahtev beku da vrati listu komentara i nekako da je ubacim u recyclerview u modal bottom sheet
-                dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                dialog.behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
                 dialog.show()
             }
 
