@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -77,7 +78,7 @@ class HomeFragment : Fragment() {
                         recyclerView=view.findViewById(R.id.homePostsRv)
                         recyclerView.layoutManager=mylayoutManager
                         recyclerView.setHasFixedSize(true)
-                        myAdapter = this.context?.let { PostAdapter(photosList,it) }
+                        myAdapter = this.context?.let { PostAdapter(photosList,it,requireActivity()) }
                         recyclerView.adapter=myAdapter
                     }
                     view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.GONE)
