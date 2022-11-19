@@ -51,8 +51,6 @@ class MainActivity : AppCompatActivity() {
             bubbleTabBar2.visibility = View.INVISIBLE;
         }
 
-//        replaceFragment(HomeFragment())
-
         bubbleTabBar.addBubbleListener(object : OnBubbleClickListener{
             override fun onBubbleClick(id: Int) {
                 when(id){
