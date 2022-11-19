@@ -65,7 +65,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editProfilePicture" />
 
     <Button
-        android:id="@+id/editAddPicture"
+        android:id="@+id/saveChangesProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -84,7 +84,7 @@
         android:background="@drawable/shape"
         android:paddingBottom="40dp"
         android:layout_marginTop="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/editAddPicture"
+        app:layout_constraintBottom_toTopOf="@+id/saveChangesProfile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/changePhotoLink">
@@ -103,7 +103,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <EditText
-                android:id="@+id/editName"
+                android:id="@+id/editNameProfile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Name"
@@ -126,7 +126,7 @@
             app:boxBackgroundColor="@color/light_blue">
 
             <EditText
-                android:id="@+id/editUsername"
+                android:id="@+id/editUsernameProfile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Username"
@@ -147,7 +147,7 @@
             app:boxBackgroundColor="@color/light_blue">
 
             <EditText
-                android:id="@+id/editDescription"
+                android:id="@+id/editDescriptionProfile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Description"
