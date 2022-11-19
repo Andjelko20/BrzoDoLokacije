@@ -19,11 +19,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
+import com.example.brzodolokacije.Constants.Constants
 import com.example.brzodolokacije.Posts.Photo
 import com.example.brzodolokacije.Posts.PrivremeniKomentar
 import com.example.brzodolokacije.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.Executors
@@ -38,7 +40,6 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
 
         fun bindData(photo : Photo, index : Int)
         {
-            Log.d("slikeA",dataList.toString())
             val owner = itemView.findViewById<TextView>(R.id.postOwner)
             val date = itemView.findViewById<TextView>(R.id.postDate)
             val location = itemView.findViewById<TextView>(R.id.location)
@@ -46,6 +47,7 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
             val likes = itemView.findViewById<TextView>(R.id.numOfLikes)
             val comments = itemView.findViewById<TextView>(R.id.postComments)
             val image = itemView.findViewById<ImageView>(R.id.postImage)
+            val likedByMe = itemView.findViewById<ImageView>(R.id.likeBtn)
 
             owner.text = photo.owner
             owner.setOnClickListener{
@@ -79,11 +81,14 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
                 dialog.show()
             }
 
-            itemView.findViewById<ImageView>(R.id.likeBtn).setOnClickListener{
+            val imagePath=Constants.BASE_URL+"Post/postPhoto/${photo.id}"
+            Picasso.get().load(imagePath).into(image);
+
+            if(photo.likedByMe) likedByMe.setBackgroundResource(R.drawable.liked_true)
+            else likedByMe.setBackgroundResource(R.drawable.liked_false)
+            likedByMe.setOnClickListener{
                 Toast.makeText(context,"Liked post with ID: ${photo.id} - likes",Toast.LENGTH_SHORT).show()
             }
-
-            loadImage(image,photo.image)
         }
     }
 
@@ -106,12 +111,12 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
         notifyDataSetChanged()
     }
 
-    private fun loadImage(image : ImageView, path : String)
-    {
-        val imageBytes = Base64.decode(path, Base64.DEFAULT)
-        val decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-        image.setImageBitmap(decodedImage)
-    }
+//    private fun loadImage(image : ImageView, path : String)
+//    {
+//        val imageBytes = Base64.decode(path, Base64.DEFAULT)
+//        val decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+//        image.setImageBitmap(decodedImage)
+//    }
 
     @SuppressLint("SimpleDateFormat")
     private fun convertLongToTime(time: Long): String {

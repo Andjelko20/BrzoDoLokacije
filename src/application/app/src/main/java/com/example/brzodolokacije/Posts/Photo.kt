@@ -7,9 +7,6 @@ data class Photo (
     @SerializedName("Id")
     val id : String,
 
-    @SerializedName("Image")
-    val image : String,
-
     @SerializedName("Owner")
     val owner : String,
 
@@ -26,5 +23,8 @@ data class Photo (
     val numberOfLikes : Int,
 
     @SerializedName("NumberOfComments")
-    val numberOfComments : Int
+    val numberOfComments : Int,
+
+    @SerializedName("LikedByMe")
+    val likedByMe : Boolean
 )
