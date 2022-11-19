@@ -40,4 +40,7 @@ interface Api {
     @GET("Post/getAll")
     fun getAllPosts(): Call<DefaultResponse>
 
+    @GET("Post/comments/{postId}")
+    fun getComments(@Path("postId") postId : String) : Call<DefaultResponse>
+
 }

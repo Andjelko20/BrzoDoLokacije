@@ -240,10 +240,12 @@ namespace backend.Controllers
                     Owner = user.Username
                 });
             }
+
+            string json = JsonSerializer.Serialize(commentsDto);
             return Ok(new
             {
                 error = false,
-                message = commentsDto
+                message = json
             });
         }
 

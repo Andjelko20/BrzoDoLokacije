@@ -2,33 +2,31 @@ package com.example.brzodolokacije.Adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Matrix
-import android.graphics.drawable.BitmapDrawable
-import android.os.Looper
 import android.text.Html
-import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
-import androidx.test.core.app.ApplicationProvider.getApplicationContext
+import com.example.brzodolokacije.API.Api
+import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Constants.Constants
+import com.example.brzodolokacije.Models.DefaultResponse
+import com.example.brzodolokacije.Posts.Comment
 import com.example.brzodolokacije.Posts.Photo
-import com.example.brzodolokacije.Posts.PrivremeniKomentar
 import com.example.brzodolokacije.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.fragment_home.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.Executors
 
 
 class PostAdapter(val photoList : List<Photo>, val context : Context, val activity : Context) :
@@ -67,18 +65,43 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
 
             comments.text="View all ${photo.numberOfComments} comments"
             comments.setOnClickListener{
-
-                //poslati zahtev beku da vrati listu komentara i nekako da je ubacim u recyclerview u modal bottom sheet
-                val comments=PrivremeniKomentar.getComments()
-
                 val view : View = LayoutInflater.from(context).inflate(R.layout.fragment_comment,null)
-                val rvComments = view.findViewById<RecyclerView>(R.id.rv_comments)
-                rvComments.adapter = CommentsAdapter(comments,context,activity)
 
-                val dialog = BottomSheetDialog(activity)
-                dialog.setContentView(view)
-                dialog.behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
-                dialog.show()
+                val retrofit = Client(activity).buildService(Api::class.java)
+                retrofit.getComments(photo.id).enqueue(object: Callback<DefaultResponse>
+                {
+                    override fun onResponse(
+                        call: Call<DefaultResponse>,
+                        response: Response<DefaultResponse>
+                    ) {
+                        if(response.body()?.error.toString()=="false")
+                        {
+                            val listOfCommentsStr: String = response.body()?.message.toString();
+
+                            val typeToken = object : TypeToken<List<Comment>>() {}.type
+                            val commentsList = Gson().fromJson<List<Comment>>(listOfCommentsStr, typeToken)
+
+
+                            val rvComments = view.findViewById<RecyclerView>(R.id.rv_comments)
+                            if(commentsList.isNotEmpty()) rvComments.adapter = CommentsAdapter(commentsList,context,activity)
+
+                            val dialog = BottomSheetDialog(activity)
+                            dialog.setContentView(view)
+                            dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                            //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
+                            dialog.show()
+                        }
+                        else
+                        {
+                            Toast.makeText(activity,"Error loading comments",Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                        Toast.makeText(activity,"Error loading comments. Something went wrong",Toast.LENGTH_SHORT).show()
+                    }
+
+                })
             }
 
             val imagePath=Constants.BASE_URL+"Post/postPhoto/${photo.id}"

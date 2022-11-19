@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    style="@style/BottomSheetTheme"
-    tools:context=".fragments.CommentSectionFragment">
+    android:layout_height="match_parent"
+    tools:context=".fragments.CommentSectionFragment"
+    android:background="@color/postHeader">
 
     <LinearLayout
         android:id="@+id/commentSection"
@@ -13,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:behavior_peekHeight="800dp"
-        style="@style/BottomSheetTheme"
         android:background="@color/postHeader"
         android:orientation="vertical">
 
@@ -95,6 +94,7 @@
             android:padding="5dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/rv_comment"
+            tools:itemCount="1"
             android:layout_marginTop="10dp"/>
 
         <!--        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>-->

@@ -44,7 +44,7 @@ class CommentsAdapter(val commentList : List<Comment>, val context : Context, va
             val text = itemView.findViewById<TextView>(R.id.commentText)
 
             owner.text=comment.owner
-            text.text=comment.text
+            text.text=comment.content
         }
     }
 
