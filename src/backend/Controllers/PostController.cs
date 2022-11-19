@@ -178,20 +178,22 @@ namespace backend.Controllers
                 };
                 _context.Likes.Add(l);
                 await _context.SaveChangesAsync();
+                int numOfLikes = (await _context.Likes.Where(c => c.PostId == postId).ToListAsync()).Count;
                 return Ok(new
                 {
                     error = false,
-                    message = "liked"
+                    message = "liked,"+numOfLikes
                 });
             }
             else
             {
                 _context.Likes.Remove(like);
                 await _context.SaveChangesAsync();
+                int numOfLikes = (await _context.Likes.Where(c => c.PostId == postId).ToListAsync()).Count;
                 return Ok(new
                 {
                     error = false,
-                    message = "unliked"
+                    message = "unliked,"+numOfLikes
                 });
             }
 

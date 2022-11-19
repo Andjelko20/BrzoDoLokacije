@@ -103,31 +103,7 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
             if(photo.likedByMe) likedByMe.setBackgroundResource(R.drawable.liked)
             else likedByMe.setBackgroundResource(R.drawable.unliked)
             likedByMe.setOnClickListener{
-                //Toast.makeText(context,"Liked post with ID: ${photo.id} - likes",Toast.LENGTH_SHORT).show()
-                val retrofit = Client(activity).buildService(Api::class.java)
-                retrofit.likPost(photo.id).enqueue(object: Callback<DefaultResponse>
-                {
-                    override fun onResponse(
-                        call: Call<DefaultResponse>,
-                        response: Response<DefaultResponse>
-                    ) {
-                       if(response.body()?.error.toString()=="false")
-                       {
-                           if(response.body()?.message=="liked")
-                               likedByMe.setBackgroundResource(R.drawable.liked)
-                           else likedByMe.setBackgroundResource(R.drawable.unliked)
-                       }
-                        else
-                       {
-                           Toast.makeText(context,"Unable to like post",Toast.LENGTH_SHORT).show()
-                       }
-                    }
-
-                    override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                        Toast.makeText(context,"Something went wrong",Toast.LENGTH_SHORT).show()
-                    }
-
-                })
+                likeUnlike(itemView,photo)
             }
         }
     }
@@ -217,6 +193,43 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
 
             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                 Toast.makeText(activity,"Something else went wrong",Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
+
+    private fun likeUnlike(itemView : View, photo : Photo)
+    {
+        val likedByMe = itemView.findViewById<ImageView>(R.id.likeBtn)
+        val likes = itemView.findViewById<TextView>(R.id.numOfLikes)
+        val retrofit = Client(activity).buildService(Api::class.java)
+        retrofit.likPost(photo.id).enqueue(object: Callback<DefaultResponse>
+        {
+            override fun onResponse(
+                call: Call<DefaultResponse>,
+                response: Response<DefaultResponse>
+            ) {
+                if(response.body()?.error.toString()=="false")
+                {
+                    val string = response.body()?.message.toString()
+                    val list: List<String> = string.split(",")
+                    //Toast.makeText(context,list.get(1),Toast.LENGTH_SHORT).show()
+
+                    if(list.get(0)=="liked")
+                        likedByMe.setBackgroundResource(R.drawable.liked)
+
+                    else likedByMe.setBackgroundResource(R.drawable.unliked)
+
+                    likes.text=list.get(1).toString()
+                }
+                else
+                {
+                    Toast.makeText(context,"Unable to like post",Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                Toast.makeText(context,"Something went wrong",Toast.LENGTH_SHORT).show()
             }
 
         })
