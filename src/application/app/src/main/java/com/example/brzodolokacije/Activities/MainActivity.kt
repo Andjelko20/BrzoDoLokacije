@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         PrivremeneSlikeZaFeed.addPhotos()
 
         val intent = getIntent()
-        val provera = intent.getStringExtra("backPressed");
+        val provera = intent.getStringExtra("backToProfile");
         if (provera != null)
         {
             replaceFragment(ProfileFragment())

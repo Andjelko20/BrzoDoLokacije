@@ -14,7 +14,9 @@ import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -24,11 +26,15 @@ import com.example.brzodolokacije.Constants.Constants
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.UserProfile
+import com.example.brzodolokacije.Models.Validation
+import com.example.brzodolokacije.ModelsDto.EditProfileDto
 import com.example.brzodolokacije.R
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_editprofile.*
+import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_register.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -46,8 +52,89 @@ class ActivityEditProfile : AppCompatActivity() {
         val buttonBack = findViewById<Button>(R.id.backButton)
         buttonBack.setOnClickListener{
             val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("backPressed", "returnToProfile");
+            intent.putExtra("backToProfile", "returnToProfile");
             startActivity(intent)
+        }
+
+        saveChangesProfile.setOnClickListener{
+            val editName = findViewById<EditText>(R.id.editNameProfile)
+            val editUsername = findViewById<EditText>(R.id.editUsernameProfile)
+            val editDescription = findViewById<EditText>(R.id.editDescriptionProfile)
+            val validation = Validation()
+
+            val name = editName.text.toString().trim()
+            val username = editUsername.text.toString().trim()
+            val description = editDescription.text.toString().trim()
+
+            //username je obavezan, opis i name nisu
+            if(username.isEmpty()){
+                editUsername.error = "Username required"
+                editUsername.requestFocus()
+                return@setOnClickListener
+            }
+
+            if(!validation.checkUsername(username)){
+                editUsername.error = "Username must contain at least 6 characters (lowercase letters, numbers and _ only)"
+                editUsername.requestFocus()
+                return@setOnClickListener
+            }
+
+            val newData = EditProfileDto(name, username, description)
+            val sessionManager = SessionManager(this)
+            val retrofit = Client(this).buildService(Api::class.java)
+            retrofit.editUserInfo(newData).enqueue(object : Callback<DefaultResponse>
+            {
+                override fun onResponse(
+                    call: Call<DefaultResponse>,
+                    response: Response<DefaultResponse>
+                ) {
+                    if(response.body()?.error.toString() == "false")
+                    {
+                        val token = response.body()?.message.toString()
+                        sessionManager.deleteAuthToken()
+                        sessionManager.saveAuthToken(token)
+
+                        retrofit.authentication().enqueue(object: Callback<DefaultResponse>
+                        {
+                            override fun onResponse(
+                                call: Call<DefaultResponse>,
+                                response: Response<DefaultResponse>
+                            ) {
+                                if(response.body()?.error.toString() == "false") {
+                                    var usernameRes = response.body()?.message.toString()
+                                    sessionManager.deleteUsername()
+                                    sessionManager.saveUsername(usernameRes)
+                                }
+                            }
+
+                            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                                Toast.makeText(this@ActivityEditProfile, t.toString(), Toast.LENGTH_SHORT).show()
+                            }
+
+                        })
+//
+                        Toast.makeText(this@ActivityEditProfile, "Data successfully updated", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this@ActivityEditProfile, MainActivity::class.java)
+                        intent.putExtra("backToProfile", "returnToProfile");
+                        startActivity(intent)
+                        finish()
+                    }
+                    else if(response.body()?.error.toString() == "true" && response.body()?.message.toString() != "Error")
+                    {
+                        editUsername.error = "Username already in use"
+                        editUsername.requestFocus()
+                    }
+                    else
+                    {
+                        Toast.makeText(this@ActivityEditProfile, "An error occurred", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                    Log.d("edit profile failed", "")
+                }
+
+            })
         }
 
         fillData()
@@ -114,9 +201,9 @@ class ActivityEditProfile : AppCompatActivity() {
                         val gson = Gson()
                         val userProfileInfo: UserProfile = gson.fromJson(userProfileInfoStr, UserProfile::class.java)
 
-                        val name = findViewById<TextView>(R.id.editName)
-                        val username = findViewById<TextView>(R.id.editUsername)
-                        val description = findViewById<TextView>(R.id.editDescription)
+                        val name = findViewById<TextView>(R.id.editNameProfile)
+                        val username = findViewById<TextView>(R.id.editUsernameProfile)
+                        val description = findViewById<TextView>(R.id.editDescriptionProfile)
                         val pfp = findViewById<CircleImageView>(R.id.editProfilePicture)
 
                         name.text = userProfileInfo.name;
