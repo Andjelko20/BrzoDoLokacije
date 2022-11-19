@@ -32,11 +32,28 @@
         app:bubbletab_icon_padding="5sp"
         app:bubbletab_vertical_padding="10dp"
         app:bubbletab_tab_corner_radius="25dp">
-        <ImageView
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/whitelogo"
-            android:layout_marginTop="4dp"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/whitelogo"
+                android:layout_marginTop="4dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+            <TextView
+                android:id="@+id/optionsMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:visibility="invisible"
+                android:drawableLeft="@drawable/ic_round_menu_24"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </io.ak1.BubbleTabBar>
 
     <io.ak1.BubbleTabBar
