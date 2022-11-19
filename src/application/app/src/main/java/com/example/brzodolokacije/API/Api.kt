@@ -47,4 +47,7 @@ interface Api {
     @POST("Post/addComment")
     fun addComment(@Body newComment : NewCommentDto) :  Call<DefaultResponse>
 
+    @POST("Post/like/{postId}")
+    fun likPost(@Path("postId") postId : String) : Call<DefaultResponse>
+
 }
