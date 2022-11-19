@@ -66,42 +66,7 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
             comments.text="View all ${photo.numberOfComments} comments"
             comments.setOnClickListener{
                 val view : View = LayoutInflater.from(context).inflate(R.layout.fragment_comment,null)
-
-                val retrofit = Client(activity).buildService(Api::class.java)
-                retrofit.getComments(photo.id).enqueue(object: Callback<DefaultResponse>
-                {
-                    override fun onResponse(
-                        call: Call<DefaultResponse>,
-                        response: Response<DefaultResponse>
-                    ) {
-                        if(response.body()?.error.toString()=="false")
-                        {
-                            val listOfCommentsStr: String = response.body()?.message.toString();
-
-                            val typeToken = object : TypeToken<List<Comment>>() {}.type
-                            val commentsList = Gson().fromJson<List<Comment>>(listOfCommentsStr, typeToken)
-
-
-                            val rvComments = view.findViewById<RecyclerView>(R.id.rv_comments)
-                            if(commentsList.isNotEmpty()) rvComments.adapter = CommentsAdapter(commentsList,context,activity)
-
-                            val dialog = BottomSheetDialog(activity)
-                            dialog.setContentView(view)
-                            dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
-                            //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
-                            dialog.show()
-                        }
-                        else
-                        {
-                            Toast.makeText(activity,"Error loading comments",Toast.LENGTH_SHORT).show()
-                        }
-                    }
-
-                    override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                        Toast.makeText(activity,"Error loading comments. Something went wrong",Toast.LENGTH_SHORT).show()
-                    }
-
-                })
+                loadComments(view,photo)
             }
 
             val imagePath=Constants.BASE_URL+"Post/postPhoto/${photo.id}"
@@ -147,6 +112,45 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
         Log.d("datum",time.toString())
         val format = SimpleDateFormat("HH:mm  dd/MM/yyyy")
         return format.format(date).dropLast(4)
+    }
+
+    private fun loadComments(view : View, photo : Photo)
+    {
+        val retrofit = Client(activity).buildService(Api::class.java)
+        retrofit.getComments(photo.id).enqueue(object: Callback<DefaultResponse>
+        {
+            override fun onResponse(
+                call: Call<DefaultResponse>,
+                response: Response<DefaultResponse>
+            ) {
+                if(response.body()?.error.toString()=="false")
+                {
+                    val listOfCommentsStr: String = response.body()?.message.toString();
+
+                    val typeToken = object : TypeToken<List<Comment>>() {}.type
+                    val commentsList = Gson().fromJson<List<Comment>>(listOfCommentsStr, typeToken)
+
+
+                    val rvComments = view.findViewById<RecyclerView>(R.id.rv_comments)
+                    if(commentsList.isNotEmpty()) rvComments.adapter = CommentsAdapter(commentsList,context,activity)
+
+                    val dialog = BottomSheetDialog(activity)
+                    dialog.setContentView(view)
+                    dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                    //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
+                    dialog.show()
+                }
+                else
+                {
+                    Toast.makeText(activity,"Error loading comments",Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                Toast.makeText(activity,"Error loading comments. Something went wrong",Toast.LENGTH_SHORT).show()
+            }
+
+        })
     }
 
     private fun currentTimeToLong(): Long {
