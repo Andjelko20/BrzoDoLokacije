@@ -30,12 +30,12 @@ import java.util.*
 import java.util.concurrent.Executors
 
 
-class CommentsAdapter(val commentList : List<Comment>, val context : Context, val activity : Context) :
+class CommentsAdapter(commentList : List<Comment>, val context : Context, val activity : Context) :
     RecyclerView.Adapter<CommentsAdapter.MainViewHolder>() {
 
     var dataList = commentList
 
-    inner class MainViewHolder(private val itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class MainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bindData(comment: Comment, index: Int) {
 
@@ -44,6 +44,7 @@ class CommentsAdapter(val commentList : List<Comment>, val context : Context, va
             val text = itemView.findViewById<TextView>(R.id.commentText)
 
             owner.text=comment.owner
+            //Log.d("tekst",comment.content)
             text.text=comment.content
         }
     }

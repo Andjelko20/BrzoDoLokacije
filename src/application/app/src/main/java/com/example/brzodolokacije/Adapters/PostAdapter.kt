@@ -13,6 +13,7 @@ import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Constants.Constants
 import com.example.brzodolokacije.Models.DefaultResponse
+import com.example.brzodolokacije.Models.NewCommentDto
 import com.example.brzodolokacije.Posts.Comment
 import com.example.brzodolokacije.Posts.Photo
 import com.example.brzodolokacije.R
@@ -42,8 +43,8 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
             val date = itemView.findViewById<TextView>(R.id.postDate)
             val location = itemView.findViewById<TextView>(R.id.location)
             val caption = itemView.findViewById<TextView>(R.id.postCaption)
-            val likes = itemView.findViewById<TextView>(R.id.numOfLikes)
-            val comments = itemView.findViewById<TextView>(R.id.postComments)
+            var likes = itemView.findViewById<TextView>(R.id.numOfLikes)
+            var comments = itemView.findViewById<TextView>(R.id.postComments)
             val image = itemView.findViewById<ImageView>(R.id.postImage)
             val likedByMe = itemView.findViewById<ImageView>(R.id.likeBtn)
 
@@ -67,6 +68,17 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
             comments.setOnClickListener{
                 val view : View = LayoutInflater.from(context).inflate(R.layout.fragment_comment,null)
                 loadComments(view,photo)
+
+                val addCommentButton = view.findViewById<ImageView>(R.id.addCommentBtn)
+                val addCommentText = view.findViewById<EditText>(R.id.addCommentText)
+                addCommentButton.setOnClickListener{
+                    if(addCommentText.text.toString()!="")
+                    {
+                        val ct=addCommentText.text.toString().trim()
+                        val newComment = NewCommentDto(photo.id,ct)
+                        addNewComment(view,photo,newComment,itemView)
+                    }
+                }
             }
 
             val imagePath=Constants.BASE_URL+"Post/postPhoto/${photo.id}"
@@ -148,6 +160,33 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
 
             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                 Toast.makeText(activity,"Error loading comments. Something went wrong",Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
+
+    private fun addNewComment(view: View, photo: Photo, newComment : NewCommentDto,itemView: View)
+    {
+        val retrofit = Client(activity).buildService(Api::class.java)
+        retrofit.addComment(newComment).enqueue(object: Callback<DefaultResponse>
+        {
+            override fun onResponse(
+                call: Call<DefaultResponse>,
+                response: Response<DefaultResponse>
+            ) {
+                if(response.body()?.error.toString()=="false")
+                {
+                    Toast.makeText(activity,"Comment added",Toast.LENGTH_SHORT).show()
+                    itemView.findViewById<TextView>(R.id.postComments).text = "View all ${response.body()?.message.toString()} comments"
+                }
+                else
+                {
+                    Toast.makeText(activity,"Error",Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                Toast.makeText(activity,"Something else went wrong",Toast.LENGTH_SHORT).show()
             }
 
         })

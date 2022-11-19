@@ -218,10 +218,11 @@ namespace backend.Controllers
             };
             _context.Comments.Add(comment);
             await _context.SaveChangesAsync();
+            int numOfComms = (await _context.Comments.Where(c => c.PostId == request.PostId).ToListAsync()).Count;
             return Ok(new
             {
                 error = false,
-                message = "Success"
+                message = numOfComms.ToString()
             });
         }
 
