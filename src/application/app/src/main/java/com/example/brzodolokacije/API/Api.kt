@@ -2,6 +2,7 @@ package com.example.brzodolokacije.API
 
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.NewCommentDto
+import com.example.brzodolokacije.ModelsDto.EditProfileDto
 import com.example.brzodolokacije.ModelsDto.LoginDto
 import com.example.brzodolokacije.ModelsDto.RegisterDto
 import com.example.brzodolokacije.ModelsDto.ResetPasswordDto
@@ -47,4 +48,6 @@ interface Api {
     @POST("Post/addComment")
     fun addComment(@Body newComment : NewCommentDto) :  Call<DefaultResponse>
 
+    @PUT("User/update")
+    fun editUserInfo(@Body editProfile: EditProfileDto): Call<DefaultResponse>
 }
