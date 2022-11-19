@@ -111,13 +111,6 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
         notifyDataSetChanged()
     }
 
-//    private fun loadImage(image : ImageView, path : String)
-//    {
-//        val imageBytes = Base64.decode(path, Base64.DEFAULT)
-//        val decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-//        image.setImageBitmap(decodedImage)
-//    }
-
     @SuppressLint("SimpleDateFormat")
     private fun convertLongToTime(time: Long): String {
         val date = Date(time)
@@ -177,7 +170,9 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
                 if(response.body()?.error.toString()=="false")
                 {
                     Toast.makeText(activity,"Comment added",Toast.LENGTH_SHORT).show()
-                    itemView.findViewById<TextView>(R.id.postComments).text = "View all ${response.body()?.message.toString()} comments"
+                    val newNumOfLikes=response.body()?.message.toString().trim()
+                    itemView.findViewById<TextView>(R.id.postComments).text = "View all ${newNumOfLikes} comments"
+                    view.findViewById<TextView>(R.id.addCommentText).text=""
                 }
                 else
                 {
