@@ -30,7 +30,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.logging.Handler
 
 
 class PostAdapter(val photoList : List<Photo>, val context : Context, val activity : Context) :
@@ -101,10 +100,34 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
             val imagePath=Constants.BASE_URL+"Post/postPhoto/${photo.id}"
             Picasso.get().load(imagePath).into(image);
 
-            if(photo.likedByMe) likedByMe.setBackgroundResource(R.drawable.liked_true)
-            else likedByMe.setBackgroundResource(R.drawable.liked_false)
+            if(photo.likedByMe) likedByMe.setBackgroundResource(R.drawable.liked)
+            else likedByMe.setBackgroundResource(R.drawable.unliked)
             likedByMe.setOnClickListener{
-                Toast.makeText(context,"Liked post with ID: ${photo.id} - likes",Toast.LENGTH_SHORT).show()
+                //Toast.makeText(context,"Liked post with ID: ${photo.id} - likes",Toast.LENGTH_SHORT).show()
+                val retrofit = Client(activity).buildService(Api::class.java)
+                retrofit.likPost(photo.id).enqueue(object: Callback<DefaultResponse>
+                {
+                    override fun onResponse(
+                        call: Call<DefaultResponse>,
+                        response: Response<DefaultResponse>
+                    ) {
+                       if(response.body()?.error.toString()=="false")
+                       {
+                           if(response.body()?.message=="liked")
+                               likedByMe.setBackgroundResource(R.drawable.liked)
+                           else likedByMe.setBackgroundResource(R.drawable.unliked)
+                       }
+                        else
+                       {
+                           Toast.makeText(context,"Unable to like post",Toast.LENGTH_SHORT).show()
+                       }
+                    }
+
+                    override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                        Toast.makeText(context,"Something went wrong",Toast.LENGTH_SHORT).show()
+                    }
+
+                })
             }
         }
     }
