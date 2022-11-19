@@ -80,11 +80,11 @@
 
         </RelativeLayout>
 
-        <!--        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout-->
-        <!--            android:id="@+id/refreshLayout"-->
-        <!--            android:layout_marginTop="10dp"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content">-->
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/refreshLayout"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_comments"
@@ -97,7 +97,7 @@
             tools:itemCount="1"
             android:layout_marginTop="10dp"/>
 
-        <!--        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>-->
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </LinearLayout>
 

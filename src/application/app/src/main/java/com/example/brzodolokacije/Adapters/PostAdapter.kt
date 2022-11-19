@@ -2,6 +2,7 @@ package com.example.brzodolokacije.Adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Looper
 import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Constants.Constants
@@ -28,6 +30,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.logging.Handler
 
 
 class PostAdapter(val photoList : List<Photo>, val context : Context, val activity : Context) :
@@ -64,7 +67,8 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
                 Toast.makeText(context,"Post ID: ${photo.id} - likes",Toast.LENGTH_SHORT).show()
             }
 
-            comments.text="View all ${photo.numberOfComments} comments"
+            if(photo.numberOfComments != 0) comments.text="View all ${photo.numberOfComments} comments"
+            else comments.text="No comments yet. Add yours?"
             comments.setOnClickListener{
                 val view : View = LayoutInflater.from(context).inflate(R.layout.fragment_comment,null)
                 loadComments(view,photo)
@@ -79,6 +83,19 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
                         addNewComment(view,photo,newComment,itemView)
                     }
                 }
+                val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayout)
+                refresh.setOnRefreshListener {
+                    android.os.Handler(Looper.getMainLooper()).postDelayed({
+
+                        loadComments(view,photo)
+                        refresh.isRefreshing = false
+                    }, 1500)
+                }
+                val dialog = BottomSheetDialog(activity)
+                dialog.setContentView(view)
+                dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
+                dialog.show()
             }
 
             val imagePath=Constants.BASE_URL+"Post/postPhoto/${photo.id}"
@@ -138,12 +155,6 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
 
                     val rvComments = view.findViewById<RecyclerView>(R.id.rv_comments)
                     if(commentsList.isNotEmpty()) rvComments.adapter = CommentsAdapter(commentsList,context,activity)
-
-                    val dialog = BottomSheetDialog(activity)
-                    dialog.setContentView(view)
-                    dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
-                    //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
-                    dialog.show()
                 }
                 else
                 {
@@ -169,10 +180,11 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
             ) {
                 if(response.body()?.error.toString()=="false")
                 {
-                    Toast.makeText(activity,"Comment added",Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(activity,"Comment added",Toast.LENGTH_SHORT).show()
                     val newNumOfLikes=response.body()?.message.toString().trim()
                     itemView.findViewById<TextView>(R.id.postComments).text = "View all ${newNumOfLikes} comments"
                     view.findViewById<TextView>(R.id.addCommentText).text=""
+                    loadComments(view,photo)
                 }
                 else
                 {
