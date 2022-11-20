@@ -1,4 +1,4 @@
-package com.example.brzodolokacije.Fragments
+package com.example.brzodolokacije.Fragments2
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

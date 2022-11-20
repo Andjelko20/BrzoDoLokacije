@@ -10,9 +10,9 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
-import com.example.brzodolokacije.Fragments.ExploreFragment
-import com.example.brzodolokacije.Fragments.HomeFragment
-import com.example.brzodolokacije.Fragments.ProfileFragment
+import com.example.brzodolokacije.Fragments2.ExploreFragment
+import com.example.brzodolokacije.Fragments2.HomeFragment
+import com.example.brzodolokacije.Fragments2.ProfileFragment
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Posts.PrivremeneSlikeZaFeed

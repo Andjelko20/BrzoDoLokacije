@@ -1,4 +1,4 @@
-package com.example.brzodolokacije.Fragments
+package com.example.brzodolokacije.Fragments2
 
 import android.Manifest
 import android.content.pm.PackageManager
