@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.CommentSectionFragment"
+    tools:context=".Fragments2.CommentSectionFragment"
     android:background="@color/postHeader">
 
     <LinearLayout
@@ -31,7 +31,7 @@
                 android:layout_marginTop="3dp"
                 android:drawablePadding="8dp"
                 android:gravity="center_vertical"
-                android:text="Comment section"
+                android:text="Comment Section"
                 android:textColor="@color/backgroundLightTheme"
                 android:textSize="19sp"
                 android:textStyle="bold" />
