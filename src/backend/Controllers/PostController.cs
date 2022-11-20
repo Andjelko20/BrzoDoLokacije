@@ -178,11 +178,10 @@ namespace backend.Controllers
                 };
                 _context.Likes.Add(l);
                 await _context.SaveChangesAsync();
-                int numOfLikes = (await _context.Likes.Where(c => c.PostId == postId).ToListAsync()).Count;
                 return Ok(new
                 {
                     error = false,
-                    message = "liked,"+numOfLikes
+                    message = "liked"
                 });
             }
             else
@@ -193,7 +192,7 @@ namespace backend.Controllers
                 return Ok(new
                 {
                     error = false,
-                    message = "unliked,"+numOfLikes
+                    message = "unliked"
                 });
             }
 
@@ -267,6 +266,22 @@ namespace backend.Controllers
             }
 
             string json = JsonSerializer.Serialize(commentsDto);
+            return Ok(new
+            {
+                error = false,
+                message = json
+            });
+        }
+
+        [HttpGet("refreshPost/{postId}")]
+        public async Task<ActionResult<string>> refreshLikesComments(int postId)
+        {
+            var data = new
+            {
+                numOfLikes = (await _context.Likes.Where(l => l.PostId == postId).ToListAsync()).Count,
+                numOfComments = (await _context.Comments.Where(c => c.PostId == postId).ToListAsync()).Count
+            };
+            string json = JsonSerializer.Serialize(data);
             return Ok(new
             {
                 error = false,
