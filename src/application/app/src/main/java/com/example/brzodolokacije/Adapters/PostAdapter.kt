@@ -18,6 +18,7 @@ import com.example.brzodolokacije.Constants.Constants
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.NewCommentDto
 import com.example.brzodolokacije.Posts.Comment
+import com.example.brzodolokacije.Posts.Like
 import com.example.brzodolokacije.Posts.Photo
 import com.example.brzodolokacije.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -64,7 +65,22 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
 
             likes.text = photo.numberOfLikes.toString()
             likes.setOnClickListener{
-                Toast.makeText(context,"Post ID: ${photo.id} - likes",Toast.LENGTH_SHORT).show()
+                val view : View = LayoutInflater.from(context).inflate(R.layout.fragment_like_section,null)
+                loadLikes(view,photo)
+
+                val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayout)
+                refresh.setOnRefreshListener {
+                    android.os.Handler(Looper.getMainLooper()).postDelayed({
+
+                        loadLikes(view,photo)
+                        refresh.isRefreshing = false
+                    }, 1500)
+                }
+                val dialog = BottomSheetDialog(activity)
+                dialog.setContentView(view)
+                dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
+                dialog.show()
             }
 
             if(photo.numberOfComments != 0) comments.text="View all ${photo.numberOfComments} comments"
@@ -231,6 +247,39 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
 
             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                 Toast.makeText(context,"Something went wrong",Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
+
+    private fun loadLikes(view : View, photo : Photo)
+    {
+        val retrofit = Client(activity).buildService(Api::class.java)
+        retrofit.getLikes(photo.id).enqueue(object: Callback<DefaultResponse>
+        {
+            override fun onResponse(
+                call: Call<DefaultResponse>,
+                response: Response<DefaultResponse>
+            ) {
+                if(response.body()?.error.toString()=="false")
+                {
+                    val listOfLikesStr: String = response.body()?.message.toString();
+
+                    val typeToken = object : TypeToken<List<Like>>() {}.type
+                    val likesList = Gson().fromJson<List<Like>>(listOfLikesStr, typeToken)
+
+
+                    val rvLikes = view.findViewById<RecyclerView>(R.id.rv_likes)
+                    if(likesList.isNotEmpty()) rvLikes.adapter = LikesAdapter(likesList,context,activity)
+                }
+                else
+                {
+                    Toast.makeText(activity,"Error loading likes",Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                Toast.makeText(activity,"Error loading likes. Something went wrong",Toast.LENGTH_SHORT).show()
             }
 
         })
