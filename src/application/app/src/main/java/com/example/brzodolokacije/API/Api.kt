@@ -3,6 +3,7 @@ package com.example.brzodolokacije.API
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.NewCommentDto
 import com.example.brzodolokacije.ModelsDto.LoginDto
+import com.example.brzodolokacije.ModelsDto.NewPostDto
 import com.example.brzodolokacije.ModelsDto.RegisterDto
 import com.example.brzodolokacije.ModelsDto.ResetPasswordDto
 import retrofit2.Call
@@ -46,5 +47,8 @@ interface Api {
 
     @POST("Post/addComment")
     fun addComment(@Body newComment : NewCommentDto) :  Call<DefaultResponse>
+
+    @POST("Post/addNew")
+    fun addNewPost(@Body newPost : NewPostDto) :  Call<DefaultResponse>
 
 }
