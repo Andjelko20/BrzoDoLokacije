@@ -199,6 +199,28 @@ namespace backend.Controllers
 
         }
 
+        [HttpGet("likes/{postId}")]
+        public async Task<ActionResult<string>> getLikes(int postId)
+        {
+            var likes = await _context.Likes.Where(l => l.PostId == postId).ToListAsync();
+            List<LikeDto> likesDto = new List<LikeDto>();
+            foreach (Like like in likes)
+            {
+                var user = await _context.Users.FindAsync(like.UserId);
+                likesDto.Add(new LikeDto
+                {
+                    Owner = user.Username
+                });
+            }
+            
+            string json = JsonSerializer.Serialize(likesDto);
+            return Ok(new
+            {
+                error = false,
+                message = json
+            });
+        }
+
         [HttpPost("addComment")]
         public async Task<ActionResult<string>> addComment(AddCommentDto request)
         {

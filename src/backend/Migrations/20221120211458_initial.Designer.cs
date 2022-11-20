@@ -11,8 +11,8 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221118023138_IniialMigration")]
-    partial class IniialMigration
+    [Migration("20221120211458_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
