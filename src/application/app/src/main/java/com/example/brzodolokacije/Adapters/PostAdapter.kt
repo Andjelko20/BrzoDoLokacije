@@ -2,6 +2,7 @@ package com.example.brzodolokacije.Adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
 import android.os.Looper
 import android.text.Html
 import android.util.Log
@@ -56,10 +57,10 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
             }
             date.text = convertLongToTime(photo.date)
 
-            val text= Html.fromHtml("<i>"+photo.location+"</i>")
+            val text= photo.location //Html.fromHtml("<i>"+photo.location+"</i>")
             location.text = text //=photo.location
 
-            caption.text = Html.fromHtml("<i>"+photo.caption+"</i>")
+            caption.text = photo.caption //Html.fromHtml("<i>"+photo.caption+"</i>")
 
             likes.text = photo.numberOfLikes.toString()
             likes.setOnClickListener{
