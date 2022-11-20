@@ -9,6 +9,7 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
@@ -38,11 +39,15 @@ import kotlinx.android.synthetic.main.activity_register.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
 
 class ActivityEditProfile : AppCompatActivity() {
 
     var pickedPhoto : Uri? = null
     var pickedBitMap : Bitmap? = null
+    var file: File? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -173,10 +178,14 @@ class ActivityEditProfile : AppCompatActivity() {
                     val source = ImageDecoder.createSource(this.contentResolver,pickedPhoto!!)
                     pickedBitMap = ImageDecoder.decodeBitmap(source)
                     editProfilePicture.setImageBitmap(pickedBitMap)
+
+                    file = bitmapToFile(pickedBitMap!!, "image.png")
                 }
                 else {
                     pickedBitMap = MediaStore.Images.Media.getBitmap(this.contentResolver,pickedPhoto)
                     editProfilePicture.setImageBitmap(pickedBitMap)
+
+                    file = bitmapToFile(pickedBitMap!!, "image.png")
                 }
             }
         }
@@ -229,6 +238,30 @@ class ActivityEditProfile : AppCompatActivity() {
                 }
 
             })
+        }
+    }
+
+    fun bitmapToFile(bitmap: Bitmap, fileNameToSave: String): File? { // File name like "image.png"
+        //create a file to write bitmap data
+        var file: File? = null
+        return try {
+            file = File(Environment.getExternalStorageDirectory().toString() + File.separator + fileNameToSave)
+            file.createNewFile()
+
+            //Convert bitmap to byte array
+            val bos = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos) // YOU can also save it in JPEG
+            val bitmapdata = bos.toByteArray()
+
+            //write the bytes in file
+            val fos = FileOutputStream(file)
+            fos.write(bitmapdata)
+            fos.flush()
+            fos.close()
+            file
+        } catch (e: Exception) {
+            e.printStackTrace()
+            file // it will return null
         }
     }
 }
