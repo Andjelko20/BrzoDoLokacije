@@ -131,7 +131,7 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
     @SuppressLint("SimpleDateFormat")
     private fun convertLongToTime(time: Long): String {
         val date = Date(time)
-        Log.d("datum",time.toString())
+        //Log.d("datum",time.toString())
         val format = SimpleDateFormat("HH:mm  dd/MM/yyyy")
         return format.format(date).dropLast(4)
     }
