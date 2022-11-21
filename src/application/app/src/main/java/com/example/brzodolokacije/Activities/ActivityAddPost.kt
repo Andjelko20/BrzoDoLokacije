@@ -9,6 +9,7 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
@@ -22,14 +23,21 @@ import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.ModelsDto.NewPostDto
 import com.example.brzodolokacije.R
 import kotlinx.android.synthetic.main.activity_addpost.*
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
 
 class ActivityAddPost : AppCompatActivity() {
 
     var pickedPhoto : Uri? = null
     var pickedBitMap : Bitmap? = null
+    var file: File? = null
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -42,28 +50,50 @@ class ActivityAddPost : AppCompatActivity() {
             startActivity(intent)
         }
 
+            btnAddPost.setOnClickListener {
+                if(file != null) {
+                    val picture = MultipartBody.Part.createFormData(
+                        "picture",
+                        file!!.name,
+                        RequestBody.create(MediaType.parse("image/*"), file)
+                    )
+                    Log.d("File",picture.toString())
+                var location = editLocationSection.text.toString().trim()
+                var caption = editCaptionSection.text.toString().trim()
+                var newPost = NewPostDto(location, caption)
+                retrofit.addNewPost(newPost).enqueue(object : Callback<DefaultResponse> {
+                    override fun onResponse(
+                        call: Call<DefaultResponse>,
+                        response: Response<DefaultResponse>
+                    ) {
+                        Toast.makeText(this@ActivityAddPost, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
+                        Log.d("uploadPosta",response.body()?.message.toString())
+                        retrofit.uploadPostPhoto(picture, response.body()?.message.toString())
+                            .enqueue(object : Callback<DefaultResponse> {
+                                override fun onResponse(
+                                    call: Call<DefaultResponse>,
+                                    response: Response<DefaultResponse>
+                                ) {
+                                    Toast.makeText(this@ActivityAddPost, response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
+                                    Log.d("uploadSlike",response.body()?.message.toString())
+                                }
 
-        btnAddPost.setOnClickListener{
+                                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                                    Toast.makeText(this@ActivityAddPost, t.message.toString(), Toast.LENGTH_SHORT).show()
+                                }
 
-            var location = editLocationSection.text.toString().trim()
-            var caption = editCaptionSection.text.toString().trim()
-            var newPost = NewPostDto(location,caption)
-            retrofit.addNewPost(newPost).enqueue(object : Callback<DefaultResponse>{
-                override fun onResponse(
-                    call: Call<DefaultResponse>,
-                    response: Response<DefaultResponse>
-                ) {
-                    Toast.makeText(this@ActivityAddPost, response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this@ActivityAddPost, MainActivity::class.java)
-                    startActivity(intent)
-                }
+                            })
 
-                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                    Toast.makeText(this@ActivityAddPost, t.message.toString(),Toast.LENGTH_SHORT).show()
-                }
-            })
+                        val intent = Intent(this@ActivityAddPost, MainActivity::class.java)
+                        startActivity(intent)
+                    }
+
+                    override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                        Toast.makeText(this@ActivityAddPost, t.message.toString(), Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }
         }
-
     }
     fun pickPhotoFromGallery(view: View){
         if (ContextCompat.checkSelfPermission(this,android.Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -97,16 +127,36 @@ class ActivityAddPost : AppCompatActivity() {
                     val source = ImageDecoder.createSource(this.contentResolver,pickedPhoto!!)
                     pickedBitMap = ImageDecoder.decodeBitmap(source)
                     previewPic.setImageBitmap(pickedBitMap)
+                    file = bitmapToFile(pickedBitMap!!, "slika.png")
                 }
                 else {
                     pickedBitMap = MediaStore.Images.Media.getBitmap(this.contentResolver,pickedPhoto)
                     previewPic.setImageBitmap(pickedBitMap)
+                    file = bitmapToFile(pickedBitMap!!, "slika.png")
                 }
             }
         }
-        Log.d("Slika",pickedPhoto.toString())
-        Log.d("Slika2",pickedBitMap.toString())
         super.onActivityResult(requestCode, resultCode, data)
+    }
+    fun bitmapToFile(bitmap: Bitmap, fileNameToSave: String): File? {
+        var file: File? = null
+        return try {
+            file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() + File.separator + fileNameToSave)
+            file.createNewFile()
+
+            val bos = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos)
+            val bitmapdata = bos.toByteArray()
+
+            val fos = FileOutputStream(file)
+            fos.write(bitmapdata)
+            fos.flush()
+            fos.close()
+            file
+        } catch (e: Exception) {
+            e.printStackTrace()
+            file
+        }
     }
 
 }
