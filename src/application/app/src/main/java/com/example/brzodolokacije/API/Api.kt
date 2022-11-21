@@ -57,5 +57,5 @@ interface Api {
 
     @Multipart
     @PUT("User/updateAvatar")
-    fun uploadNewAvatar(@Part filePart: MultipartBody.Part): Call<DefaultResponse>
+    fun uploadNewAvatar(@Part picture: MultipartBody.Part): Call<DefaultResponse>
 }

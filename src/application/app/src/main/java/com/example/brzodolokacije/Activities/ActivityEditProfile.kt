@@ -92,80 +92,94 @@ class ActivityEditProfile : AppCompatActivity() {
 
             if(file != null)
             {
-                val filePart = MultipartBody.Part.createFormData(
-                    "file",  //sa "picture" vraca gresku
+//                          Log.d("file not null", file!!.name.toString()) stampa slika.png
+                val picture = MultipartBody.Part.createFormData(
+                    "picture",  //sa "picture" vraca gresku
                     file!!.name,
                     RequestBody.create(MediaType.parse("image/*"), file)
                 )
 
-                retrofit.uploadNewAvatar(filePart).enqueue(object : Callback<DefaultResponse>{
+                retrofit.uploadNewAvatar(picture).enqueue(object : Callback<DefaultResponse>{
                     override fun onResponse(
                         call: Call<DefaultResponse>,
                         response: Response<DefaultResponse>
                     ) {
                         Log.d("response", "")
+                        if(response.body()?.error.toString() == "false")
+                        {
+                            Log.d("uspesno", "")
+
+                            retrofit.editUserInfo(newData).enqueue(object : Callback<DefaultResponse>
+                            {
+                                override fun onResponse(
+                                    call: Call<DefaultResponse>,
+                                    response: Response<DefaultResponse>
+                                ) {
+                                    if(response.body()?.error.toString() == "false")
+                                    {
+                                        val token = response.body()?.message.toString()
+                                        sessionManager.deleteAuthToken()
+                                        sessionManager.saveAuthToken(token)
+
+                                        retrofit.authentication().enqueue(object: Callback<DefaultResponse>
+                                        {
+                                            override fun onResponse(
+                                                call: Call<DefaultResponse>,
+                                                response: Response<DefaultResponse>
+                                            ) {
+                                                if(response.body()?.error.toString() == "false") {
+                                                    var usernameRes = response.body()?.message.toString()
+                                                    sessionManager.deleteUsername()
+                                                    sessionManager.saveUsername(usernameRes)
+                                                }
+                                            }
+
+                                            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                                                Toast.makeText(this@ActivityEditProfile, t.toString(), Toast.LENGTH_SHORT).show()
+                                            }
+                                        })
+
+                                        Toast.makeText(this@ActivityEditProfile, "Data successfully updated", Toast.LENGTH_SHORT).show()
+                                        val intent = Intent(this@ActivityEditProfile, MainActivity::class.java)
+                                        intent.putExtra("backToProfile", "returnToProfile");
+                                        startActivity(intent)
+                                        finish()
+                                    }
+                                    else if(response.body()?.error.toString() == "true" && response.body()?.message.toString() != "Error")
+                                    {
+                                        editUsername.error = "Username already in use"
+                                        editUsername.requestFocus()
+                                    }
+                                    else
+                                    {
+                                        Toast.makeText(this@ActivityEditProfile, "An error occurred", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+
+                                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                                    Log.d("edit profile failed", "")
+                                }
+
+                            })
+                        }
+                        else if(response.body()?.error.toString() == "true")
+                        {
+                            Log.d("error true", response.body()?.message.toString())
+                        }
+                        else
+                        {
+                            Log.d("error je nesto trece", "")
+                            Log.d(response.body()?.error.toString(), response.body()?.message.toString())
+                        }
                     }
 
                     override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                        Log.d("failure", "")
+                        Log.d("failed slika", t.message.toString())
                     }
                 })
-//                val call: Call<DefaultResponse> = Api.uploadNewAvatar(filePart)
+//                          val call: Call<DefaultResponse> = Api.uploadNewAvatar(filePart)
             }
 
-            retrofit.editUserInfo(newData).enqueue(object : Callback<DefaultResponse>
-            {
-                override fun onResponse(
-                    call: Call<DefaultResponse>,
-                    response: Response<DefaultResponse>
-                ) {
-                    if(response.body()?.error.toString() == "false")
-                    {
-                        val token = response.body()?.message.toString()
-                        sessionManager.deleteAuthToken()
-                        sessionManager.saveAuthToken(token)
-
-                        retrofit.authentication().enqueue(object: Callback<DefaultResponse>
-                        {
-                            override fun onResponse(
-                                call: Call<DefaultResponse>,
-                                response: Response<DefaultResponse>
-                            ) {
-                                if(response.body()?.error.toString() == "false") {
-                                    var usernameRes = response.body()?.message.toString()
-                                    sessionManager.deleteUsername()
-                                    sessionManager.saveUsername(usernameRes)
-                                }
-                            }
-
-                            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                                Toast.makeText(this@ActivityEditProfile, t.toString(), Toast.LENGTH_SHORT).show()
-                            }
-
-                        })
-//
-                        Toast.makeText(this@ActivityEditProfile, "Data successfully updated", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(this@ActivityEditProfile, MainActivity::class.java)
-                        intent.putExtra("backToProfile", "returnToProfile");
-                        startActivity(intent)
-                        finish()
-                    }
-                    else if(response.body()?.error.toString() == "true" && response.body()?.message.toString() != "Error")
-                    {
-                        editUsername.error = "Username already in use"
-                        editUsername.requestFocus()
-                    }
-                    else
-                    {
-                        Toast.makeText(this@ActivityEditProfile, "An error occurred", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                    Log.d("edit profile failed", "")
-                }
-
-            })
         }
 
         fillData()
@@ -205,17 +219,41 @@ class ActivityEditProfile : AppCompatActivity() {
                     pickedBitMap = ImageDecoder.decodeBitmap(source)
                     editProfilePicture.setImageBitmap(pickedBitMap)
 
-                    file = bitmapToFile(pickedBitMap!!, "image.png")
+                    file = bitmapToFile(pickedBitMap!!, "slika.png")
                 }
                 else {
                     pickedBitMap = MediaStore.Images.Media.getBitmap(this.contentResolver,pickedPhoto)
                     editProfilePicture.setImageBitmap(pickedBitMap)
 
-                    file = bitmapToFile(pickedBitMap!!, "image.png")
+                    file = bitmapToFile(pickedBitMap!!, "slika.png")
                 }
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    fun bitmapToFile(bitmap: Bitmap, fileNameToSave: String): File? { // File name like "image.png"
+        //create a file to write bitmap data
+        var file: File? = null
+        return try {
+            file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() + File.separator + fileNameToSave)
+            file.createNewFile()
+
+            //Convert bitmap to byte array
+            val bos = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos)
+            val bitmapdata = bos.toByteArray()
+
+            //write the bytes in file
+            val fos = FileOutputStream(file)
+            fos.write(bitmapdata)
+            fos.flush()
+            fos.close()
+            file
+        } catch (e: Exception) {
+            e.printStackTrace()
+            file // it will return null
+        }
     }
 
     private fun fillData()
@@ -264,30 +302,6 @@ class ActivityEditProfile : AppCompatActivity() {
                 }
 
             })
-        }
-    }
-
-    fun bitmapToFile(bitmap: Bitmap, fileNameToSave: String): File? { // File name like "image.png"
-        //create a file to write bitmap data
-        var file: File? = null
-        return try {
-            file = File(Environment.getExternalStorageDirectory().toString() + File.separator + fileNameToSave)
-            file.createNewFile()
-
-            //Convert bitmap to byte array
-            val bos = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos) // YOU can also save it in JPEG
-            val bitmapdata = bos.toByteArray()
-
-            //write the bytes in file
-            val fos = FileOutputStream(file)
-            fos.write(bitmapdata)
-            fos.flush()
-            fos.close()
-            file
-        } catch (e: Exception) {
-            e.printStackTrace()
-            file // it will return null
         }
     }
 }
