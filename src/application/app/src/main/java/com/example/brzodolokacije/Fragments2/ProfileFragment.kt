@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Activities.ActivityAddPost
@@ -26,6 +27,7 @@ import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import io.ak1.BubbleTabBar
 import io.ak1.OnBubbleClickListener
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -68,6 +70,10 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         replaceFragmentOnProfile(PostsFragment())
+
+//        options_meni.setOnClickListener{
+//            Toast.makeText(this.requireActivity(),"Tekstnkei",Toast.LENGTH_SHORT).show()
+//        }
 
         val button = view.findViewById<Button>(R.id.logoutButton)
         val bubbleTabBarProfile = view.findViewById<BubbleTabBar>(R.id.bubbleTabBarProfile);
