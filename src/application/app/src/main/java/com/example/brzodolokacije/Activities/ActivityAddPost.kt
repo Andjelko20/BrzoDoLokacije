@@ -66,21 +66,20 @@ class ActivityAddPost : AppCompatActivity() {
                         call: Call<DefaultResponse>,
                         response: Response<DefaultResponse>
                     ) {
-                        Toast.makeText(this@ActivityAddPost, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
-                        Log.d("uploadPosta",response.body()?.message.toString())
+//                        Log.d("uploadPosta",response.body()?.message.toString())
                         retrofit.uploadPostPhoto(picture, response.body()?.message.toString())
                             .enqueue(object : Callback<DefaultResponse> {
                                 override fun onResponse(
                                     call: Call<DefaultResponse>,
                                     response: Response<DefaultResponse>
                                 ) {
-                                    Toast.makeText(this@ActivityAddPost, response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
-                                    Log.d("uploadSlike",response.body()?.message.toString())
+                                    Toast.makeText(this@ActivityAddPost, "Post uploaded",Toast.LENGTH_SHORT).show()
+//                                    Log.d("uploadSlike",response.body()?.message.toString())
                                 }
 
                                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                                     Toast.makeText(this@ActivityAddPost, t.message.toString(), Toast.LENGTH_SHORT).show()
-                                    Log.d("Greska",t.message.toString())
+//                                    Log.d("Greska",t.message.toString())
                                 }
 
                             })
