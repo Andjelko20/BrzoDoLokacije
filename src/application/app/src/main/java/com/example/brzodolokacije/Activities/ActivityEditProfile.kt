@@ -98,7 +98,7 @@ class ActivityEditProfile : AppCompatActivity() {
                     file!!.name,
                     RequestBody.create(MediaType.parse("image/*"), file)
                 )
-
+                Log.d("File",picture.toString())
                 retrofit.uploadNewAvatar(picture).enqueue(object : Callback<DefaultResponse>{
                     override fun onResponse(
                         call: Call<DefaultResponse>,

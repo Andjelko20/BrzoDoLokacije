@@ -80,6 +80,7 @@ class ActivityAddPost : AppCompatActivity() {
 
                                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                                     Toast.makeText(this@ActivityAddPost, t.message.toString(), Toast.LENGTH_SHORT).show()
+                                    Log.d("Greska",t.message.toString())
                                 }
 
                             })
