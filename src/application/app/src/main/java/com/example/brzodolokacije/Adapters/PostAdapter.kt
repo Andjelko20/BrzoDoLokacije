@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.brzodolokacije.API.Api
@@ -47,6 +48,7 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
         {
             val owner = itemView.findViewById<TextView>(R.id.postOwner)
             val profilePic = itemView.findViewById<CircleImageView>(R.id.userProfilePic)
+            val ownerProfile = itemView.findViewById<ConstraintLayout>(R.id.ownerProfile)
             val date = itemView.findViewById<TextView>(R.id.postDate)
             val location = itemView.findViewById<TextView>(R.id.location)
             val caption = itemView.findViewById<TextView>(R.id.postCaption)
@@ -57,7 +59,9 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
 
             //owner
             owner.text = photo.owner
-            owner.setOnClickListener{
+
+            //for visiting post owner's profile
+            ownerProfile.setOnClickListener{
                 Toast.makeText(context,"Owner: ${photo.owner}",Toast.LENGTH_SHORT).show()
             }
 
