@@ -6,6 +6,7 @@ import com.example.brzodolokacije.ModelsDto.EditProfileDto
 import com.example.brzodolokacije.ModelsDto.LoginDto
 import com.example.brzodolokacije.ModelsDto.RegisterDto
 import com.example.brzodolokacije.ModelsDto.ResetPasswordDto
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -53,4 +54,8 @@ interface Api {
 
     @PUT("User/update")
     fun editUserInfo(@Body editProfile: EditProfileDto): Call<DefaultResponse>
+
+    @Multipart
+    @PUT("User/updateAvatar")
+    fun uploadNewAvatar(@Part filePart: MultipartBody.Part): Call<DefaultResponse>
 }

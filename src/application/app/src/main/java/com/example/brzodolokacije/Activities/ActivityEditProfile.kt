@@ -4,14 +4,12 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -36,12 +34,16 @@ import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_editprofile.*
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_register.*
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
+
 
 class ActivityEditProfile : AppCompatActivity() {
 
@@ -87,6 +89,30 @@ class ActivityEditProfile : AppCompatActivity() {
             val newData = EditProfileDto(name, username, description)
             val sessionManager = SessionManager(this)
             val retrofit = Client(this).buildService(Api::class.java)
+
+            if(file != null)
+            {
+                val filePart = MultipartBody.Part.createFormData(
+                    "file",  //sa "picture" vraca gresku
+                    file!!.name,
+                    RequestBody.create(MediaType.parse("image/*"), file)
+                )
+
+                retrofit.uploadNewAvatar(filePart).enqueue(object : Callback<DefaultResponse>{
+                    override fun onResponse(
+                        call: Call<DefaultResponse>,
+                        response: Response<DefaultResponse>
+                    ) {
+                        Log.d("response", "")
+                    }
+
+                    override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                        Log.d("failure", "")
+                    }
+                })
+//                val call: Call<DefaultResponse> = Api.uploadNewAvatar(filePart)
+            }
+
             retrofit.editUserInfo(newData).enqueue(object : Callback<DefaultResponse>
             {
                 override fun onResponse(
