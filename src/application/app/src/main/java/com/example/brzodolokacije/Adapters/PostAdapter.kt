@@ -27,6 +27,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.fragment_home.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -45,6 +46,7 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
         fun bindData(photo : Photo, index : Int)
         {
             val owner = itemView.findViewById<TextView>(R.id.postOwner)
+            val profilePic = itemView.findViewById<CircleImageView>(R.id.userProfilePic)
             val date = itemView.findViewById<TextView>(R.id.postDate)
             val location = itemView.findViewById<TextView>(R.id.location)
             val caption = itemView.findViewById<TextView>(R.id.postCaption)
@@ -58,6 +60,10 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
             owner.setOnClickListener{
                 Toast.makeText(context,"Owner: ${photo.owner}",Toast.LENGTH_SHORT).show()
             }
+
+            //profile image
+            val path : String=Constants.BASE_URL + "User/avatar/" + photo.owner
+            Picasso.get().load(path).into(profilePic);
 
             //date
             date.text = convertLongToTime(photo.date)
@@ -132,7 +138,7 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
                 refreshPost(itemView,photo)
             }
 
-            //profile image of the owner
+            //image in the post
             val imagePath=Constants.BASE_URL+"Post/postPhoto/${photo.id}"
             Picasso.get().load(imagePath).into(image);
 
