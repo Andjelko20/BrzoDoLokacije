@@ -68,4 +68,8 @@ interface Api {
     @Multipart
     @PUT("User/updateAvatar")
     fun uploadNewAvatar(@Part picture: MultipartBody.Part): Call<DefaultResponse>
+
+    @Multipart
+    @PUT("Post/uploadPhoto/{postId}")
+    fun uploadPostPhoto(@Part picture: MultipartBody.Part,@Path("postId") postId : String): Call<DefaultResponse>
 }
