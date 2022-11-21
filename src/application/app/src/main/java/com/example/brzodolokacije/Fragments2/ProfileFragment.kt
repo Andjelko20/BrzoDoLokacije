@@ -75,7 +75,6 @@ class ProfileFragment : Fragment() {
 //            Toast.makeText(this.requireActivity(),"Tekstnkei",Toast.LENGTH_SHORT).show()
 //        }
 
-        val button = view.findViewById<Button>(R.id.logoutButton)
         val bubbleTabBarProfile = view.findViewById<BubbleTabBar>(R.id.bubbleTabBarProfile);
         addPost.setOnClickListener{
             activity?.let{
@@ -83,17 +82,6 @@ class ProfileFragment : Fragment() {
                 it.startActivity(intent)
             }
 
-        }
-        editProfileButton.setOnClickListener{
-            activity?.let{
-                val intent = Intent (it, ActivityEditProfile::class.java)
-                it.startActivity(intent)
-            }
-
-        }
-        button.setOnClickListener { view ->
-            val mainActivity = activity as MainActivity
-            mainActivity.logOut()
         }
 
         bubbleTabBarProfile.addBubbleListener(object : OnBubbleClickListener {
