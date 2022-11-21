@@ -123,6 +123,7 @@ namespace backend.Controllers
             //await f.WriteAsync(bytes);
             var stream = new FileStream(path, FileMode.Create);
             await picture.CopyToAsync(stream);
+            stream.Close();
             user.Avatar = path;
             await _context.SaveChangesAsync();
             return Ok(new
@@ -151,7 +152,7 @@ namespace backend.Controllers
             return Ok(new
             {
                 error = false,
-                message = "deleted" + username
+                message = "deleted " + username
             });
         }
         private string CreateToken(User user)
@@ -180,6 +181,13 @@ namespace backend.Controllers
             var rootDirPath = $"../miscellaneous/avatars/{userID}";
 
             Directory.CreateDirectory(rootDirPath);
+            
+            DirectoryInfo dir = new DirectoryInfo(rootDirPath);
+
+            foreach(FileInfo fi in dir.GetFiles())
+            {
+                fi.Delete();
+            }
 
             rootDirPath = rootDirPath.Replace(@"\", "/");
 
