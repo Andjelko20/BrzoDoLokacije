@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using backend.Models;
@@ -101,6 +102,38 @@ namespace backend.Controllers
             });
         }
 
+        [HttpPut("updateAvatar")]
+        public async Task<ActionResult<string>> updateAvatar(IFormFile picture)
+        {
+            if (picture == null)
+                return Ok(new
+                {
+                    error = false,
+                    message = "not changed"
+                });
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
+            if (user == null)
+                return BadRequest(new
+                {
+                    error = true,
+                    message = "Error"
+                });
+            string path = CreatePathToDataRoot(user.Id, picture.FileName);
+            //using StreamWriter f = new(path);
+            //await f.WriteAsync(bytes);
+            var stream = new FileStream(path, FileMode.Create);
+            await picture.CopyToAsync(stream);
+            stream.Close();
+            user.Avatar = path;
+            await _context.SaveChangesAsync();
+            return Ok(new
+            {
+                error = false,
+                message = path
+            });
+
+        }
+
         [HttpDelete("delete/{username}")]
         public async Task<ActionResult<string>> deleteUser(string username)
         {
@@ -119,7 +152,7 @@ namespace backend.Controllers
             return Ok(new
             {
                 error = false,
-                message = "deleted" + username
+                message = "deleted " + username
             });
         }
         private string CreateToken(User user)
@@ -142,6 +175,25 @@ namespace backend.Controllers
 
             return jwt;
         }
+        
+        private string CreatePathToDataRoot(int userID, string filename)
+        {
+            var rootDirPath = $"../miscellaneous/avatars/{userID}";
+
+            Directory.CreateDirectory(rootDirPath);
+            
+            DirectoryInfo dir = new DirectoryInfo(rootDirPath);
+
+            foreach(FileInfo fi in dir.GetFiles())
+            {
+                fi.Delete();
+            }
+
+            rootDirPath = rootDirPath.Replace(@"\", "/");
+
+            return $"{rootDirPath}/{filename}";
+        }
+
         
     }
 }

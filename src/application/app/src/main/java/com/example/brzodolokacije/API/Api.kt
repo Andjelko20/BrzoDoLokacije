@@ -7,6 +7,7 @@ import com.example.brzodolokacije.ModelsDto.LoginDto
 import com.example.brzodolokacije.ModelsDto.NewPostDto
 import com.example.brzodolokacije.ModelsDto.RegisterDto
 import com.example.brzodolokacije.ModelsDto.ResetPasswordDto
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -63,4 +64,8 @@ interface Api {
 
     @POST("Post/addNew")
     fun addNewPost(@Body newPost : NewPostDto) :  Call<DefaultResponse>
+
+    @Multipart
+    @PUT("User/updateAvatar")
+    fun uploadNewAvatar(@Part picture: MultipartBody.Part): Call<DefaultResponse>
 }
