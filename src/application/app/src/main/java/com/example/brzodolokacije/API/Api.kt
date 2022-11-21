@@ -4,6 +4,7 @@ import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.NewCommentDto
 import com.example.brzodolokacije.ModelsDto.EditProfileDto
 import com.example.brzodolokacije.ModelsDto.LoginDto
+import com.example.brzodolokacije.ModelsDto.NewPostDto
 import com.example.brzodolokacije.ModelsDto.RegisterDto
 import com.example.brzodolokacije.ModelsDto.ResetPasswordDto
 import retrofit2.Call
@@ -59,4 +60,7 @@ interface Api {
 
     @GET("Post/refreshPost/{postId}")
     fun refrestPost(@Path("postId") postId : String) :  Call<DefaultResponse>
+
+    @POST("Post/addNew")
+    fun addNewPost(@Body newPost : NewPostDto) :  Call<DefaultResponse>
 }
