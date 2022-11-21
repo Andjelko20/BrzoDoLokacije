@@ -136,7 +136,7 @@ namespace backend.Controllers
             return Ok(new
             {
                 error = false,
-                message = "Success"
+                message = post.Id.ToString()
             });
         }
 
@@ -287,6 +287,46 @@ namespace backend.Controllers
                 error = false,
                 message = json
             });
+        }
+        
+        [HttpPut("uploadPhoto/{postId}")]
+        public async Task<ActionResult<string>> uploadPhoto(IFormFile picture, int postId)
+        {
+            if (picture == null)
+                return BadRequest(new
+                {
+                    error = false,
+                    message = "Error"
+                });
+            var post = await _context.Posts.FirstOrDefaultAsync(p => p.Id == postId);
+            if (post == null)
+                return BadRequest(new
+                {
+                    error = true,
+                    message = "Error"
+                });
+            string path = CreatePathToDataRoot(post.Id, picture.FileName);
+            var stream = new FileStream(path, FileMode.Create);
+            await picture.CopyToAsync(stream);
+            stream.Close();
+            post.ImagePath = path;
+            await _context.SaveChangesAsync();
+            return Ok(new
+            {
+                error = false,
+                message = path
+            });
+
+        }
+        private string CreatePathToDataRoot(int postId, string filename)
+        {
+            var rootDirPath = $"../miscellaneous/posts/{postId}";
+
+            Directory.CreateDirectory(rootDirPath);
+
+            rootDirPath = rootDirPath.Replace(@"\", "/");
+
+            return $"{rootDirPath}/{filename}";
         }
 
     }

@@ -119,8 +119,6 @@ namespace backend.Controllers
                     message = "Error"
                 });
             string path = CreatePathToDataRoot(user.Id, picture.FileName);
-            //using StreamWriter f = new(path);
-            //await f.WriteAsync(bytes);
             var stream = new FileStream(path, FileMode.Create);
             await picture.CopyToAsync(stream);
             stream.Close();
