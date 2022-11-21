@@ -43,7 +43,7 @@
             android:background="@color/postHeader" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/refreshLayout"
+            android:id="@+id/refreshLayoutLikes"
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

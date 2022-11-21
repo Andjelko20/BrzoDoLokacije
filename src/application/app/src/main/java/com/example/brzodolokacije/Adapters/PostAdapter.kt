@@ -20,6 +20,7 @@ import com.example.brzodolokacije.Models.NewCommentDto
 import com.example.brzodolokacije.Posts.Comment
 import com.example.brzodolokacije.Posts.Like
 import com.example.brzodolokacije.Posts.Photo
+import com.example.brzodolokacije.Posts.Stats
 import com.example.brzodolokacije.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -52,27 +53,36 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
             val image = itemView.findViewById<ImageView>(R.id.postImage)
             val likedByMe = itemView.findViewById<ImageView>(R.id.likeBtn)
 
+            //owner
             owner.text = photo.owner
             owner.setOnClickListener{
                 Toast.makeText(context,"Owner: ${photo.owner}",Toast.LENGTH_SHORT).show()
             }
+
+            //date
             date.text = convertLongToTime(photo.date)
 
+            //location
             val text= photo.location //Html.fromHtml("<i>"+photo.location+"</i>")
             location.text = text //=photo.location
 
+            //caption
             caption.text = photo.caption //Html.fromHtml("<i>"+photo.caption+"</i>")
 
+            //list of likes
             likes.text = photo.numberOfLikes.toString()
             likes.setOnClickListener{
+
                 val view : View = LayoutInflater.from(context).inflate(R.layout.fragment_like_section,null)
                 loadLikes(view,photo)
 
-                val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayout)
+                //refreshing the list of likes
+                val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayoutLikes)
                 refresh.setOnRefreshListener {
                     android.os.Handler(Looper.getMainLooper()).postDelayed({
 
                         loadLikes(view,photo)
+                        refreshPost(itemView,photo)
                         refresh.isRefreshing = false
                     }, 1500)
                 }
@@ -81,14 +91,18 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
                 dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
                 //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
                 dialog.show()
+
+                refreshPost(itemView,photo)
             }
 
+            //list and number of comments
             if(photo.numberOfComments != 0) comments.text="View all ${photo.numberOfComments} comments"
             else comments.text="No comments yet. Add yours?"
             comments.setOnClickListener{
                 val view : View = LayoutInflater.from(context).inflate(R.layout.fragment_comment,null)
                 loadComments(view,photo)
 
+                //adding a new comment
                 val addCommentButton = view.findViewById<ImageView>(R.id.addCommentBtn)
                 val addCommentText = view.findViewById<EditText>(R.id.addCommentText)
                 addCommentButton.setOnClickListener{
@@ -97,13 +111,16 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
                         val ct=addCommentText.text.toString().trim()
                         val newComment = NewCommentDto(photo.id,ct)
                         addNewComment(view,photo,newComment,itemView)
+                        refreshPost(itemView,photo)
                     }
                 }
-                val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayout)
+                //refreshing the list of comments
+                val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayoutComments)
                 refresh.setOnRefreshListener {
                     android.os.Handler(Looper.getMainLooper()).postDelayed({
 
                         loadComments(view,photo)
+                        refreshPost(itemView,photo)
                         refresh.isRefreshing = false
                     }, 1500)
                 }
@@ -112,15 +129,19 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
                 dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
                 //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
                 dialog.show()
+                refreshPost(itemView,photo)
             }
 
+            //profile image of the owner
             val imagePath=Constants.BASE_URL+"Post/postPhoto/${photo.id}"
             Picasso.get().load(imagePath).into(image);
 
+            //liked or not liked
             if(photo.likedByMe) likedByMe.setBackgroundResource(R.drawable.liked)
             else likedByMe.setBackgroundResource(R.drawable.unliked)
             likedByMe.setOnClickListener{
                 likeUnlike(itemView,photo)
+                refreshPost(itemView,photo)
             }
         }
     }
@@ -197,8 +218,8 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
                 if(response.body()?.error.toString()=="false")
                 {
                     //Toast.makeText(activity,"Comment added",Toast.LENGTH_SHORT).show()
-                    val newNumOfLikes=response.body()?.message.toString().trim()
-                    itemView.findViewById<TextView>(R.id.postComments).text = "View all ${newNumOfLikes} comments"
+                    val newNumOfComments=response.body()?.message.toString().trim()
+                    itemView.findViewById<TextView>(R.id.postComments).text = "View all ${newNumOfComments} comments"
                     view.findViewById<TextView>(R.id.addCommentText).text=""
                     loadComments(view,photo)
                 }
@@ -218,7 +239,6 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
     private fun likeUnlike(itemView : View, photo : Photo)
     {
         val likedByMe = itemView.findViewById<ImageView>(R.id.likeBtn)
-        val likes = itemView.findViewById<TextView>(R.id.numOfLikes)
         val retrofit = Client(activity).buildService(Api::class.java)
         retrofit.likPost(photo.id).enqueue(object: Callback<DefaultResponse>
         {
@@ -228,16 +248,14 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
             ) {
                 if(response.body()?.error.toString()=="false")
                 {
-                    val string = response.body()?.message.toString()
-                    val list: List<String> = string.split(",")
-                    //Toast.makeText(context,list.get(1),Toast.LENGTH_SHORT).show()
+                    val state = response.body()?.message.toString()
 
-                    if(list.get(0)=="liked")
+                    if(state=="liked")
                         likedByMe.setBackgroundResource(R.drawable.liked)
 
                     else likedByMe.setBackgroundResource(R.drawable.unliked)
 
-                    likes.text=list.get(1).toString()
+                    refreshPost(itemView,photo)
                 }
                 else
                 {
@@ -280,6 +298,40 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
 
             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                 Toast.makeText(activity,"Error loading likes. Something went wrong",Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
+
+    private fun refreshPost(itemView : View, photo : Photo)
+    {
+        var likes = itemView.findViewById<TextView>(R.id.numOfLikes)
+        var comments = itemView.findViewById<TextView>(R.id.postComments)
+
+        val retrofit = Client(activity).buildService(Api::class.java)
+        retrofit.refrestPost(photo.id).enqueue(object: Callback<DefaultResponse>
+        {
+            override fun onResponse(
+                call: Call<DefaultResponse>,
+                response: Response<DefaultResponse>
+            ) {
+               if(response.body()?.error.toString()=="false")
+               {
+                   val newStatsStr = response.body()?.message.toString()
+                   val newStats : Stats = Gson().fromJson(newStatsStr, Stats :: class.java)
+
+                   likes.text=newStats.numOfLikes.toString()
+                   if(newStats.numOfComments.toInt() != 0) comments.text="View all ${newStats.numOfComments} comments"
+                   else comments.text="No comments yet. Add yours?"
+               }
+                else
+               {
+                   Toast.makeText(activity,"Error refreshing",Toast.LENGTH_SHORT).show()
+               }
+            }
+
+            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                Toast.makeText(activity,"Something went wrong while refreshing",Toast.LENGTH_SHORT).show()
             }
 
         })

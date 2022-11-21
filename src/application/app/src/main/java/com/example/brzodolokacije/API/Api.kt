@@ -56,4 +56,7 @@ interface Api {
 
     @GET("Post/likes/{postId}")
     fun getLikes(@Path("postId") postId : String) :  Call<DefaultResponse>
+
+    @GET("Post/refreshPost/{postId}")
+    fun refrestPost(@Path("postId") postId : String) :  Call<DefaultResponse>
 }
