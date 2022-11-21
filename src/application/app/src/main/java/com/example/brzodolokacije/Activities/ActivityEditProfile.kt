@@ -179,6 +179,61 @@ class ActivityEditProfile : AppCompatActivity() {
                 })
 //                          val call: Call<DefaultResponse> = Api.uploadNewAvatar(filePart)
             }
+            else
+            {
+                retrofit.editUserInfo(newData).enqueue(object : Callback<DefaultResponse>
+                {
+                    override fun onResponse(
+                        call: Call<DefaultResponse>,
+                        response: Response<DefaultResponse>
+                    ) {
+                        if(response.body()?.error.toString() == "false")
+                        {
+                            val token = response.body()?.message.toString()
+                            sessionManager.deleteAuthToken()
+                            sessionManager.saveAuthToken(token)
+
+                            retrofit.authentication().enqueue(object: Callback<DefaultResponse>
+                            {
+                                override fun onResponse(
+                                    call: Call<DefaultResponse>,
+                                    response: Response<DefaultResponse>
+                                ) {
+                                    if(response.body()?.error.toString() == "false") {
+                                        var usernameRes = response.body()?.message.toString()
+                                        sessionManager.deleteUsername()
+                                        sessionManager.saveUsername(usernameRes)
+                                    }
+                                }
+
+                                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                                    Toast.makeText(this@ActivityEditProfile, t.toString(), Toast.LENGTH_SHORT).show()
+                                }
+                            })
+
+                            Toast.makeText(this@ActivityEditProfile, "Data successfully updated", Toast.LENGTH_SHORT).show()
+                            val intent = Intent(this@ActivityEditProfile, MainActivity::class.java)
+                            intent.putExtra("backToProfile", "returnToProfile");
+                            startActivity(intent)
+                            finish()
+                        }
+                        else if(response.body()?.error.toString() == "true" && response.body()?.message.toString() != "Error")
+                        {
+                            editUsername.error = "Username already in use"
+                            editUsername.requestFocus()
+                        }
+                        else
+                        {
+                            Toast.makeText(this@ActivityEditProfile, "An error occurred", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                        Log.d("edit profile failed", "")
+                    }
+
+                })
+            }
 
         }
 
