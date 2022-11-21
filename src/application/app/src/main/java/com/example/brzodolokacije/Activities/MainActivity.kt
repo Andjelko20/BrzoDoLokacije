@@ -3,7 +3,11 @@ package com.example.brzodolokacije.Activities
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.ContextMenu
+import android.view.MenuItem
 import android.view.View
+import android.widget.PopupMenu
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -35,6 +39,27 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         PrivremeneSlikeZaFeed.addPhotos()
+
+        options_meni.setOnClickListener{
+            val popupMenu = PopupMenu(this,it)
+            popupMenu.setOnMenuItemClickListener { item ->
+                when(item.itemId){
+                    R.id.editProfileMeni ->{
+                        val intent = Intent(this, ActivityEditProfile::class.java)
+                        startActivity(intent)
+                        true
+                    }
+                    R.id.logoutMeni ->{
+                        logOut()
+                        true
+                    }
+                    else -> false
+                }
+
+            }
+            popupMenu.inflate(R.menu.meni)
+            popupMenu.show()
+        }
 
         val intent = getIntent()
         val provera = intent.getStringExtra("backToProfile");
@@ -77,6 +102,27 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+    override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        menuInflater.inflate(R.menu.meni, menu)
+        Log.d("Proveri2",menuInflater.inflate(R.menu.meni, menu).toString())
+    }
+
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.editProfileMeni ->{
+                Toast.makeText(this, "call code", Toast.LENGTH_LONG).show()
+                return true
+            }
+            R.id.logoutMeni ->{
+                Toast.makeText(this, "sms code", Toast.LENGTH_LONG).show()
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     override fun onBackPressed() {
         if (backPressedTime + 3000 > System.currentTimeMillis()) {
             super.onBackPressed()
@@ -122,4 +168,7 @@ class MainActivity : AppCompatActivity() {
 
         })
     }
+
+
+
 }
