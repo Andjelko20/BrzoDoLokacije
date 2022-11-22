@@ -162,8 +162,8 @@
             <TextView
                 android:id="@+id/postCaption"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:maxHeight="50dp"
+                android:layout_height="wrap_content"
+                android:minHeight="50dp"
                 tools:text="Image caption"
                 android:textSize="17sp"
                 android:textStyle="bold"
