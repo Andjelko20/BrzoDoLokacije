@@ -2,31 +2,42 @@ package com.example.brzodolokacije.Adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Matrix
-import android.graphics.drawable.BitmapDrawable
+import android.os.Build
 import android.os.Looper
 import android.text.Html
-import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import androidx.test.core.app.ApplicationProvider.getApplicationContext
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.brzodolokacije.API.Api
+import com.example.brzodolokacije.Client.Client
+import com.example.brzodolokacije.Constants.Constants
+import com.example.brzodolokacije.Models.DefaultResponse
+import com.example.brzodolokacije.Models.NewCommentDto
+import com.example.brzodolokacije.Posts.Comment
+import com.example.brzodolokacije.Posts.Like
 import com.example.brzodolokacije.Posts.Photo
+import com.example.brzodolokacije.Posts.Stats
 import com.example.brzodolokacije.R
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.android.synthetic.main.fragment_home.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.Executors
 
 
-class PostAdapter(val photoList : List<Photo>, val context : Context) :
+class PostAdapter(val photoList : List<Photo>, val context : Context, val activity : Context) :
     RecyclerView.Adapter<PostAdapter.MainViewHolder>() {
 
     var dataList = photoList
@@ -35,41 +46,113 @@ class PostAdapter(val photoList : List<Photo>, val context : Context) :
 
         fun bindData(photo : Photo, index : Int)
         {
-            Log.d("slikeA",dataList.toString())
             val owner = itemView.findViewById<TextView>(R.id.postOwner)
+            val profilePic = itemView.findViewById<CircleImageView>(R.id.userProfilePic)
+            val ownerProfile = itemView.findViewById<ConstraintLayout>(R.id.ownerProfile)
             val date = itemView.findViewById<TextView>(R.id.postDate)
             val location = itemView.findViewById<TextView>(R.id.location)
             val caption = itemView.findViewById<TextView>(R.id.postCaption)
-            val likes = itemView.findViewById<TextView>(R.id.numOfLikes)
-            val comments = itemView.findViewById<TextView>(R.id.postComments)
+            var likes = itemView.findViewById<TextView>(R.id.numOfLikes)
+            var comments = itemView.findViewById<TextView>(R.id.postComments)
             val image = itemView.findViewById<ImageView>(R.id.postImage)
+            val likedByMe = itemView.findViewById<ImageView>(R.id.likeBtn)
 
+            //owner
             owner.text = photo.owner
-            owner.setOnClickListener{
+
+            //for visiting post owner's profile
+            ownerProfile.setOnClickListener{
                 Toast.makeText(context,"Owner: ${photo.owner}",Toast.LENGTH_SHORT).show()
             }
+
+            //profile image
+            val path : String=Constants.BASE_URL + "User/avatar/" + photo.owner
+            Picasso.get().load(path).into(profilePic);
+
+            //date
             date.text = convertLongToTime(photo.date)
 
-            val text= Html.fromHtml("<i>"+photo.location+"</i>")
+            //location
+            val text= photo.location //Html.fromHtml("<i>"+photo.location+"</i>")
             location.text = text //=photo.location
 
-            caption.text = Html.fromHtml("<i>"+photo.caption+"</i>")
+            //caption
+            caption.text = photo.caption //Html.fromHtml("<i>"+photo.caption+"</i>")
 
+            //list of likes
             likes.text = photo.numberOfLikes.toString()
             likes.setOnClickListener{
-                Toast.makeText(context,"Post ID: ${photo.id} - likes",Toast.LENGTH_SHORT).show()
+
+                val view : View = LayoutInflater.from(context).inflate(R.layout.fragment_like_section,null)
+                loadLikes(view,photo)
+
+                //refreshing the list of likes
+                val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayoutLikes)
+                refresh.setOnRefreshListener {
+                    android.os.Handler(Looper.getMainLooper()).postDelayed({
+
+                        loadLikes(view,photo)
+                        refreshPost(itemView,photo)
+                        refresh.isRefreshing = false
+                    }, 1500)
+                }
+                val dialog = BottomSheetDialog(activity)
+                dialog.setContentView(view)
+                dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
+                dialog.show()
+
+                refreshPost(itemView,photo)
             }
 
-            comments.text="View all ${photo.numberOfComments} comments"
+            //list and number of comments
+            if(photo.numberOfComments != 0) comments.text="View all ${photo.numberOfComments} comments"
+            else comments.text="No comments yet. Add yours?"
             comments.setOnClickListener{
-                Toast.makeText(context,"Post ID: ${photo.id} - comments",Toast.LENGTH_SHORT).show()
+                val view : View = LayoutInflater.from(context).inflate(R.layout.fragment_comment,null)
+                loadComments(view,photo)
+
+                //adding a new comment
+                val addCommentButton = view.findViewById<ImageView>(R.id.addCommentBtn)
+                val addCommentText = view.findViewById<EditText>(R.id.addCommentText)
+                addCommentButton.setOnClickListener{
+                    if(addCommentText.text.toString()!="")
+                    {
+                        val ct=addCommentText.text.toString().trim()
+                        val newComment = NewCommentDto(photo.id,ct)
+                        addNewComment(view,photo,newComment,itemView)
+                        refreshPost(itemView,photo)
+                    }
+                }
+                //refreshing the list of comments
+                val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayoutComments)
+                refresh.setOnRefreshListener {
+                    android.os.Handler(Looper.getMainLooper()).postDelayed({
+
+                        loadComments(view,photo)
+                        refreshPost(itemView,photo)
+                        refresh.isRefreshing = false
+                    }, 1500)
+                }
+                val dialog = BottomSheetDialog(activity)
+                dialog.setContentView(view)
+                dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
+                dialog.show()
+                refreshPost(itemView,photo)
             }
 
-            itemView.findViewById<ImageView>(R.id.likeBtn).setOnClickListener{
-                Toast.makeText(context,"Liked post with ID: ${photo.id} - likes",Toast.LENGTH_SHORT).show()
-            }
+            //image in the post
+            val imagePath=Constants.BASE_URL+"Post/postPhoto/${photo.id}"
+            Picasso.get().load(imagePath).into(image);
 
-            loadImage(image,photo.image)
+            //liked or not liked
+            if(photo.likedByMe) likedByMe.setBackgroundResource(R.drawable.liked)
+            else likedByMe.setBackgroundResource(R.drawable.unliked)
+            likedByMe.setOnClickListener{
+                likeUnlike(itemView,photo)
+                refreshPost(itemView,photo)
+            }
         }
     }
 
@@ -92,19 +175,176 @@ class PostAdapter(val photoList : List<Photo>, val context : Context) :
         notifyDataSetChanged()
     }
 
-    private fun loadImage(image : ImageView, path : String)
-    {
-        val imageBytes = Base64.decode(path, Base64.DEFAULT)
-        val decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-        image.setImageBitmap(decodedImage)
-    }
-
     @SuppressLint("SimpleDateFormat")
     private fun convertLongToTime(time: Long): String {
         val date = Date(time)
-        Log.d("datum",time.toString())
+        //Log.d("datum",time.toString())
         val format = SimpleDateFormat("HH:mm  dd/MM/yyyy")
         return format.format(date).dropLast(4)
+    }
+
+    private fun loadComments(view : View, photo : Photo)
+    {
+        val retrofit = Client(activity).buildService(Api::class.java)
+        retrofit.getComments(photo.id).enqueue(object: Callback<DefaultResponse>
+        {
+            override fun onResponse(
+                call: Call<DefaultResponse>,
+                response: Response<DefaultResponse>
+            ) {
+                if(response.body()?.error.toString()=="false")
+                {
+                    val listOfCommentsStr: String = response.body()?.message.toString();
+
+                    val typeToken = object : TypeToken<List<Comment>>() {}.type
+                    val commentsList = Gson().fromJson<List<Comment>>(listOfCommentsStr, typeToken)
+
+
+                    val rvComments = view.findViewById<RecyclerView>(R.id.rv_comments)
+                    if(commentsList.isNotEmpty()) rvComments.adapter = CommentsAdapter(commentsList,context,activity)
+                }
+                else
+                {
+                    Toast.makeText(activity,"Error loading comments",Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                Toast.makeText(activity,"Error loading comments. Something went wrong",Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
+
+    private fun addNewComment(view: View, photo: Photo, newComment : NewCommentDto,itemView: View)
+    {
+        val retrofit = Client(activity).buildService(Api::class.java)
+        retrofit.addComment(newComment).enqueue(object: Callback<DefaultResponse>
+        {
+            override fun onResponse(
+                call: Call<DefaultResponse>,
+                response: Response<DefaultResponse>
+            ) {
+                if(response.body()?.error.toString()=="false")
+                {
+                    //Toast.makeText(activity,"Comment added",Toast.LENGTH_SHORT).show()
+                    val newNumOfComments=response.body()?.message.toString().trim()
+                    itemView.findViewById<TextView>(R.id.postComments).text = "View all ${newNumOfComments} comments"
+                    view.findViewById<TextView>(R.id.addCommentText).text=""
+                    loadComments(view,photo)
+                }
+                else
+                {
+                    Toast.makeText(activity,"Error",Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                Toast.makeText(activity,"Something else went wrong",Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
+
+    private fun likeUnlike(itemView : View, photo : Photo)
+    {
+        val likedByMe = itemView.findViewById<ImageView>(R.id.likeBtn)
+        val retrofit = Client(activity).buildService(Api::class.java)
+        retrofit.likPost(photo.id).enqueue(object: Callback<DefaultResponse>
+        {
+            override fun onResponse(
+                call: Call<DefaultResponse>,
+                response: Response<DefaultResponse>
+            ) {
+                if(response.body()?.error.toString()=="false")
+                {
+                    val state = response.body()?.message.toString()
+
+                    if(state=="liked")
+                        likedByMe.setBackgroundResource(R.drawable.liked)
+
+                    else likedByMe.setBackgroundResource(R.drawable.unliked)
+
+                    refreshPost(itemView,photo)
+                }
+                else
+                {
+                    Toast.makeText(context,"Unable to like post",Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                Toast.makeText(context,"Something went wrong",Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
+
+    private fun loadLikes(view : View, photo : Photo)
+    {
+        val retrofit = Client(activity).buildService(Api::class.java)
+        retrofit.getLikes(photo.id).enqueue(object: Callback<DefaultResponse>
+        {
+            override fun onResponse(
+                call: Call<DefaultResponse>,
+                response: Response<DefaultResponse>
+            ) {
+                if(response.body()?.error.toString()=="false")
+                {
+                    val listOfLikesStr: String = response.body()?.message.toString();
+
+                    val typeToken = object : TypeToken<List<Like>>() {}.type
+                    val likesList = Gson().fromJson<List<Like>>(listOfLikesStr, typeToken)
+
+
+                    val rvLikes = view.findViewById<RecyclerView>(R.id.rv_likes)
+                    if(likesList.isNotEmpty()) rvLikes.adapter = LikesAdapter(likesList,context,activity)
+                }
+                else
+                {
+                    Toast.makeText(activity,"Error loading likes",Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                Toast.makeText(activity,"Error loading likes. Something went wrong",Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
+
+    private fun refreshPost(itemView : View, photo : Photo)
+    {
+        var likes = itemView.findViewById<TextView>(R.id.numOfLikes)
+        var comments = itemView.findViewById<TextView>(R.id.postComments)
+
+        val retrofit = Client(activity).buildService(Api::class.java)
+        retrofit.refrestPost(photo.id).enqueue(object: Callback<DefaultResponse>
+        {
+            override fun onResponse(
+                call: Call<DefaultResponse>,
+                response: Response<DefaultResponse>
+            ) {
+               if(response.body()?.error.toString()=="false")
+               {
+                   val newStatsStr = response.body()?.message.toString()
+                   val newStats : Stats = Gson().fromJson(newStatsStr, Stats :: class.java)
+
+                   likes.text=newStats.numOfLikes.toString()
+                   if(newStats.numOfComments.toInt() != 0) comments.text="View all ${newStats.numOfComments} comments"
+                   else comments.text="No comments yet. Add yours?"
+               }
+                else
+               {
+                   Toast.makeText(activity,"Error refreshing",Toast.LENGTH_SHORT).show()
+               }
+            }
+
+            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                Toast.makeText(activity,"Something went wrong while refreshing",Toast.LENGTH_SHORT).show()
+            }
+
+        })
     }
 
     private fun currentTimeToLong(): Long {

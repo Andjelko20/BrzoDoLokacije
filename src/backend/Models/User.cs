@@ -14,9 +14,10 @@ public class User
     [Required]
     public string Password { get; set; }
     public string PasswordResetToken { get; set; } = string.Empty;
-    public string Name { get; set; } = "Milos Andjelkovic";
-    public string Description { get; set; } = "Are you lost, babygirl?";
+    public string Name { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
     public string Avatar { get; set; } = "../miscellaneous/avatars/default.png";
-    public bool HasAvatar { get; set; } = false;
     public List<Post> Posts { get; set; }
+    public List<Like> Likes { get; set; }
+    public List<Comment> Comments { get; set; }
 }

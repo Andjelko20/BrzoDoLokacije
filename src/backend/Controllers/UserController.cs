@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using backend.Models;
@@ -9,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace backend.Controllers
 {
@@ -36,15 +40,11 @@ namespace backend.Controllers
                     error = true,
                     message = "User don't exist"
                 });
-                
-            byte[] imageArray = await System.IO.File.ReadAllBytesAsync(user.Avatar);
-            string base64ImageRepresentation = Convert.ToBase64String(imageArray);
             UserProfileDto upd = new UserProfileDto
             {
                 Username = user.Username,
                 Name = user.Name,
                 Description = user.Description,
-                Avatar = base64ImageRepresentation,
                 Followers = 100,
                 Following = 50,
                 NumberOfLikes = 300,
@@ -59,7 +59,8 @@ namespace backend.Controllers
             });
         }
         
-        /*[HttpGet("avatar/{username}")]
+        [AllowAnonymous]
+        [HttpGet("avatar/{username}")]
         public async Task<IActionResult> GetAvatar(string username)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
@@ -67,8 +68,70 @@ namespace backend.Controllers
             string[] types = user.Avatar.Split(".");
             string type =types[types.Length-1];
             return File(b, "image/"+type);
-        }*/
-        
+        }
+
+        [HttpPut("update")]
+        public async Task<ActionResult<string>> updateProfile(UpdateProfileDto request)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
+            if (user == null)
+                return BadRequest(new
+                {
+                    error = true,
+                    message = "Error"
+                });
+            if (user.Username != request.Username)
+            {
+                var userDB = await _context.Users.FirstOrDefaultAsync(u => u.Username == request.Username);
+                if (userDB != null)
+                    return Ok(new
+                    {
+                        error = true,
+                        message = "Someone else's using that username!"
+                    });
+            }
+
+            user.Username = request.Username;
+            user.Name = request.Name;
+            user.Description = request.Description;
+            await _context.SaveChangesAsync();
+            string token = CreateToken(user);
+            return Ok(new {
+                error = false,
+                message = token
+            });
+        }
+
+        [HttpPut("updateAvatar")]
+        public async Task<ActionResult<string>> updateAvatar(IFormFile picture)
+        {
+            if (picture == null)
+                return Ok(new
+                {
+                    error = false,
+                    message = "not changed"
+                });
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
+            if (user == null)
+                return BadRequest(new
+                {
+                    error = true,
+                    message = "Error"
+                });
+            string path = CreatePathToDataRoot(user.Id, picture.FileName);
+            var stream = new FileStream(path, FileMode.Create);
+            await picture.CopyToAsync(stream);
+            stream.Close();
+            user.Avatar = path;
+            await _context.SaveChangesAsync();
+            return Ok(new
+            {
+                error = false,
+                message = path
+            });
+
+        }
+
         [HttpDelete("delete/{username}")]
         public async Task<ActionResult<string>> deleteUser(string username)
         {
@@ -87,9 +150,48 @@ namespace backend.Controllers
             return Ok(new
             {
                 error = false,
-                message = "deleted" + username
+                message = "deleted " + username
             });
         }
+        private string CreateToken(User user)
+        {
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.Role, "korisnik")
+            };
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
+                _configuration.GetSection("AppSettings:Token").Value));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            var token = new JwtSecurityToken(
+                claims: claims,
+                expires: DateTime.Now.AddDays(30),
+                signingCredentials: creds
+            );
+
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return jwt;
+        }
+        
+        private string CreatePathToDataRoot(int userID, string filename)
+        {
+            var rootDirPath = $"../miscellaneous/avatars/{userID}";
+
+            Directory.CreateDirectory(rootDirPath);
+            
+            DirectoryInfo dir = new DirectoryInfo(rootDirPath);
+
+            foreach(FileInfo fi in dir.GetFiles())
+            {
+                fi.Delete();
+            }
+
+            rootDirPath = rootDirPath.Replace(@"\", "/");
+
+            return $"{rootDirPath}/{filename}";
+        }
+
         
     }
 }

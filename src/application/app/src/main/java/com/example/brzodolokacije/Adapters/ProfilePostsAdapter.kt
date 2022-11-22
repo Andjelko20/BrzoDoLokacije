@@ -19,8 +19,6 @@ import java.util.concurrent.Executors
 
 class ProfilePostsAdapter(val postsList : List<String>, val context : Context) : RecyclerView.Adapter<ProfilePostsAdapter.MainViewHolder>()
 {
-    var dataList = postsList
-
     inner class MainViewHolder(private val itemView: View) :RecyclerView.ViewHolder(itemView) {
 
         fun bindData(url : String, index : Int)
@@ -36,10 +34,10 @@ class ProfilePostsAdapter(val postsList : List<String>, val context : Context) :
     }
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
-        holder.bindData(dataList[position],position)
+        holder.bindData(postsList[position],position)
     }
 
     override fun getItemCount(): Int {
-        return dataList.size
+        return postsList.size
     }
 }

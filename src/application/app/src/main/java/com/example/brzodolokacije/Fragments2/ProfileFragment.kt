@@ -1,4 +1,4 @@
-package com.example.brzodolokacije.Fragments
+package com.example.brzodolokacije.Fragments2
 
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -10,12 +10,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Activities.ActivityAddPost
 import com.example.brzodolokacije.Activities.ActivityEditProfile
 import com.example.brzodolokacije.Activities.MainActivity
 import com.example.brzodolokacije.Client.Client
+import com.example.brzodolokacije.Constants.Constants
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.UserProfile
@@ -25,6 +27,7 @@ import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import io.ak1.BubbleTabBar
 import io.ak1.OnBubbleClickListener
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -53,8 +56,6 @@ class ProfileFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-
-
     }
 
     override fun onCreateView(
@@ -70,7 +71,10 @@ class ProfileFragment : Fragment() {
 
         replaceFragmentOnProfile(PostsFragment())
 
-        val button = view.findViewById<Button>(R.id.logoutButton)
+//        options_meni.setOnClickListener{
+//            Toast.makeText(this.requireActivity(),"Tekstnkei",Toast.LENGTH_SHORT).show()
+//        }
+
         val bubbleTabBarProfile = view.findViewById<BubbleTabBar>(R.id.bubbleTabBarProfile);
         addPost.setOnClickListener{
             activity?.let{
@@ -78,17 +82,6 @@ class ProfileFragment : Fragment() {
                 it.startActivity(intent)
             }
 
-        }
-        editProfileButton.setOnClickListener{
-            activity?.let{
-                val intent = Intent (it, ActivityEditProfile::class.java)
-                it.startActivity(intent)
-            }
-
-        }
-        button.setOnClickListener { view ->
-            val mainActivity = activity as MainActivity
-            mainActivity.logOut()
         }
 
         bubbleTabBarProfile.addBubbleListener(object : OnBubbleClickListener {
@@ -123,7 +116,6 @@ class ProfileFragment : Fragment() {
                         val userProfileInfoStr: String = response.body()?.message.toString();
                         val gson = Gson()
                         val userProfileInfo: UserProfile = gson.fromJson(userProfileInfoStr, UserProfile::class.java)
-    //                    Log.d(userProfileInfo.profilePicture, "proba");
 
                         val username = view.findViewById<TextView>(R.id.username)
                         val postsNum = view.findViewById<TextView>(R.id.postsNum)
@@ -140,11 +132,12 @@ class ProfileFragment : Fragment() {
                         imeprezime.text = userProfileInfo.name;
                         opis.text = userProfileInfo.description;
 
-                        val avatarEncoded = userProfileInfo.profilePicture;
+//                        val avatarEncoded = userProfileInfo.profilePicture;
 
-                        val imageBytes = Base64.decode(avatarEncoded, Base64.DEFAULT)
-                        val decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-                        pfp.setImageBitmap(decodedImage)
+//                        val imageBytes = Base64.decode(avatarEncoded, Base64.DEFAULT)
+//                        val decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+
+                        Picasso.get().load(Constants.BASE_URL + "User/avatar/" + usernameSm).into(pfp)
                     }
                     else
                     {
