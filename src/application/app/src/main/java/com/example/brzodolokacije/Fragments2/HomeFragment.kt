@@ -1,5 +1,6 @@
 package com.example.brzodolokacije.Fragments2
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -10,6 +11,7 @@ import android.widget.ProgressBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.brzodolokacije.API.Api
+import com.example.brzodolokacije.Activities.ActivityAddPost
 import com.example.brzodolokacije.Adapters.PostAdapter
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Models.DefaultResponse
@@ -19,6 +21,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_profile.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -77,6 +80,13 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.VISIBLE)
+
+        addPostHome.setOnClickListener{
+            activity?.let{
+                val intent = Intent (it, ActivityAddPost::class.java)
+                it.startActivity(intent)
+            }
+        }
 
         val retrofit = Client(requireActivity()).buildService(Api::class.java)
         retrofit.getAllPosts().enqueue(object: Callback<DefaultResponse>
