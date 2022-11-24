@@ -60,15 +60,15 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toTopOf="@id/drugiDeoProfileVisit"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:paddingTop="5dp">
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/profilePictureProfileVisit"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:layout_gravity="left"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginTop="2dp"/>
+                        android:layout_marginStart="15dp"/>
 
                     <LinearLayout
                         android:id="@+id/prviDeoDesnoProfileVisit"

@@ -18,6 +18,7 @@ import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Constants.Constants
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.NewCommentDto
+import com.example.brzodolokacije.Models.UserProfile
 import com.example.brzodolokacije.Posts.Comment
 import com.example.brzodolokacije.Posts.Like
 import com.example.brzodolokacije.Posts.Photo
@@ -60,22 +61,22 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
             //owner
             owner.text = photo.owner
 
+            //profile image
+            val path : String=Constants.BASE_URL + "User/avatar/" + photo.owner
+            Picasso.get().load(path).into(profilePic);
+
             //for visiting post owner's profile
             ownerProfile.setOnClickListener{
                 //Toast.makeText(context,"Owner: ${photo.owner}",Toast.LENGTH_SHORT).show()
                 val view : View = LayoutInflater.from(context).inflate(R.layout.fragment_profile_visit,null)
                 val user = view.findViewById<TextView>(R.id.usernameProfileVisit)
-                user.text=photo.owner
+                getUserInfo(photo.owner,path,view)
                 val dialog = BottomSheetDialog(activity)
                 dialog.setContentView(view)
                 dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
                 //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
                 dialog.show()
             }
-
-            //profile image
-            val path : String=Constants.BASE_URL + "User/avatar/" + photo.owner
-            Picasso.get().load(path).into(profilePic);
 
             //date
             date.text = convertLongToTime(photo.date)
@@ -351,6 +352,51 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
 
             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                 Toast.makeText(activity,"Something went wrong while refreshing",Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
+
+    private fun getUserInfo(username : String, imagePath : String,view : View)
+    {
+        val retrofit = Client(activity).buildService(Api::class.java)
+        retrofit.fetchUserProfileInfo(username).enqueue(object: Callback<DefaultResponse>
+        {
+            override fun onResponse(
+                call: Call<DefaultResponse>,
+                response: Response<DefaultResponse>
+            ) {
+                if(response.body()?.error.toString() == "false") {
+                    //                    Log.d(response.body()?.error.toString(), response.body()?.message.toString());
+                    val userProfileInfoStr: String = response.body()?.message.toString();
+                    val gson = Gson()
+                    val userProfileInfo: UserProfile =
+                        gson.fromJson(userProfileInfoStr, UserProfile::class.java)
+
+                    val user = view.findViewById<TextView>(R.id.usernameProfileVisit)
+                    val postsNum = view.findViewById<TextView>(R.id.postsNumProfileVisit)
+                    val followersNum = view.findViewById<TextView>(R.id.followersNumProfileVisit)
+                    val likesNum = view.findViewById<TextView>(R.id.likesNumProfileVisit)
+                    val imeprezime = view.findViewById<TextView>(R.id.imeprezimeProfileVisit)
+                    val opis = view.findViewById<TextView>(R.id.opisProfileVisit)
+                    val pfp = view.findViewById<CircleImageView>(R.id.profilePictureProfileVisit)
+
+                    user.text = userProfileInfo.username
+                    postsNum.text = userProfileInfo.numOfPosts.toString()
+                    followersNum.text = userProfileInfo.numOfFollowers.toString()
+                    likesNum.text = userProfileInfo.totalNumOfLikes.toString();
+                    imeprezime.text = userProfileInfo.name;
+                    opis.text = userProfileInfo.description;
+                    Picasso.get().load(imagePath).into(pfp)
+                }
+                else
+                {
+                    Toast.makeText(activity,"Unable to get user info",Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                Toast.makeText(activity,"Something went wrong. Try again later",Toast.LENGTH_SHORT).show()
             }
 
         })
