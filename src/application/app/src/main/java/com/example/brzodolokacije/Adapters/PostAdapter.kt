@@ -62,7 +62,15 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
 
             //for visiting post owner's profile
             ownerProfile.setOnClickListener{
-                Toast.makeText(context,"Owner: ${photo.owner}",Toast.LENGTH_SHORT).show()
+                //Toast.makeText(context,"Owner: ${photo.owner}",Toast.LENGTH_SHORT).show()
+                val view : View = LayoutInflater.from(context).inflate(R.layout.fragment_profile_visit,null)
+                val user = view.findViewById<TextView>(R.id.usernameProfileVisit)
+                user.text=photo.owner
+                val dialog = BottomSheetDialog(activity)
+                dialog.setContentView(view)
+                dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
+                dialog.show()
             }
 
             //profile image
