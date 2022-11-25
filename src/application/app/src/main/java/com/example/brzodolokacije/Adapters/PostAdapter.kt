@@ -16,6 +16,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Constants.Constants
+import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.NewCommentDto
 import com.example.brzodolokacije.Models.UserProfile
@@ -360,6 +361,8 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
     private fun getUserInfo(username : String, imagePath : String,view : View)
     {
         val retrofit = Client(activity).buildService(Api::class.java)
+        val sessionManager = SessionManager(context)
+        val appUser=sessionManager.fetchUsername()
         retrofit.fetchUserProfileInfo(username).enqueue(object: Callback<DefaultResponse>
         {
             override fun onResponse(
@@ -380,6 +383,20 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
                     val imeprezime = view.findViewById<TextView>(R.id.imeprezimeProfileVisit)
                     val opis = view.findViewById<TextView>(R.id.opisProfileVisit)
                     val pfp = view.findViewById<CircleImageView>(R.id.profilePictureProfileVisit)
+                    val follow=view.findViewById<Button>(R.id.followBtnProfileVisit)
+                    val message=view.findViewById<Button>(R.id.messageBtnProfileVisit)
+
+                    if(username==appUser)
+                    {
+
+                        follow.setVisibility(View.GONE)
+                        message.setVisibility(View.GONE);
+                    }
+                    else
+                    {
+                        follow.setVisibility(View.VISIBLE);
+                        message.setVisibility(View.VISIBLE);
+                    }
 
                     user.text = userProfileInfo.username
                     postsNum.text = userProfileInfo.numOfPosts.toString()
