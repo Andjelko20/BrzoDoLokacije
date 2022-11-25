@@ -215,6 +215,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center"
                     android:layout_marginBottom="15dp">
+
                     <Button
                         android:id="@+id/followBtnProfileVisit"
                         android:layout_width="130dp"

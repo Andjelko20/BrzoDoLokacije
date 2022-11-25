@@ -388,7 +388,6 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
 
                     if(username==appUser)
                     {
-
                         follow.setVisibility(View.GONE)
                         message.setVisibility(View.GONE);
                     }
@@ -398,13 +397,13 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
                         message.setVisibility(View.VISIBLE);
                     }
 
+                    Picasso.get().load(imagePath).into(pfp)
                     user.text = userProfileInfo.username
                     postsNum.text = userProfileInfo.numOfPosts.toString()
                     followersNum.text = userProfileInfo.numOfFollowers.toString()
                     likesNum.text = userProfileInfo.totalNumOfLikes.toString();
                     imeprezime.text = userProfileInfo.name;
                     opis.text = userProfileInfo.description;
-                    Picasso.get().load(imagePath).into(pfp)
                 }
                 else
                 {
