@@ -9,30 +9,39 @@
 
     <LinearLayout
         android:id="@+id/profileVisitSection"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:behavior_peekHeight="800dp"
-        android:background="@drawable/commentsectiondesigne"
+        android:background="@color/postHeader"
         android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/light_blue"
-            android:gravity="center"
+            android:gravity="left"
             android:orientation="horizontal"
-            android:paddingStart="16dp"
+            android:paddingStart="0dp"
             android:paddingEnd="16dp"
-            android:paddingBottom="16dp"
+            android:paddingBottom="3dp"
             android:paddingTop="3dp">
 
-            <ImageView
-                android:id="@+id/dragProfileVisit"
-                android:gravity="center|center_horizontal"
-                android:layout_width="wrap_content"
+            <Button
+                android:id="@+id/exitProfileVisit"
+                android:padding="10dp"
+                android:drawableLeft="@drawable/ic_arrow_back"
+                android:background="@color/transparent"
+                android:layout_width="30dp"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_drag_sheet"/>
+                android:layout_marginStart="10dp">
+            </Button>
+
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="8dp"
+                android:layout_toEndOf="@+id/exitProfileVisit"
+                app:srcCompat="@drawable/whitelogo" />
         </RelativeLayout>
 
         <View
@@ -65,8 +74,8 @@
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/profilePictureProfileVisit"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
                         android:layout_gravity="left"
                         android:layout_marginStart="15dp"/>
 
@@ -76,7 +85,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_gravity="right"
-                        android:layout_marginStart="15dp">
+                        android:layout_marginStart="5dp">
 
                         <TextView
                             android:id="@+id/usernameProfileVisit"
@@ -86,7 +95,7 @@
                             android:layout_marginTop="15dp"
                             android:text="username"
                             android:textColor="@color/dark_blue"
-                            android:textSize="20dp" />
+                            android:textSize="22dp" />
 
                         <LinearLayout
                             android:id="@+id/prviDeoDesnoIspodProfileVisit"
@@ -106,7 +115,7 @@
                                 <TextView
                                     android:id="@+id/postsNumProfileVisit"
                                     android:text="0"
-                                    android:textSize="18dp"
+                                    android:textSize="20dp"
                                     android:textAlignment="center"
                                     android:textColor="@color/dark_blue"
                                     android:layout_width="match_parent"
@@ -115,7 +124,7 @@
                                 <TextView
                                     android:id="@+id/wordPostsProfileVisit"
                                     android:text="Posts"
-                                    android:textSize="16dp"
+                                    android:textSize="18dp"
                                     android:textColor="@color/dark_blue"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"/>
@@ -135,7 +144,7 @@
                                     android:text="0"
                                     android:textAlignment="center"
                                     android:textColor="@color/dark_blue"
-                                    android:textSize="18dp" />
+                                    android:textSize="20dp" />
 
                                 <TextView
                                     android:id="@+id/wordFollowersProfileVisit"
@@ -143,7 +152,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="Followers"
                                     android:textColor="@color/dark_blue"
-                                    android:textSize="16dp" />
+                                    android:textSize="18dp" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -155,7 +164,7 @@
                                 <TextView
                                     android:id="@+id/likesNumProfileVisit"
                                     android:text="0"
-                                    android:textSize="18dp"
+                                    android:textSize="20dp"
                                     android:textAlignment="center"
                                     android:textColor="@color/dark_blue"
                                     android:layout_width="match_parent"
@@ -164,7 +173,7 @@
                                 <TextView
                                     android:id="@+id/wordLikesProfileVisit"
                                     android:text="Likes"
-                                    android:textSize="16dp"
+                                    android:textSize="18dp"
                                     android:textColor="@color/dark_blue"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"/>
@@ -182,14 +191,14 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_below="@+id/prviDeoProfileVisit"
-                    android:layout_marginTop="15dp">
+                    android:layout_marginTop="12dp">
 
                     <TextView
                         android:id="@+id/imeprezimeProfileVisit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Ime Prezime"
-                        android:textSize="18dp"
+                        android:textSize="20dp"
                         android:textColor="@color/dark_blue"
                         android:layout_marginStart="20dp"/>
 
@@ -198,27 +207,29 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Opis"
-                        android:textSize="16dp"
+                        android:textSize="18dp"
                         android:textColor="@color/dark_blue"
                         android:layout_marginStart="20dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="5dp"
                         android:layout_marginBottom="8dp"/>
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/dugmiciProfileVisit"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_below="@+id/drugiDeoProfileVisit"
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center"
-                    android:layout_marginBottom="15dp">
+                    android:layout_marginBottom="10dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp">
 
                     <Button
                         android:id="@+id/followBtnProfileVisit"
-                        android:layout_width="130dp"
+                        android:layout_width="182dp"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:backgroundTint="@color/light_blue"
@@ -228,10 +239,10 @@
                         android:textAllCaps="false"
                         android:textColor="@color/light_text"
                         android:textSize="16sp"
-                        android:layout_marginRight="15dp"/>
+                        android:layout_marginRight="5dp"/>
                     <Button
                         android:id="@+id/messageBtnProfileVisit"
-                        android:layout_width="130dp"
+                        android:layout_width="182dp"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:backgroundTint="@color/light_blue"

@@ -1,23 +1,19 @@
 package com.example.brzodolokacije.Adapters
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.os.Looper
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.example.brzodolokacije.Fragments2.ProfileVisitPostsFragment
 import com.example.brzodolokacije.Posts.Photo
 import com.example.brzodolokacije.R
 import com.squareup.picasso.Picasso
 import java.util.concurrent.Executors
 
-class ProfilePostsAdapter(val postsList : List<String>, val context : Context) : RecyclerView.Adapter<ProfilePostsAdapter.MainViewHolder>()
+class ProfilePostsAdapter(val postsList: List<String>, val context: Context) : RecyclerView.Adapter<ProfilePostsAdapter.MainViewHolder>()
 {
     inner class MainViewHolder(private val itemView: View) :RecyclerView.ViewHolder(itemView) {
 

@@ -52,9 +52,9 @@ class PostsFragment : Fragment() {
 
         profilePostsRv.apply {
             recyclerView=view.findViewById(R.id.profilePostsRv)
-            layoutManager = GridLayoutManager(context, 3)
+            mylayoutManager = GridLayoutManager(context, 3)
             myAdapter = this.context?.let { ProfilePostsAdapter(PrivremeneSlikeZaFeed.getPhotos(),it) }
-            recyclerView.layoutManager=layoutManager
+            recyclerView.layoutManager=mylayoutManager
             recyclerView.adapter=myAdapter
         }
     }

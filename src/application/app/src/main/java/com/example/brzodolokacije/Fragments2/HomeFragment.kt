@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
-import android.widget.LinearLayout
 import android.widget.Toast
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,9 +18,7 @@ import com.example.brzodolokacije.Posts.Photo
 import com.example.brzodolokacije.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.fragment_profile.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -104,7 +101,8 @@ class HomeFragment : Fragment() {
                         recyclerView=view.findViewById(R.id.homePostsRv)
                         recyclerView.layoutManager=mylayoutManager
                         recyclerView.setHasFixedSize(true)
-                        myAdapter = this.context?.let { PostAdapter(photosList,it,requireActivity()) }
+                        val fragmentManager = getChildFragmentManager()
+                        myAdapter = this.context?.let { PostAdapter(photosList,it,requireActivity(),fragmentManager) }
                         recyclerView.adapter=myAdapter
                     }
                     view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.GONE)

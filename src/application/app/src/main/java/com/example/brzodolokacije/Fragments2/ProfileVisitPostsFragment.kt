@@ -5,27 +5,27 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.brzodolokacije.Adapters.CommentsAdapter
-import com.example.brzodolokacije.Adapters.PostAdapter
+import com.example.brzodolokacije.Adapters.ProfilePostsAdapter
+import com.example.brzodolokacije.Posts.PrivremeneSlikeZaFeed
 import com.example.brzodolokacije.R
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-var myAdapter : RecyclerView.Adapter<CommentsAdapter.MainViewHolder>? = null
-private var mylayoutManager : RecyclerView.LayoutManager? = null
-lateinit var recyclerView : RecyclerView
+private var pvAdapter : RecyclerView.Adapter<ProfilePostsAdapter.MainViewHolder>? = null
+private var pvLayoutManager : RecyclerView.LayoutManager? = null
+private lateinit var pvRecyclerView : RecyclerView
 
 /**
  * A simple [Fragment] subclass.
- * Use the [CommentSectionFragment.newInstance] factory method to
+ * Use the [ProfileVisitPostsFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class CommentSectionFragment : BottomSheetDialogFragment() {
+class ProfileVisitPostsFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -43,7 +43,22 @@ class CommentSectionFragment : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_comment, container, false)
+        return inflater.inflate(R.layout.fragment_posts, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val profilePostsVisitRv = view.findViewById<RecyclerView>(R.id.profilePostsRv)
+
+        //poslati zahtev da se uzmu svi postovi korisnika na ciji profil idemo i proslediti ga adapteru
+
+        profilePostsVisitRv.apply {
+            pvLayoutManager = GridLayoutManager(context, 3)
+            pvRecyclerView = view.findViewById(R.id.profilePostsRv)
+            pvAdapter = this.context?.let { ProfilePostsAdapter(PrivremeneSlikeZaFeed.getPhotos(),it) }
+            pvRecyclerView.layoutManager = pvLayoutManager
+            pvRecyclerView.adapter = pvAdapter
+        }
     }
 
     companion object {
@@ -53,12 +68,12 @@ class CommentSectionFragment : BottomSheetDialogFragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment CommentSectionFragment.
+         * @return A new instance of fragment ProfileVisitPostsFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            CommentSectionFragment().apply {
+            ProfileVisitPostsFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

@@ -20,6 +20,7 @@ import com.example.brzodolokacije.Fragments2.ProfileFragment
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Posts.PrivremeneSlikeZaFeed
+import com.example.brzodolokacije.Posts.VisitUserProfile
 import com.example.brzodolokacije.R
 import com.example.brzodolokacije.databinding.ActivityMainBinding
 import io.ak1.BubbleTabBar
@@ -155,6 +156,7 @@ class MainActivity : AppCompatActivity() {
                 {
                     sessionManager.deleteAuthToken()
                     sessionManager.deleteUsername()
+                    VisitUserProfile.setVisit("")
 
                     val intent = Intent(this@MainActivity, LoginActivity::class.java)
                     startActivity(intent)
