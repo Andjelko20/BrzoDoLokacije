@@ -1,9 +1,7 @@
 package com.example.brzodolokacije.Activities
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -19,17 +17,13 @@ import com.example.brzodolokacije.Fragments2.ProfileVisitPostsFragment
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.UserProfile
-import com.example.brzodolokacije.ModelsDto.ResetPasswordDto
 import com.example.brzodolokacije.R
-import com.example.brzodolokacije.Models.Validation
 import com.example.brzodolokacije.Posts.VisitUserProfile
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import io.ak1.BubbleTabBar
 import io.ak1.OnBubbleClickListener
-import kotlinx.android.synthetic.main.activity_register.*
-import kotlinx.android.synthetic.main.activity_resetpassword.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -39,7 +33,7 @@ class ProfileVisitActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_profile_visit)
+        setContentView(R.layout.activity_profile_visit)
 
         replaceFragmentOnProfile(PostsFragment())
 

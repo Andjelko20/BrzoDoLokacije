@@ -72,15 +72,7 @@ class PostAdapter(val photoList: List<Photo>, val context: Context, val activity
 
             //for visiting post owner's profile
             ownerProfile.setOnClickListener{
-                //Toast.makeText(context,"Owner: ${photo.owner}",Toast.LENGTH_SHORT).show()
-//                val view : View = LayoutInflater.from(context).inflate(R.layout.fragment_profile_visit,null)
-//                val user = view.findViewById<TextView>(R.id.usernameProfileVisit)
-//                getUserInfo(photo.owner,path,view)
-//                val dialog = BottomSheetDialog(activity)
-//                dialog.setContentView(view)
-//                dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
-//                //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
-//                dialog.show()
+
                 VisitUserProfile.setVisit(photo.owner)
                 val intent = Intent(activity,ProfileVisitActivity::class.java)
                 activity.startActivity(intent)
@@ -364,91 +356,6 @@ class PostAdapter(val photoList: List<Photo>, val context: Context, val activity
 
         })
     }
-
-    private fun getUserInfo(username : String, imagePath : String,view : View)
-    {
-        val retrofit = Client(activity).buildService(Api::class.java)
-        val sessionManager = SessionManager(context)
-        val appUser=sessionManager.fetchUsername()
-        retrofit.fetchUserProfileInfo(username).enqueue(object: Callback<DefaultResponse>
-        {
-            override fun onResponse(
-                call: Call<DefaultResponse>,
-                response: Response<DefaultResponse>
-            ) {
-                if(response.body()?.error.toString() == "false") {
-                    //                    Log.d(response.body()?.error.toString(), response.body()?.message.toString());
-                    val userProfileInfoStr: String = response.body()?.message.toString();
-                    val gson = Gson()
-                    val userProfileInfo: UserProfile =
-                        gson.fromJson(userProfileInfoStr, UserProfile::class.java)
-
-                    val user = view.findViewById<TextView>(R.id.usernameProfileVisit)
-                    val postsNum = view.findViewById<TextView>(R.id.postsNumProfileVisit)
-                    val followersNum = view.findViewById<TextView>(R.id.followersNumProfileVisit)
-                    val likesNum = view.findViewById<TextView>(R.id.likesNumProfileVisit)
-                    val imeprezime = view.findViewById<TextView>(R.id.imeprezimeProfileVisit)
-                    val opis = view.findViewById<TextView>(R.id.opisProfileVisit)
-                    val pfp = view.findViewById<CircleImageView>(R.id.profilePictureProfileVisit)
-                    val follow=view.findViewById<Button>(R.id.followBtnProfileVisit)
-                    val message=view.findViewById<Button>(R.id.messageBtnProfileVisit)
-                    //val bubbleTabBarProfileVisit = view.findViewById<BubbleTabBar>(R.id.bubbleTabBarProfileProfileVisit)
-
-                    if(username==appUser)
-                    {
-                        follow.setVisibility(View.GONE)
-                        message.setVisibility(View.GONE);
-                    }
-                    else
-                    {
-                        follow.setVisibility(View.VISIBLE);
-                        message.setVisibility(View.VISIBLE);
-                    }
-
-                    Picasso.get().load(imagePath).into(pfp)
-                    user.text = userProfileInfo.username
-                    postsNum.text = userProfileInfo.numOfPosts.toString()
-                    followersNum.text = userProfileInfo.numOfFollowers.toString()
-                    likesNum.text = userProfileInfo.totalNumOfLikes.toString();
-                    imeprezime.text = userProfileInfo.name;
-                    opis.text = userProfileInfo.description;
-
-                    //loadFragments(bubbleTabBarProfileVisit)
-                }
-                else
-                {
-                    Toast.makeText(activity,"Unable to get user info",Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                Toast.makeText(activity,"Something went wrong. Try again later",Toast.LENGTH_SHORT).show()
-            }
-
-        })
-    }
-
-//    private fun replaceFragmentOnProfile(fragment: Fragment) {
-//        val fragmentTransaction = fragmentManager.beginTransaction()
-//        fragmentTransaction.replace(R.id.fragment_container_profileProfileVisit, fragment)
-//        fragmentTransaction.commit()
-//    }
-//
-//    private fun loadFragments(bubbleTabBarProfileVisit : BubbleTabBar)
-//    {
-//        bubbleTabBarProfileVisit.addBubbleListener(object : OnBubbleClickListener {
-//            override fun onBubbleClick(id: Int) {
-//                when(id){
-//                    R.id.posts -> replaceFragmentOnProfile(PostsFragment())
-//                    R.id.visitedLocations -> replaceFragmentOnProfile(LocationsFragment())
-//
-//                    else -> {}
-//                }
-//
-//            }
-//        })
-//    }
-
     private fun currentTimeToLong(): Long {
         return System.currentTimeMillis()
     }
