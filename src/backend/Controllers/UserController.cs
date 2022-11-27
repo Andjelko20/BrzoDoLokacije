@@ -40,15 +40,23 @@ namespace backend.Controllers
                     error = true,
                     message = "User don't exist"
                 });
+            int followers = (await _context.Follows.Where(f => f.FolloweeId == user.Id).ToListAsync()).Count;
+            int following = (await _context.Follows.Where(f => f.FollowerId == user.Id).ToListAsync()).Count;
+            var posts = await _context.Posts.Where(p => p.UserId == user.Id).ToListAsync();
+            int numOfLikes = 0;
+            foreach (Post post in posts)
+            {
+                numOfLikes += (await _context.Likes.Where(l => l.PostId == post.Id).ToListAsync()).Count;
+            }
             UserProfileDto upd = new UserProfileDto
             {
                 Username = user.Username,
                 Name = user.Name,
                 Description = user.Description,
-                Followers = 100,
-                Following = 50,
-                NumberOfLikes = 300,
-                NumberOfPosts = 6
+                Followers = followers,
+                Following = following,
+                NumberOfLikes = numOfLikes,
+                NumberOfPosts = posts.Count
                 //Posts = await _context.Posts.Where(p => p.UserId == user.Id).OrderByDescending(p => p.Date).ToListAsync()
             };
             string json = JsonSerializer.Serialize(upd);
@@ -129,6 +137,47 @@ namespace backend.Controllers
                 error = false,
                 message = path
             });
+
+        }
+        [HttpPost("follow/{username}")]
+        public async Task<ActionResult<string>> followUnfollow(string username)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
+            var userToFollow = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+            if (user == null || userToFollow == null)
+                return BadRequest(new
+                {
+                    error = true,
+                    message = "Error"
+                });
+            var follow = await _context.Follows.FirstOrDefaultAsync(f => f.FollowerId == user.Id && f.FolloweeId == userToFollow.Id);
+            if (follow == null)
+            {
+                Follow f = new Follow
+                {
+                    Follower = user,
+                    Followee = userToFollow,
+                    FollowerId = user.Id,
+                    FolloweeId = userToFollow.Id
+                };
+                _context.Follows.Add(f);
+                await _context.SaveChangesAsync();
+                return Ok(new
+                {
+                    error = false,
+                    message = "followed"
+                });
+            }
+            else
+            {
+                _context.Follows.Remove(follow);
+                await _context.SaveChangesAsync();
+                return Ok(new
+                {
+                    error = false,
+                    message = "unfollowed"
+                });
+            }
 
         }
 

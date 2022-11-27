@@ -51,6 +51,29 @@ namespace backend.Migrations
                     b.ToTable("Comments");
                 });
 
+            modelBuilder.Entity("backend.Models.Follow", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("FolloweeId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("FollowerId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FolloweeId");
+
+                    b.HasIndex("FollowerId");
+
+                    b.ToTable("Follows");
+                });
+
             modelBuilder.Entity("backend.Models.Like", b =>
                 {
                     b.Property<int>("Id")
@@ -173,6 +196,25 @@ namespace backend.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("backend.Models.Follow", b =>
+                {
+                    b.HasOne("backend.Models.User", "Follower")
+                        .WithMany("Followees")
+                        .HasForeignKey("FolloweeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("backend.Models.User", "Followee")
+                        .WithMany("Followers")
+                        .HasForeignKey("FollowerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Followee");
+
+                    b.Navigation("Follower");
+                });
+
             modelBuilder.Entity("backend.Models.Like", b =>
                 {
                     b.HasOne("backend.Models.Post", "Post")
@@ -213,6 +255,10 @@ namespace backend.Migrations
             modelBuilder.Entity("backend.Models.User", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("Followees");
+
+                    b.Navigation("Followers");
 
                     b.Navigation("Likes");
 
