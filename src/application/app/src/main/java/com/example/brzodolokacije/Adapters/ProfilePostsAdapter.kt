@@ -13,19 +13,21 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.example.brzodolokacije.Constants.Constants
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Posts.Photo
 import com.example.brzodolokacije.R
 import com.squareup.picasso.Picasso
 import java.util.concurrent.Executors
 
-class ProfilePostsAdapter(val postsList : List<String>, val context : Context) : RecyclerView.Adapter<ProfilePostsAdapter.MainViewHolder>()
+class ProfilePostsAdapter(val postsList : MutableList<String>, val context : Context) : RecyclerView.Adapter<ProfilePostsAdapter.MainViewHolder>()
 {
     inner class MainViewHolder(private val itemView: View) :RecyclerView.ViewHolder(itemView) {
 
-        fun bindData(url : String, index : Int)
+        fun bindData(id : String, index : Int)
         {
             val image = itemView.findViewById<ImageView>(R.id.profilePost)
+            val url = Constants.BASE_URL + "Post/postPhoto/" + id;
 
             Picasso.get().load(url).into(image);
         }

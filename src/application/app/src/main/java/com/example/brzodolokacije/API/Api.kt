@@ -10,6 +10,7 @@ import com.example.brzodolokacije.ModelsDto.ResetPasswordDto
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.*
+import java.io.File
 
 
 interface Api {
@@ -73,6 +74,6 @@ interface Api {
     @PUT("Post/uploadPhoto/{postId}")
     fun uploadPostPhoto(@Part picture: MultipartBody.Part,@Path("postId") postId : String): Call<DefaultResponse>
 
-    @GET("Post/getPostsFromUser/{username}")
+    @GET("Post/profilePosts/{username}")
     fun getUserPosts(@Path("username") username: String): Call<DefaultResponse>
 }

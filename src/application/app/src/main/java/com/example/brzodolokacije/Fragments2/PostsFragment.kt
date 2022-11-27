@@ -13,8 +13,11 @@ import com.example.brzodolokacije.Adapters.ProfilePostsAdapter
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
+import com.example.brzodolokacije.Posts.Photo
 import com.example.brzodolokacije.Posts.PrivremeneSlikeZaFeed
 import com.example.brzodolokacije.R
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -56,18 +59,11 @@ class PostsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val profilePostsRv = view.findViewById<RecyclerView>(R.id.profilePostsRv)
 
-        profilePostsRv.apply {
-            recyclerView=view.findViewById(R.id.profilePostsRv)
-            layoutManager = GridLayoutManager(context, 3)
-            myAdapter = this.context?.let { ProfilePostsAdapter(getUserPosts(), it) }
-            recyclerView.layoutManager=layoutManager
-            recyclerView.adapter=myAdapter
-        }
+        getUserPosts(view)
     }
 
-    fun getUserPosts(): List<String>
+    fun getUserPosts(view: View)
     {
         val sessionManager= this.context?.let { SessionManager(it) }
         val usernameSm = sessionManager?.fetchUsername()
@@ -79,11 +75,25 @@ class PostsFragment : Fragment() {
                     call: Call<DefaultResponse>,
                     response: Response<DefaultResponse>
                 ) {
-//                    Log.d("response", "")
                     if(response.body()?.error.toString() == "false"){
-//                        Log.d("error false", "")
                         val json = response.body()?.message.toString()
-                        Log.d("json", json)
+//                        Log.d("json", json)
+                        val typeToken = object : TypeToken<List<Int>>() {}.type
+                        val idList = Gson().fromJson<List<Int>>(json, typeToken)
+
+                        val ids: MutableList<String> = mutableListOf()
+                        for(id in idList){
+                            ids.add(id.toString())
+                        }
+
+                        val profilePostsRv = view.findViewById<RecyclerView>(R.id.profilePostsRv)
+                        profilePostsRv.apply {
+                            recyclerView=view.findViewById(R.id.profilePostsRv)
+                            layoutManager = GridLayoutManager(context, 3)
+                            myAdapter = this.context?.let { ProfilePostsAdapter(ids, it) }
+                            recyclerView.layoutManager=layoutManager
+                            recyclerView.adapter=myAdapter
+                        }
                     }
                 }
 
@@ -93,8 +103,6 @@ class PostsFragment : Fragment() {
 
             })
         }
-
-        return PrivremeneSlikeZaFeed.getPhotos();
     }
 
     companion object {
