@@ -27,8 +27,8 @@ namespace backend.Controllers
             _configuration = configuration;
         }
 
-        [HttpGet("getAll")]
-        public async Task<ActionResult<List<Post>>> getAll()
+        [HttpGet("getAll/{page}")]
+        public async Task<ActionResult<List<Post>>> getAll(int page)
         {
             var me = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
             if (me == null)
@@ -45,7 +45,20 @@ namespace backend.Controllers
                 posts.AddRange(await _context.Posts.Where(p=>p.UserId==follow.FolloweeId).ToListAsync());
             }
 
-            posts = posts.OrderByDescending(p => p.Date).ToList();
+            var pageResults = 3f;
+            var pageCount = Math.Ceiling(posts.Count / pageResults);
+
+            if (page > pageCount || page<1)
+                return BadRequest(new
+                {
+                    error = true,
+                    message = "Error"
+                });
+            
+            posts = posts
+                .Skip((page-1) * (int)pageResults)
+                .Take((int)pageResults)
+                .OrderByDescending(p => p.Date).ToList();
             List<PostDto> postsDto = new List<PostDto>();
             foreach (Post post in posts)
             {
