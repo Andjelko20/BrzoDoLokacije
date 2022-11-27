@@ -11,8 +11,11 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.text.Editable
 import android.util.Log
 import android.view.View
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -44,6 +47,23 @@ class ActivityAddPost : AppCompatActivity() {
         setContentView(R.layout.activity_addpost)
         val retrofit = Client(this).buildService(Api::class.java)
 
+        var nesto = intent.getStringExtra("sb").toString()
+//        Log.d("nesto",nesto)
+        if(nesto != "null") {
+            editLocationSection.setText(nesto)
+        }
+        else{
+            editLocationSection.setText("")
+        }
+
+
+
+
+        editLocationSection.setOnClickListener{
+            val intent = Intent(this@ActivityAddPost, ActivityMaps::class.java)
+            startActivity(intent)
+        }
+
         backButton.setOnClickListener{
             val intent = Intent(this, MainActivity::class.java)
             intent.putExtra("backPressed", "returnToProfile");
@@ -58,9 +78,11 @@ class ActivityAddPost : AppCompatActivity() {
                         RequestBody.create(MediaType.parse("image/*"), file)
                     )
                     Log.d("File",picture.toString())
-                var location = editLocationSection.text.toString().trim()
+//                var location = editLocationSection.text.toString().trim()
                 var caption = editCaptionSection.text.toString().trim()
+                var location = intent.getStringExtra("sb").toString()
                 var newPost = NewPostDto(location, caption)
+
                 retrofit.addNewPost(newPost).enqueue(object : Callback<DefaultResponse> {
                     override fun onResponse(
                         call: Call<DefaultResponse>,
