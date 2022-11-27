@@ -222,13 +222,13 @@ class ActivityEditProfile : AppCompatActivity() {
                     pickedBitMap = ImageDecoder.decodeBitmap(source)
                     editProfilePicture.setImageBitmap(pickedBitMap)
 
-                    file = bitmapToFile(pickedBitMap!!, "slika.png")
+                    file = bitmapToFile(pickedBitMap!!, "slika.jpeg")
                 }
                 else {
                     pickedBitMap = MediaStore.Images.Media.getBitmap(this.contentResolver,pickedPhoto)
                     editProfilePicture.setImageBitmap(pickedBitMap)
 
-                    file = bitmapToFile(pickedBitMap!!, "slika.png")
+                    file = bitmapToFile(pickedBitMap!!, "slika.jpeg")
                 }
             }
         }
@@ -244,7 +244,7 @@ class ActivityEditProfile : AppCompatActivity() {
 
             //Convert bitmap to byte array
             val bos = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 40, bos)
             val bitmapdata = bos.toByteArray()
 
             //write the bytes in file
