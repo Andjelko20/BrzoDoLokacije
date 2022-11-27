@@ -30,7 +30,6 @@ namespace backend.Controllers
         [HttpGet("getAll")]
         public async Task<ActionResult<List<Post>>> getAll()
         {
-            var posts = await _context.Posts.OrderByDescending(p => p.Date).ToListAsync();
             var me = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
             if (me == null)
                 return BadRequest(new
@@ -38,7 +37,15 @@ namespace backend.Controllers
                     error = true,
                     message = "Error"
                 });
-            
+
+            List<Follow> following = await _context.Follows.Where(f => f.FollowerId == me.Id).ToListAsync();
+            List<Post> posts = await _context.Posts.Where(p => p.UserId == me.Id).ToListAsync();
+            foreach (Follow follow in following)
+            {
+                posts.AddRange(await _context.Posts.Where(p=>p.UserId==follow.FolloweeId).ToListAsync());
+            }
+
+            posts = posts.OrderByDescending(p => p.Date).ToList();
             List<PostDto> postsDto = new List<PostDto>();
             foreach (Post post in posts)
             {
@@ -76,6 +83,7 @@ namespace backend.Controllers
             return File(b, "image/"+type);
         }
         
+        /*
         [HttpGet("getPostsFromUser/{username}")]
         public async Task<ActionResult<List<Post>>> getAll(string username)
         {
@@ -113,7 +121,7 @@ namespace backend.Controllers
                 message = json
             });
         }
-
+    */
         [HttpPost("addNew")]
         public async Task<ActionResult<string>> addNew(AddPostDto request)
         {
