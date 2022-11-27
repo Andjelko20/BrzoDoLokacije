@@ -2,17 +2,21 @@ package com.example.brzodolokacije.Fragments2
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Looper
 import android.util.Log
 import android.view.*
+import android.widget.AbsListView.OnScrollListener
 import androidx.fragment.app.Fragment
 import android.widget.Toast
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Activities.ActivityAddPost
 import com.example.brzodolokacije.Adapters.PostAdapter
 import com.example.brzodolokacije.Client.Client
+import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Posts.Photo
 import com.example.brzodolokacije.R
@@ -37,6 +41,7 @@ class HomeFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private var lastPosition : Int = 0
 
     private var myAdapter : RecyclerView.Adapter<PostAdapter.MainViewHolder>? = null
     private var mylayoutManager : RecyclerView.LayoutManager? = null
@@ -76,6 +81,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val sessionManager= SessionManager(requireActivity())
         view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.VISIBLE)
 
         addPostHome.setOnClickListener{
@@ -85,39 +91,23 @@ class HomeFragment : Fragment() {
             }
         }
 
-        val retrofit = Client(requireActivity()).buildService(Api::class.java)
-        retrofit.getAllPosts().enqueue(object: Callback<DefaultResponse>
+        val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayoutHome)
+        refresh.setOnRefreshListener {
+            android.os.Handler(Looper.getMainLooper()).postDelayed({
+                requestLoadFeed(sessionManager,view)
+                //Toast.makeText(requireActivity(),"Poslat zahtev",Toast.LENGTH_SHORT).show()
+                refresh.isRefreshing = false
+            }, 1500)
+        }
+
+        if(sessionManager.fetchFeed()==null)
         {
-            override fun onResponse(call: Call<DefaultResponse>, response: Response<DefaultResponse>) {
-                if(response.body()?.error.toString()=="false")
-                {
-                    val listOfPhotosStr: String = response.body()?.message.toString();
-
-                    val typeToken = object : TypeToken<List<Photo>>() {}.type
-                    val photosList = Gson().fromJson<List<Photo>>(listOfPhotosStr, typeToken)
-
-                    homePostsRv.apply {
-                        mylayoutManager = LinearLayoutManager(context) //activity
-                        recyclerView=view.findViewById(R.id.homePostsRv)
-                        recyclerView.layoutManager=mylayoutManager
-                        recyclerView.setHasFixedSize(true)
-                        val fragmentManager = getChildFragmentManager()
-                        myAdapter = this.context?.let { PostAdapter(photosList,it,requireActivity(),fragmentManager) }
-                        recyclerView.adapter=myAdapter
-                    }
-                    view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.GONE)
-                }
-                else
-                {
-                    Toast.makeText(requireActivity(),"Error loading images",Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                Toast.makeText(requireActivity(),"Error loading images",Toast.LENGTH_SHORT).show()
-            }
-
-        })
+            requestLoadFeed(sessionManager,view)
+        }
+        else
+        {
+            loadPhotos(sessionManager,view)
+        }
     }
 
     companion object {
@@ -139,4 +129,70 @@ class HomeFragment : Fragment() {
                 }
             }
     }
+
+    private fun requestLoadFeed(sessionManager : SessionManager, view : View)
+    {
+        val retrofit = Client(requireActivity()).buildService(Api::class.java)
+        retrofit.getAllPosts().enqueue(object: Callback<DefaultResponse>
+        {
+            override fun onResponse(call: Call<DefaultResponse>, response: Response<DefaultResponse>) {
+                if(response.body()?.error.toString()=="false")
+                {
+                    val listOfPhotosStr: String = response.body()?.message.toString()
+                    sessionManager.saveFeed(listOfPhotosStr)
+
+                    val typeToken = object : TypeToken<MutableList<Photo>>() {}.type
+                    val photosList = Gson().fromJson<MutableList<Photo>>(listOfPhotosStr, typeToken)
+
+                    homePostsRv.apply {
+                        mylayoutManager = LinearLayoutManager(context) //activity
+                        recyclerView=view.findViewById(R.id.homePostsRv)
+                        recyclerView.layoutManager=mylayoutManager
+                        recyclerView.setHasFixedSize(true)
+                        val fragmentManager = getChildFragmentManager()
+                        myAdapter = this.context?.let { PostAdapter(photosList,it,requireActivity(),fragmentManager) }
+                        recyclerView.adapter=myAdapter
+                    }
+                    view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.GONE)
+                    //Toast.makeText(requireActivity(),"Poslat zahtev",Toast.LENGTH_SHORT).show()
+                }
+                else
+                {
+                    Toast.makeText(requireActivity(),"Error loading images",Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                Toast.makeText(requireActivity(),"Error loading images",Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
+
+    private fun loadPhotos(sessionManager : SessionManager, view : View)
+    {
+        val listOfPhotosStr: String = sessionManager.fetchFeed().toString()
+
+        val typeToken = object : TypeToken<MutableList<Photo>>() {}.type
+        val photosList = Gson().fromJson<MutableList<Photo>>(listOfPhotosStr, typeToken)
+        homePostsRv.apply {
+            mylayoutManager = LinearLayoutManager(context) //activity
+            recyclerView=view.findViewById(R.id.homePostsRv)
+            recyclerView.layoutManager=mylayoutManager
+            recyclerView.setHasFixedSize(true)
+            val fragmentManager = getChildFragmentManager()
+            myAdapter = this.context?.let { PostAdapter(photosList,it,requireActivity(),fragmentManager) }
+            recyclerView.adapter=myAdapter
+        }
+        view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.GONE)
+        //Toast.makeText(requireActivity(),"Ucitano",Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        val sessionManager = SessionManager(requireActivity())
+        sessionManager.saveLast(lastPosition)
+        //Toast.makeText(requireActivity(),lastPosition.toString(),Toast.LENGTH_SHORT).show()
+    }
+
 }

@@ -43,10 +43,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class PostAdapter(val photoList: List<Photo>, val context: Context, val activity: Context, val fragmentManager: FragmentManager) :
+class PostAdapter(val photoList: MutableList<Photo>, val context: Context, val activity: Context, val fragmentManager: FragmentManager) :
     RecyclerView.Adapter<PostAdapter.MainViewHolder>() {
 
-    var dataList = photoList
+    var dataList : MutableList<Photo> = photoList
 
     inner class MainViewHolder(private val itemView: View) :RecyclerView.ViewHolder(itemView) {
 
@@ -178,7 +178,7 @@ class PostAdapter(val photoList: List<Photo>, val context: Context, val activity
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun refreshPosts(items : List<Photo>)
+    fun refreshPosts(items : MutableList<Photo>)
     {
         dataList=items
         notifyDataSetChanged()
@@ -355,6 +355,11 @@ class PostAdapter(val photoList: List<Photo>, val context: Context, val activity
             }
 
         })
+    }
+
+    fun getPhotos() : MutableList<Photo>
+    {
+        return dataList
     }
     private fun currentTimeToLong(): Long {
         return System.currentTimeMillis()

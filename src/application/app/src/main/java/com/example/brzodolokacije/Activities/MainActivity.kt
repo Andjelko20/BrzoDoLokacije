@@ -127,6 +127,8 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         if (backPressedTime + 3000 > System.currentTimeMillis()) {
             super.onBackPressed()
+            val sessionManager =SessionManager(this)
+            sessionManager.deleteFeed()
             finish()
         } /*else {
             Toast.makeText(this, "Press back again to leave the app.", Toast.LENGTH_SHORT).show()
@@ -171,6 +173,15 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        val sessionManager =SessionManager(this)
+        sessionManager.deleteFeed()
+    }
 
-
+//    override fun onStop() {
+//        super.onStop()
+//        val sessionManager =SessionManager(this)
+//        sessionManager.deleteFeed()
+//    }
 }
