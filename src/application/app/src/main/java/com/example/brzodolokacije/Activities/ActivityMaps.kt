@@ -1,6 +1,7 @@
 package com.example.brzodolokacije.Activities
 
 import android.Manifest
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
@@ -22,6 +23,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_maps.*
 import java.util.*
 
@@ -86,6 +88,12 @@ class ActivityMaps : AppCompatActivity(), OnMapReadyCallback {
                     builder.setNegativeButton("Cancel",null)
 
                     val alertDialog: AlertDialog = builder.create()
+                    alertDialog.setOnShowListener(DialogInterface.OnShowListener() {
+                        alertDialog.window?.setBackgroundDrawableResource(R.color.light_blue)
+                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.light_text))
+                        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.light_text))
+
+                    })
                     alertDialog.setCancelable(false)
                     alertDialog.show()
 //                    Intent(this@ActivityMaps,ActivityAddPost::class.java).also{
