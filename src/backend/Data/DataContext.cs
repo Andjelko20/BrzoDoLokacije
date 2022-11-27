@@ -24,12 +24,12 @@ public class DataContext : DbContext
         modelBuilder.Entity<Follow>()
             .HasOne(u => u.Followee)
             .WithMany(u => u.Followers)
-            .HasForeignKey(u => u.FollowerId)
+            .HasForeignKey(u => u.FolloweeId)
             .OnDelete(DeleteBehavior.Restrict);
         modelBuilder.Entity<Follow>()
             .HasOne(u => u.Follower)
             .WithMany(u => u.Followees)
-            .HasForeignKey(u => u.FolloweeId)
+            .HasForeignKey(u => u.FollowerId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

@@ -11,7 +11,7 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221127174122_followers")]
+    [Migration("20221127201242_followers")]
     partial class followers
     {
         /// <inheritdoc />
@@ -201,14 +201,14 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Models.Follow", b =>
                 {
-                    b.HasOne("backend.Models.User", "Follower")
-                        .WithMany("Followees")
+                    b.HasOne("backend.Models.User", "Followee")
+                        .WithMany("Followers")
                         .HasForeignKey("FolloweeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("backend.Models.User", "Followee")
-                        .WithMany("Followers")
+                    b.HasOne("backend.Models.User", "Follower")
+                        .WithMany("Followees")
                         .HasForeignKey("FollowerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
