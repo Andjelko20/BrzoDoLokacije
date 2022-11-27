@@ -75,6 +75,28 @@ namespace backend.Controllers
             string type =types[types.Length-1];
             return File(b, "image/"+type);
         }
+
+        [HttpGet("profilePosts/{username}")]
+        public async Task<ActionResult<string>> getProfilePosts(string username)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+            if (user == null)
+                return BadRequest(new
+                {
+                    error = true,
+                    message = "Error"
+                });
+            var ids = (await _context.Posts.Where(p => p.UserId == user.Id)
+                .OrderByDescending(p => p.Date)
+                .ToListAsync())
+                .Select(p=>p.Id).ToList();
+            string json = JsonSerializer.Serialize(ids);
+            return Ok(new
+            {
+                error = false,
+                message = json
+            });
+        }
         
         [HttpGet("getPostsFromUser/{username}")]
         public async Task<ActionResult<List<Post>>> getAll(string username)
