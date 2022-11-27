@@ -48,7 +48,7 @@ class ActivityAddPost : AppCompatActivity() {
         val retrofit = Client(this).buildService(Api::class.java)
 
         var nesto = intent.getStringExtra("sb").toString()
-        Log.d("nesto",nesto)
+//        Log.d("nesto",nesto)
         if(nesto != "null") {
             editLocationSection.setText(nesto)
         }
