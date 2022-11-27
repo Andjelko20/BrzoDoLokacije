@@ -1,15 +1,23 @@
 package com.example.brzodolokacije.Fragments2
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Adapters.ProfilePostsAdapter
+import com.example.brzodolokacije.Client.Client
+import com.example.brzodolokacije.Managers.SessionManager
+import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Posts.PrivremeneSlikeZaFeed
 import com.example.brzodolokacije.R
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -53,10 +61,40 @@ class PostsFragment : Fragment() {
         profilePostsRv.apply {
             recyclerView=view.findViewById(R.id.profilePostsRv)
             layoutManager = GridLayoutManager(context, 3)
-            myAdapter = this.context?.let { ProfilePostsAdapter(PrivremeneSlikeZaFeed.getPhotos(),it) }
+            myAdapter = this.context?.let { ProfilePostsAdapter(getUserPosts(), it) }
             recyclerView.layoutManager=layoutManager
             recyclerView.adapter=myAdapter
         }
+    }
+
+    fun getUserPosts(): List<String>
+    {
+        val sessionManager= this.context?.let { SessionManager(it) }
+        val usernameSm = sessionManager?.fetchUsername()
+
+        val retrofit = Client(requireActivity()).buildService(Api::class.java)
+        if (usernameSm != null){
+            retrofit.getUserPosts(usernameSm).enqueue(object: Callback<DefaultResponse>{
+                override fun onResponse(
+                    call: Call<DefaultResponse>,
+                    response: Response<DefaultResponse>
+                ) {
+//                    Log.d("response", "")
+                    if(response.body()?.error.toString() == "false"){
+//                        Log.d("error false", "")
+                        val json = response.body()?.message.toString()
+                        Log.d("json", json)
+                    }
+                }
+
+                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                    Log.d("failure", "")
+                }
+
+            })
+        }
+
+        return PrivremeneSlikeZaFeed.getPhotos();
     }
 
     companion object {
