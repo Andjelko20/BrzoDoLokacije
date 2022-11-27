@@ -33,8 +33,9 @@ namespace backend.Controllers
         [HttpGet("profileInfo/{username}")]
         public async Task<ActionResult<UserProfileDto>> getProfileInfo(string username)
         {
+            var me = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
-            if (user == null)
+            if (user == null || me==null)
                 return BadRequest(new
                 {
                     error = true,
@@ -48,6 +49,8 @@ namespace backend.Controllers
             {
                 numOfLikes += (await _context.Likes.Where(l => l.PostId == post.Id).ToListAsync()).Count;
             }
+
+            var followed = await _context.Follows.FirstOrDefaultAsync(f => f.FollowerId == me.Id && f.FolloweeId == user.Id);
             UserProfileDto upd = new UserProfileDto
             {
                 Username = user.Username,
@@ -56,7 +59,8 @@ namespace backend.Controllers
                 Followers = followers,
                 Following = following,
                 NumberOfLikes = numOfLikes,
-                NumberOfPosts = posts.Count
+                NumberOfPosts = posts.Count,
+                IsFollowed = followed==null ? false : true
                 //Posts = await _context.Posts.Where(p => p.UserId == user.Id).OrderByDescending(p => p.Date).ToListAsync()
             };
             string json = JsonSerializer.Serialize(upd);
