@@ -1,12 +1,14 @@
 package com.example.brzodolokacije.Activities
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.example.brzodolokacije.R
@@ -39,6 +41,7 @@ class ActivityMaps : AppCompatActivity(), OnMapReadyCallback {
             .commit()
 
         mapFragment.getMapAsync(this)
+        searchMap.visibility = View.INVISIBLE
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
     }
 
@@ -69,9 +72,16 @@ class ActivityMaps : AppCompatActivity(), OnMapReadyCallback {
                     var sb = StringBuilder()
                     sb.append(grad).append(", ").append(drzava)
                     Log.d("Lokacija",sb.toString())
+
+                    Intent(this@ActivityMaps,ActivityAddPost::class.java).also{
+                        it.putExtra("sb",sb.toString())
+                        startActivity(it)
+                    }
                     Toast.makeText(this@ActivityMaps,sb.toString(),Toast.LENGTH_SHORT).show()
                     mMap.addMarker(MarkerOptions().position(location))
-                }catch (e : Exception){}
+                }catch (e : Exception){
+
+                }
 
             }
 

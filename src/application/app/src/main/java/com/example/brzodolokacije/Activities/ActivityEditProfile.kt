@@ -58,8 +58,8 @@ class ActivityEditProfile : AppCompatActivity() {
 
         val buttonBack = findViewById<Button>(R.id.backButton)
         buttonBack.setOnClickListener{
-            val intent = Intent(this, ActivityMaps::class.java)
-//            intent.putExtra("backToProfile", "returnToProfile");
+            val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra("backToProfile", "returnToProfile");
             startActivity(intent)
         }
 
