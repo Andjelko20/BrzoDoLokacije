@@ -127,12 +127,12 @@ class ActivityAddPost : AppCompatActivity() {
                     val source = ImageDecoder.createSource(this.contentResolver,pickedPhoto!!)
                     pickedBitMap = ImageDecoder.decodeBitmap(source)
                     previewPic.setImageBitmap(pickedBitMap)
-                    file = bitmapToFile(pickedBitMap!!, "slika.png")
+                    file = bitmapToFile(pickedBitMap!!, "slika.jpeg")
                 }
                 else {
                     pickedBitMap = MediaStore.Images.Media.getBitmap(this.contentResolver,pickedPhoto)
                     previewPic.setImageBitmap(pickedBitMap)
-                    file = bitmapToFile(pickedBitMap!!, "slika.png")
+                    file = bitmapToFile(pickedBitMap!!, "slika.jpeg")
                 }
             }
         }
@@ -145,7 +145,7 @@ class ActivityAddPost : AppCompatActivity() {
             file.createNewFile()
 
             val bos = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, bos)
             val bitmapdata = bos.toByteArray()
 
             val fos = FileOutputStream(file)
