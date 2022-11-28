@@ -70,3 +70,8 @@ google-services.json
 # File System
 avatars/
 posts/
+
+# Builds
+backedn/bin/
+backend/obj/
+*.cache
