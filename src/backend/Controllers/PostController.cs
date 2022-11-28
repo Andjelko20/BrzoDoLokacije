@@ -84,6 +84,59 @@ namespace backend.Controllers
                 message = json
             });
         }
+        
+        [HttpGet("getByLocation/{location}")]
+        public async Task<ActionResult<List<Post>>> getAll(string location)
+        {
+            var me = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
+            if (me == null)
+                return BadRequest(new
+                {
+                    error = true,
+                    message = "Error"
+                });
+            
+            List<Post> posts = await _context.Posts.Where(p => p.Location == location).OrderByDescending(p=>p.Date).ToListAsync();
+            /*
+            var pageResults = 3f;
+            var pageCount = Math.Ceiling(posts.Count / pageResults);
+
+            if (page > pageCount || page<1)
+                return BadRequest(new
+                {
+                    error = true,
+                    message = "Error"
+                });
+            posts = posts
+                .Skip((page-1) * (int)pageResults)
+                .Take((int)pageResults)
+                .OrderByDescending(p => p.Date).ToList();
+            */
+            List<PostDto> postsDto = new List<PostDto>();
+            foreach (Post post in posts)
+            {
+                List<Like> likes = await _context.Likes.Where(l => l.PostId == post.Id).ToListAsync();
+                List<Comment> comments = await _context.Comments.Where(c => c.PostId == post.Id).ToListAsync();
+                postsDto.Add(new PostDto
+                {
+                    Id = post.Id,
+                    Owner = (await _context.Users.FindAsync(post.UserId)).Username,
+                    Date = post.Date,
+                    Location = post.Location,
+                    Caption = post.Caption,
+                    NumberOfLikes = likes.Count,
+                    NumberOfComments = comments.Count,
+                    LikedByMe = likes.Exists(l => l.UserId == me.Id)
+                });
+            }
+
+            string json = JsonSerializer.Serialize(postsDto);
+            return Ok(new
+            {
+                error = false,
+                message = json
+            });
+        }
 
         [AllowAnonymous]
         [HttpGet("postPhoto/{postId}")]
