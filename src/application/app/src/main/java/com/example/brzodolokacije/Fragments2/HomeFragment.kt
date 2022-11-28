@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.widget.LinearLayout
 import android.widget.Toast
 import android.widget.ProgressBar
+import androidx.core.view.isNotEmpty
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.brzodolokacije.API.Api
@@ -19,6 +20,7 @@ import com.example.brzodolokacije.Posts.Photo
 import com.example.brzodolokacije.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.android.synthetic.main.activity_addpost.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_profile.*
@@ -89,37 +91,98 @@ class HomeFragment : Fragment() {
         }
 
         val retrofit = Client(requireActivity()).buildService(Api::class.java)
-        retrofit.getAllPosts().enqueue(object: Callback<DefaultResponse>
+        Log.d("search",searchFilter.text.toString())
+        searchBtn.setOnClickListener{
+            Intent(requireActivity(),HomeFragment::class.java).also{
+                it.putExtra("location",searchFilter.text.toString().trim())
+                startActivity(it)
+            }
+        }
+        var nesto = activity?.intent!!.getStringExtra("location").toString()
+        if(nesto != "null") {
+            searchFilter.setText(nesto)
+        }
+        else{
+            searchFilter.setText("")
+        }
+        if(searchFilter.text.toString() != "")
         {
-            override fun onResponse(call: Call<DefaultResponse>, response: Response<DefaultResponse>) {
-                if(response.body()?.error.toString()=="false")
-                {
-                    val listOfPhotosStr: String = response.body()?.message.toString();
+            var location = activity?.intent!!.getStringExtra("location").toString()
+            retrofit.getByLocation(location).enqueue(object : Callback<DefaultResponse>{
+                override fun onResponse(
+                    call: Call<DefaultResponse>,
+                    response: Response<DefaultResponse>
+                ) {
+                    if (response.body()?.error.toString() == "false") {
+                        val listOfPhotosStr: String = response.body()?.message.toString();
 
-                    val typeToken = object : TypeToken<List<Photo>>() {}.type
-                    val photosList = Gson().fromJson<List<Photo>>(listOfPhotosStr, typeToken)
+                        val typeToken = object : TypeToken<List<Photo>>() {}.type
+                        val photosList = Gson().fromJson<List<Photo>>(listOfPhotosStr, typeToken)
 
-                    homePostsRv.apply {
-                        mylayoutManager = LinearLayoutManager(context) //activity
-                        recyclerView=view.findViewById(R.id.homePostsRv)
-                        recyclerView.layoutManager=mylayoutManager
-                        recyclerView.setHasFixedSize(true)
-                        myAdapter = this.context?.let { PostAdapter(photosList,it,requireActivity()) }
-                        recyclerView.adapter=myAdapter
+                        homePostsRv.apply {
+                            mylayoutManager = LinearLayoutManager(context) //activity
+                            recyclerView = view.findViewById(R.id.homePostsRv)
+                            recyclerView.layoutManager = mylayoutManager
+                            recyclerView.setHasFixedSize(true)
+                            myAdapter =
+                                this.context?.let { PostAdapter(photosList, it, requireActivity()) }
+                            recyclerView.adapter = myAdapter
+                        }
+                        view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.GONE)
+                    } else {
+                        Toast.makeText(
+                            requireActivity(),
+                            "Error loading images",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
-                    view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.GONE)
                 }
-                else
-                {
-                    Toast.makeText(requireActivity(),"Error loading images",Toast.LENGTH_SHORT).show()
+
+                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                    Toast.makeText(requireActivity(), "There is no location with that name", Toast.LENGTH_SHORT)
+                        .show()
                 }
-            }
 
-            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                Toast.makeText(requireActivity(),"Error loading images",Toast.LENGTH_SHORT).show()
-            }
+            })
+        }
+        else {
+            retrofit.getAllPosts().enqueue(object : Callback<DefaultResponse> {
+                override fun onResponse(
+                    call: Call<DefaultResponse>,
+                    response: Response<DefaultResponse>
+                ) {
+                    if (response.body()?.error.toString() == "false") {
+                        val listOfPhotosStr: String = response.body()?.message.toString();
 
-        })
+                        val typeToken = object : TypeToken<List<Photo>>() {}.type
+                        val photosList = Gson().fromJson<List<Photo>>(listOfPhotosStr, typeToken)
+
+                        homePostsRv.apply {
+                            mylayoutManager = LinearLayoutManager(context) //activity
+                            recyclerView = view.findViewById(R.id.homePostsRv)
+                            recyclerView.layoutManager = mylayoutManager
+                            recyclerView.setHasFixedSize(true)
+                            myAdapter =
+                                this.context?.let { PostAdapter(photosList, it, requireActivity()) }
+                            recyclerView.adapter = myAdapter
+                        }
+                        view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.GONE)
+                    } else {
+                        Toast.makeText(
+                            requireActivity(),
+                            "Error loading images",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                    Toast.makeText(requireActivity(), "Error loading images", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+            })
+        }
     }
 
     companion object {
