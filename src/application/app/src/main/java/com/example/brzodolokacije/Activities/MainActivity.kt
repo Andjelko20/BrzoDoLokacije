@@ -140,7 +140,7 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         if (backPressedTime + 3000 > System.currentTimeMillis()) {
             super.onBackPressed()
-            val sessionManager =SessionManager(this)
+            VisitUserProfile.profileVisit(0)
             finish()
         } /*else {
             Toast.makeText(this, "Press back again to leave the app.", Toast.LENGTH_SHORT).show()

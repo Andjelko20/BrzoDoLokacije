@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.os.Looper
 import android.util.Log
 import android.view.*
-import android.widget.AbsListView.OnScrollListener
 import androidx.fragment.app.Fragment
 import android.widget.Toast
 import android.widget.ProgressBar
@@ -19,6 +18,7 @@ import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Posts.Photo
+import com.example.brzodolokacije.Posts.VisitUserProfile
 import com.example.brzodolokacije.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -112,7 +112,30 @@ class HomeFragment : Fragment() {
 
         if(savedState==null)
         {
-            requestLoadFeed(view)
+
+            if(VisitUserProfile.isVisited()==1)
+            {
+                savedState=VisitUserProfile.retreiveFeed()
+                VisitUserProfile.profileVisit(0)
+                val typeToken = object : TypeToken<MutableList<Photo>>() {}.type
+                val photosList = Gson().fromJson<MutableList<Photo>>(savedState, typeToken)
+
+                homePostsRv.apply {
+                    mylayoutManager = LinearLayoutManager(context) //activity
+                    recyclerView=view.findViewById(R.id.homePostsRv)
+                    recyclerView.layoutManager=mylayoutManager
+                    recyclerView.setHasFixedSize(true)
+                    val fragmentManager = getChildFragmentManager()
+                    myAdapter = this.context?.let { PostAdapter(photosList,it,requireActivity(),fragmentManager) }
+                    recyclerView.adapter=myAdapter
+                }
+                view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.GONE)
+                val last = sessionManager.fetchLast()
+                val lastOffset= sessionManager.fetchLastOffset()
+                ScrollToPosition(last,lastOffset)
+            }
+
+            else requestLoadFeed(view)
             //Toast.makeText(requireActivity(),"sa beka",Toast.LENGTH_SHORT).show()
         }
         else
@@ -170,7 +193,7 @@ class HomeFragment : Fragment() {
                 {
                     val listOfPhotosStr: String = response.body()?.message.toString()
                     savedState = listOfPhotosStr
-                    Log.d("saved", savedState.toString())
+                    VisitUserProfile.saveFeed(savedState.toString())
 
                     val typeToken = object : TypeToken<MutableList<Photo>>() {}.type
                     val photosList = Gson().fromJson<MutableList<Photo>>(listOfPhotosStr, typeToken)

@@ -77,6 +77,7 @@ class PostAdapter(val photoList: MutableList<Photo>, val context: Context, val a
                 VisitUserProfile.setVisit(photo.owner)
                 val intent = Intent(activity,ProfileVisitActivity::class.java)
                 Handler(Looper.getMainLooper()).postDelayed({
+                    VisitUserProfile.profileVisit(1)
                     activity.startActivity(intent)
                 }, 30)
             }
