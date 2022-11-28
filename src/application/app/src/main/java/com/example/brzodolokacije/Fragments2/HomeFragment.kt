@@ -41,6 +41,10 @@ class HomeFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    private var savedState : String? = null
+    private val key : String = "saved_state"
+
     private var lastPosition : Int = 0
     private var topViewRv = 0
 
@@ -75,7 +79,13 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        val view = inflater.inflate(R.layout.fragment_home, container, false)
+        if(savedInstanceState!=null)
+        {
+            savedState = savedInstanceState.getString(key)
+            //Log.d("saved",savedState.toString())
+        }
+        return view
     }
 
 
@@ -95,18 +105,20 @@ class HomeFragment : Fragment() {
         val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayoutHome)
         refresh.setOnRefreshListener {
             android.os.Handler(Looper.getMainLooper()).postDelayed({
-                requestLoadFeed(sessionManager,view)
+                requestLoadFeed(view)
                 refresh.isRefreshing = false
             }, 1500)
         }
 
-        if(sessionManager.fetchFeed()==null)
+        if(savedState==null)
         {
-            requestLoadFeed(sessionManager,view)
+            requestLoadFeed(view)
+            //Toast.makeText(requireActivity(),"sa beka",Toast.LENGTH_SHORT).show()
         }
         else
         {
             loadPhotos(sessionManager,view)
+            //Toast.makeText(requireActivity(),"sacuvano",Toast.LENGTH_SHORT).show()
         }
 
         homePostsRv.addOnScrollListener(object : RecyclerView.OnScrollListener()
@@ -121,6 +133,11 @@ class HomeFragment : Fragment() {
                 savePosition()
             }
         })
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putString(key,savedState)
+        super.onSaveInstanceState(outState)
     }
 
     companion object {
@@ -143,7 +160,7 @@ class HomeFragment : Fragment() {
             }
     }
 
-    private fun requestLoadFeed(sessionManager : SessionManager, view : View)
+    private fun requestLoadFeed(view : View)
     {
         val retrofit = Client(requireActivity()).buildService(Api::class.java)
         retrofit.getAllPosts().enqueue(object: Callback<DefaultResponse>
@@ -152,7 +169,8 @@ class HomeFragment : Fragment() {
                 if(response.body()?.error.toString()=="false")
                 {
                     val listOfPhotosStr: String = response.body()?.message.toString()
-                    sessionManager.saveFeed(listOfPhotosStr)
+                    savedState = listOfPhotosStr
+                    Log.d("saved", savedState.toString())
 
                     val typeToken = object : TypeToken<MutableList<Photo>>() {}.type
                     val photosList = Gson().fromJson<MutableList<Photo>>(listOfPhotosStr, typeToken)
@@ -183,7 +201,7 @@ class HomeFragment : Fragment() {
 
     private fun loadPhotos(sessionManager : SessionManager, view : View)
     {
-        val listOfPhotosStr: String = sessionManager.fetchFeed().toString()
+        val listOfPhotosStr: String = savedState.toString()
 
         val typeToken = object : TypeToken<MutableList<Photo>>() {}.type
         val photosList = Gson().fromJson<MutableList<Photo>>(listOfPhotosStr, typeToken)

@@ -56,25 +56,6 @@ class SessionManager (context: Context) {
         return prefs.getString(USERNAME, null)
     }
 
-    fun saveFeed(posts : String)
-    {
-        val editor = prefs.edit()
-        editor.putString(HOME_FEED, posts)
-        editor.apply()
-    }
-
-    fun fetchFeed() : String?
-    {
-        return prefs.getString(HOME_FEED, null)
-    }
-
-    fun deleteFeed()
-    {
-        val editor = prefs.edit()
-        editor.putString(HOME_FEED, null)
-        editor.apply()
-    }
-
     fun saveLast(position : Int)
     {
         val editor = prefs.edit()
