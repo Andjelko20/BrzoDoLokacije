@@ -3,14 +3,20 @@ package com.example.brzodolokacije.Activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
+import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.Validation
+import com.example.brzodolokacije.ModelsDto.ChangePasswordDto
 import com.example.brzodolokacije.R
 import kotlinx.android.synthetic.main.activity_register.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class ChangePasswordActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,7 +85,40 @@ class ChangePasswordActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            Toast.makeText(this@ChangePasswordActivity, "Uspesno", Toast.LENGTH_SHORT).show()
+            val passwords = ChangePasswordDto(currentPassword, newPassword)
+            retrofit.changePassword(passwords).enqueue(object : Callback<DefaultResponse> {
+                override fun onResponse(
+                    call: Call<DefaultResponse>,
+                    response: Response<DefaultResponse>
+                ) {
+                    if(response.body()?.error.toString() == "false"){
+//                        Log.d("error false", "")
+                        Toast.makeText(this@ChangePasswordActivity, "Password successfully updated", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this@ChangePasswordActivity, MainActivity::class.java)
+                        intent.putExtra("backToProfile", "returnToProfile");
+                        startActivity(intent)
+                    }
+                    else if(response.body()?.error.toString() == "true"){
+                        Log.d("error true", response.body()?.message.toString())
+                        val message = response.body()?.message.toString()
+                        if(message != "Error"){
+                            Toast.makeText(this@ChangePasswordActivity, message, Toast.LENGTH_SHORT).show()
+                        }
+                        else{
+                            Toast.makeText(this@ChangePasswordActivity, "An error occurred", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    else{
+                        Log.d("error", response.body()?.error.toString())
+                        Log.d("message", response.body()?.message.toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                    Log.d("failure", "")
+                }
+
+            })
         }
     }
 }

@@ -2,11 +2,7 @@ package com.example.brzodolokacije.API
 
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.NewCommentDto
-import com.example.brzodolokacije.ModelsDto.EditProfileDto
-import com.example.brzodolokacije.ModelsDto.LoginDto
-import com.example.brzodolokacije.ModelsDto.NewPostDto
-import com.example.brzodolokacije.ModelsDto.RegisterDto
-import com.example.brzodolokacije.ModelsDto.ResetPasswordDto
+import com.example.brzodolokacije.ModelsDto.*
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -72,4 +68,7 @@ interface Api {
     @Multipart
     @PUT("Post/uploadPhoto/{postId}")
     fun uploadPostPhoto(@Part picture: MultipartBody.Part,@Path("postId") postId : String): Call<DefaultResponse>
+
+    @PUT("Auth/change-password")
+    fun changePassword(@Body changePasswordDto: ChangePasswordDto): Call<DefaultResponse>
 }
