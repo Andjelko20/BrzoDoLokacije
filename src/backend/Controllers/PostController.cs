@@ -27,10 +27,9 @@ namespace backend.Controllers
             _configuration = configuration;
         }
 
-        [HttpGet("getAll")]
-        public async Task<ActionResult<List<Post>>> getAll()
+                [HttpGet("getAll/{page}")]
+        public async Task<ActionResult<List<Post>>> getAll(int page)
         {
-            var posts = await _context.Posts.OrderByDescending(p => p.Date).ToListAsync();
             var me = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
             if (me == null)
                 return BadRequest(new
@@ -38,7 +37,28 @@ namespace backend.Controllers
                     error = true,
                     message = "Error"
                 });
+
+            List<Follow> following = await _context.Follows.Where(f => f.FollowerId == me.Id).ToListAsync();
+            List<Post> posts = await _context.Posts.Where(p => p.UserId == me.Id).ToListAsync();
+            foreach (Follow follow in following)
+            {
+                posts.AddRange(await _context.Posts.Where(p=>p.UserId==follow.FolloweeId).ToListAsync());
+            }
+
+            var pageResults = 3f;
+            var pageCount = Math.Ceiling(posts.Count / pageResults);
+
+            if (page > pageCount || page<1)
+                return BadRequest(new
+                {
+                    error = true,
+                    message = "Error"
+                });
             
+            posts = posts
+                .Skip((page-1) * (int)pageResults)
+                .Take((int)pageResults)
+                .OrderByDescending(p => p.Date).ToList();
             List<PostDto> postsDto = new List<PostDto>();
             foreach (Post post in posts)
             {
@@ -64,7 +84,7 @@ namespace backend.Controllers
                 message = json
             });
         }
-        
+
         [AllowAnonymous]
         [HttpGet("postPhoto/{postId}")]
         public async Task<IActionResult> GetAvatar(int postId)
