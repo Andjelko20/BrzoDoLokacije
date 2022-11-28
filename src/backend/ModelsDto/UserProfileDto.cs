@@ -11,4 +11,5 @@ public class UserProfileDto
     public int Following { get; set; }
     public int NumberOfLikes { get; set; }
     public int NumberOfPosts { get; set; }
+    public bool IsFollowed { get; set; }
 }
