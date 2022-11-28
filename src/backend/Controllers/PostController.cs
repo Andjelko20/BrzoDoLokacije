@@ -27,7 +27,7 @@ namespace backend.Controllers
             _configuration = configuration;
         }
 
-                [HttpGet("getAll/{page}")]
+        [HttpGet("getAll/{page}")]
         public async Task<ActionResult<List<Post>>> getAll(int page)
         {
             var me = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
