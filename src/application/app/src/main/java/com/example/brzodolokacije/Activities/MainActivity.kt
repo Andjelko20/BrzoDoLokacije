@@ -1,9 +1,11 @@
 package com.example.brzodolokacije.Activities
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.ContextMenu
+import android.view.ContextThemeWrapper
 import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
@@ -40,8 +42,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         PrivremeneSlikeZaFeed.addPhotos()
 
+        val wrapper: Context = ContextThemeWrapper(this, R.style.MyPopupMenu)
+
         options_meni.setOnClickListener{
-            val popupMenu = PopupMenu(this,it)
+            val popupMenu = PopupMenu(wrapper, it)
             popupMenu.setOnMenuItemClickListener { item ->
                 when(item.itemId){
                     R.id.editProfileMeni ->{
