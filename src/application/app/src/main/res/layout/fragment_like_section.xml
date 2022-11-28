@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".Fragments2.LikeSectionFragment"
     android:background="@color/postHeader">
 
@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:behavior_peekHeight="800dp"
-        android:background="@color/postHeader"
+        android:background="@drawable/commentsectiondesigne"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -22,19 +22,30 @@
             android:background="@color/light_blue"
             android:gravity="center"
             android:orientation="horizontal"
-            android:padding="16dp">
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="16dp"
+            android:paddingTop="3dp">
+
+            <ImageView
+                android:id="@+id/dragLikeSection"
+                android:gravity="center|center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_drag_sheet"/>
 
             <TextView
+                android:layout_below="@+id/dragLikeSection"
                 android:id="@+id/likeSectionHeaderText"
+                android:gravity="center_horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:drawablePadding="8dp"
-                android:gravity="center_vertical"
-                android:text="All Likes"
+                android:text="Peope that like this"
                 android:textColor="@color/backgroundLightTheme"
-                android:textSize="19sp"
-                android:textStyle="bold" />
+                android:textSize="18sp"
+                android:textStyle="bold"/>
         </RelativeLayout>
 
         <View

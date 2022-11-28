@@ -2,7 +2,10 @@ package com.example.brzodolokacije.Managers
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.example.brzodolokacije.Posts.Photo
 import com.example.brzodolokacije.R
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class SessionManager (context: Context) {
     private var prefs: SharedPreferences = context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE)
@@ -10,6 +13,9 @@ class SessionManager (context: Context) {
     companion object {
         const val USER_TOKEN = "user_token"
         const val USERNAME = "username"
+        const val HOME_FEED = "home_feed"
+        const val LAST_POSITION = "last_position"
+        const val LAST_POSITION_OFFSET = "last_post_offset"
     }
 
     /**
@@ -48,5 +54,29 @@ class SessionManager (context: Context) {
     }
     fun fetchUsername(): String? {
         return prefs.getString(USERNAME, null)
+    }
+
+    fun saveLast(position : Int)
+    {
+        val editor = prefs.edit()
+        editor.putInt(LAST_POSITION, position)
+        editor.apply()
+    }
+
+    fun fetchLast() : Int
+    {
+        return prefs.getInt(LAST_POSITION, 0)
+    }
+
+    fun saveLastOffset(offset : Int)
+    {
+        val editor = prefs.edit()
+        editor.putInt(LAST_POSITION_OFFSET, offset)
+        editor.apply()
+    }
+
+    fun fetchLastOffset() : Int
+    {
+        return prefs.getInt(LAST_POSITION_OFFSET, 0)
     }
 }

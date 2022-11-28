@@ -2,26 +2,31 @@ package com.example.brzodolokacije.Adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Build
+import android.content.Intent
+import android.os.Handler
 import android.os.Looper
-import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat.startActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.brzodolokacije.API.Api
+import com.example.brzodolokacije.Activities.ProfileVisitActivity
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Constants.Constants
+import com.example.brzodolokacije.Fragments2.LocationsFragment
+import com.example.brzodolokacije.Fragments2.PostsFragment
+import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.NewCommentDto
-import com.example.brzodolokacije.Posts.Comment
-import com.example.brzodolokacije.Posts.Like
-import com.example.brzodolokacije.Posts.Photo
-import com.example.brzodolokacije.Posts.Stats
+import com.example.brzodolokacije.Models.UserProfile
+import com.example.brzodolokacije.Posts.*
 import com.example.brzodolokacije.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -29,6 +34,8 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
+import io.ak1.BubbleTabBar
+import io.ak1.OnBubbleClickListener
 import kotlinx.android.synthetic.main.fragment_home.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -37,10 +44,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class PostAdapter(val photoList : List<Photo>, val context : Context, val activity : Context) :
+class PostAdapter(val photoList: MutableList<Photo>, val context: Context, val activity: Context, val fragmentManager: FragmentManager) :
     RecyclerView.Adapter<PostAdapter.MainViewHolder>() {
 
-    var dataList = photoList
+    var dataList : MutableList<Photo> = photoList
 
     inner class MainViewHolder(private val itemView: View) :RecyclerView.ViewHolder(itemView) {
 
@@ -60,14 +67,20 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
             //owner
             owner.text = photo.owner
 
-            //for visiting post owner's profile
-            ownerProfile.setOnClickListener{
-                Toast.makeText(context,"Owner: ${photo.owner}",Toast.LENGTH_SHORT).show()
-            }
-
             //profile image
             val path : String=Constants.BASE_URL + "User/avatar/" + photo.owner
             Picasso.get().load(path).into(profilePic);
+
+            //for visiting post owner's profile
+            ownerProfile.setOnClickListener{
+
+                VisitUserProfile.setVisit(photo.owner)
+                val intent = Intent(activity,ProfileVisitActivity::class.java)
+                Handler(Looper.getMainLooper()).postDelayed({
+                    VisitUserProfile.profileVisit(1)
+                    activity.startActivity(intent)
+                }, 30)
+            }
 
             //date
             date.text = convertLongToTime(photo.date)
@@ -169,7 +182,7 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun refreshPosts(items : List<Photo>)
+    fun refreshPosts(items : MutableList<Photo>)
     {
         dataList=items
         notifyDataSetChanged()
@@ -348,6 +361,10 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
         })
     }
 
+    fun getPhotos() : MutableList<Photo>
+    {
+        return dataList
+    }
     private fun currentTimeToLong(): Long {
         return System.currentTimeMillis()
     }
