@@ -53,6 +53,11 @@ class MainActivity : AppCompatActivity() {
                         logOut()
                         true
                     }
+                    R.id.changePasswordMeni ->{
+                        val intent = Intent(this, ChangePasswordActivity::class.java)
+                        startActivity(intent)
+                        true
+                    }
                     else -> false
                 }
 

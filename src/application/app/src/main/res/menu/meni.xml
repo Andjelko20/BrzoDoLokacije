@@ -5,6 +5,10 @@
         android:title="Edit profile"
         />
     <item
+        android:id="@+id/changePasswordMeni"
+        android:title="Change password"
+        />
+    <item
         android:id="@+id/logoutMeni"
         android:title="Logout"
         />

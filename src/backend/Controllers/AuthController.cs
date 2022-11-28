@@ -205,6 +205,33 @@ namespace backend.Controllers
         }
 
         [Authorize(Roles = "korisnik")]
+        [HttpPut("change-password")]
+        public async Task<ActionResult<string>> changePassword(ChangePasswordDto request)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
+            if (user == null)
+                return BadRequest(new
+                {
+                    error = true,
+                    message = "Error"
+                });
+            if (BCrypt.Net.BCrypt.Verify(request.CurrentPassword, user.Password) == false)
+                return Ok(new
+                {
+                    error = true,
+                    message = "Current password is not correct"
+                });
+            user.Password = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+            await _context.SaveChangesAsync();
+            return Ok(new
+            {
+                error = false,
+                message = "Success"
+            });
+        }
+
+
+        [Authorize(Roles = "korisnik")]
         [HttpGet("check-session")]
         public ActionResult<string> checkSession()
         {
