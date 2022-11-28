@@ -37,7 +37,7 @@ interface Api {
     @GET("User/profileInfo/{username}")
     fun fetchUserProfileInfo(@Path("username") username:String) : Call<DefaultResponse>
 
-    @GET("Post/getAll")
+    @GET("Post/getAll/1")
     fun getAllPosts() : Call<DefaultResponse>
 
     @GET("Post/comments/{postId}")
