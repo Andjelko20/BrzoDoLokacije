@@ -3,6 +3,7 @@ package com.example.brzodolokacije.Adapters
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
@@ -75,7 +76,9 @@ class PostAdapter(val photoList: MutableList<Photo>, val context: Context, val a
 
                 VisitUserProfile.setVisit(photo.owner)
                 val intent = Intent(activity,ProfileVisitActivity::class.java)
-                activity.startActivity(intent)
+                Handler(Looper.getMainLooper()).postDelayed({
+                    activity.startActivity(intent)
+                }, 30)
             }
 
             //date

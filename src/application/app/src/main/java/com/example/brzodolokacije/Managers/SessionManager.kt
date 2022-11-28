@@ -15,6 +15,7 @@ class SessionManager (context: Context) {
         const val USERNAME = "username"
         const val HOME_FEED = "home_feed"
         const val LAST_POSITION = "last_position"
+        const val LAST_POSITION_OFFSET = "last_post_offset"
     }
 
     /**
@@ -84,5 +85,17 @@ class SessionManager (context: Context) {
     fun fetchLast() : Int
     {
         return prefs.getInt(LAST_POSITION, 0)
+    }
+
+    fun saveLastOffset(offset : Int)
+    {
+        val editor = prefs.edit()
+        editor.putInt(LAST_POSITION_OFFSET, offset)
+        editor.apply()
+    }
+
+    fun fetchLastOffset() : Int
+    {
+        return prefs.getInt(LAST_POSITION_OFFSET, 0)
     }
 }

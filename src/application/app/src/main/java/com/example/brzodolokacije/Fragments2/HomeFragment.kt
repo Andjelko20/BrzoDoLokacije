@@ -42,6 +42,7 @@ class HomeFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private var lastPosition : Int = 0
+    private var topViewRv = 0
 
     private var myAdapter : RecyclerView.Adapter<PostAdapter.MainViewHolder>? = null
     private var mylayoutManager : RecyclerView.LayoutManager? = null
@@ -95,7 +96,6 @@ class HomeFragment : Fragment() {
         refresh.setOnRefreshListener {
             android.os.Handler(Looper.getMainLooper()).postDelayed({
                 requestLoadFeed(sessionManager,view)
-                //Toast.makeText(requireActivity(),"Poslat zahtev",Toast.LENGTH_SHORT).show()
                 refresh.isRefreshing = false
             }, 1500)
         }
@@ -108,6 +108,19 @@ class HomeFragment : Fragment() {
         {
             loadPhotos(sessionManager,view)
         }
+
+        homePostsRv.addOnScrollListener(object : RecyclerView.OnScrollListener()
+        {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                lastPosition = (homePostsRv.layoutManager as? LinearLayoutManager)?.findFirstVisibleItemPosition()!!
+                //Toast.makeText(requireActivity(),lastPosition.toString(),Toast.LENGTH_SHORT).show()
+                val v = (homePostsRv.layoutManager as? LinearLayoutManager)?.getChildAt(0)
+                topViewRv = if(v == null) 0 else v.top - (homePostsRv.layoutManager as? LinearLayoutManager)?.paddingTop!!
+
+                savePosition()
+            }
+        })
     }
 
     companion object {
@@ -154,7 +167,6 @@ class HomeFragment : Fragment() {
                         recyclerView.adapter=myAdapter
                     }
                     view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.GONE)
-                    //Toast.makeText(requireActivity(),"Poslat zahtev",Toast.LENGTH_SHORT).show()
                 }
                 else
                 {
@@ -185,14 +197,34 @@ class HomeFragment : Fragment() {
             recyclerView.adapter=myAdapter
         }
         view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.GONE)
-        //Toast.makeText(requireActivity(),"Ucitano",Toast.LENGTH_SHORT).show()
+
+        val last = sessionManager.fetchLast()
+        val lastOffset= sessionManager.fetchLastOffset()
+        ScrollToPosition(last,lastOffset)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    private fun savePosition()
+    {
         val sessionManager = SessionManager(requireActivity())
         sessionManager.saveLast(lastPosition)
-        //Toast.makeText(requireActivity(),lastPosition.toString(),Toast.LENGTH_SHORT).show()
+        sessionManager.saveLastOffset(topViewRv)
     }
 
+//    override fun onDestroy() {
+//        super.onDestroy()
+//        savePosition()
+//        Log.d("destroy","")
+//    }
+
+    override fun onStop() {
+        super.onStop()
+        savePosition()
+        Log.d("stop","")
+    }
+
+    private fun ScrollToPosition(position : Int, offset : Int)
+    {
+        homePostsRv.stopScroll()
+        (homePostsRv.layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(position,offset)
+    }
 }
