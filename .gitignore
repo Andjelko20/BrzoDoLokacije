@@ -68,10 +68,10 @@ google-services.json
 *.hprof
 
 # File System
-avatars/
-posts/
+src/miscellaneous/
 
 # Builds
-backedn/bin/
+backend/bin/
 backend/obj/
 *.cache
+src/backend/bin/
