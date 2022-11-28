@@ -72,6 +72,6 @@ src/miscellaneous/
 
 # Builds
 backend/bin/
-src/backend/obj/
+src/backend/obj/*
 *.cache
 src/backend/bin/
