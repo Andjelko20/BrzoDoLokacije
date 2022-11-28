@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".Fragments2.ProfileVisitFragment"
+    tools:context=".Activities.ProfileVisitActivity"
     android:background="@color/postHeader">
 
     <LinearLayout
@@ -232,7 +232,7 @@
                         android:layout_width="182dp"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:backgroundTint="@color/light_blue"
+                        android:backgroundTint="@color/dark_blue"
                         android:backgroundTintMode="src_atop"
                         android:text="Follow"
                         android:textAlignment="center"

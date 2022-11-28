@@ -74,4 +74,7 @@ interface Api {
 
     @PUT("Auth/change-password")
     fun changePassword(@Body changePasswordDto: ChangePasswordDto): Call<DefaultResponse>
+
+    @POST("User/follow/{username}")
+    fun followUnfollow(@Path("username") username : String) : Call<DefaultResponse>
 }

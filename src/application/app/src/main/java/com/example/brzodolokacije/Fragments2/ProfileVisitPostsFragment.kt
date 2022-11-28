@@ -1,15 +1,26 @@
 package com.example.brzodolokacije.Fragments2
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Adapters.ProfilePostsAdapter
+import com.example.brzodolokacije.Client.Client
+import com.example.brzodolokacije.Constants.Constants
+import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Posts.PrivremeneSlikeZaFeed
+import com.example.brzodolokacije.Posts.VisitUserProfile
 import com.example.brzodolokacije.R
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -50,14 +61,41 @@ class ProfileVisitPostsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val profilePostsVisitRv = view.findViewById<RecyclerView>(R.id.profilePostsRv)
 
-        //poslati zahtev da se uzmu svi postovi korisnika na ciji profil idemo i proslediti ga adapteru
+        val user=VisitUserProfile.getVisit()
 
-        profilePostsVisitRv.apply {
-            pvLayoutManager = GridLayoutManager(context, 3)
-            pvRecyclerView = view.findViewById(R.id.profilePostsRv)
-            pvAdapter = this.context?.let { ProfilePostsAdapter(PrivremeneSlikeZaFeed.getPhotos(),it) }
-            pvRecyclerView.layoutManager = pvLayoutManager
-            pvRecyclerView.adapter = pvAdapter
+        val retrofit = Client(requireActivity()).buildService(Api::class.java)
+        if (user != "") {
+            retrofit.getUserPosts(user).enqueue(object : Callback<DefaultResponse> {
+                override fun onResponse(
+                    call: Call<DefaultResponse>,
+                    response: Response<DefaultResponse>
+                ) {
+                    if (response.body()?.error.toString() == "false") {
+                        val json = response.body()?.message.toString()
+//                        Log.d("json", json)
+                        val typeToken = object : TypeToken<List<Int>>() {}.type
+                        val idList = Gson().fromJson<List<Int>>(json, typeToken)
+
+                        val ids = mutableListOf<String>()
+                        for (id in idList) {
+                            ids.add(Constants.BASE_URL + "Post/postPhoto/" + id.toString())
+                        }
+
+                        profilePostsVisitRv.apply {
+                            pvLayoutManager = GridLayoutManager(context, 3)
+                            pvRecyclerView = view.findViewById(R.id.profilePostsRv)
+                            pvAdapter = this.context?.let { ProfilePostsAdapter(ids, it) }
+                            pvRecyclerView.layoutManager = pvLayoutManager
+                            pvRecyclerView.adapter = pvAdapter
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                    Log.d("failure", "")
+                }
+
+            })
         }
     }
 

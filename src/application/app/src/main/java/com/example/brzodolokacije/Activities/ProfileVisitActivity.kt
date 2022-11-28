@@ -17,6 +17,7 @@ import com.example.brzodolokacije.Fragments2.ProfileVisitPostsFragment
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.UserProfile
+import com.example.brzodolokacije.Models.UserProfileVisit
 import com.example.brzodolokacije.R
 import com.example.brzodolokacije.Posts.VisitUserProfile
 import com.google.gson.Gson
@@ -52,7 +53,7 @@ class ProfileVisitActivity : AppCompatActivity() {
 
         val retrofit = Client(this).buildService(Api::class.java)
         val sessionManager = SessionManager(this)
-        if (sessionManager != null && VisitUserProfile.getVisit()!=""){
+        if (VisitUserProfile.getVisit()!=""){
             val appUser=sessionManager.fetchUsername()
             val username=VisitUserProfile.getVisit()
             retrofit.fetchUserProfileInfo(username).enqueue(object: Callback<DefaultResponse>
@@ -65,7 +66,7 @@ class ProfileVisitActivity : AppCompatActivity() {
                         //                    Log.d(response.body()?.error.toString(), response.body()?.message.toString());
                         val userProfileInfoStr: String = response.body()?.message.toString();
                         val gson = Gson()
-                        val userProfileInfo: UserProfile = gson.fromJson(userProfileInfoStr, UserProfile::class.java)
+                        val userProfileInfo: UserProfileVisit = gson.fromJson(userProfileInfoStr, UserProfileVisit::class.java)
 
                         val user = findViewById<TextView>(R.id.usernameProfileVisit)
                         val postsNum = findViewById<TextView>(R.id.postsNumProfileVisit)
@@ -88,6 +89,48 @@ class ProfileVisitActivity : AppCompatActivity() {
                         {
                             follow.setVisibility(View.VISIBLE);
                             message.setVisibility(View.VISIBLE);
+                            if(userProfileInfo.isFollowed)
+                            {
+                                follow.text="Following"
+                                follow.setBackgroundColor(getResources().getColor(R.color.light_blue))
+                            }
+
+                            follow.setOnClickListener{
+                                retrofit.followUnfollow(username).enqueue(object: Callback<DefaultResponse>
+                                {
+                                    override fun onResponse(
+                                        call: Call<DefaultResponse>,
+                                        response: Response<DefaultResponse>
+                                    ) {
+                                        if(response.body()?.error.toString()=="false")
+                                        {
+                                            val state = response.body()?.message.toString()
+                                            if(state=="followed")
+                                            {
+                                                follow.text="Following"
+                                                follow.setBackgroundColor(getResources().getColor(R.color.light_blue))
+                                            }
+                                            else
+                                            {
+                                                follow.text="Follow"
+                                                follow.setBackgroundColor(getResources().getColor(R.color.dark_blue))
+                                            }
+                                        }
+                                    }
+
+                                    override fun onFailure(
+                                        call: Call<DefaultResponse>,
+                                        t: Throwable
+                                    ) {
+                                        Toast.makeText(this@ProfileVisitActivity,"Something went wrong. Try again later",Toast.LENGTH_SHORT).show()
+                                    }
+
+                                })
+                            }
+
+                            message.setOnClickListener{
+                                Toast.makeText(this@ProfileVisitActivity,"message",Toast.LENGTH_SHORT).show()
+                            }
                         }
                         val path : String= Constants.BASE_URL + "User/avatar/" + username
                         Picasso.get().load(path).into(pfp)
@@ -102,6 +145,7 @@ class ProfileVisitActivity : AppCompatActivity() {
                             VisitUserProfile.setVisit("")
                             val intent = Intent(this@ProfileVisitActivity,MainActivity::class.java)
                             startActivity(intent)
+                            finish()
                         }
                     }
                     else
