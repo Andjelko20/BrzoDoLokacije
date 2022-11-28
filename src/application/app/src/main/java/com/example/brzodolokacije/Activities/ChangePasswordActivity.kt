@@ -86,6 +86,8 @@ class ChangePasswordActivity : AppCompatActivity() {
             }
 
             val passwords = ChangePasswordDto(currentPassword, newPassword)
+            Log.d("currentPassword", currentPassword)
+            Log.d("newPassword", newPassword)
             retrofit.changePassword(passwords).enqueue(object : Callback<DefaultResponse> {
                 override fun onResponse(
                     call: Call<DefaultResponse>,

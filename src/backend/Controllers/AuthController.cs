@@ -216,7 +216,7 @@ namespace backend.Controllers
                     message = "Error"
                 });
             if (BCrypt.Net.BCrypt.Verify(request.CurrentPassword, user.Password) == false)
-                return BadRequest(new
+                return Ok(new
                 {
                     error = true,
                     message = "Current password is not correct"
