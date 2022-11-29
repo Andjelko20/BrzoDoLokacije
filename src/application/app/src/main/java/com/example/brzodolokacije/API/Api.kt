@@ -75,6 +75,6 @@ interface Api {
     @PUT("Auth/change-password")
     fun changePassword(@Body changePasswordDto: ChangePasswordDto): Call<DefaultResponse>
 
-    @PUT("Post/getAll/{location}")
+    @GET("Post/getByLocation/{location}")
     fun getByLocation(@Path ("location") location :String): Call<DefaultResponse>
 }

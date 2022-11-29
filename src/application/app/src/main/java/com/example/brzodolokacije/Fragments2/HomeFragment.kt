@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Activities.ActivityAddPost
+import com.example.brzodolokacije.Activities.ActivityMaps
+import com.example.brzodolokacije.Activities.MainActivity
 import com.example.brzodolokacije.Adapters.PostAdapter
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Models.DefaultResponse
@@ -91,24 +93,26 @@ class HomeFragment : Fragment() {
         }
 
         val retrofit = Client(requireActivity()).buildService(Api::class.java)
-        Log.d("search",searchFilter.text.toString())
         searchBtn.setOnClickListener{
-            Intent(requireActivity(),HomeFragment::class.java).also{
-                it.putExtra("location",searchFilter.text.toString().trim())
-                startActivity(it)
-            }
+            val intent = Intent(this.requireActivity(),MainActivity::class.java)
+            intent.putExtra("location",searchFilter.text.toString())
+            startActivity(intent)
+
         }
-        var nesto = activity?.intent!!.getStringExtra("location").toString()
+        var nesto = requireActivity().intent.getStringExtra("location").toString()
+        Log.d("nesto",nesto)
         if(nesto != "null") {
             searchFilter.setText(nesto)
         }
         else{
             searchFilter.setText("")
         }
+
+        Log.d("search",searchFilter.text.toString())
         if(searchFilter.text.toString() != "")
         {
-            var location = activity?.intent!!.getStringExtra("location").toString()
-            retrofit.getByLocation(location).enqueue(object : Callback<DefaultResponse>{
+            var location = searchFilter.text
+            retrofit.getByLocation(location.toString()).enqueue(object : Callback<DefaultResponse>{
                 override fun onResponse(
                     call: Call<DefaultResponse>,
                     response: Response<DefaultResponse>
