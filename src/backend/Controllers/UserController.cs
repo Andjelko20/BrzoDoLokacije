@@ -184,6 +184,22 @@ namespace backend.Controllers
             }
 
         }
+        
+        [HttpGet("refreshUser/{username}")]
+        public async Task<ActionResult<string>> refreshUser(string username)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+            if(user == null)
+                return BadRequest(new
+                { error = true,
+                    message="Error"
+                });
+            int numOfFollowers = (await _context.Follows.Where(f => f.FolloweeId == user.Id).ToListAsync()).Count;
+            return Ok(new 
+            { error=false,
+                message=numOfFollowers
+            });
+        }
 
         [HttpDelete("delete/{username}")]
         public async Task<ActionResult<string>> deleteUser(string username)

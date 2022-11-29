@@ -77,4 +77,7 @@ interface Api {
 
     @POST("User/follow/{username}")
     fun followUnfollow(@Path("username") username : String) : Call<DefaultResponse>
+
+    @GET("User/refreshUser/{username}")
+    fun refreshFollows(@Path("username") username : String) : Call<DefaultResponse>
 }

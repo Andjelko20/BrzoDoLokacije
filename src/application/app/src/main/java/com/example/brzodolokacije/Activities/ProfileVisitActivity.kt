@@ -2,6 +2,7 @@ package com.example.brzodolokacije.Activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -115,6 +116,27 @@ class ProfileVisitActivity : AppCompatActivity() {
                                                 follow.text="Follow"
                                                 follow.setBackgroundColor(getResources().getColor(R.color.dark_blue))
                                             }
+                                            retrofit.refreshFollows(username).enqueue(object: Callback<DefaultResponse>
+                                            {
+                                                override fun onResponse(
+                                                    call: Call<DefaultResponse>,
+                                                    response: Response<DefaultResponse>
+                                                ) {
+                                                    if(response.body()?.error.toString()=="false")
+                                                    {
+                                                        val newNumOfFollowers= response.body()?.message.toString()
+                                                        followersNum.text = newNumOfFollowers
+                                                    }
+                                                }
+
+                                                override fun onFailure(
+                                                    call: Call<DefaultResponse>,
+                                                    t: Throwable
+                                                ) {
+                                                    Log.d("follows","greska menjanje br pratilaca")
+                                                }
+
+                                            })
                                         }
                                     }
 
