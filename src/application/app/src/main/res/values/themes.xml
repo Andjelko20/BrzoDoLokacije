@@ -18,6 +18,11 @@
         <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
     </style>
 
+    <style name="MyPopupMenu" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:textColor">@color/dark_blue</item>
+        <item name="android:itemBackground">@color/backgroundLightTheme</item>
+    </style>
+
     <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@android:color/transparent</item>
     </style>

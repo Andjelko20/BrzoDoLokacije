@@ -2,11 +2,7 @@ package com.example.brzodolokacije.API
 
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.NewCommentDto
-import com.example.brzodolokacije.ModelsDto.EditProfileDto
-import com.example.brzodolokacije.ModelsDto.LoginDto
-import com.example.brzodolokacije.ModelsDto.NewPostDto
-import com.example.brzodolokacije.ModelsDto.RegisterDto
-import com.example.brzodolokacije.ModelsDto.ResetPasswordDto
+import com.example.brzodolokacije.ModelsDto.*
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -41,7 +37,7 @@ interface Api {
     @GET("User/profileInfo/{username}")
     fun fetchUserProfileInfo(@Path("username") username:String) : Call<DefaultResponse>
 
-    @GET("Post/getAll")
+    @GET("Post/getAll/1")
     fun getAllPosts() : Call<DefaultResponse>
 
     @GET("Post/comments/{postId}")
@@ -71,5 +67,17 @@ interface Api {
 
     @Multipart
     @PUT("Post/uploadPhoto/{postId}")
-    fun uploadPostPhoto(@Part picture: MultipartBody.Part,@Path("postId") postId : String): Call<DefaultResponse>
+    fun uploadPostPhoto(@Part picture: MultipartBody.Part, @Path("postId") postId : String): Call<DefaultResponse>
+
+    @GET("Post/profilePosts/{username}")
+    fun getUserPosts(@Path("username") username: String): Call<DefaultResponse>
+
+    @PUT("Auth/change-password")
+    fun changePassword(@Body changePasswordDto: ChangePasswordDto): Call<DefaultResponse>
+
+    @POST("User/follow/{username}")
+    fun followUnfollow(@Path("username") username : String) : Call<DefaultResponse>
+
+    @GET("User/refreshUser/{username}")
+    fun refreshFollows(@Path("username") username : String) : Call<DefaultResponse>
 }

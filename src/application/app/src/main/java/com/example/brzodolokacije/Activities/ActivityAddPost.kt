@@ -5,14 +5,19 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.text.Editable
+import android.util.Base64
 import android.util.Log
 import android.view.View
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -33,6 +38,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 
+
 class ActivityAddPost : AppCompatActivity() {
 
     var pickedPhoto : Uri? = null
@@ -43,6 +49,33 @@ class ActivityAddPost : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_addpost)
         val retrofit = Client(this).buildService(Api::class.java)
+
+        var nesto = intent.getStringExtra("sb").toString()
+//        Log.d("nesto",nesto)
+        if(nesto != "null") {
+            editLocationSection.setText(nesto)
+        }
+        else{
+            editLocationSection.setText("")
+        }
+
+
+
+        editLocationSection.setOnClickListener{
+            val intent = Intent(this@ActivityAddPost, ActivityMaps::class.java)
+            val banana = pickedBitMap?.let { encodeImage(it) }
+            intent.putExtra("bit",banana)
+            startActivity(intent)
+        }
+        val test = intent.getStringExtra("bitslike");
+        if(test.toString() != "null")
+        {
+            val imageBytes =Base64.decode(test,0);
+            val image=BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size);
+            pickedBitMap = image
+            previewPic.setImageBitmap(pickedBitMap)
+            file = bitmapToFile(pickedBitMap!!, "slika.jpeg")
+        }
 
         backButton.setOnClickListener{
             val intent = Intent(this, MainActivity::class.java)
@@ -58,9 +91,11 @@ class ActivityAddPost : AppCompatActivity() {
                         RequestBody.create(MediaType.parse("image/*"), file)
                     )
                     Log.d("File",picture.toString())
-                var location = editLocationSection.text.toString().trim()
+//                var location = editLocationSection.text.toString().trim()
                 var caption = editCaptionSection.text.toString().trim()
+                var location = intent.getStringExtra("sb").toString()
                 var newPost = NewPostDto(location, caption)
+
                 retrofit.addNewPost(newPost).enqueue(object : Callback<DefaultResponse> {
                     override fun onResponse(
                         call: Call<DefaultResponse>,
@@ -127,12 +162,12 @@ class ActivityAddPost : AppCompatActivity() {
                     val source = ImageDecoder.createSource(this.contentResolver,pickedPhoto!!)
                     pickedBitMap = ImageDecoder.decodeBitmap(source)
                     previewPic.setImageBitmap(pickedBitMap)
-                    file = bitmapToFile(pickedBitMap!!, "slika.png")
+                    file = bitmapToFile(pickedBitMap!!, "slika.jpeg")
                 }
                 else {
                     pickedBitMap = MediaStore.Images.Media.getBitmap(this.contentResolver,pickedPhoto)
                     previewPic.setImageBitmap(pickedBitMap)
-                    file = bitmapToFile(pickedBitMap!!, "slika.png")
+                    file = bitmapToFile(pickedBitMap!!, "slika.jpeg")
                 }
             }
         }
@@ -145,7 +180,7 @@ class ActivityAddPost : AppCompatActivity() {
             file.createNewFile()
 
             val bos = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, bos)
             val bitmapdata = bos.toByteArray()
 
             val fos = FileOutputStream(file)
@@ -157,6 +192,12 @@ class ActivityAddPost : AppCompatActivity() {
             e.printStackTrace()
             file
         }
+    }
+    private fun encodeImage(bm: Bitmap): String? {
+        val baos = ByteArrayOutputStream()
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val b = baos.toByteArray()
+        return Base64.encodeToString(b, Base64.DEFAULT)
     }
 
 }

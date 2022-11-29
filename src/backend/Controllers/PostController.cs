@@ -27,10 +27,9 @@ namespace backend.Controllers
             _configuration = configuration;
         }
 
-        [HttpGet("getAll")]
-        public async Task<ActionResult<List<Post>>> getAll()
+        [HttpGet("getAll/{page}")]
+        public async Task<ActionResult<List<Post>>> getAll(int page)
         {
-            var posts = await _context.Posts.OrderByDescending(p => p.Date).ToListAsync();
             var me = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
             if (me == null)
                 return BadRequest(new
@@ -38,7 +37,28 @@ namespace backend.Controllers
                     error = true,
                     message = "Error"
                 });
+
+            List<Follow> following = await _context.Follows.Where(f => f.FollowerId == me.Id).ToListAsync();
+            List<Post> posts = await _context.Posts.Where(p => p.UserId == me.Id).ToListAsync();
+            foreach (Follow follow in following)
+            {
+                posts.AddRange(await _context.Posts.Where(p=>p.UserId==follow.FolloweeId).ToListAsync());
+            }
+
+            var pageResults = 3f;
+            var pageCount = Math.Ceiling(posts.Count / pageResults);
+
+            if (page > pageCount || page<1)
+                return BadRequest(new
+                {
+                    error = true,
+                    message = "Error"
+                });
             
+            posts = posts
+                .Skip((page-1) * (int)pageResults)
+                .Take((int)pageResults)
+                .OrderByDescending(p => p.Date).ToList();
             List<PostDto> postsDto = new List<PostDto>();
             foreach (Post post in posts)
             {
@@ -65,6 +85,59 @@ namespace backend.Controllers
             });
         }
         
+        [HttpGet("getByLocation/{location}")]
+        public async Task<ActionResult<List<Post>>> getAll(string location)
+        {
+            var me = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
+            if (me == null)
+                return BadRequest(new
+                {
+                    error = true,
+                    message = "Error"
+                });
+            
+            List<Post> posts = await _context.Posts.Where(p => p.Location == location).OrderByDescending(p=>p.Date).ToListAsync();
+            /*
+            var pageResults = 3f;
+            var pageCount = Math.Ceiling(posts.Count / pageResults);
+
+            if (page > pageCount || page<1)
+                return BadRequest(new
+                {
+                    error = true,
+                    message = "Error"
+                });
+            posts = posts
+                .Skip((page-1) * (int)pageResults)
+                .Take((int)pageResults)
+                .OrderByDescending(p => p.Date).ToList();
+            */
+            List<PostDto> postsDto = new List<PostDto>();
+            foreach (Post post in posts)
+            {
+                List<Like> likes = await _context.Likes.Where(l => l.PostId == post.Id).ToListAsync();
+                List<Comment> comments = await _context.Comments.Where(c => c.PostId == post.Id).ToListAsync();
+                postsDto.Add(new PostDto
+                {
+                    Id = post.Id,
+                    Owner = (await _context.Users.FindAsync(post.UserId)).Username,
+                    Date = post.Date,
+                    Location = post.Location,
+                    Caption = post.Caption,
+                    NumberOfLikes = likes.Count,
+                    NumberOfComments = comments.Count,
+                    LikedByMe = likes.Exists(l => l.UserId == me.Id)
+                });
+            }
+
+            string json = JsonSerializer.Serialize(postsDto);
+            return Ok(new
+            {
+                error = false,
+                message = json
+            });
+        }
+
         [AllowAnonymous]
         [HttpGet("postPhoto/{postId}")]
         public async Task<IActionResult> GetAvatar(int postId)
@@ -76,6 +149,28 @@ namespace backend.Controllers
             return File(b, "image/"+type);
         }
         
+        [HttpGet("profilePosts/{username}")]
+        public async Task<ActionResult<string>> getProfilePosts(string username)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+            if (user == null)
+                return BadRequest(new
+                {
+                    error = true,
+                    message = "Error"
+                });
+            var ids = (await _context.Posts.Where(p => p.UserId == user.Id)
+                    .OrderByDescending(p => p.Date)
+                    .ToListAsync())
+                .Select(p=>p.Id).ToList();
+            string json = JsonSerializer.Serialize(ids);
+            return Ok(new
+            {
+                error = false,
+                message = json
+            });
+        }
+        /*
         [HttpGet("getPostsFromUser/{username}")]
         public async Task<ActionResult<List<Post>>> getAll(string username)
         {
@@ -113,6 +208,7 @@ namespace backend.Controllers
                 message = json
             });
         }
+        */
 
         [HttpPost("addNew")]
         public async Task<ActionResult<string>> addNew(AddPostDto request)

@@ -1,9 +1,11 @@
 package com.example.brzodolokacije.Activities
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.ContextMenu
+import android.view.ContextThemeWrapper
 import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
@@ -20,6 +22,7 @@ import com.example.brzodolokacije.Fragments2.ProfileFragment
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Posts.PrivremeneSlikeZaFeed
+import com.example.brzodolokacije.Posts.VisitUserProfile
 import com.example.brzodolokacije.R
 import com.example.brzodolokacije.databinding.ActivityMainBinding
 import io.ak1.BubbleTabBar
@@ -34,14 +37,28 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var backPressedTime: Long = 0
 
+    private var homeFragment : HomeFragment? = null
+    private val homeKey : String = "homeFragment"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         PrivremeneSlikeZaFeed.addPhotos()
 
+        val wrapper: Context = ContextThemeWrapper(this, R.style.MyPopupMenu)
+        if(savedInstanceState!=null)
+        {
+            homeFragment = supportFragmentManager.findFragmentByTag(homeKey) as HomeFragment
+            //Toast.makeText(this,"postoji home",Toast.LENGTH_SHORT).show()
+        }
+        else
+        {
+            homeFragment = HomeFragment()
+        }
+
         options_meni.setOnClickListener{
-            val popupMenu = PopupMenu(this,it)
+            val popupMenu = PopupMenu(wrapper, it)
             popupMenu.setOnMenuItemClickListener { item ->
                 when(item.itemId){
                     R.id.editProfileMeni ->{
@@ -51,6 +68,11 @@ class MainActivity : AppCompatActivity() {
                     }
                     R.id.logoutMeni ->{
                         logOut()
+                        true
+                    }
+                    R.id.changePasswordMeni ->{
+                        val intent = Intent(this, ChangePasswordActivity::class.java)
+                        startActivity(intent)
                         true
                     }
                     else -> false
@@ -65,13 +87,13 @@ class MainActivity : AppCompatActivity() {
         val provera = intent.getStringExtra("backToProfile");
         if (provera != null)
         {
-            replaceFragment(ProfileFragment())
+            replaceFragment(ProfileFragment()) //vraca na profil ako smo isli na edit profila
             bubbleTabBar.visibility = View.INVISIBLE;
             bubbleTabBar2.visibility = View.VISIBLE;
         }
         else
         {
-            replaceFragment(HomeFragment())
+            replaceFragment(HomeFragment()) //ide na home kad prvi put otvorimo main i kad se vratimo iz biilo kod drugog aktivitija
             bubbleTabBar.visibility = View.VISIBLE;
             bubbleTabBar2.visibility = View.INVISIBLE;
         }
@@ -80,7 +102,7 @@ class MainActivity : AppCompatActivity() {
             override fun onBubbleClick(id: Int) {
                 when(id){
                     R.id.explore -> replaceFragment(ExploreFragment())
-                    R.id.home -> replaceFragment(HomeFragment())
+                    R.id.home -> replaceFragment(homeFragment!!) //ovde da proverim da l postoji sacuvano stanje
                     R.id.profile -> replaceFragment(ProfileFragment())
 
                     else -> {}
@@ -93,7 +115,7 @@ class MainActivity : AppCompatActivity() {
             override fun onBubbleClick(id: Int) {
                 when(id){
                     R.id.explore -> replaceFragment(ExploreFragment())
-                    R.id.home -> replaceFragment(HomeFragment())
+                    R.id.home -> replaceFragment(homeFragment!!) //ovde da proverim da li postoji sacuvano stanje
                     R.id.profile -> replaceFragment(ProfileFragment())
 
                     else -> {}
@@ -126,6 +148,7 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         if (backPressedTime + 3000 > System.currentTimeMillis()) {
             super.onBackPressed()
+            VisitUserProfile.profileVisit(0)
             finish()
         } /*else {
             Toast.makeText(this, "Press back again to leave the app.", Toast.LENGTH_SHORT).show()
@@ -155,6 +178,7 @@ class MainActivity : AppCompatActivity() {
                 {
                     sessionManager.deleteAuthToken()
                     sessionManager.deleteUsername()
+                    VisitUserProfile.setVisit("")
 
                     val intent = Intent(this@MainActivity, LoginActivity::class.java)
                     startActivity(intent)
@@ -168,7 +192,4 @@ class MainActivity : AppCompatActivity() {
 
         })
     }
-
-
-
 }

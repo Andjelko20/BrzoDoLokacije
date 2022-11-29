@@ -131,7 +131,7 @@ class RegisterActivity : AppCompatActivity() {
 
                                             })
                                             
-                                            reset()
+//                                            reset()
                                             val intent = Intent(this@RegisterActivity, MainActivity::class.java)
                                             startActivity(intent)
                                             finish()

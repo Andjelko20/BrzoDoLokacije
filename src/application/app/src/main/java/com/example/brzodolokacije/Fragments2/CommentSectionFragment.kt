@@ -16,9 +16,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-private var myAdapter : RecyclerView.Adapter<CommentsAdapter.MainViewHolder>? = null
+var myAdapter : RecyclerView.Adapter<CommentsAdapter.MainViewHolder>? = null
 private var mylayoutManager : RecyclerView.LayoutManager? = null
-private lateinit var recyclerView : RecyclerView
+lateinit var recyclerView : RecyclerView
 
 /**
  * A simple [Fragment] subclass.
