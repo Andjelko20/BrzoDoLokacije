@@ -233,9 +233,9 @@ namespace backend.Controllers
 
         [Authorize(Roles = "korisnik")]
         [HttpGet("check-session")]
-        public ActionResult<string> checkSession()
+        public async Task<ActionResult<string>> checkSession()
         {
-            var user = _context.Users.FirstOrDefault(u => u.Username == User.Identity.Name);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
             if (user == null)
                 return Unauthorized();
             return Ok(new {
