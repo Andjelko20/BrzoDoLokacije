@@ -43,7 +43,7 @@
     <ImageView
         android:id="@+id/previewPic"
         android:layout_width="wrap_content"
-        android:layout_height="300dp"
+        android:layout_height="280dp"
         android:src="@drawable/defaultpicture"
         android:layout_margin="5dp"
         app:layout_constraintTop_toBottomOf="@+id/bubbleTabBarTopEditProfile"
@@ -59,7 +59,8 @@
         android:backgroundTint="@color/light_blue"
         android:text="Choose picture"
         android:onClick="pickPhotoFromGallery"
-        app:icon="@drawable/dodajsliku"
+        android:layout_marginTop="0dp"
+        app:icon="@drawable/dodajsliku_smaller"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/previewPic">
@@ -68,10 +69,11 @@
 
     <RelativeLayout
         android:id="@+id/formaKomentar"
-        android:layout_width="400dp"
+        android:layout_width="340dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:background="@drawable/shape"
-        android:paddingBottom="20dp"
+        android:paddingBottom="40dp"
         app:layout_constraintBottom_toTopOf="@id/btnAddPost"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -94,8 +96,8 @@
                 android:id="@+id/editLocationSection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Location"
                 android:focusable="false"
+                android:hint="Location"
                 android:textColor="@color/light_text" />
 
 
@@ -123,11 +125,13 @@
         </com.google.android.material.textfield.TextInputLayout>
 
     </RelativeLayout>
+
     <Button
         android:id="@+id/btnAddPost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/light_blue"
+        android:layout_marginTop="10dp"
         android:text="Add post"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
