@@ -120,8 +120,8 @@ class HomeFragment : Fragment() {
                     if (response.body()?.error.toString() == "false") {
                         val listOfPhotosStr: String = response.body()?.message.toString();
 
-                        val typeToken = object : TypeToken<List<Photo>>() {}.type
-                        val photosList = Gson().fromJson<List<Photo>>(listOfPhotosStr, typeToken)
+                        val typeToken = object : TypeToken<MutableList<Photo>>() {}.type
+                        val photosList = Gson().fromJson<MutableList<Photo>>(listOfPhotosStr, typeToken)
 
                         homePostsRv.apply {
                             mylayoutManager = LinearLayoutManager(context) //activity
@@ -158,8 +158,8 @@ class HomeFragment : Fragment() {
                     if (response.body()?.error.toString() == "false") {
                         val listOfPhotosStr: String = response.body()?.message.toString();
 
-                        val typeToken = object : TypeToken<List<Photo>>() {}.type
-                        val photosList = Gson().fromJson<List<Photo>>(listOfPhotosStr, typeToken)
+                        val typeToken = object : TypeToken<MutableList<Photo>>() {}.type
+                        val photosList = Gson().fromJson<MutableList<Photo>>(listOfPhotosStr, typeToken)
 
                         homePostsRv.apply {
                             mylayoutManager = LinearLayoutManager(context) //activity

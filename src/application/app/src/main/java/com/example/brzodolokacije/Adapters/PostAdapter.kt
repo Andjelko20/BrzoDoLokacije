@@ -37,7 +37,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class PostAdapter(val photoList : List<Photo>, val context : Context, val activity : Context) :
+class PostAdapter(val photoList : MutableList<Photo>, val context : Context, val activity : Context) :
     RecyclerView.Adapter<PostAdapter.MainViewHolder>() {
 
     var dataList = photoList
@@ -169,7 +169,7 @@ class PostAdapter(val photoList : List<Photo>, val context : Context, val activi
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun refreshPosts(items : List<Photo>)
+    fun refreshPosts(items : MutableList<Photo>)
     {
         dataList=items
         notifyDataSetChanged()
