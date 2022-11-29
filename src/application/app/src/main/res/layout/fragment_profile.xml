@@ -215,8 +215,8 @@
             android:backgroundTint="@color/light_blue"
             android:hapticFeedbackEnabled="false"
             android:src="@drawable/camera"
-            app:fabCustomSize="80dp"
-            app:maxImageSize="60dp"
+            app:fabCustomSize="70dp"
+            app:maxImageSize="50dp"
             app:tint="@color/backgroundLightTheme">
 
         </com.google.android.material.floatingactionbutton.FloatingActionButton>
