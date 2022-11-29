@@ -37,7 +37,7 @@ class ProfileVisitActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile_visit)
 
-        replaceFragmentOnProfile(PostsFragment())
+        replaceFragmentOnProfile(ProfileVisitPostsFragment())
 
         val bubbleTabBarProfileVisit = findViewById<BubbleTabBar>(R.id.bubbleTabBarProfileProfileVisit)
         bubbleTabBarProfileVisit.addBubbleListener(object : OnBubbleClickListener {
