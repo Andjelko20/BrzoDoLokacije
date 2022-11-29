@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
@@ -12,6 +13,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.text.Editable
+import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.widget.EditText
@@ -36,6 +38,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 
+
 class ActivityAddPost : AppCompatActivity() {
 
     var pickedPhoto : Uri? = null
@@ -58,10 +61,20 @@ class ActivityAddPost : AppCompatActivity() {
 
 
 
-
         editLocationSection.setOnClickListener{
             val intent = Intent(this@ActivityAddPost, ActivityMaps::class.java)
+            val banana = pickedBitMap?.let { encodeImage(it) }
+            intent.putExtra("bit",banana)
             startActivity(intent)
+        }
+        val test = intent.getStringExtra("bitslike");
+        if(test.toString() != "null")
+        {
+            val imageBytes =Base64.decode(test,0);
+            val image=BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size);
+            pickedBitMap = image
+            previewPic.setImageBitmap(pickedBitMap)
+            file = bitmapToFile(pickedBitMap!!, "slika.jpeg")
         }
 
         backButton.setOnClickListener{
@@ -179,6 +192,12 @@ class ActivityAddPost : AppCompatActivity() {
             e.printStackTrace()
             file
         }
+    }
+    private fun encodeImage(bm: Bitmap): String? {
+        val baos = ByteArrayOutputStream()
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val b = baos.toByteArray()
+        return Base64.encodeToString(b, Base64.DEFAULT)
     }
 
 }

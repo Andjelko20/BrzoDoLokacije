@@ -75,11 +75,14 @@ class ActivityMaps : AppCompatActivity(), OnMapReadyCallback {
                     sb.append(grad).append(", ").append(drzava)
 //                    Log.d("Lokacija",sb.toString())
                     val builder = AlertDialog.Builder(this@ActivityMaps)
+                    val bit = intent.getStringExtra("bit")
+//                    Log.d("bit",bit.toString())
                     builder.setTitle("Confirm location")
 //                    builder.setMessage("Test")
                     builder.setPositiveButton("Yes"){dialogInterface, which ->
                         Intent(this@ActivityMaps,ActivityAddPost::class.java).also{
                             it.putExtra("sb",sb.toString())
+                            it.putExtra("bitslike",bit)
                             it.putExtra("latitude",location.latitude)
                             it.putExtra("longitude",location.longitude)
                             startActivity(it)
