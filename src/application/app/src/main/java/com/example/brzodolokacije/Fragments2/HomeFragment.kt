@@ -106,37 +106,24 @@ class HomeFragment : Fragment() {
         refresh.setOnRefreshListener {
             android.os.Handler(Looper.getMainLooper()).postDelayed({
                 requestLoadFeed(view)
+                //Toast.makeText(requireActivity(),"sa beka - refresh",Toast.LENGTH_SHORT).show()
                 refresh.isRefreshing = false
             }, 1500)
         }
 
         if(savedState==null)
         {
-
+            //Toast.makeText(requireActivity(),"saved state null "+VisitUserProfile.isVisited().toString(),Toast.LENGTH_SHORT).show()
             if(VisitUserProfile.isVisited()==1)
             {
-                savedState=VisitUserProfile.retreiveFeed()
-                VisitUserProfile.profileVisit(0)
-                val typeToken = object : TypeToken<MutableList<Photo>>() {}.type
-                val photosList = Gson().fromJson<MutableList<Photo>>(savedState, typeToken)
-
-                homePostsRv.apply {
-                    mylayoutManager = LinearLayoutManager(context) //activity
-                    recyclerView=view.findViewById(R.id.homePostsRv)
-                    recyclerView.layoutManager=mylayoutManager
-                    recyclerView.setHasFixedSize(true)
-                    val fragmentManager = getChildFragmentManager()
-                    myAdapter = this.context?.let { PostAdapter(photosList,it,requireActivity(),fragmentManager) }
-                    recyclerView.adapter=myAdapter
-                }
-                view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.GONE)
-                val last = sessionManager.fetchLast()
-                val lastOffset= sessionManager.fetchLastOffset()
-                ScrollToPosition(last,lastOffset)
+                backFromVisit(sessionManager,view)
+                //Toast.makeText(requireActivity(),"povratak sa profila "+VisitUserProfile.isVisited().toString(),Toast.LENGTH_SHORT).show()
             }
-
-            else requestLoadFeed(view)
-            //Toast.makeText(requireActivity(),"sa beka",Toast.LENGTH_SHORT).show()
+            else
+            {
+                requestLoadFeed(view)
+                //Toast.makeText(requireActivity(),"sa beka",Toast.LENGTH_SHORT).show()
+            }
         }
         else
         {
@@ -239,6 +226,28 @@ class HomeFragment : Fragment() {
         }
         view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.GONE)
 
+        val last = sessionManager.fetchLast()
+        val lastOffset= sessionManager.fetchLastOffset()
+        ScrollToPosition(last,lastOffset)
+    }
+
+    private fun backFromVisit(sessionManager : SessionManager, view : View)
+    {
+        savedState=VisitUserProfile.retreiveFeed()
+        VisitUserProfile.profileVisit(0)
+        val typeToken = object : TypeToken<MutableList<Photo>>() {}.type
+        val photosList = Gson().fromJson<MutableList<Photo>>(savedState, typeToken)
+
+        homePostsRv.apply {
+            mylayoutManager = LinearLayoutManager(context) //activity
+            recyclerView=view.findViewById(R.id.homePostsRv)
+            recyclerView.layoutManager=mylayoutManager
+            recyclerView.setHasFixedSize(true)
+            val fragmentManager = getChildFragmentManager()
+            myAdapter = this.context?.let { PostAdapter(photosList,it,requireActivity(),fragmentManager) }
+            recyclerView.adapter=myAdapter
+        }
+        view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.GONE)
         val last = sessionManager.fetchLast()
         val lastOffset= sessionManager.fetchLastOffset()
         ScrollToPosition(last,lastOffset)
