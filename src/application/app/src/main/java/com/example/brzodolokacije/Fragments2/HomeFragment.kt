@@ -2,7 +2,6 @@ package com.example.brzodolokacije.Fragments2
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.*
@@ -19,7 +18,7 @@ import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Posts.Photo
-import com.example.brzodolokacije.Posts.VisitUserProfile
+import com.example.brzodolokacije.Posts.HomeFragmentState
 import com.example.brzodolokacije.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -44,7 +43,6 @@ class HomeFragment : Fragment() {
     private var param2: String? = null
 
     private var savedState : String? = null
-    private val key : String = "saved_state"
 
     private var lastPosition : Int = 0
     private var topViewRv = 0
@@ -80,15 +78,8 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
-        if(savedInstanceState!=null)
-        {
-            savedState = savedInstanceState.getString(key)
-            //Log.d("saved",savedState.toString())
-        }
-        return view
+        return inflater.inflate(R.layout.fragment_home, container, false)
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -107,35 +98,16 @@ class HomeFragment : Fragment() {
         refresh.setOnRefreshListener {
             android.os.Handler(Looper.getMainLooper()).postDelayed({
                 requestLoadFeed(view)
-                //Log.d("refresh",savedState.toString())
-                //Toast.makeText(requireActivity(),"sa beka - refresh",Toast.LENGTH_SHORT).show()
                 refresh.isRefreshing = false
             }, 1500)
         }
-
-        if(savedState==null)
+        if(HomeFragmentState.isSaved() && HomeFragmentState.retreiveFeed()!="")
         {
-            //Toast.makeText(requireActivity(),"saved state null "+VisitUserProfile.isVisited().toString(),Toast.LENGTH_SHORT).show()
-            if(VisitUserProfile.isVisited()==1)
-            {
-                backFromVisit(sessionManager,view)
-                //Log.d("visit",savedState.toString())
-                //Toast.makeText(requireActivity(),"povratak sa profila "+VisitUserProfile.isVisited().toString(),Toast.LENGTH_SHORT).show()
-            }
-            else
-            {
-                requestLoadFeed(view)
-//                Handler(Looper.getMainLooper()).postDelayed({
-//                    Log.d("bek",savedState.toString())
-//                }, 2000)
-                //Toast.makeText(requireActivity(),"sa beka",Toast.LENGTH_SHORT).show()
-            }
+            loadPhotos(sessionManager,view)
         }
         else
         {
-            loadPhotos(sessionManager,view)
-//            Log.d("sacuvano",savedState.toString())
-            //Toast.makeText(requireActivity(),"sacuvano",Toast.LENGTH_SHORT).show()
+            requestLoadFeed(view)
         }
 
         homePostsRv.addOnScrollListener(object : RecyclerView.OnScrollListener()
@@ -143,18 +115,12 @@ class HomeFragment : Fragment() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 lastPosition = (homePostsRv.layoutManager as? LinearLayoutManager)?.findFirstVisibleItemPosition()!!
-                //Toast.makeText(requireActivity(),lastPosition.toString(),Toast.LENGTH_SHORT).show()
                 val v = (homePostsRv.layoutManager as? LinearLayoutManager)?.getChildAt(0)
                 topViewRv = if(v == null) 0 else v.top - (homePostsRv.layoutManager as? LinearLayoutManager)?.paddingTop!!
 
                 savePosition(lastPosition,topViewRv)
             }
         })
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putString(key,savedState)
-        super.onSaveInstanceState(outState)
     }
 
     companion object {
@@ -179,7 +145,6 @@ class HomeFragment : Fragment() {
 
     private fun requestLoadFeed(view : View)
     {
-//        Log.d("bekrequ","uslo u request")
         val retrofit = Client(requireActivity()).buildService(Api::class.java)
         retrofit.getAllPosts().enqueue(object: Callback<DefaultResponse>
         {
@@ -187,10 +152,8 @@ class HomeFragment : Fragment() {
                 if(response.body()?.error.toString()=="false")
                 {
                     val listOfPhotosStr: String = response.body()?.message.toString()
-//                    Log.d("bekrequ",listOfPhotosStr)
                     savedState = listOfPhotosStr
-//                    Log.d("bekrequ",savedState.toString())
-                    VisitUserProfile.saveFeed(savedState.toString())
+                    HomeFragmentState.saveFeed(savedState.toString())
 
                     val typeToken = object : TypeToken<MutableList<Photo>>() {}.type
                     val photosList = Gson().fromJson<MutableList<Photo>>(listOfPhotosStr, typeToken)
@@ -221,8 +184,9 @@ class HomeFragment : Fragment() {
 
     private fun loadPhotos(sessionManager : SessionManager, view : View)
     {
+        savedState = HomeFragmentState.retreiveFeed()
         val listOfPhotosStr: String = savedState.toString()
-
+        HomeFragmentState.shouldSave(false)
         val typeToken = object : TypeToken<MutableList<Photo>>() {}.type
         val photosList = Gson().fromJson<MutableList<Photo>>(listOfPhotosStr, typeToken)
         homePostsRv.apply {
@@ -240,27 +204,6 @@ class HomeFragment : Fragment() {
         ScrollToPosition(last,lastOffset)
     }
 
-    private fun backFromVisit(sessionManager : SessionManager, view : View)
-    {
-        savedState=VisitUserProfile.retreiveFeed()
-        VisitUserProfile.profileVisit(0)
-        val typeToken = object : TypeToken<MutableList<Photo>>() {}.type
-        val photosList = Gson().fromJson<MutableList<Photo>>(savedState, typeToken)
-
-        homePostsRv.apply {
-            mylayoutManager = LinearLayoutManager(context) //activity
-            recyclerView=view.findViewById(R.id.homePostsRv)
-            recyclerView.layoutManager=mylayoutManager
-            recyclerView.setHasFixedSize(true)
-            myAdapter = this.context?.let { PostAdapter(photosList,it,requireActivity()) }
-            recyclerView.adapter=myAdapter
-        }
-        view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.GONE)
-        val last = sessionManager.fetchLast()
-        val lastOffset= sessionManager.fetchLastOffset()
-        ScrollToPosition(last,lastOffset)
-    }
-
     private fun savePosition(last : Int, lastOffset : Int)
     {
         val sessionManager = SessionManager(requireActivity())
@@ -268,18 +211,19 @@ class HomeFragment : Fragment() {
         sessionManager.saveLastOffset(lastOffset)
     }
 
-//    override fun onDestroy() {
-//        super.onDestroy()
-//        savePosition()
-//        Log.d("destroy","")
-//    }
-
-    override fun onStop() {
-        super.onStop()
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        HomeFragmentState.saveFeed(savedState.toString())
+        HomeFragmentState.shouldSave(true)
         savePosition(lastPosition,topViewRv)
-        Log.d("stop","")
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        HomeFragmentState.saveFeed(savedState.toString())
+        HomeFragmentState.shouldSave(true)
+        savePosition(lastPosition,topViewRv)
+    }
     private fun ScrollToPosition(position : Int, offset : Int)
     {
         homePostsRv.stopScroll()

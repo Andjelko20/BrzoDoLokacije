@@ -13,8 +13,7 @@ import com.example.brzodolokacije.Adapters.ProfilePostsAdapter
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Constants.Constants
 import com.example.brzodolokacije.Models.DefaultResponse
-import com.example.brzodolokacije.Posts.PrivremeneSlikeZaFeed
-import com.example.brzodolokacije.Posts.VisitUserProfile
+import com.example.brzodolokacije.Posts.HomeFragmentState
 import com.example.brzodolokacije.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -61,7 +60,7 @@ class ProfileVisitPostsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val profilePostsVisitRv = view.findViewById<RecyclerView>(R.id.profilePostsRv)
 
-        val user=VisitUserProfile.getVisit()
+        val user=HomeFragmentState.getVisit()
 
         val retrofit = Client(requireActivity()).buildService(Api::class.java)
         if (user != "") {
