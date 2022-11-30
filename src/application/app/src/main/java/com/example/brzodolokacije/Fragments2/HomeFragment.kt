@@ -207,7 +207,8 @@ class HomeFragment : Fragment() {
                 }
                 else
                 {
-                    Toast.makeText(requireActivity(),"Error loading images",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireActivity(),"You don't follow anyone",Toast.LENGTH_SHORT).show()
+                    view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.GONE)
                 }
             }
 
