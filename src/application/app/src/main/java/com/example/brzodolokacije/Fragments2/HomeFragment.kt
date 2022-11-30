@@ -2,6 +2,7 @@ package com.example.brzodolokacije.Fragments2
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.*
@@ -106,6 +107,7 @@ class HomeFragment : Fragment() {
         refresh.setOnRefreshListener {
             android.os.Handler(Looper.getMainLooper()).postDelayed({
                 requestLoadFeed(view)
+                //Log.d("refresh",savedState.toString())
                 //Toast.makeText(requireActivity(),"sa beka - refresh",Toast.LENGTH_SHORT).show()
                 refresh.isRefreshing = false
             }, 1500)
@@ -117,17 +119,22 @@ class HomeFragment : Fragment() {
             if(VisitUserProfile.isVisited()==1)
             {
                 backFromVisit(sessionManager,view)
+                //Log.d("visit",savedState.toString())
                 //Toast.makeText(requireActivity(),"povratak sa profila "+VisitUserProfile.isVisited().toString(),Toast.LENGTH_SHORT).show()
             }
             else
             {
                 requestLoadFeed(view)
+//                Handler(Looper.getMainLooper()).postDelayed({
+//                    Log.d("bek",savedState.toString())
+//                }, 2000)
                 //Toast.makeText(requireActivity(),"sa beka",Toast.LENGTH_SHORT).show()
             }
         }
         else
         {
             loadPhotos(sessionManager,view)
+//            Log.d("sacuvano",savedState.toString())
             //Toast.makeText(requireActivity(),"sacuvano",Toast.LENGTH_SHORT).show()
         }
 
@@ -140,7 +147,7 @@ class HomeFragment : Fragment() {
                 val v = (homePostsRv.layoutManager as? LinearLayoutManager)?.getChildAt(0)
                 topViewRv = if(v == null) 0 else v.top - (homePostsRv.layoutManager as? LinearLayoutManager)?.paddingTop!!
 
-                savePosition()
+                savePosition(lastPosition,topViewRv)
             }
         })
     }
@@ -172,6 +179,7 @@ class HomeFragment : Fragment() {
 
     private fun requestLoadFeed(view : View)
     {
+//        Log.d("bekrequ","uslo u request")
         val retrofit = Client(requireActivity()).buildService(Api::class.java)
         retrofit.getAllPosts().enqueue(object: Callback<DefaultResponse>
         {
@@ -179,7 +187,9 @@ class HomeFragment : Fragment() {
                 if(response.body()?.error.toString()=="false")
                 {
                     val listOfPhotosStr: String = response.body()?.message.toString()
+//                    Log.d("bekrequ",listOfPhotosStr)
                     savedState = listOfPhotosStr
+//                    Log.d("bekrequ",savedState.toString())
                     VisitUserProfile.saveFeed(savedState.toString())
 
                     val typeToken = object : TypeToken<MutableList<Photo>>() {}.type
@@ -190,8 +200,7 @@ class HomeFragment : Fragment() {
                         recyclerView=view.findViewById(R.id.homePostsRv)
                         recyclerView.layoutManager=mylayoutManager
                         recyclerView.setHasFixedSize(true)
-                        val fragmentManager = getChildFragmentManager()
-                        myAdapter = this.context?.let { PostAdapter(photosList,it,requireActivity(),fragmentManager) }
+                        myAdapter = this.context?.let { PostAdapter(photosList,it,requireActivity()) }
                         recyclerView.adapter=myAdapter
                     }
                     view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.GONE)
@@ -220,8 +229,7 @@ class HomeFragment : Fragment() {
             recyclerView=view.findViewById(R.id.homePostsRv)
             recyclerView.layoutManager=mylayoutManager
             recyclerView.setHasFixedSize(true)
-            val fragmentManager = getChildFragmentManager()
-            myAdapter = this.context?.let { PostAdapter(photosList,it,requireActivity(),fragmentManager) }
+            myAdapter = this.context?.let { PostAdapter(photosList,it,requireActivity()) }
             recyclerView.adapter=myAdapter
         }
         view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.GONE)
@@ -243,8 +251,7 @@ class HomeFragment : Fragment() {
             recyclerView=view.findViewById(R.id.homePostsRv)
             recyclerView.layoutManager=mylayoutManager
             recyclerView.setHasFixedSize(true)
-            val fragmentManager = getChildFragmentManager()
-            myAdapter = this.context?.let { PostAdapter(photosList,it,requireActivity(),fragmentManager) }
+            myAdapter = this.context?.let { PostAdapter(photosList,it,requireActivity()) }
             recyclerView.adapter=myAdapter
         }
         view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.GONE)
@@ -253,11 +260,11 @@ class HomeFragment : Fragment() {
         ScrollToPosition(last,lastOffset)
     }
 
-    private fun savePosition()
+    private fun savePosition(last : Int, lastOffset : Int)
     {
         val sessionManager = SessionManager(requireActivity())
-        sessionManager.saveLast(lastPosition)
-        sessionManager.saveLastOffset(topViewRv)
+        sessionManager.saveLast(last)
+        sessionManager.saveLastOffset(lastOffset)
     }
 
 //    override fun onDestroy() {
@@ -268,7 +275,7 @@ class HomeFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        savePosition()
+        savePosition(lastPosition,topViewRv)
         Log.d("stop","")
     }
 

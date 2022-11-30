@@ -28,6 +28,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/rv_photopost"/>
 
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleLarge"
@@ -39,8 +40,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addPostHome"
@@ -55,10 +54,5 @@
         android:src="@drawable/camera"
         app:fabCustomSize="70dp"
         app:maxImageSize="50dp"
-        app:tint="@color/backgroundLightTheme">
-
-    </com.google.android.material.floatingactionbutton.FloatingActionButton>
-
-
-
+        app:tint="@color/backgroundLightTheme"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

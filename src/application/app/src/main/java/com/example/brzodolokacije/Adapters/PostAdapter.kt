@@ -44,7 +44,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class PostAdapter(val photoList: MutableList<Photo>, val context: Context, val activity: Context, val fragmentManager: FragmentManager) :
+class PostAdapter(val photoList: MutableList<Photo>, val context: Context, val activity: Context) :
     RecyclerView.Adapter<PostAdapter.MainViewHolder>() {
 
     var dataList : MutableList<Photo> = photoList
@@ -59,8 +59,8 @@ class PostAdapter(val photoList: MutableList<Photo>, val context: Context, val a
             val date = itemView.findViewById<TextView>(R.id.postDate)
             val location = itemView.findViewById<TextView>(R.id.location)
             val caption = itemView.findViewById<TextView>(R.id.postCaption)
-            var likes = itemView.findViewById<TextView>(R.id.numOfLikes)
-            var comments = itemView.findViewById<TextView>(R.id.postComments)
+            val likes = itemView.findViewById<TextView>(R.id.numOfLikes)
+            val comments = itemView.findViewById<TextView>(R.id.postComments)
             val image = itemView.findViewById<ImageView>(R.id.postImage)
             val likedByMe = itemView.findViewById<ImageView>(R.id.likeBtn)
 
@@ -192,8 +192,8 @@ class PostAdapter(val photoList: MutableList<Photo>, val context: Context, val a
     private fun convertLongToTime(time: Long): String {
         val format = SimpleDateFormat("HH:mm  dd/MM/yyyy")
         val tickAtEpoche= 621355968000000000L
-        val ticksPerMiliSec = 10000;
-        Log.d("time",((time-tickAtEpoche)/ticksPerMiliSec).toString())
+        val ticksPerMiliSec = 10000
+//        Log.d("time",((time-tickAtEpoche)/ticksPerMiliSec).toString())
         return format.format(Date((time-tickAtEpoche)/ticksPerMiliSec))
     }
 
@@ -359,11 +359,6 @@ class PostAdapter(val photoList: MutableList<Photo>, val context: Context, val a
             }
 
         })
-    }
-
-    fun getPhotos() : MutableList<Photo>
-    {
-        return dataList
     }
     private fun currentTimeToLong(): Long {
         return System.currentTimeMillis()
