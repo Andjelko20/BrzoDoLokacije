@@ -348,10 +348,11 @@ class PostAdapter(val photoList: MutableList<Photo>, val context: Context, val a
                    photo.numberOfLikes = newStats.numOfLikes.toInt()
                    photo.numberOfComments = newStats.numOfComments.toInt()
 
-                   val typeToken = object : TypeToken<MutableList<Photo>>() {}.type
-                   val dataListStr = Gson().toJson(dataList,typeToken)
-                   //Log.d("json",dataListStr)
-                   HomeFragmentState.saveFeed(dataListStr)
+//                   val typeToken = object : TypeToken<MutableList<Photo>>() {}.type
+//                   val dataListStr = Gson().toJson(dataList,typeToken)
+//                   //Log.d("json",dataListStr)
+//                   HomeFragmentState.saveFeed(dataListStr)
+                   HomeFragmentState.list(dataList)
                }
                 else
                {

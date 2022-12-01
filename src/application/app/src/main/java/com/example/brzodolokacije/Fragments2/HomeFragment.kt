@@ -43,6 +43,7 @@ class HomeFragment : Fragment() {
     private var param2: String? = null
 
     private var savedState : String? = null
+    private lateinit var feed : MutableList<Photo>
 
     private var lastPosition : Int = 0
     private var topViewRv = 0
@@ -101,7 +102,7 @@ class HomeFragment : Fragment() {
                 refresh.isRefreshing = false
             }, 1500)
         }
-        if(HomeFragmentState.isSaved() && HomeFragmentState.retreiveFeed()!="")
+        if(HomeFragmentState.isSaved() && HomeFragmentState.getList() != null)
         {
             loadPhotos(sessionManager,view)
         }
@@ -152,11 +153,12 @@ class HomeFragment : Fragment() {
                 if(response.body()?.error.toString()=="false")
                 {
                     val listOfPhotosStr: String = response.body()?.message.toString()
-                    savedState = listOfPhotosStr
-                    HomeFragmentState.saveFeed(savedState.toString())
+//                    savedState = listOfPhotosStr
+//                    HomeFragmentState.saveFeed(savedState.toString())
 
                     val typeToken = object : TypeToken<MutableList<Photo>>() {}.type
                     val photosList = Gson().fromJson<MutableList<Photo>>(listOfPhotosStr, typeToken)
+                    HomeFragmentState.list(photosList)
 
                     homePostsRv.apply {
                         mylayoutManager = LinearLayoutManager(context) //activity
@@ -184,17 +186,18 @@ class HomeFragment : Fragment() {
 
     private fun loadPhotos(sessionManager : SessionManager, view : View)
     {
-        savedState = HomeFragmentState.retreiveFeed()
-        val listOfPhotosStr: String = savedState.toString()
+//        savedState = HomeFragmentState.retreiveFeed()
+        feed = HomeFragmentState.getList()!!
+//        val listOfPhotosStr: String = savedState.toString()
         HomeFragmentState.shouldSave(false)
-        val typeToken = object : TypeToken<MutableList<Photo>>() {}.type
-        val photosList = Gson().fromJson<MutableList<Photo>>(listOfPhotosStr, typeToken)
+//        val typeToken = object : TypeToken<MutableList<Photo>>() {}.type
+//        val photosList = Gson().fromJson<MutableList<Photo>>(listOfPhotosStr, typeToken)
         homePostsRv.apply {
             mylayoutManager = LinearLayoutManager(context) //activity
             recyclerView=view.findViewById(R.id.homePostsRv)
             recyclerView.layoutManager=mylayoutManager
             recyclerView.setHasFixedSize(true)
-            myAdapter = this.context?.let { PostAdapter(photosList,it,requireActivity()) }
+            myAdapter = this.context?.let { PostAdapter(feed,it,requireActivity()) }
             recyclerView.adapter=myAdapter
         }
         view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.GONE)

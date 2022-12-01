@@ -145,7 +145,8 @@ class MainActivity : AppCompatActivity() {
         if (backPressedTime + 3000 > System.currentTimeMillis()) {
             super.onBackPressed()
             HomeFragmentState.shouldSave(false)
-            HomeFragmentState.saveFeed("")
+//            HomeFragmentState.saveFeed("")
+            HomeFragmentState.list(null)
             finish()
         } /*else {
             Toast.makeText(this, "Press back again to leave the app.", Toast.LENGTH_SHORT).show()
@@ -163,7 +164,8 @@ class MainActivity : AppCompatActivity() {
     fun logOut()
     {
         HomeFragmentState.shouldSave(false)
-        HomeFragmentState.saveFeed("")
+//        HomeFragmentState.saveFeed("")
+        HomeFragmentState.list(null)
         val sessionManager = SessionManager(this)
         val retrofit = Client(this).buildService(Api::class.java)
         retrofit.authentication().enqueue(object:
