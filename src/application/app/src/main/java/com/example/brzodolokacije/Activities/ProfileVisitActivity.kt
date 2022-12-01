@@ -31,17 +31,25 @@ import retrofit2.Response
 
 class ProfileVisitActivity : AppCompatActivity() {
 
+    private lateinit var username : String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile_visit)
 
-        replaceFragmentOnProfile(ProfileVisitPostsFragment())
+        username = intent.getStringExtra("visit").toString()
+
+        val profileVisitPostFragment = ProfileVisitPostsFragment()
+        val bundle = Bundle()
+        bundle.putString("username",username)
+        profileVisitPostFragment.arguments = bundle
+        replaceFragmentOnProfile(profileVisitPostFragment)
 
         val bubbleTabBarProfileVisit = findViewById<BubbleTabBar>(R.id.bubbleTabBarProfileProfileVisit)
         bubbleTabBarProfileVisit.addBubbleListener(object : OnBubbleClickListener {
             override fun onBubbleClick(id: Int) {
                 when(id){
-                    R.id.posts -> replaceFragmentOnProfile(ProfileVisitPostsFragment())
+                    R.id.posts -> replaceFragmentOnProfile(profileVisitPostFragment)
                     R.id.visitedLocations -> replaceFragmentOnProfile(LocationsFragment()) //napraviti poseban fragment gde ce se prikazivati lokacije korisnika (zavisi od implementacije Location fragmenta)
 
                     else -> {}
@@ -52,9 +60,8 @@ class ProfileVisitActivity : AppCompatActivity() {
 
         val retrofit = Client(this).buildService(Api::class.java)
         val sessionManager = SessionManager(this)
-        if (HomeFragmentState.getVisit()!=""){
+        if (username!="null"){
             val appUser=sessionManager.fetchUsername()
-            val username=HomeFragmentState.getVisit()
             retrofit.fetchUserProfileInfo(username).enqueue(object: Callback<DefaultResponse>
             {
                 override fun onResponse(
@@ -162,7 +169,6 @@ class ProfileVisitActivity : AppCompatActivity() {
                         opis.text = userProfileInfo.description;
 
                         exit.setOnClickListener{
-                            HomeFragmentState.setVisit("")
                             val intent = Intent(this@ProfileVisitActivity,MainActivity::class.java)
                             startActivity(intent)
                             finish()

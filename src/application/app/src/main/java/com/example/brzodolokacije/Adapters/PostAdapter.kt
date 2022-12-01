@@ -64,8 +64,9 @@ class PostAdapter(val photoList: MutableList<Photo>, val context: Context, val a
             //for visiting post owner's profile
             ownerProfile.setOnClickListener{
 
-                HomeFragmentState.setVisit(photo.owner)
+                //HomeFragmentState.setVisit(photo.owner)
                 val intent = Intent(activity,ProfileVisitActivity::class.java)
+                intent.putExtra("visit",photo.owner)
                 Handler(Looper.getMainLooper()).postDelayed({
                     activity.startActivity(intent)
                 }, 30)

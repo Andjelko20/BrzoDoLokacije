@@ -177,7 +177,6 @@ class MainActivity : AppCompatActivity() {
                 {
                     sessionManager.deleteAuthToken()
                     sessionManager.deleteUsername()
-                    HomeFragmentState.setVisit("")
 
                     val intent = Intent(this@MainActivity, LoginActivity::class.java)
                     startActivity(intent)
