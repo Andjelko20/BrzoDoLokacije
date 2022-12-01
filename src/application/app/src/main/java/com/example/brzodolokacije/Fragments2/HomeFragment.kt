@@ -213,14 +213,14 @@ class HomeFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        HomeFragmentState.saveFeed(savedState.toString())
+//        HomeFragmentState.saveFeed(savedState.toString())
         HomeFragmentState.shouldSave(true)
         savePosition(lastPosition,topViewRv)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        HomeFragmentState.saveFeed(savedState.toString())
+//        HomeFragmentState.saveFeed(savedState.toString())
         HomeFragmentState.shouldSave(true)
         savePosition(lastPosition,topViewRv)
     }

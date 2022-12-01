@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -154,7 +155,6 @@ class PostAdapter(val photoList: MutableList<Photo>, val context: Context, val a
             else likedByMe.setBackgroundResource(R.drawable.unliked)
             likedByMe.setOnClickListener{
                 likeUnlike(itemView,photo)
-                refreshPost(itemView,photo)
             }
         }
     }
@@ -265,9 +265,16 @@ class PostAdapter(val photoList: MutableList<Photo>, val context: Context, val a
                     val state = response.body()?.message.toString()
 
                     if(state=="liked")
+                    {
                         likedByMe.setBackgroundResource(R.drawable.liked)
+                        photo.likedByMe = true
+                    }
 
-                    else likedByMe.setBackgroundResource(R.drawable.unliked)
+                    else
+                    {
+                        likedByMe.setBackgroundResource(R.drawable.unliked)
+                        photo.likedByMe = false
+                    }
 
                     refreshPost(itemView,photo)
                 }
@@ -337,6 +344,14 @@ class PostAdapter(val photoList: MutableList<Photo>, val context: Context, val a
                    likes.text=newStats.numOfLikes.toString()
                    if(newStats.numOfComments.toInt() != 0) comments.text="View all ${newStats.numOfComments} comments"
                    else comments.text="No comments yet. Add yours?"
+
+                   photo.numberOfLikes = newStats.numOfLikes.toInt()
+                   photo.numberOfComments = newStats.numOfComments.toInt()
+
+                   val typeToken = object : TypeToken<MutableList<Photo>>() {}.type
+                   val dataListStr = Gson().toJson(dataList,typeToken)
+                   //Log.d("json",dataListStr)
+                   HomeFragmentState.saveFeed(dataListStr)
                }
                 else
                {
