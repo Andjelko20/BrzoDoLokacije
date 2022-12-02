@@ -96,7 +96,9 @@ class HomeFragment : Fragment() {
             activity?.let{
                 val intent = Intent (it, ActivityAddPost::class.java)
                 it.startActivity(intent)
+//                it.finish()
             }
+            requestLoadFeed(view)
         }
 
         val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayoutHome)
