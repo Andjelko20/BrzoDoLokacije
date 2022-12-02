@@ -11,21 +11,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat.startActivity
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Activities.ProfileVisitActivity
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Constants.Constants
-import com.example.brzodolokacije.Fragments2.LocationsFragment
-import com.example.brzodolokacije.Fragments2.PostsFragment
-import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.NewCommentDto
-import com.example.brzodolokacije.Models.UserProfile
 import com.example.brzodolokacije.Posts.*
 import com.example.brzodolokacije.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -34,8 +27,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
-import io.ak1.BubbleTabBar
-import io.ak1.OnBubbleClickListener
 import kotlinx.android.synthetic.main.fragment_home.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -44,7 +35,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class PostAdapter(val photoList: MutableList<Photo>, val context: Context, val activity: Context, val fragmentManager: FragmentManager) :
+class PostAdapter(val photoList: MutableList<Photo>, val context: Context, val activity: Context) :
     RecyclerView.Adapter<PostAdapter.MainViewHolder>() {
 
     var dataList : MutableList<Photo> = photoList
@@ -59,8 +50,8 @@ class PostAdapter(val photoList: MutableList<Photo>, val context: Context, val a
             val date = itemView.findViewById<TextView>(R.id.postDate)
             val location = itemView.findViewById<TextView>(R.id.location)
             val caption = itemView.findViewById<TextView>(R.id.postCaption)
-            var likes = itemView.findViewById<TextView>(R.id.numOfLikes)
-            var comments = itemView.findViewById<TextView>(R.id.postComments)
+            val likes = itemView.findViewById<TextView>(R.id.numOfLikes)
+            val comments = itemView.findViewById<TextView>(R.id.postComments)
             val image = itemView.findViewById<ImageView>(R.id.postImage)
             val likedByMe = itemView.findViewById<ImageView>(R.id.likeBtn)
 
@@ -74,10 +65,10 @@ class PostAdapter(val photoList: MutableList<Photo>, val context: Context, val a
             //for visiting post owner's profile
             ownerProfile.setOnClickListener{
 
-                VisitUserProfile.setVisit(photo.owner)
+                //HomeFragmentState.setVisit(photo.owner)
                 val intent = Intent(activity,ProfileVisitActivity::class.java)
+                intent.putExtra("visit",photo.owner)
                 Handler(Looper.getMainLooper()).postDelayed({
-                    VisitUserProfile.profileVisit(1)
                     activity.startActivity(intent)
                 }, 30)
             }
@@ -164,7 +155,6 @@ class PostAdapter(val photoList: MutableList<Photo>, val context: Context, val a
             else likedByMe.setBackgroundResource(R.drawable.unliked)
             likedByMe.setOnClickListener{
                 likeUnlike(itemView,photo)
-                refreshPost(itemView,photo)
             }
         }
     }
@@ -192,8 +182,8 @@ class PostAdapter(val photoList: MutableList<Photo>, val context: Context, val a
     private fun convertLongToTime(time: Long): String {
         val format = SimpleDateFormat("HH:mm  dd/MM/yyyy")
         val tickAtEpoche= 621355968000000000L
-        val ticksPerMiliSec = 10000;
-        Log.d("time",((time-tickAtEpoche)/ticksPerMiliSec).toString())
+        val ticksPerMiliSec = 10000
+//        Log.d("time",((time-tickAtEpoche)/ticksPerMiliSec).toString())
         return format.format(Date((time-tickAtEpoche)/ticksPerMiliSec))
     }
 
@@ -275,9 +265,16 @@ class PostAdapter(val photoList: MutableList<Photo>, val context: Context, val a
                     val state = response.body()?.message.toString()
 
                     if(state=="liked")
+                    {
                         likedByMe.setBackgroundResource(R.drawable.liked)
+                        photo.likedByMe = true
+                    }
 
-                    else likedByMe.setBackgroundResource(R.drawable.unliked)
+                    else
+                    {
+                        likedByMe.setBackgroundResource(R.drawable.unliked)
+                        photo.likedByMe = false
+                    }
 
                     refreshPost(itemView,photo)
                 }
@@ -347,6 +344,14 @@ class PostAdapter(val photoList: MutableList<Photo>, val context: Context, val a
                    likes.text=newStats.numOfLikes.toString()
                    if(newStats.numOfComments.toInt() != 0) comments.text="View all ${newStats.numOfComments} comments"
                    else comments.text="No comments yet. Add yours?"
+
+                   photo.numberOfLikes = newStats.numOfLikes.toInt()
+                   photo.numberOfComments = newStats.numOfComments.toInt()
+
+                   val typeToken = object : TypeToken<MutableList<Photo>>() {}.type
+                   val dataListStr = Gson().toJson(dataList,typeToken)
+                   //Log.d("json",dataListStr)
+                   HomeFragmentState.saveFeed(dataListStr)
                }
                 else
                {
@@ -359,11 +364,6 @@ class PostAdapter(val photoList: MutableList<Photo>, val context: Context, val a
             }
 
         })
-    }
-
-    fun getPhotos() : MutableList<Photo>
-    {
-        return dataList
     }
     private fun currentTimeToLong(): Long {
         return System.currentTimeMillis()

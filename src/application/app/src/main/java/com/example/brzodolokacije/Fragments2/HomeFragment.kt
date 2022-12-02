@@ -18,7 +18,7 @@ import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Posts.Photo
-import com.example.brzodolokacije.Posts.VisitUserProfile
+import com.example.brzodolokacije.Posts.HomeFragmentState
 import com.example.brzodolokacije.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -43,7 +43,6 @@ class HomeFragment : Fragment() {
     private var param2: String? = null
 
     private var savedState : String? = null
-    private val key : String = "saved_state"
 
     private var lastPosition : Int = 0
     private var topViewRv = 0
@@ -79,15 +78,8 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
-        if(savedInstanceState!=null)
-        {
-            savedState = savedInstanceState.getString(key)
-            //Log.d("saved",savedState.toString())
-        }
-        return view
+        return inflater.inflate(R.layout.fragment_home, container, false)
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -109,39 +101,13 @@ class HomeFragment : Fragment() {
                 refresh.isRefreshing = false
             }, 1500)
         }
-
-        if(savedState==null)
+        if(HomeFragmentState.isSaved() && HomeFragmentState.retreiveFeed()!="")
         {
-
-            if(VisitUserProfile.isVisited()==1)
-            {
-                savedState=VisitUserProfile.retreiveFeed()
-                VisitUserProfile.profileVisit(0)
-                val typeToken = object : TypeToken<MutableList<Photo>>() {}.type
-                val photosList = Gson().fromJson<MutableList<Photo>>(savedState, typeToken)
-
-                homePostsRv.apply {
-                    mylayoutManager = LinearLayoutManager(context) //activity
-                    recyclerView=view.findViewById(R.id.homePostsRv)
-                    recyclerView.layoutManager=mylayoutManager
-                    recyclerView.setHasFixedSize(true)
-                    val fragmentManager = getChildFragmentManager()
-                    myAdapter = this.context?.let { PostAdapter(photosList,it,requireActivity(),fragmentManager) }
-                    recyclerView.adapter=myAdapter
-                }
-                view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.GONE)
-                val last = sessionManager.fetchLast()
-                val lastOffset= sessionManager.fetchLastOffset()
-                ScrollToPosition(last,lastOffset)
-            }
-
-            else requestLoadFeed(view)
-            //Toast.makeText(requireActivity(),"sa beka",Toast.LENGTH_SHORT).show()
+            loadPhotos(sessionManager,view)
         }
         else
         {
-            loadPhotos(sessionManager,view)
-            //Toast.makeText(requireActivity(),"sacuvano",Toast.LENGTH_SHORT).show()
+            requestLoadFeed(view)
         }
 
         homePostsRv.addOnScrollListener(object : RecyclerView.OnScrollListener()
@@ -149,18 +115,12 @@ class HomeFragment : Fragment() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 lastPosition = (homePostsRv.layoutManager as? LinearLayoutManager)?.findFirstVisibleItemPosition()!!
-                //Toast.makeText(requireActivity(),lastPosition.toString(),Toast.LENGTH_SHORT).show()
                 val v = (homePostsRv.layoutManager as? LinearLayoutManager)?.getChildAt(0)
                 topViewRv = if(v == null) 0 else v.top - (homePostsRv.layoutManager as? LinearLayoutManager)?.paddingTop!!
 
-                savePosition()
+                savePosition(lastPosition,topViewRv)
             }
         })
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putString(key,savedState)
-        super.onSaveInstanceState(outState)
     }
 
     companion object {
@@ -193,7 +153,7 @@ class HomeFragment : Fragment() {
                 {
                     val listOfPhotosStr: String = response.body()?.message.toString()
                     savedState = listOfPhotosStr
-                    VisitUserProfile.saveFeed(savedState.toString())
+                    HomeFragmentState.saveFeed(savedState.toString())
 
                     val typeToken = object : TypeToken<MutableList<Photo>>() {}.type
                     val photosList = Gson().fromJson<MutableList<Photo>>(listOfPhotosStr, typeToken)
@@ -203,15 +163,15 @@ class HomeFragment : Fragment() {
                         recyclerView=view.findViewById(R.id.homePostsRv)
                         recyclerView.layoutManager=mylayoutManager
                         recyclerView.setHasFixedSize(true)
-                        val fragmentManager = getChildFragmentManager()
-                        myAdapter = this.context?.let { PostAdapter(photosList,it,requireActivity(),fragmentManager) }
+                        myAdapter = this.context?.let { PostAdapter(photosList,it,requireActivity()) }
                         recyclerView.adapter=myAdapter
                     }
                     view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.GONE)
                 }
                 else
                 {
-                    Toast.makeText(requireActivity(),"Error loading images",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireActivity(),"You don't follow anyone",Toast.LENGTH_SHORT).show()
+                    view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.GONE)
                 }
             }
 
@@ -224,8 +184,9 @@ class HomeFragment : Fragment() {
 
     private fun loadPhotos(sessionManager : SessionManager, view : View)
     {
+        savedState = HomeFragmentState.retreiveFeed()
         val listOfPhotosStr: String = savedState.toString()
-
+        HomeFragmentState.shouldSave(false)
         val typeToken = object : TypeToken<MutableList<Photo>>() {}.type
         val photosList = Gson().fromJson<MutableList<Photo>>(listOfPhotosStr, typeToken)
         homePostsRv.apply {
@@ -233,8 +194,7 @@ class HomeFragment : Fragment() {
             recyclerView=view.findViewById(R.id.homePostsRv)
             recyclerView.layoutManager=mylayoutManager
             recyclerView.setHasFixedSize(true)
-            val fragmentManager = getChildFragmentManager()
-            myAdapter = this.context?.let { PostAdapter(photosList,it,requireActivity(),fragmentManager) }
+            myAdapter = this.context?.let { PostAdapter(photosList,it,requireActivity()) }
             recyclerView.adapter=myAdapter
         }
         view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.GONE)
@@ -244,25 +204,26 @@ class HomeFragment : Fragment() {
         ScrollToPosition(last,lastOffset)
     }
 
-    private fun savePosition()
+    private fun savePosition(last : Int, lastOffset : Int)
     {
         val sessionManager = SessionManager(requireActivity())
-        sessionManager.saveLast(lastPosition)
-        sessionManager.saveLastOffset(topViewRv)
+        sessionManager.saveLast(last)
+        sessionManager.saveLastOffset(lastOffset)
     }
 
-//    override fun onDestroy() {
-//        super.onDestroy()
-//        savePosition()
-//        Log.d("destroy","")
-//    }
-
-    override fun onStop() {
-        super.onStop()
-        savePosition()
-        Log.d("stop","")
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+//        HomeFragmentState.saveFeed(savedState.toString())
+        HomeFragmentState.shouldSave(true)
+        savePosition(lastPosition,topViewRv)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+//        HomeFragmentState.saveFeed(savedState.toString())
+        HomeFragmentState.shouldSave(true)
+        savePosition(lastPosition,topViewRv)
+    }
     private fun ScrollToPosition(position : Int, offset : Int)
     {
         homePostsRv.stopScroll()

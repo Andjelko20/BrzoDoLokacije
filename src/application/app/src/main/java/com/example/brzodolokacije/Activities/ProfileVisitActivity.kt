@@ -13,14 +13,12 @@ import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Constants.Constants
 import com.example.brzodolokacije.Fragments2.LocationsFragment
-import com.example.brzodolokacije.Fragments2.PostsFragment
 import com.example.brzodolokacije.Fragments2.ProfileVisitPostsFragment
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
-import com.example.brzodolokacije.Models.UserProfile
 import com.example.brzodolokacije.Models.UserProfileVisit
 import com.example.brzodolokacije.R
-import com.example.brzodolokacije.Posts.VisitUserProfile
+import com.example.brzodolokacije.Posts.HomeFragmentState
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
@@ -33,17 +31,25 @@ import retrofit2.Response
 
 class ProfileVisitActivity : AppCompatActivity() {
 
+    private lateinit var username : String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile_visit)
 
-        replaceFragmentOnProfile(PostsFragment())
+        username = intent.getStringExtra("visit").toString()
+
+        val profileVisitPostFragment = ProfileVisitPostsFragment()
+        val bundle = Bundle()
+        bundle.putString("username",username)
+        profileVisitPostFragment.arguments = bundle
+        replaceFragmentOnProfile(profileVisitPostFragment)
 
         val bubbleTabBarProfileVisit = findViewById<BubbleTabBar>(R.id.bubbleTabBarProfileProfileVisit)
         bubbleTabBarProfileVisit.addBubbleListener(object : OnBubbleClickListener {
             override fun onBubbleClick(id: Int) {
                 when(id){
-                    R.id.posts -> replaceFragmentOnProfile(ProfileVisitPostsFragment())
+                    R.id.posts -> replaceFragmentOnProfile(profileVisitPostFragment)
                     R.id.visitedLocations -> replaceFragmentOnProfile(LocationsFragment()) //napraviti poseban fragment gde ce se prikazivati lokacije korisnika (zavisi od implementacije Location fragmenta)
 
                     else -> {}
@@ -54,9 +60,8 @@ class ProfileVisitActivity : AppCompatActivity() {
 
         val retrofit = Client(this).buildService(Api::class.java)
         val sessionManager = SessionManager(this)
-        if (VisitUserProfile.getVisit()!=""){
+        if (username!="null"){
             val appUser=sessionManager.fetchUsername()
-            val username=VisitUserProfile.getVisit()
             retrofit.fetchUserProfileInfo(username).enqueue(object: Callback<DefaultResponse>
             {
                 override fun onResponse(
@@ -164,7 +169,6 @@ class ProfileVisitActivity : AppCompatActivity() {
                         opis.text = userProfileInfo.description;
 
                         exit.setOnClickListener{
-                            VisitUserProfile.setVisit("")
                             val intent = Intent(this@ProfileVisitActivity,MainActivity::class.java)
                             startActivity(intent)
                             finish()

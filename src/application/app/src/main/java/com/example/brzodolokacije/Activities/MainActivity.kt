@@ -9,10 +9,8 @@ import android.view.ContextThemeWrapper
 import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
@@ -22,10 +20,9 @@ import com.example.brzodolokacije.Fragments2.ProfileFragment
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Posts.PrivremeneSlikeZaFeed
-import com.example.brzodolokacije.Posts.VisitUserProfile
+import com.example.brzodolokacije.Posts.HomeFragmentState
 import com.example.brzodolokacije.R
 import com.example.brzodolokacije.databinding.ActivityMainBinding
-import io.ak1.BubbleTabBar
 import io.ak1.OnBubbleClickListener
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
@@ -50,7 +47,6 @@ class MainActivity : AppCompatActivity() {
         if(savedInstanceState!=null)
         {
             homeFragment = supportFragmentManager.findFragmentByTag(homeKey) as HomeFragment
-            //Toast.makeText(this,"postoji home",Toast.LENGTH_SHORT).show()
         }
         else
         {
@@ -93,7 +89,7 @@ class MainActivity : AppCompatActivity() {
         }
         else
         {
-            replaceFragment(HomeFragment()) //ide na home kad prvi put otvorimo main i kad se vratimo iz biilo kod drugog aktivitija
+            replaceFragment(HomeFragment()) //ide na home kad prvi put otvorimo main i kad se vratimo iz bilo kod drugog aktivitija
             bubbleTabBar.visibility = View.VISIBLE;
             bubbleTabBar2.visibility = View.INVISIBLE;
         }
@@ -148,7 +144,8 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         if (backPressedTime + 3000 > System.currentTimeMillis()) {
             super.onBackPressed()
-            VisitUserProfile.profileVisit(0)
+            HomeFragmentState.shouldSave(false)
+            HomeFragmentState.saveFeed("")
             finish()
         } /*else {
             Toast.makeText(this, "Press back again to leave the app.", Toast.LENGTH_SHORT).show()
@@ -165,6 +162,8 @@ class MainActivity : AppCompatActivity() {
 
     fun logOut()
     {
+        HomeFragmentState.shouldSave(false)
+        HomeFragmentState.saveFeed("")
         val sessionManager = SessionManager(this)
         val retrofit = Client(this).buildService(Api::class.java)
         retrofit.authentication().enqueue(object:
@@ -178,7 +177,6 @@ class MainActivity : AppCompatActivity() {
                 {
                     sessionManager.deleteAuthToken()
                     sessionManager.deleteUsername()
-                    VisitUserProfile.setVisit("")
 
                     val intent = Intent(this@MainActivity, LoginActivity::class.java)
                     startActivity(intent)
