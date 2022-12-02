@@ -244,15 +244,28 @@ class HomeFragment : Fragment() {
                         val last = sessionManager.fetchLast()
                         val lastOffset= sessionManager.fetchLastOffset()
                         val listOfPhotosStr: String = response.body()?.message.toString()
-                        val typeToken = object : TypeToken<MutableList<Photo?>?>() {}.type
-                        val photosList  = Gson().fromJson<MutableList<Photo?>?>(listOfPhotosStr, typeToken)
-                        var i =0
-                        Log.d("velicina",photosList.size.toString())
+                        val typeToken = object : TypeToken<MutableList<Photo>>() {}.type
+                        val photosList  = Gson().fromJson<MutableList<Photo>>(listOfPhotosStr, typeToken)
+                        var i = 0
+                        var j = 0
+                        var flag = true
                         while(i < photosList.size-1)
                         {
-                            val photo : Photo? = photosList.get(i)
-                            //Log.d("photo",photo.toString())
-                            feed.add(photosList.get(i))
+                            j=0
+                            while(j < feed.size-1)
+                            {
+                                if(photosList.get(i).id == feed.get(j)!!.id)
+                                {
+                                    flag=false
+                                    break
+                                }
+                                j++
+                            }
+                            if(flag)
+                            {
+                                feed.add(photosList.get(i))
+                            }
+                            flag = true
                             i++
                         }
                         HomeFragmentState.list(feed)
@@ -288,8 +301,12 @@ class HomeFragment : Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 //        HomeFragmentState.saveFeed(savedState.toString())
-        HomeFragmentState.shouldSave(true)
-        savePosition(lastPosition,topViewRv)
+        if(HomeFragmentState.isSaved())
+        {
+            savePosition(lastPosition,topViewRv)
+            //HomeFragmentState.shouldSave(false)
+        }
+//        Log.d("saved","saved")
     }
 
     override fun onDestroy() {
@@ -297,6 +314,7 @@ class HomeFragment : Fragment() {
 //        HomeFragmentState.saveFeed(savedState.toString())
         HomeFragmentState.shouldSave(true)
         savePosition(lastPosition,topViewRv)
+//        Log.d("saved","destroy")
     }
     private fun ScrollToPosition(position : Int, offset : Int)
     {
