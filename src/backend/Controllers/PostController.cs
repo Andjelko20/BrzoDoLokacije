@@ -54,11 +54,12 @@ namespace backend.Controllers
                     error = true,
                     message = "Error"
                 });
-            
+
             posts = posts
-                .Skip((page-1) * (int)pageResults)
+                .OrderByDescending(p => p.Date)
+                .Skip((page - 1) * (int)pageResults)
                 .Take((int)pageResults)
-                .OrderByDescending(p => p.Date).ToList();
+                .ToList();
             List<PostDto> postsDto = new List<PostDto>();
             foreach (Post post in posts)
             {
