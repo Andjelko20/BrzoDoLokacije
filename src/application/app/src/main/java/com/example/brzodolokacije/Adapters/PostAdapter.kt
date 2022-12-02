@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,132 +34,141 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class PostAdapter(val photoList: MutableList<Photo>, val context: Context, val activity: Context) :
+class PostAdapter(val photoList: MutableList<Photo?>, val context: Context, val activity: Context) :
     RecyclerView.Adapter<PostAdapter.MainViewHolder>() {
 
-    var dataList : MutableList<Photo> = photoList
+    var dataList : MutableList<Photo?> = photoList
+    private val VIEW_TYPE_ITEM = 0
+    private val VIEW_TYPE_LOADING = 1
 
-    inner class MainViewHolder(private val itemView: View) :RecyclerView.ViewHolder(itemView) {
+    inner class MainViewHolder(private val itemView: View, type : Int) :RecyclerView.ViewHolder(itemView) {
+        val t = type
 
-        fun bindData(photo : Photo, index : Int)
+        fun bindData(p : Photo?, index : Int)
         {
-            val owner = itemView.findViewById<TextView>(R.id.postOwner)
-            val profilePic = itemView.findViewById<CircleImageView>(R.id.userProfilePic)
-            val ownerProfile = itemView.findViewById<ConstraintLayout>(R.id.ownerProfile)
-            val date = itemView.findViewById<TextView>(R.id.postDate)
-            val location = itemView.findViewById<TextView>(R.id.location)
-            val caption = itemView.findViewById<TextView>(R.id.postCaption)
-            val likes = itemView.findViewById<TextView>(R.id.numOfLikes)
-            val comments = itemView.findViewById<TextView>(R.id.postComments)
-            val image = itemView.findViewById<ImageView>(R.id.postImage)
-            val likedByMe = itemView.findViewById<ImageView>(R.id.likeBtn)
+            if(t == VIEW_TYPE_ITEM)
+            {
+                val photo = p!!
 
-            //owner
-            owner.text = photo.owner
+                val owner = itemView.findViewById<TextView>(R.id.postOwner)
+                val profilePic = itemView.findViewById<CircleImageView>(R.id.userProfilePic)
+                val ownerProfile = itemView.findViewById<ConstraintLayout>(R.id.ownerProfile)
+                val date = itemView.findViewById<TextView>(R.id.postDate)
+                val location = itemView.findViewById<TextView>(R.id.location)
+                val caption = itemView.findViewById<TextView>(R.id.postCaption)
+                val likes = itemView.findViewById<TextView>(R.id.numOfLikes)
+                val comments = itemView.findViewById<TextView>(R.id.postComments)
+                val image = itemView.findViewById<ImageView>(R.id.postImage)
+                val likedByMe = itemView.findViewById<ImageView>(R.id.likeBtn)
 
-            //profile image
-            val path : String=Constants.BASE_URL + "User/avatar/" + photo.owner
-            Picasso.get().load(path).into(profilePic);
+                //owner
+                owner.text = photo.owner
 
-            //for visiting post owner's profile
-            ownerProfile.setOnClickListener{
+                //profile image
+                val path : String=Constants.BASE_URL + "User/avatar/" + photo.owner
+                Picasso.get().load(path).into(profilePic);
 
-                //HomeFragmentState.setVisit(photo.owner)
-                val intent = Intent(activity,ProfileVisitActivity::class.java)
-                intent.putExtra("visit",photo.owner)
-                Handler(Looper.getMainLooper()).postDelayed({
-                    activity.startActivity(intent)
-                }, 30)
-            }
+                //for visiting post owner's profile
+                ownerProfile.setOnClickListener{
 
-            //date
-            date.text = convertLongToTime(photo.date)
-
-            //location
-            val text= photo.location //Html.fromHtml("<i>"+photo.location+"</i>")
-            location.text = text //=photo.location
-
-            //caption
-            caption.text = photo.caption //Html.fromHtml("<i>"+photo.caption+"</i>")
-
-            //list of likes
-            likes.text = photo.numberOfLikes.toString()
-            likes.setOnClickListener{
-
-                val view : View = LayoutInflater.from(context).inflate(R.layout.fragment_like_section,null)
-                loadLikes(view,photo)
-
-                //refreshing the list of likes
-                val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayoutLikes)
-                refresh.setOnRefreshListener {
-                    android.os.Handler(Looper.getMainLooper()).postDelayed({
-
-                        loadLikes(view,photo)
-                        refreshPost(itemView,photo)
-                        refresh.isRefreshing = false
-                    }, 1500)
+                    //HomeFragmentState.setVisit(photo.owner)
+                    val intent = Intent(activity,ProfileVisitActivity::class.java)
+                    intent.putExtra("visit",photo.owner)
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        activity.startActivity(intent)
+                    }, 30)
                 }
-                val dialog = BottomSheetDialog(activity)
-                dialog.setContentView(view)
-                dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
-                //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
-                dialog.show()
 
-                refreshPost(itemView,photo)
-            }
+                //date
+                date.text = convertLongToTime(photo.date)
 
-            //list and number of comments
-            if(photo.numberOfComments != 0) comments.text="View all ${photo.numberOfComments} comments"
-            else comments.text="No comments yet. Add yours?"
-            comments.setOnClickListener{
-                val view : View = LayoutInflater.from(context).inflate(R.layout.fragment_comment,null)
-                loadComments(view,photo)
+                //location
+                val text= photo.location //Html.fromHtml("<i>"+photo.location+"</i>")
+                location.text = text //=photo.location
 
-                //adding a new comment
-                val addCommentButton = view.findViewById<ImageView>(R.id.addCommentBtn)
-                val addCommentText = view.findViewById<EditText>(R.id.addCommentText)
-                addCommentButton.setOnClickListener{
-                    if(addCommentText.text.toString()!="")
-                    {
-                        val ct=addCommentText.text.toString().trim()
-                        val newComment = NewCommentDto(photo.id,ct)
-                        addNewComment(view,photo,newComment,itemView)
-                        refreshPost(itemView,photo)
+                //caption
+                caption.text = photo.caption //Html.fromHtml("<i>"+photo.caption+"</i>")
+
+                //list of likes
+                likes.text = photo.numberOfLikes.toString()
+                likes.setOnClickListener{
+
+                    val view : View = LayoutInflater.from(context).inflate(R.layout.fragment_like_section,null)
+                    loadLikes(view,photo)
+
+                    //refreshing the list of likes
+                    val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayoutLikes)
+                    refresh.setOnRefreshListener {
+                        android.os.Handler(Looper.getMainLooper()).postDelayed({
+
+                            loadLikes(view,photo)
+                            refreshPost(itemView,photo)
+                            refresh.isRefreshing = false
+                        }, 1500)
                     }
+                    val dialog = BottomSheetDialog(activity)
+                    dialog.setContentView(view)
+                    dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                    //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
+                    dialog.show()
+
+                    refreshPost(itemView,photo)
                 }
-                //refreshing the list of comments
-                val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayoutComments)
-                refresh.setOnRefreshListener {
-                    android.os.Handler(Looper.getMainLooper()).postDelayed({
 
-                        loadComments(view,photo)
-                        refreshPost(itemView,photo)
-                        refresh.isRefreshing = false
-                    }, 1500)
+                //list and number of comments
+                if(photo.numberOfComments != 0) comments.text="View all ${photo.numberOfComments} comments"
+                else comments.text="No comments yet. Add yours?"
+                comments.setOnClickListener{
+                    val view : View = LayoutInflater.from(context).inflate(R.layout.fragment_comment,null)
+                    loadComments(view,photo)
+
+                    //adding a new comment
+                    val addCommentButton = view.findViewById<ImageView>(R.id.addCommentBtn)
+                    val addCommentText = view.findViewById<EditText>(R.id.addCommentText)
+                    addCommentButton.setOnClickListener{
+                        if(addCommentText.text.toString()!="")
+                        {
+                            val ct=addCommentText.text.toString().trim()
+                            val newComment = NewCommentDto(photo.id,ct)
+                            addNewComment(view,photo,newComment,itemView)
+                            refreshPost(itemView,photo)
+                        }
+                    }
+                    //refreshing the list of comments
+                    val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayoutComments)
+                    refresh.setOnRefreshListener {
+                        android.os.Handler(Looper.getMainLooper()).postDelayed({
+
+                            loadComments(view,photo)
+                            refreshPost(itemView,photo)
+                            refresh.isRefreshing = false
+                        }, 1500)
+                    }
+                    val dialog = BottomSheetDialog(activity)
+                    dialog.setContentView(view)
+                    dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                    //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
+                    dialog.show()
+                    refreshPost(itemView,photo)
                 }
-                val dialog = BottomSheetDialog(activity)
-                dialog.setContentView(view)
-                dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
-                //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
-                dialog.show()
-                refreshPost(itemView,photo)
-            }
 
-            //image in the post
-            val imagePath=Constants.BASE_URL+"Post/postPhoto/${photo.id}"
-            Picasso.get().load(imagePath).into(image);
+                //image in the post
+                val imagePath=Constants.BASE_URL+"Post/postPhoto/${photo.id}"
+                Picasso.get().load(imagePath).into(image);
 
-            //liked or not liked
-            if(photo.likedByMe) likedByMe.setBackgroundResource(R.drawable.liked)
-            else likedByMe.setBackgroundResource(R.drawable.unliked)
-            likedByMe.setOnClickListener{
-                likeUnlike(itemView,photo)
+                //liked or not liked
+                if(photo.likedByMe) likedByMe.setBackgroundResource(R.drawable.liked)
+                else likedByMe.setBackgroundResource(R.drawable.unliked)
+                likedByMe.setOnClickListener{
+                    likeUnlike(itemView,photo)
+                }
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
-        return MainViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.rv_photopost, parent, false))
+        if(viewType == VIEW_TYPE_LOADING) return MainViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.homepage_item_load, parent, false), viewType)
+        return MainViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.rv_photopost, parent, false), viewType)
     }
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
@@ -171,11 +179,9 @@ class PostAdapter(val photoList: MutableList<Photo>, val context: Context, val a
         return dataList.size
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun refreshPosts(items : MutableList<Photo>)
-    {
-        dataList=items
-        notifyDataSetChanged()
+    override fun getItemViewType(position: Int): Int {
+        if(dataList.get(position)==null) return VIEW_TYPE_LOADING
+        return VIEW_TYPE_ITEM
     }
 
     @SuppressLint("SimpleDateFormat")

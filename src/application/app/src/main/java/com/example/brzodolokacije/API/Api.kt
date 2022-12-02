@@ -80,4 +80,7 @@ interface Api {
 
     @GET("User/refreshUser/{username}")
     fun refreshFollows(@Path("username") username : String) : Call<DefaultResponse>
+
+    @GET("Post/getAll/{page}")
+    fun getAll(@Path("page") page : Int) : Call<DefaultResponse>
 }

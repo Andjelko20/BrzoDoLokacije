@@ -2,6 +2,7 @@ package com.example.brzodolokacije.Fragments2
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.*
@@ -43,7 +44,10 @@ class HomeFragment : Fragment() {
     private var param2: String? = null
 
     private var savedState : String? = null
-    private lateinit var feed : MutableList<Photo>
+    private lateinit var feed : MutableList<Photo?>
+    private var page : Int = 1
+
+    private var isLoading : Boolean = false
 
     private var lastPosition : Int = 0
     private var topViewRv = 0
@@ -120,6 +124,17 @@ class HomeFragment : Fragment() {
                 topViewRv = if(v == null) 0 else v.top - (homePostsRv.layoutManager as? LinearLayoutManager)?.paddingTop!!
 
                 savePosition(lastPosition,topViewRv)
+
+                if(!isLoading)
+                {
+                    val lastCompletelyVisible = (homePostsRv.layoutManager as? LinearLayoutManager)?.findLastCompletelyVisibleItemPosition()!!
+                    if(lastCompletelyVisible == feed.size-1)
+                    {
+                        //bottom of the list, load more
+                        loadMorePhotos(sessionManager,view)
+                        isLoading = true
+                    }
+                }
             }
         })
     }
@@ -147,7 +162,7 @@ class HomeFragment : Fragment() {
     private fun requestLoadFeed(view : View)
     {
         val retrofit = Client(requireActivity()).buildService(Api::class.java)
-        retrofit.getAllPosts().enqueue(object: Callback<DefaultResponse>
+        retrofit.getAll(page).enqueue(object: Callback<DefaultResponse>
         {
             override fun onResponse(call: Call<DefaultResponse>, response: Response<DefaultResponse>) {
                 if(response.body()?.error.toString()=="false")
@@ -156,16 +171,17 @@ class HomeFragment : Fragment() {
 //                    savedState = listOfPhotosStr
 //                    HomeFragmentState.saveFeed(savedState.toString())
 
-                    val typeToken = object : TypeToken<MutableList<Photo>>() {}.type
-                    val photosList = Gson().fromJson<MutableList<Photo>>(listOfPhotosStr, typeToken)
+                    val typeToken = object : TypeToken<MutableList<Photo?>?>() {}.type
+                    val photosList  = Gson().fromJson<MutableList<Photo?>?>(listOfPhotosStr, typeToken)
                     HomeFragmentState.list(photosList)
+                    feed = HomeFragmentState.getList()!!
 
                     homePostsRv.apply {
                         mylayoutManager = LinearLayoutManager(context) //activity
                         recyclerView=view.findViewById(R.id.homePostsRv)
                         recyclerView.layoutManager=mylayoutManager
                         recyclerView.setHasFixedSize(true)
-                        myAdapter = this.context?.let { PostAdapter(photosList,it,requireActivity()) }
+                        myAdapter = this.context?.let { PostAdapter(feed,it,requireActivity()) }
                         recyclerView.adapter=myAdapter
                     }
                     view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.GONE)
@@ -205,6 +221,61 @@ class HomeFragment : Fragment() {
         val last = sessionManager.fetchLast()
         val lastOffset= sessionManager.fetchLastOffset()
         ScrollToPosition(last,lastOffset)
+    }
+
+    private fun loadMorePhotos(sessionManager : SessionManager,view : View)
+    {
+        page++
+        feed.add(null)
+        myAdapter!!.notifyItemInserted(feed.size -1)
+        ScrollToPosition(feed.size-1,0)
+//        Log.d("adapter", myAdapter.toString())
+        val retrofit = Client(requireActivity()).buildService(Api::class.java)
+        retrofit.getAll(page).enqueue(object: Callback<DefaultResponse>
+        {
+            override fun onResponse(
+                call: Call<DefaultResponse>,
+                response: Response<DefaultResponse>
+            ) {
+                if(response.body()?.error.toString() == "false")
+                {
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        feed.removeAt(feed.size-1)
+                        val last = sessionManager.fetchLast()
+                        val lastOffset= sessionManager.fetchLastOffset()
+                        val listOfPhotosStr: String = response.body()?.message.toString()
+                        val typeToken = object : TypeToken<MutableList<Photo?>?>() {}.type
+                        val photosList  = Gson().fromJson<MutableList<Photo?>?>(listOfPhotosStr, typeToken)
+                        var i =0
+                        Log.d("velicina",photosList.size.toString())
+                        while(i < photosList.size-1)
+                        {
+                            val photo : Photo? = photosList.get(i)
+                            //Log.d("photo",photo.toString())
+                            feed.add(photosList.get(i))
+                            i++
+                        }
+                        HomeFragmentState.list(feed)
+                        myAdapter!!.notifyDataSetChanged()
+                        isLoading=false
+                        ScrollToPosition(last,lastOffset)
+
+                    }, 2000)
+                }
+                else
+                {
+                    feed.removeAt(feed.size-1)
+                    isLoading=false
+                }
+            }
+
+            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                Toast.makeText(requireActivity(),"Error loading images",Toast.LENGTH_SHORT).show()
+                feed.removeAt(feed.size-1)
+                isLoading=false
+            }
+
+        })
     }
 
     private fun savePosition(last : Int, lastOffset : Int)
