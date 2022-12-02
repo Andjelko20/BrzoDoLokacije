@@ -101,7 +101,7 @@ class HomeFragment : Fragment() {
 
         val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayoutHome)
         refresh.setOnRefreshListener {
-            android.os.Handler(Looper.getMainLooper()).postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
                 requestLoadFeed(view)
                 refresh.isRefreshing = false
             }, 1500)
@@ -161,6 +161,8 @@ class HomeFragment : Fragment() {
 
     private fun requestLoadFeed(view : View)
     {
+        page = 1
+//        Toast.makeText(requireActivity(),page.toString(),Toast.LENGTH_SHORT).show()
         val retrofit = Client(requireActivity()).buildService(Api::class.java)
         retrofit.getAll(page).enqueue(object: Callback<DefaultResponse>
         {
@@ -204,6 +206,8 @@ class HomeFragment : Fragment() {
     {
 //        savedState = HomeFragmentState.retreiveFeed()
         feed = HomeFragmentState.getList()!!
+        page = HomeFragmentState.savedPage()
+//        Toast.makeText(requireActivity(),page.toString(),Toast.LENGTH_SHORT).show()
 //        val listOfPhotosStr: String = savedState.toString()
         HomeFragmentState.shouldSave(false)
 //        val typeToken = object : TypeToken<MutableList<Photo>>() {}.type
@@ -226,6 +230,7 @@ class HomeFragment : Fragment() {
     private fun loadMorePhotos(sessionManager : SessionManager,view : View)
     {
         page++
+//        Toast.makeText(requireActivity(),page.toString(),Toast.LENGTH_SHORT).show()
         feed.add(null)
         myAdapter!!.notifyItemInserted(feed.size -1)
         ScrollToPosition(feed.size-1,0)
@@ -249,10 +254,10 @@ class HomeFragment : Fragment() {
                         var i = 0
                         var j = 0
                         var flag = true
-                        while(i < photosList.size-1)
+                        while(i < photosList.size)
                         {
                             j=0
-                            while(j < feed.size-1)
+                            while(j < feed.size)
                             {
                                 if(photosList.get(i).id == feed.get(j)!!.id)
                                 {
@@ -304,6 +309,7 @@ class HomeFragment : Fragment() {
         if(HomeFragmentState.isSaved())
         {
             savePosition(lastPosition,topViewRv)
+            HomeFragmentState.page(page)
             //HomeFragmentState.shouldSave(false)
         }
 //        Log.d("saved","saved")
@@ -313,6 +319,7 @@ class HomeFragment : Fragment() {
         super.onDestroy()
 //        HomeFragmentState.saveFeed(savedState.toString())
         HomeFragmentState.shouldSave(true)
+        HomeFragmentState.page(page)
         savePosition(lastPosition,topViewRv)
 //        Log.d("saved","destroy")
     }
