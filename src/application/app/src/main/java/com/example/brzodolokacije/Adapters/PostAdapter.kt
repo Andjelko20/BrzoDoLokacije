@@ -243,6 +243,7 @@ class PostAdapter(val photoList: MutableList<Photo?>, val context: Context, val 
                     itemView.findViewById<TextView>(R.id.postComments).text = "View all ${newNumOfComments} comments"
                     view.findViewById<TextView>(R.id.addCommentText).text=""
                     loadComments(view,photo)
+                    refreshPost(itemView,photo)
                 }
                 else
                 {
@@ -349,17 +350,12 @@ class PostAdapter(val photoList: MutableList<Photo?>, val context: Context, val 
                    val newStats : Stats = Gson().fromJson(newStatsStr, Stats :: class.java)
 
                    likes.text=newStats.numOfLikes.toString()
+                   photo.numberOfComments = newStats.numOfComments.toInt()
+                   photo.numberOfLikes = newStats.numOfLikes.toInt()
+                   HomeFragmentState.list(dataList)
                    if(newStats.numOfComments.toInt() != 0) comments.text="View all ${newStats.numOfComments} comments"
                    else comments.text="No comments yet. Add yours?"
 
-                   photo.numberOfLikes = newStats.numOfLikes.toInt()
-                   photo.numberOfComments = newStats.numOfComments.toInt()
-
-//                   val typeToken = object : TypeToken<MutableList<Photo>>() {}.type
-//                   val dataListStr = Gson().toJson(dataList,typeToken)
-//                   //Log.d("json",dataListStr)
-//                   HomeFragmentState.saveFeed(dataListStr)
-                   HomeFragmentState.list(dataList)
                }
                 else
                {
