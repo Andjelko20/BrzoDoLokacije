@@ -12,6 +12,7 @@ public class DataContext : DbContext
     public DbSet<Like> Likes { get; set; }
     public DbSet<Comment> Comments { get; set; }
     public DbSet<Follow> Follows { get; set; }
+    public DbSet<Message> Messages { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -30,6 +31,16 @@ public class DataContext : DbContext
             .HasOne(u => u.Follower)
             .WithMany(u => u.Followees)
             .HasForeignKey(u => u.FollowerId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Message>()
+            .HasOne(u => u.Receiver)
+            .WithMany(u => u.Senders)
+            .HasForeignKey(u => u.ReceiverId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Message>()
+            .HasOne(u => u.Sender)
+            .WithMany(u => u.Receivers)
+            .HasForeignKey(u => u.SenderId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }
