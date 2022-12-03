@@ -79,7 +79,7 @@ class ActivityAddPost : AppCompatActivity() {
 
         backButton.setOnClickListener{
             val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("backPressed", "returnToProfile");
+//            intent.putExtra("backPressed", "returnToProfile");
             startActivity(intent)
         }
 
@@ -120,6 +120,7 @@ class ActivityAddPost : AppCompatActivity() {
                             })
 
                         val intent = Intent(this@ActivityAddPost, MainActivity::class.java)
+                        intent.putExtra("postAdded", "refresh again");
                         startActivity(intent)
                     }
 
@@ -200,4 +201,10 @@ class ActivityAddPost : AppCompatActivity() {
         return Base64.encodeToString(b, Base64.DEFAULT)
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(this, MainActivity::class.java)
+//        intent.putExtra("backPressed", "returnToProfile");
+        startActivity(intent)
+    }
 }

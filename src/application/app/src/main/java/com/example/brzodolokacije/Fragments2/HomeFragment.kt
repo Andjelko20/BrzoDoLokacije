@@ -98,7 +98,6 @@ class HomeFragment : Fragment() {
                 it.startActivity(intent)
 //                it.finish()
             }
-            requestLoadFeed(view)
         }
 
         val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayoutHome)
@@ -115,6 +114,12 @@ class HomeFragment : Fragment() {
         else
         {
             requestLoadFeed(view)
+            val p = requireActivity().intent.getStringExtra("postAdded")
+            if(p!=null) {
+                Handler(Looper.getMainLooper()).postDelayed({
+                    loadPhotos(sessionManager,view)
+                }, 500)
+            }
         }
 
         homePostsRv.addOnScrollListener(object : RecyclerView.OnScrollListener()
