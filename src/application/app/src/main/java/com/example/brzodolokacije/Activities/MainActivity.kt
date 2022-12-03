@@ -71,6 +71,11 @@ class MainActivity : AppCompatActivity() {
                         startActivity(intent)
                         true
                     }
+                    R.id.deleteAccountMeni ->{
+                        val intent = Intent(this, DeleteAccountActivity::class.java)
+                        startActivity(intent)
+                        true
+                    }
                     else -> false
                 }
 
