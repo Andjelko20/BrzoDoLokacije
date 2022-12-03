@@ -229,6 +229,30 @@ namespace backend.Controllers
                 message = "Success"
             });
         }
+        
+        [Authorize(Roles = "korisnik")]
+        [HttpGet("check-password")]
+        public async Task<ActionResult<string>> checkPassword(PasswordDto request)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
+            if (user == null)
+                return BadRequest(new
+                {
+                    error = true,
+                    message = "Error"
+                });
+            if (BCrypt.Net.BCrypt.Verify(request.Password, user.Password) == false)
+                return Ok(new
+                {
+                    error = true,
+                    message = "Current password is not correct"
+                });
+            return Ok(new
+            {
+                error = false,
+                message = "Success"
+            });
+        }
 
 
         [Authorize(Roles = "korisnik")]
