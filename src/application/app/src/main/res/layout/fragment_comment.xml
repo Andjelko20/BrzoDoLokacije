@@ -75,7 +75,7 @@
                 android:paddingBottom="10dp"
                 android:textColor="@color/text_dark"
                 android:textColorHint="@color/text_dark"
-                android:textSize="18sp" />
+                android:textSize="18sp"/>
 
             <ImageView
                 android:id="@+id/addCommentBtn"

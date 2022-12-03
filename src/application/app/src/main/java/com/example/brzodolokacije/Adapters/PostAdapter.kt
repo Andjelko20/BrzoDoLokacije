@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -187,10 +188,10 @@ class PostAdapter(val photoList: MutableList<Photo?>, val context: Context, val 
 
     @SuppressLint("SimpleDateFormat")
     private fun convertLongToTime(time: Long): String {
-        val format = SimpleDateFormat("HH:mm  dd/MM/yyyy")
+        val format = SimpleDateFormat("HH:mm  dd/MM/yyyy", Locale("Serbia"))
+        format.setTimeZone(TimeZone.getTimeZone("GMT"));
         val tickAtEpoche= 621355968000000000L
         val ticksPerMiliSec = 10000
-//        Log.d("time",((time-tickAtEpoche)/ticksPerMiliSec).toString())
         return format.format(Date((time-tickAtEpoche)/ticksPerMiliSec))
     }
 
