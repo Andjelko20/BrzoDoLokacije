@@ -131,10 +131,10 @@ class HomeFragment : Fragment() {
                 topViewRv = if(v == null) 0 else v.top - (homePostsRv.layoutManager as? LinearLayoutManager)?.paddingTop!!
 
                 savePosition(lastPosition,topViewRv)
-
+//                Toast.makeText(requireActivity(),isLoading.toString(),Toast.LENGTH_SHORT).show()
                 if(!isLoading)
                 {
-                    val lastCompletelyVisible = (homePostsRv.layoutManager as? LinearLayoutManager)?.findLastCompletelyVisibleItemPosition()!!
+                    val lastCompletelyVisible = (homePostsRv.layoutManager as? LinearLayoutManager)?.findLastVisibleItemPosition()!!
                     if(lastCompletelyVisible == feed.size-1)
                     {
                         //bottom of the list, load more
@@ -239,8 +239,10 @@ class HomeFragment : Fragment() {
         page++
 //        Toast.makeText(requireActivity(),page.toString(),Toast.LENGTH_SHORT).show()
         feed.add(null)
-        myAdapter!!.notifyItemInserted(feed.size -1)
-        ScrollToPosition(feed.size-1,0)
+        homePostsRv.post{
+            myAdapter!!.notifyItemInserted(feed.size -1)
+        }
+//        ScrollToPosition(feed.size-1,0)
 //        Log.d("adapter", myAdapter.toString())
         val retrofit = Client(requireActivity()).buildService(Api::class.java)
         retrofit.getAll(page).enqueue(object: Callback<DefaultResponse>
@@ -253,6 +255,9 @@ class HomeFragment : Fragment() {
                 {
                     Handler(Looper.getMainLooper()).postDelayed({
                         feed.removeAt(feed.size-1)
+                        homePostsRv.post{
+                            myAdapter!!.notifyItemRemoved(feed.size-1)
+                        }
                         val last = sessionManager.fetchLast()
                         val lastOffset= sessionManager.fetchLastOffset()
                         val listOfPhotosStr: String = response.body()?.message.toString()
@@ -264,6 +269,7 @@ class HomeFragment : Fragment() {
                         while(i < photosList.size)
                         {
                             j=0
+                            Toast.makeText(requireActivity(),photosList.get(i).id,Toast.LENGTH_SHORT).show()
                             while(j < feed.size)
                             {
                                 if(photosList.get(i).id == feed.get(j)!!.id)
@@ -275,13 +281,17 @@ class HomeFragment : Fragment() {
                             }
                             if(flag)
                             {
+
                                 feed.add(photosList.get(i))
+                                homePostsRv.post{
+                                    myAdapter!!.notifyItemInserted(feed.size -1)
+                                }
                             }
                             flag = true
                             i++
                         }
                         HomeFragmentState.list(feed)
-                        myAdapter!!.notifyDataSetChanged()
+//                        myAdapter!!.notifyDataSetChanged()
                         isLoading=false
                         ScrollToPosition(last,lastOffset)
 
@@ -290,14 +300,14 @@ class HomeFragment : Fragment() {
                 else
                 {
                     feed.removeAt(feed.size-1)
-                    isLoading=false
+//                    isLoading=false
                 }
             }
 
             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                 Toast.makeText(requireActivity(),"Error loading images",Toast.LENGTH_SHORT).show()
                 feed.removeAt(feed.size-1)
-                isLoading=false
+//                isLoading=false
             }
 
         })
@@ -317,6 +327,7 @@ class HomeFragment : Fragment() {
         {
             savePosition(lastPosition,topViewRv)
             HomeFragmentState.page(page)
+            savePosition(lastPosition,topViewRv)
             //HomeFragmentState.shouldSave(false)
         }
 //        Log.d("saved","saved")

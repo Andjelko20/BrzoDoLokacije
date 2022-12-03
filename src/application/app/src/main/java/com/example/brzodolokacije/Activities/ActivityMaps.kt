@@ -82,7 +82,7 @@ class ActivityMaps : AppCompatActivity(), OnMapReadyCallback {
                     builder.setPositiveButton("Yes"){dialogInterface, which ->
                         Intent(this@ActivityMaps,ActivityAddPost::class.java).also{
                             it.putExtra("sb",sb.toString())
-                            it.putExtra("bitslike",bit)
+//                            it.putExtra("bitslike",bit)
                             it.putExtra("latitude",location.latitude)
                             it.putExtra("longitude",location.longitude)
                             startActivity(it)

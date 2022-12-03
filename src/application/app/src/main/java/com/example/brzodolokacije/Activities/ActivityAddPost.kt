@@ -64,18 +64,18 @@ class ActivityAddPost : AppCompatActivity() {
         editLocationSection.setOnClickListener{
             val intent = Intent(this@ActivityAddPost, ActivityMaps::class.java)
             val banana = pickedBitMap?.let { encodeImage(it) }
-            intent.putExtra("bit",banana)
+//            intent.putExtra("bit",banana)
             startActivity(intent)
         }
-        val test = intent.getStringExtra("bitslike");
-        if(test.toString() != "null")
-        {
-            val imageBytes =Base64.decode(test,0);
-            val image=BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size);
-            pickedBitMap = image
-            previewPic.setImageBitmap(pickedBitMap)
-            file = bitmapToFile(pickedBitMap!!, "slika.jpeg")
-        }
+//        val test = intent.getStringExtra("bitslike");
+//        if(test.toString() != "null")
+//        {
+//            val imageBytes =Base64.decode(test,0);
+//            val image=BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size);
+//            pickedBitMap = image
+//            previewPic.setImageBitmap(pickedBitMap)
+//            file = bitmapToFile(pickedBitMap!!, "slika.jpeg")
+//        }
 
         backButton.setOnClickListener{
             val intent = Intent(this, MainActivity::class.java)
