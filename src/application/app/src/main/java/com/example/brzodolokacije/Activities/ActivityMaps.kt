@@ -103,7 +103,7 @@ class ActivityMaps : AppCompatActivity(), OnMapReadyCallback {
                     val builder = AlertDialog.Builder(this@ActivityMaps)
                     val bit = intent.getStringExtra("bit")
 //                    Log.d("bit",bit.toString())
-//                    Toast.makeText(this@ActivityMaps,location.longitude.toString(),Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this@ActivityMaps,location.latitude.toString()+", "+location.longitude.toString(),Toast.LENGTH_SHORT).show()
                     builder.setTitle("Confirm location")
 //                    builder.setMessage("Test")
                     builder.setPositiveButton("Yes"){dialogInterface, which ->

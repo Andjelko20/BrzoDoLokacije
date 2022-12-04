@@ -114,12 +114,16 @@ class ActivityAddPost : AppCompatActivity() {
 
                 var caption = editCaptionSection.text.toString().trim()
                 var location = intent.getStringExtra("sb").toString()
-                var newPost = NewPostDto(location, caption)
+                    var newPost : NewPostDto? = null;
                     if(provera.isEmpty()){
                         editLocationSection.error = "Please enter your current password"
                         editLocationSection.requestFocus()
                         return@setOnClickListener
                     }
+                    else
+                    {
+                        newPost = NewPostDto(location, caption)
+
                 retrofit.addNewPost(newPost).enqueue(object : Callback<DefaultResponse> {
                     override fun onResponse(
                         call: Call<DefaultResponse>,
@@ -149,7 +153,7 @@ class ActivityAddPost : AppCompatActivity() {
                     override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                         Toast.makeText(this@ActivityAddPost, t.message.toString(), Toast.LENGTH_SHORT).show()
                     }
-                })
+                })}
             }
         }
     }

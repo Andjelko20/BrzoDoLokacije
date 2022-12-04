@@ -1,11 +1,15 @@
 package com.example.brzodolokacije.Fragments2
 
+import android.location.Location
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.brzodolokacije.R
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.SupportMapFragment
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,12 +26,26 @@ class LocationsFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var mMap : GoogleMap
+    private lateinit var lastLocation : Location
+    private lateinit var fusedLocationClient : FusedLocationProviderClient
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val mapFragment = SupportMapFragment.newInstance()
+        getParentFragmentManager()
+            .beginTransaction()
+            .add(R.id.maps, mapFragment)
+            .commit()
+//        mapFragment.getMapAsync()
     }
 
     override fun onCreateView(
