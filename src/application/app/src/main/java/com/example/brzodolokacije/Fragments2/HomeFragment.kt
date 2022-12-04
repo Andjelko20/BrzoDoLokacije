@@ -295,7 +295,7 @@ class HomeFragment : Fragment() {
                 {
                     val p = feed.size -1
                     feed.removeAt(feed.size-1)
-                    myAdapter!!.notifyItemInserted(p)
+                    myAdapter!!.notifyItemRemoved(p)
 //                    isLoading=false
                 }
             }
@@ -304,7 +304,7 @@ class HomeFragment : Fragment() {
                 Toast.makeText(requireActivity(),"Error loading images",Toast.LENGTH_SHORT).show()
                 val p = feed.size -1
                 feed.removeAt(feed.size-1)
-                myAdapter!!.notifyItemInserted(p)
+                myAdapter!!.notifyItemRemoved(p)
 //                isLoading=false
             }
 
