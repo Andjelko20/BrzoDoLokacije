@@ -16,6 +16,12 @@ data class Photo (
     @SerializedName("Location")
     val location : String, //za sad je string, mozda se menja
 
+    @SerializedName("Latitude")
+    val latitude : String,
+
+    @SerializedName("Longitude")
+    val longitude : String,
+
     @SerializedName("Caption")
     val caption : String,
 
