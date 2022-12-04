@@ -89,7 +89,15 @@ class PostAdapter(val photoList: MutableList<Photo?>, val context: Context, val 
                 location.text = text //=photo.location
 
                 //caption
-                caption.text = photo.caption //Html.fromHtml("<i>"+photo.caption+"</i>")
+                if(photo.caption == "")
+                {
+                    caption.setVisibility(View.GONE)
+                }
+                else
+                {
+                    caption.setVisibility(View.VISIBLE)
+                    caption.text = photo.caption
+                } //Html.fromHtml("<i>"+photo.caption+"</i>")
 
                 //list of likes
                 likes.text = photo.numberOfLikes.toString()

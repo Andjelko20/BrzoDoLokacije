@@ -177,6 +177,14 @@ class ProfileVisitActivity : AppCompatActivity() {
                         likesNum.text = userProfileInfo.totalNumOfLikes.toString();
                         imeprezime.text = userProfileInfo.name;
                         opis.text = userProfileInfo.description;
+                        if(opis.text == "" && imeprezime.text=="")
+                        {
+                            opis.setVisibility(View.GONE)
+                        }
+                        else
+                        {
+                            opis.setVisibility(View.VISIBLE)
+                        }
 
                         exit.setOnClickListener{
                             val intent = Intent(this@ProfileVisitActivity,MainActivity::class.java)
