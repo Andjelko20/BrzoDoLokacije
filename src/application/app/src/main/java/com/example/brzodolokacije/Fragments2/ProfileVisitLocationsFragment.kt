@@ -107,7 +107,7 @@ class ProfileVisitLocationsFragment : Fragment(),OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap;
         val retrofit = Client(requireActivity()).buildService(Api::class.java)
-        if (user != null){
+        if (user != "null"){
             retrofit.getLocationsByUser(user).enqueue(object: Callback<DefaultResponse>{
                 override fun onResponse(
                     call: Call<DefaultResponse>,
