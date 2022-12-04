@@ -42,14 +42,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val wrapper: Context = ContextThemeWrapper(this, R.style.MyPopupMenu)
-        if(savedInstanceState!=null)
-        {
-            homeFragment = supportFragmentManager.findFragmentByTag(homeKey) as HomeFragment
-        }
-        else
-        {
+//        if(savedInstanceState!=null)
+//        {
+//            homeFragment = supportFragmentManager.findFragmentByTag(homeKey) as HomeFragment
+//        }
+//        else
+//        {
             homeFragment = HomeFragment()
-        }
+//        }
 
         options_meni.setOnClickListener{
             val popupMenu = PopupMenu(wrapper, it)
@@ -66,6 +66,11 @@ class MainActivity : AppCompatActivity() {
                     }
                     R.id.changePasswordMeni ->{
                         val intent = Intent(this, ChangePasswordActivity::class.java)
+                        startActivity(intent)
+                        true
+                    }
+                    R.id.deleteAccountMeni ->{
+                        val intent = Intent(this, DeleteAccountActivity::class.java)
                         startActivity(intent)
                         true
                     }

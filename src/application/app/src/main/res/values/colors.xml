@@ -28,4 +28,5 @@
     <color name="light_mint_navbar">#C1F8FF</color>
     <color name="pastel_blue">#C3E2FF</color>
     <color name="transparent">#00C3E2FF</color>
+    <color name="dialog_background">#7CB1CF</color>
 </resources>

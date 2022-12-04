@@ -26,4 +26,14 @@
     <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@android:color/transparent</item>
     </style>
+
+    <style name="AlertDialogCustom" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <!-- Used for the buttons -->
+        <item name="colorAccent">@color/blue_text</item>
+        <!-- Used for the title and text -->
+        <item name="android:textColorPrimary">@color/dark_blue</item>
+        <!-- Used for the background -->
+        <item name="android:background">@color/dialog_background</item>
+        <item name="android:textColor">@color/light_text</item>
+    </style>
 </resources>
