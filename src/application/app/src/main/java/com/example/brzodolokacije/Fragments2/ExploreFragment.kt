@@ -92,7 +92,7 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
                             sb.append(drzava)
                         else
                             sb.append(grad).append(", ").append(drzava)
-                        mMap.addMarker(MarkerOptions().position(latLng).title(sb.toString()))
+//                        mMap.addMarker(MarkerOptions().position(latLng).title(sb.toString()))
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10f))
                     } catch (e: Exception) {
                         e.printStackTrace()

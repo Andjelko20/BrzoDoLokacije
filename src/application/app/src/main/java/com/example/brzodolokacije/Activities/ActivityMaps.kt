@@ -46,6 +46,7 @@ class ActivityMaps : AppCompatActivity(), OnMapReadyCallback {
 
         mapFragment.getMapAsync(this)
 
+        goToLocationPosts.visibility = View.INVISIBLE
         searchMap.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 val location: String = searchMap.getQuery().toString().trim()
@@ -111,7 +112,6 @@ class ActivityMaps : AppCompatActivity(), OnMapReadyCallback {
                             it.putExtra("sb",sb.toString())
 //                            it.putExtra("bitslike",bit)
                             it.putExtra("latitude",location.latitude.toString())
-
                             it.putExtra("longitude",location.longitude.toString())
                             startActivity(it)
                         }

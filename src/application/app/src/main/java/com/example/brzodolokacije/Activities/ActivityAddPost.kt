@@ -121,7 +121,7 @@ class ActivityAddPost : AppCompatActivity() {
                     }
                     else
                     {
-                        newPost = NewPostDto(location, caption)
+                        newPost = NewPostDto(location, caption,latitude.toString(),longitude.toString())
 
                 retrofit.addNewPost(newPost).enqueue(object : Callback<DefaultResponse> {
                     override fun onResponse(
@@ -137,6 +137,7 @@ class ActivityAddPost : AppCompatActivity() {
                                 ) {
                                     Toast.makeText(this@ActivityAddPost, "Post uploaded",Toast.LENGTH_SHORT).show()
 //                                    Log.d("uploadSlike",response.body()?.message.toString())
+
                                 }
                                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                                     Toast.makeText(this@ActivityAddPost, t.message.toString(), Toast.LENGTH_SHORT).show()
