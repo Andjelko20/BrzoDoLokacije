@@ -134,7 +134,7 @@ class HomeFragment : Fragment() {
 //                Toast.makeText(requireActivity(),isLoading.toString(),Toast.LENGTH_SHORT).show()
                 if(!isLoading)
                 {
-                    val lastCompletelyVisible = (homePostsRv.layoutManager as? LinearLayoutManager)?.findLastVisibleItemPosition()!!
+                    val lastCompletelyVisible = (homePostsRv.layoutManager as? LinearLayoutManager)?.findLastCompletelyVisibleItemPosition()!!
                     if(lastCompletelyVisible == feed.size-1)
                     {
                         //bottom of the list, load more
@@ -237,12 +237,9 @@ class HomeFragment : Fragment() {
     private fun loadMorePhotos(sessionManager : SessionManager,view : View)
     {
         page++
-//        Toast.makeText(requireActivity(),page.toString(),Toast.LENGTH_SHORT).show()
         feed.add(null)
-        homePostsRv.post{
-            myAdapter!!.notifyItemInserted(feed.size -1)
-        }
-//        ScrollToPosition(feed.size-1,0)
+        myAdapter!!.notifyItemInserted(feed.size -1)
+        ScrollToPosition(feed.size-1,0)
 //        Log.d("adapter", myAdapter.toString())
         val retrofit = Client(requireActivity()).buildService(Api::class.java)
         retrofit.getAll(page).enqueue(object: Callback<DefaultResponse>
@@ -255,9 +252,6 @@ class HomeFragment : Fragment() {
                 {
                     Handler(Looper.getMainLooper()).postDelayed({
                         feed.removeAt(feed.size-1)
-                        homePostsRv.post{
-                            myAdapter!!.notifyItemRemoved(feed.size-1)
-                        }
                         val last = sessionManager.fetchLast()
                         val lastOffset= sessionManager.fetchLastOffset()
                         val listOfPhotosStr: String = response.body()?.message.toString()
@@ -269,7 +263,6 @@ class HomeFragment : Fragment() {
                         while(i < photosList.size)
                         {
                             j=0
-                            Toast.makeText(requireActivity(),photosList.get(i).id,Toast.LENGTH_SHORT).show()
                             while(j < feed.size)
                             {
                                 if(photosList.get(i).id == feed.get(j)!!.id)
@@ -281,17 +274,13 @@ class HomeFragment : Fragment() {
                             }
                             if(flag)
                             {
-
                                 feed.add(photosList.get(i))
-                                homePostsRv.post{
-                                    myAdapter!!.notifyItemInserted(feed.size -1)
-                                }
                             }
                             flag = true
                             i++
                         }
                         HomeFragmentState.list(feed)
-//                        myAdapter!!.notifyDataSetChanged()
+                        myAdapter!!.notifyDataSetChanged()
                         isLoading=false
                         ScrollToPosition(last,lastOffset)
 
@@ -299,14 +288,18 @@ class HomeFragment : Fragment() {
                 }
                 else
                 {
+                    val p = feed.size -1
                     feed.removeAt(feed.size-1)
+                    myAdapter!!.notifyItemInserted(p)
 //                    isLoading=false
                 }
             }
 
             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                 Toast.makeText(requireActivity(),"Error loading images",Toast.LENGTH_SHORT).show()
+                val p = feed.size -1
                 feed.removeAt(feed.size-1)
+                myAdapter!!.notifyItemInserted(p)
 //                isLoading=false
             }
 
@@ -328,6 +321,7 @@ class HomeFragment : Fragment() {
             savePosition(lastPosition,topViewRv)
             HomeFragmentState.page(page)
             savePosition(lastPosition,topViewRv)
+            isLoading=false
             //HomeFragmentState.shouldSave(false)
         }
 //        Log.d("saved","saved")
@@ -339,6 +333,7 @@ class HomeFragment : Fragment() {
         HomeFragmentState.shouldSave(true)
         HomeFragmentState.page(page)
         savePosition(lastPosition,topViewRv)
+        isLoading=false
 //        Log.d("saved","destroy")
     }
     private fun ScrollToPosition(position : Int, offset : Int)
