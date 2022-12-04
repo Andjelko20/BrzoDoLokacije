@@ -188,7 +188,7 @@ namespace backend.Controllers
                     error = true,
                     message = "Error"
                 });
-            List<Post> posts = await _context.Posts.Where(p => p.UserId == user.Id).ToListAsync();
+            List<Post> posts = await _context.Posts.Where(p => p.UserId == user.Id).DistinctBy(p=>p.Location).ToListAsync();
             List<PostOnMapDto> onMap = new List<PostOnMapDto>();
             foreach (Post post in posts)
             {
