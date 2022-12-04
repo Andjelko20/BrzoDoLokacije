@@ -19,7 +19,6 @@ import com.example.brzodolokacije.Fragments2.HomeFragment
 import com.example.brzodolokacije.Fragments2.ProfileFragment
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
-import com.example.brzodolokacije.Posts.PrivremeneSlikeZaFeed
 import com.example.brzodolokacije.Posts.HomeFragmentState
 import com.example.brzodolokacije.R
 import com.example.brzodolokacije.databinding.ActivityMainBinding
@@ -41,7 +40,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        PrivremeneSlikeZaFeed.addPhotos()
 
         val wrapper: Context = ContextThemeWrapper(this, R.style.MyPopupMenu)
         if(savedInstanceState!=null)

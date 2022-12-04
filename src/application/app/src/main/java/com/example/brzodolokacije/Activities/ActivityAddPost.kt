@@ -26,6 +26,7 @@ import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.ModelsDto.NewPostDto
+import com.example.brzodolokacije.Posts.SelectedPhoto
 import com.example.brzodolokacije.R
 import kotlinx.android.synthetic.main.activity_addpost.*
 import okhttp3.MediaType
@@ -59,12 +60,19 @@ class ActivityAddPost : AppCompatActivity() {
             editLocationSection.setText("")
         }
 
-
+        if(SelectedPhoto.returnSavedBitmap() != null)
+        {
+            pickedBitMap = SelectedPhoto.returnSavedBitmap()
+            SelectedPhoto.saveBitmap(null)
+            previewPic.setImageBitmap(pickedBitMap)
+            file = bitmapToFile(pickedBitMap!!, "slika.jpeg")
+        }
 
         editLocationSection.setOnClickListener{
             val intent = Intent(this@ActivityAddPost, ActivityMaps::class.java)
             val banana = pickedBitMap?.let { encodeImage(it) }
 //            intent.putExtra("bit",banana)
+            if(pickedBitMap != null) SelectedPhoto.saveBitmap(pickedBitMap)
             startActivity(intent)
         }
 //        val test = intent.getStringExtra("bitslike");
