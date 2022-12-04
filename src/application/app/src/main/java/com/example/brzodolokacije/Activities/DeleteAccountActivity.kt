@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Models.DefaultResponse
@@ -18,9 +19,26 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class DeleteAccountActivity : AppCompatActivity() {
+
+    private lateinit var builder : AlertDialog.Builder
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_delete_account)
+
+        builder = AlertDialog.Builder(this)
+
+        builder.setTitle("Accout Deletion")
+            .setMessage(R.string.account_deletion)
+            .setCancelable(true)
+            .setPositiveButton("Confirm"){dialogInterface, it->
+                val intent = Intent(this@DeleteAccountActivity, MainActivity::class.java)
+                intent.putExtra("backToProfile", "returnToProfile");
+                startActivity(intent)
+            }
+            .setNegativeButton("Cancel"){dialogInterface, it->
+                dialogInterface.cancel()
+            }
 
         val retrofit = Client(this).buildService(Api::class.java)
 
@@ -45,7 +63,7 @@ class DeleteAccountActivity : AppCompatActivity() {
 
             //password check
             if(userPassword.isEmpty()){
-                userPasswordPolje.error = "Please enter your password"
+                userPasswordPolje.error = "You must enter your password"
                 userPasswordPolje.requestFocus()
                 return@setOnClickListener
             }
@@ -59,7 +77,7 @@ class DeleteAccountActivity : AppCompatActivity() {
                 ) {
                     if(response.body()?.error.toString() == "false")
                     {
-                        Toast.makeText(this@DeleteAccountActivity, "Correct password", Toast.LENGTH_SHORT).show()
+                        builder.show()
                     }
                     else if(response.body()?.error.toString() == "true")
                     {

@@ -86,4 +86,7 @@ interface Api {
 
     @POST("Auth/check-password")
     fun checkPassword(@Body checkPasswordDto: CheckPasswordDto) : Call<DefaultResponse>
+
+    @DELETE("User/delete/{username}")
+    fun deleteUser(@Path ("username") username : String) : Call<DefaultResponse>
 }
