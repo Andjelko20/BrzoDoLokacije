@@ -59,6 +59,15 @@ class ActivityAddPost : AppCompatActivity() {
         else{
             editLocationSection.setText("")
         }
+        val longitude = intent.getStringExtra("longitude")
+        val latitude = intent.getStringExtra("latitude")
+        if(longitude != "null" && latitude != "null") {
+            Log.d("stampaj1", longitude.toString())
+            Log.d("stampaj2", latitude.toString())
+        }
+
+
+
 
         if(SelectedPhoto.returnSavedBitmap() != null)
         {
@@ -98,11 +107,21 @@ class ActivityAddPost : AppCompatActivity() {
                         file!!.name,
                         RequestBody.create(MediaType.parse("image/*"), file)
                     )
-                    Log.d("File",picture.toString())
+//                    Log.d("File",picture.toString())
 //                var location = editLocationSection.text.toString().trim()
+
+
                 var caption = editCaptionSection.text.toString().trim()
                 var location = intent.getStringExtra("sb").toString()
-                var newPost = NewPostDto(location, caption)
+                    var newPost : NewPostDto? = null;
+                    if(nesto == "null"){
+                        editLocationSection.error = "Please enter your current location"
+                        editLocationSection.requestFocus()
+                        return@setOnClickListener
+                    }
+                    else
+                    {
+                        newPost = NewPostDto(location, caption,latitude.toString(),longitude.toString())
 
                 retrofit.addNewPost(newPost).enqueue(object : Callback<DefaultResponse> {
                     override fun onResponse(
@@ -118,15 +137,14 @@ class ActivityAddPost : AppCompatActivity() {
                                 ) {
                                     Toast.makeText(this@ActivityAddPost, "Post uploaded",Toast.LENGTH_SHORT).show()
 //                                    Log.d("uploadSlike",response.body()?.message.toString())
-                                }
 
+                                }
                                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                                     Toast.makeText(this@ActivityAddPost, t.message.toString(), Toast.LENGTH_SHORT).show()
 //                                    Log.d("Greska",t.message.toString())
                                 }
 
                             })
-
                         val intent = Intent(this@ActivityAddPost, MainActivity::class.java)
                         intent.putExtra("postAdded", "refresh again");
                         startActivity(intent)
@@ -135,7 +153,7 @@ class ActivityAddPost : AppCompatActivity() {
                     override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                         Toast.makeText(this@ActivityAddPost, t.message.toString(), Toast.LENGTH_SHORT).show()
                     }
-                })
+                })}
             }
         }
     }

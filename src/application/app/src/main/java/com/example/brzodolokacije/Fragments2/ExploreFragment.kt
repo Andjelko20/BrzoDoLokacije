@@ -14,6 +14,11 @@ import android.widget.SearchView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import com.example.brzodolokacije.API.Api
+import com.example.brzodolokacije.Client.Client
+import com.example.brzodolokacije.Managers.SessionManager
+import com.example.brzodolokacije.Models.DefaultResponse
+import com.example.brzodolokacije.ModelsDto.PinDto
 import com.example.brzodolokacije.R
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -24,8 +29,14 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_maps.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.IOException
+import java.util.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -71,12 +82,58 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
                 var addressList: List<Address>? = null
                 Log.d("Lokacija",location)
                 if (location != null || location == "") {
+                    mMap.clear()
                     val geocoder = Geocoder(activity)
                     try {
                         addressList = geocoder.getFromLocationName(location, 1)
                         val address: Address = addressList!![0]
                         val latLng = LatLng(address.getLatitude(), address.getLongitude())
-                        mMap.addMarker(MarkerOptions().position(latLng).title(location))
+                        var grad = "";
+                        try {
+                            grad = getAdressName(address.getLatitude(),address.getLongitude())
+                        }
+                        catch (e : Exception){
+                            e.printStackTrace()
+                        }
+
+                        Log.d("grad",grad)
+                        var drzava = getCountryName(address.getLatitude(),address.getLongitude())
+                        var sb = StringBuilder()
+                        if(grad == "")
+                            sb.append(drzava)
+                        else
+                            sb.append(grad).append(", ").append(drzava)
+//                        mMap.addMarker(MarkerOptions().position(latLng).title(sb.toString()))
+                        val retrofit = Client(requireActivity()).buildService(Api::class.java)
+                        retrofit.onMapLocation(sb.toString()).enqueue(object: Callback<DefaultResponse>{
+                            override fun onResponse(
+                                call: Call<DefaultResponse>,
+                                response: Response<DefaultResponse>
+                            ) {
+                                if(response.body()?.error.toString() == "false")
+                                {
+                                    val listOfPins: String = response.body()?.message.toString()
+                                    val typeToken = object : TypeToken<List<PinDto>>() {}.type
+                                    val pins = Gson().fromJson<List<PinDto>>(listOfPins, typeToken)
+
+                                    Toast.makeText(requireActivity(),pins.toString(),Toast.LENGTH_SHORT).show()
+                                    var i = 0
+                                    while(i < pins!!.size) {
+                                        val latLng = LatLng(pins[i].latitude.toDouble(), pins[i].longitude.toDouble())
+
+                                        mMap.addMarker(MarkerOptions().position(latLng).title(pins[i].id.toString()))
+                                        i++
+                                    }
+
+                                }
+                            }
+
+                            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                                TODO("Not yet implemented")
+                            }
+
+                        })
+
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10f))
                     } catch (e: Exception) {
                         e.printStackTrace()
@@ -146,7 +203,11 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
             if(location != null){
                 lastLocation = location
                 val currentLatLong = LatLng(location.latitude,location.longitude)
-                placeMarkerOnMap(currentLatLong)
+                var grad = getAdressName(currentLatLong.latitude,currentLatLong.longitude)
+                var drzava = getCountryName(currentLatLong.latitude,currentLatLong.longitude)
+                var sb = StringBuilder()
+                sb.append(grad).append(", ").append(drzava)
+//                mMap.addMarker(MarkerOptions().position(currentLatLong).title(sb.toString()))
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLong,12f))
             }
         }
@@ -154,9 +215,26 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
 
     private fun placeMarkerOnMap(currentLatLong: LatLng) {
         val markerOptions = MarkerOptions().position(currentLatLong)
-        markerOptions.title("$currentLatLong")
+
+        markerOptions.title("")
+
         mMap.addMarker(markerOptions)
     }
 
     override fun onMarkerClick(p0: Marker): Boolean = false
+
+    private fun getAdressName(lat: Double, lon: Double): String {
+        var adressName = ""
+        val geocoder = Geocoder(this.requireActivity(), Locale.getDefault())
+        val adress = geocoder.getFromLocation(lat,lon,1)
+        adressName = adress[0].locality
+        return adressName
+    }
+    private fun getCountryName(lat: Double, lon: Double): String {
+        var adressName = ""
+        val geocoder = Geocoder(this.requireActivity(), Locale.getDefault())
+        val adress = geocoder.getFromLocation(lat,lon,1)
+        adressName = adress[0].countryName
+        return adressName
+    }
 }

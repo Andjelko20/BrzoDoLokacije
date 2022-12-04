@@ -89,4 +89,13 @@ interface Api {
 
     @DELETE("User/delete/{username}")
     fun deleteUser(@Path ("username") username : String) : Call<DefaultResponse>
+
+    @GET("Post/onMap/{location}")
+    fun onMapLocation(@Path("location") location : String) : Call<DefaultResponse>
+
+    @POST("Post/getByLocation")
+    fun getByLocation(@Body filterDto: FilterDto) : Call<DefaultResponse>
+
+    @GET("Post/onMapUser/{username}")
+    fun getLocationsByUser(@Path("username") username : String) : Call<DefaultResponse>
 }
