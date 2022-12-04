@@ -48,9 +48,9 @@ class DeleteAccountActivity : AppCompatActivity() {
                         ) {
                             if(response.body()?.error.toString() == "false")
                             {
-                                val message = response.body()?.message.toString()
-                                Toast.makeText(this@DeleteAccountActivity, message, Toast.LENGTH_SHORT).show()
-                                val intent = Intent(this@DeleteAccountActivity, LoginActivity::class.java)
+//                                val message = response.body()?.message.toString()
+//                                Toast.makeText(this@DeleteAccountActivity, message, Toast.LENGTH_SHORT).show()
+                                val intent = Intent(this@DeleteAccountActivity, AccountDeletedActivity::class.java)
                                 startActivity(intent)
                                 finish()
                             }
