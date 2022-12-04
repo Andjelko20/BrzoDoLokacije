@@ -111,11 +111,11 @@ class ActivityAddPost : AppCompatActivity() {
 //                var location = editLocationSection.text.toString().trim()
 
                 var provera = editCaptionSection.text.toString().trim()
-
+                    Log.d("provera",provera)
                 var caption = editCaptionSection.text.toString().trim()
                 var location = intent.getStringExtra("sb").toString()
                     var newPost : NewPostDto? = null;
-                    if(provera.isEmpty()){
+                    if(nesto == "null"){
                         editLocationSection.error = "Please enter your current password"
                         editLocationSection.requestFocus()
                         return@setOnClickListener
