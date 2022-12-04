@@ -26,6 +26,7 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_maps.*
 import java.io.IOException
+import java.util.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -76,7 +77,22 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
                         addressList = geocoder.getFromLocationName(location, 1)
                         val address: Address = addressList!![0]
                         val latLng = LatLng(address.getLatitude(), address.getLongitude())
-                        mMap.addMarker(MarkerOptions().position(latLng).title(location))
+                        var grad = "";
+                        try {
+                            grad = getAdressName(address.getLatitude(),address.getLongitude())
+                        }
+                        catch (e : Exception){
+                            e.printStackTrace()
+                        }
+
+                        Log.d("grad",grad)
+                        var drzava = getCountryName(address.getLatitude(),address.getLongitude())
+                        var sb = StringBuilder()
+                        if(grad == "")
+                            sb.append(drzava)
+                        else
+                            sb.append(grad).append(", ").append(drzava)
+                        mMap.addMarker(MarkerOptions().position(latLng).title(sb.toString()))
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10f))
                     } catch (e: Exception) {
                         e.printStackTrace()
@@ -146,7 +162,11 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
             if(location != null){
                 lastLocation = location
                 val currentLatLong = LatLng(location.latitude,location.longitude)
-                placeMarkerOnMap(currentLatLong)
+                var grad = getAdressName(currentLatLong.latitude,currentLatLong.longitude)
+                var drzava = getCountryName(currentLatLong.latitude,currentLatLong.longitude)
+                var sb = StringBuilder()
+                sb.append(grad).append(", ").append(drzava)
+                mMap.addMarker(MarkerOptions().position(currentLatLong).title(sb.toString()))
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLong,12f))
             }
         }
@@ -154,9 +174,26 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
 
     private fun placeMarkerOnMap(currentLatLong: LatLng) {
         val markerOptions = MarkerOptions().position(currentLatLong)
-        markerOptions.title("$currentLatLong")
+
+        markerOptions.title("")
+
         mMap.addMarker(markerOptions)
     }
 
     override fun onMarkerClick(p0: Marker): Boolean = false
+
+    private fun getAdressName(lat: Double, lon: Double): String {
+        var adressName = ""
+        val geocoder = Geocoder(this.requireActivity(), Locale.getDefault())
+        val adress = geocoder.getFromLocation(lat,lon,1)
+        adressName = adress[0].locality
+        return adressName
+    }
+    private fun getCountryName(lat: Double, lon: Double): String {
+        var adressName = ""
+        val geocoder = Geocoder(this.requireActivity(), Locale.getDefault())
+        val adress = geocoder.getFromLocation(lat,lon,1)
+        adressName = adress[0].countryName
+        return adressName
+    }
 }

@@ -59,6 +59,15 @@ class ActivityAddPost : AppCompatActivity() {
         else{
             editLocationSection.setText("")
         }
+        val longitude = intent.getStringExtra("longitude")
+        val latitude = intent.getStringExtra("latitude")
+        if(longitude != "null" && latitude != "null") {
+            Log.d("stampaj1", longitude.toString())
+            Log.d("stampaj2", latitude.toString())
+        }
+
+
+
 
         if(SelectedPhoto.returnSavedBitmap() != null)
         {
@@ -98,8 +107,11 @@ class ActivityAddPost : AppCompatActivity() {
                         file!!.name,
                         RequestBody.create(MediaType.parse("image/*"), file)
                     )
-                    Log.d("File",picture.toString())
+//                    Log.d("File",picture.toString())
 //                var location = editLocationSection.text.toString().trim()
+
+
+
                 var caption = editCaptionSection.text.toString().trim()
                 var location = intent.getStringExtra("sb").toString()
                 var newPost = NewPostDto(location, caption)
