@@ -78,7 +78,13 @@ namespace backend.Controllers
                 });
             }
 
-            string json = JsonSerializer.Serialize(postsDto);
+            PostPageDto reponse = new PostPageDto
+            {
+                Posts = postsDto,
+                CurrentPage = page,
+                NumberOfPages = (int)pageCount
+            };
+            string json = JsonSerializer.Serialize(reponse);
             return Ok(new
             {
                 error = false,
