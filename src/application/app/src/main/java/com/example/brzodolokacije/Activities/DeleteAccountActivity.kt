@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
+import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.ModelsDto.ChangePasswordDto
 import com.example.brzodolokacije.ModelsDto.CheckPasswordDto
@@ -27,21 +28,48 @@ class DeleteAccountActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_delete_account)
 
+        val retrofit = Client(this).buildService(Api::class.java)
+
+        val sessionManager = SessionManager(this)
+
         builder = AlertDialog.Builder(ContextThemeWrapper(this, R.style.AlertDialogCustom))
 
         builder.setTitle("Accout Deletion")
             .setMessage(R.string.account_deletion)
             .setCancelable(true)
             .setPositiveButton("Confirm"){dialogInterface, it->
-                val intent = Intent(this@DeleteAccountActivity, MainActivity::class.java)
-                intent.putExtra("backToProfile", "returnToProfile");
-                startActivity(intent)
+                var usernameSm = sessionManager.fetchUsername()
+//                Log.d("username", usernameSm.toString())
+                if (usernameSm != null) {
+                    retrofit.deleteUser(usernameSm).enqueue(object: Callback<DefaultResponse>{
+                        override fun onResponse(
+                            call: Call<DefaultResponse>,
+                            response: Response<DefaultResponse>
+                        ) {
+                            if(response.body()?.error.toString() == "false")
+                            {
+                                val message = response.body()?.message.toString()
+                                Toast.makeText(this@DeleteAccountActivity, message, Toast.LENGTH_SHORT).show()
+                                val intent = Intent(this@DeleteAccountActivity, LoginActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            }
+                            else
+                            {
+                                Log.d("error", response.body()?.error.toString())
+                            }
+                        }
+
+                        override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                            Log.d("failed", "")
+                        }
+
+                    })
+                }
             }
             .setNegativeButton("Cancel"){dialogInterface, it->
                 dialogInterface.cancel()
             }
-
-        val retrofit = Client(this).buildService(Api::class.java)
 
         val backButtonDeleteAccount = findViewById<Button>(R.id.backButtonDeleteAccount)
         backButtonDeleteAccount.setOnClickListener{
