@@ -8,6 +8,7 @@ object HomeFragmentState {
     private var issaved : Boolean = false
     private var listFeed : MutableList<Photo?>? = null
     private var page : Int = 1
+    private var maxPages : Int = 1
 
 //    fun setVisit(owner : String)
 //    {
@@ -55,5 +56,15 @@ object HomeFragmentState {
     fun savedPage() : Int
     {
         return page
+    }
+
+    fun changeMaxPages(newMax : Int)
+    {
+        maxPages = newMax
+    }
+
+    fun returnMaxPages() : Int
+    {
+        return maxPages
     }
 }

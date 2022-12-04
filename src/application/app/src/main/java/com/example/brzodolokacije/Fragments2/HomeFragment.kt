@@ -18,6 +18,7 @@ import com.example.brzodolokacije.Adapters.PostAdapter
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
+import com.example.brzodolokacije.ModelsDto.PaginationResponse
 import com.example.brzodolokacije.Posts.Photo
 import com.example.brzodolokacije.Posts.HomeFragmentState
 import com.example.brzodolokacije.R
@@ -132,7 +133,7 @@ class HomeFragment : Fragment() {
 
                 savePosition(lastPosition,topViewRv)
 //                Toast.makeText(requireActivity(),isLoading.toString(),Toast.LENGTH_SHORT).show()
-                if(!isLoading)
+                if(!isLoading && page < HomeFragmentState.returnMaxPages())
                 {
                     val lastCompletelyVisible = (homePostsRv.layoutManager as? LinearLayoutManager)?.findLastCompletelyVisibleItemPosition()!!
                     if(lastCompletelyVisible == feed.size-1)
@@ -180,9 +181,11 @@ class HomeFragment : Fragment() {
 //                    savedState = listOfPhotosStr
 //                    HomeFragmentState.saveFeed(savedState.toString())
 
-                    val typeToken = object : TypeToken<MutableList<Photo?>?>() {}.type
-                    val photosList  = Gson().fromJson<MutableList<Photo?>?>(listOfPhotosStr, typeToken)
+                    val typeToken = object : TypeToken<PaginationResponse>() {}.type
+                    val pagination = Gson().fromJson<PaginationResponse>(listOfPhotosStr, typeToken)
+                    val photosList  = pagination.posts
                     HomeFragmentState.list(photosList)
+                    HomeFragmentState.changeMaxPages(pagination.numberOfPages)
                     feed = HomeFragmentState.getList()!!
 
                     homePostsRv.apply {
@@ -255,17 +258,19 @@ class HomeFragment : Fragment() {
                         val last = sessionManager.fetchLast()
                         val lastOffset= sessionManager.fetchLastOffset()
                         val listOfPhotosStr: String = response.body()?.message.toString()
-                        val typeToken = object : TypeToken<MutableList<Photo>>() {}.type
-                        val photosList  = Gson().fromJson<MutableList<Photo>>(listOfPhotosStr, typeToken)
+                        val typeToken = object : TypeToken<PaginationResponse>() {}.type
+                        val pagination = Gson().fromJson<PaginationResponse>(listOfPhotosStr, typeToken)
+                        val photosList  = pagination.posts
+                        //HomeFragmentState.changeMaxPages(pagination.numberOfPages)
                         var i = 0
                         var j = 0
                         var flag = true
-                        while(i < photosList.size)
+                        while(i < photosList!!.size)
                         {
                             j=0
                             while(j < feed.size)
                             {
-                                if(photosList.get(i).id == feed.get(j)!!.id)
+                                if(photosList.get(i)!!.id == feed.get(j)!!.id)
                                 {
                                     flag=false
                                     break
