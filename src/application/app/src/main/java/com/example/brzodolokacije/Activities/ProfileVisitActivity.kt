@@ -177,13 +177,25 @@ class ProfileVisitActivity : AppCompatActivity() {
                         likesNum.text = userProfileInfo.totalNumOfLikes.toString();
                         imeprezime.text = userProfileInfo.name;
                         opis.text = userProfileInfo.description;
-                        if(opis.text == "" && imeprezime.text=="")
+                        if(opis.text == "" && imeprezime.text == "")
                         {
                             opis.setVisibility(View.GONE)
+                            imeprezime.setVisibility(View.GONE)
                         }
-                        else
+                        else if(opis.text != "" && imeprezime.text != "")
                         {
                             opis.setVisibility(View.VISIBLE)
+                            imeprezime.setVisibility(View.VISIBLE)
+                        }
+                        else if(opis.text != "" && imeprezime.text == "")
+                        {
+                            imeprezime.setVisibility(View.GONE)
+                            opis.setVisibility(View.VISIBLE)
+                        }
+                        else if(opis.text == "" && imeprezime.text != "")
+                        {
+                            opis.setVisibility(View.GONE)
+                            imeprezime.setVisibility(View.VISIBLE)
                         }
 
                         exit.setOnClickListener{

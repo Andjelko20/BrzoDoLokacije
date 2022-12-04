@@ -21,6 +21,7 @@ import com.example.brzodolokacije.Constants.Constants
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.UserProfile
+import com.example.brzodolokacije.Posts.HomeFragmentState
 import com.example.brzodolokacije.R
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
@@ -80,6 +81,7 @@ class ProfileFragment : Fragment() {
             activity?.let{
                 val intent = Intent (it, ActivityAddPost::class.java)
                 it.startActivity(intent)
+                HomeFragmentState.shouldSave(false)
             }
 
         }
