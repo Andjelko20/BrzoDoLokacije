@@ -110,13 +110,12 @@ class ActivityAddPost : AppCompatActivity() {
 //                    Log.d("File",picture.toString())
 //                var location = editLocationSection.text.toString().trim()
 
-                var provera = editCaptionSection.text.toString().trim()
-                    Log.d("provera",provera)
+
                 var caption = editCaptionSection.text.toString().trim()
                 var location = intent.getStringExtra("sb").toString()
                     var newPost : NewPostDto? = null;
                     if(nesto == "null"){
-                        editLocationSection.error = "Please enter your current password"
+                        editLocationSection.error = "Please enter your current location"
                         editLocationSection.requestFocus()
                         return@setOnClickListener
                     }
