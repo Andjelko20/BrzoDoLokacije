@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Models.DefaultResponse
@@ -56,8 +57,15 @@ class DeleteAccountActivity : AppCompatActivity() {
                     call: Call<DefaultResponse>,
                     response: Response<DefaultResponse>
                 ) {
-                    Log.d("response", "")
-
+                    if(response.body()?.error.toString() == "false")
+                    {
+                        Toast.makeText(this@DeleteAccountActivity, "Correct password", Toast.LENGTH_SHORT).show()
+                    }
+                    else if(response.body()?.error.toString() == "true")
+                    {
+                        val message = response.body()?.message.toString()
+                        Toast.makeText(this@DeleteAccountActivity, message, Toast.LENGTH_SHORT).show()
+                    }
                 }
 
                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
