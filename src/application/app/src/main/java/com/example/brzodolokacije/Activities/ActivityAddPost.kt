@@ -110,12 +110,16 @@ class ActivityAddPost : AppCompatActivity() {
 //                    Log.d("File",picture.toString())
 //                var location = editLocationSection.text.toString().trim()
 
-
+                var provera = editCaptionSection.text.toString().trim()
 
                 var caption = editCaptionSection.text.toString().trim()
                 var location = intent.getStringExtra("sb").toString()
                 var newPost = NewPostDto(location, caption)
-
+                    if(provera.isEmpty()){
+                        editLocationSection.error = "Please enter your current password"
+                        editLocationSection.requestFocus()
+                        return@setOnClickListener
+                    }
                 retrofit.addNewPost(newPost).enqueue(object : Callback<DefaultResponse> {
                     override fun onResponse(
                         call: Call<DefaultResponse>,
