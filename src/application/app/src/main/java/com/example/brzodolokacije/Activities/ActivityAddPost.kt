@@ -135,14 +135,12 @@ class ActivityAddPost : AppCompatActivity() {
                                     Toast.makeText(this@ActivityAddPost, "Post uploaded",Toast.LENGTH_SHORT).show()
 //                                    Log.d("uploadSlike",response.body()?.message.toString())
                                 }
-
                                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                                     Toast.makeText(this@ActivityAddPost, t.message.toString(), Toast.LENGTH_SHORT).show()
 //                                    Log.d("Greska",t.message.toString())
                                 }
 
                             })
-
                         val intent = Intent(this@ActivityAddPost, MainActivity::class.java)
                         intent.putExtra("postAdded", "refresh again");
                         startActivity(intent)
