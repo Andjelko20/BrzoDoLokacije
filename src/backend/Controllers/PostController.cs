@@ -72,6 +72,8 @@ namespace backend.Controllers
                     Date = post.Date,
                     Location = post.Location,
                     Caption = post.Caption,
+                    Latitude = post.Latitude,
+                    Longitude = post.Longitude,
                     NumberOfLikes = likes.Count,
                     NumberOfComments = comments.Count,
                     LikedByMe = likes.Exists(l => l.UserId == me.Id)
@@ -92,8 +94,8 @@ namespace backend.Controllers
             });
         }
         
-        [HttpGet("getByLocation/{location}")]
-        public async Task<ActionResult<List<Post>>> getAll(string location)
+        [HttpPost("getByLocation")]
+        public async Task<ActionResult<List<Post>>> getAll(GetByALocationDto request)
         {
             var me = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
             if (me == null)
@@ -102,23 +104,22 @@ namespace backend.Controllers
                     error = true,
                     message = "Error"
                 });
-            
-            List<Post> posts = await _context.Posts.Where(p => p.Location == location).OrderByDescending(p=>p.Date).ToListAsync();
-            /*
-            var pageResults = 3f;
-            var pageCount = Math.Ceiling(posts.Count / pageResults);
-
-            if (page > pageCount || page<1)
-                return BadRequest(new
-                {
-                    error = true,
-                    message = "Error"
-                });
-            posts = posts
-                .Skip((page-1) * (int)pageResults)
-                .Take((int)pageResults)
-                .OrderByDescending(p => p.Date).ToList();
-            */
+            List<Post> posts = await _context.Posts.Where(p => p.Location == request.Location).ToListAsync();
+                /*
+                var pageResults = 3f;
+                var pageCount = Math.Ceiling(posts.Count / pageResults);
+    
+                if (page > pageCount || page<1)
+                    return BadRequest(new
+                    {
+                        error = true,
+                        message = "Error"
+                    });
+                posts = posts
+                    .Skip((page-1) * (int)pageResults)
+                    .Take((int)pageResults)
+                    .OrderByDescending(p => p.Date).ToList();
+                */
             List<PostDto> postsDto = new List<PostDto>();
             foreach (Post post in posts)
             {
@@ -131,13 +132,108 @@ namespace backend.Controllers
                     Date = post.Date,
                     Location = post.Location,
                     Caption = post.Caption,
+                    Latitude = post.Latitude,
+                    Longitude = post.Longitude,
                     NumberOfLikes = likes.Count,
                     NumberOfComments = comments.Count,
                     LikedByMe = likes.Exists(l => l.UserId == me.Id)
                 });
             }
 
+            if (request.Filter == string.Empty || request.Filter == "popularity")
+                postsDto = postsDto
+                    .OrderByDescending(p => p.NumberOfLikes)
+                    .ThenByDescending(p => p.NumberOfComments)
+                    .ToList();
+            else if(request.Filter=="date")
+                postsDto = postsDto.OrderByDescending(p => p.Date).ToList();
+            
             string json = JsonSerializer.Serialize(postsDto);
+            return Ok(new
+            {
+                error = false,
+                message = json
+            });
+        }
+        
+        [HttpGet("onMap/{location}")]
+        public async Task<ActionResult<List<Post>>> getAllUser(string location)
+        {
+            List<Post> posts = await _context.Posts.Where(p => p.Location == location).ToListAsync();
+            List<PostOnMapDto> onMap = new List<PostOnMapDto>();
+            foreach (Post post in posts)
+            {
+                onMap.Add(new PostOnMapDto
+                {
+                    Id = post.Id,
+                    Latitude = post.Latitude,
+                    Longitude = post.Longitude
+                });
+            }
+            string json = JsonSerializer.Serialize(onMap);
+            return Ok(new
+            {
+                error = false,
+                message = json
+            });
+        }
+        
+        [HttpGet("onMapUser/{username}")]
+        public async Task<ActionResult<List<Post>>> getAll(string username)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+            if (user == null)
+                return BadRequest(new
+                {
+                    error = true,
+                    message = "Error"
+                });
+            List<Post> posts = await _context.Posts.Where(p => p.UserId == user.Id).ToListAsync();
+            List<PostOnMapDto> onMap = new List<PostOnMapDto>();
+            foreach (Post post in posts)
+            {
+                onMap.Add(new PostOnMapDto
+                {
+                    Id = post.Id,
+                    Latitude = post.Latitude,
+                    Longitude = post.Longitude
+                });
+            }
+            string json = JsonSerializer.Serialize(onMap);
+            return Ok(new
+            {
+                error = false,
+                message = json
+            });
+        }
+
+        [HttpGet("getOne/{id}")]
+        public async Task<ActionResult<string>> GetOne(int id)
+        {
+            var post = await _context.Posts.FindAsync(id);
+            var me = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
+            if (post == null)
+                return BadRequest(new
+                {
+                    error = true,
+                    message = "Error"
+                });
+            var likes = await _context.Likes.Where(l => l.PostId == post.Id).ToListAsync();
+            var comments = await _context.Comments.Where(c => c.PostId == post.Id).ToListAsync();
+            PostDto postDto = new PostDto
+            {
+                Id = post.Id,
+                Owner = (await _context.Users.FindAsync(post.UserId)).Username,
+                Date = post.Date,
+                Location = post.Location,
+                Caption = post.Caption,
+                Latitude = post.Latitude,
+                Longitude = post.Longitude,
+                NumberOfLikes = likes.Count,
+                NumberOfComments = comments.Count,
+                LikedByMe = likes.Exists(l => l.UserId == me.Id)
+            };
+            string json = JsonSerializer.Serialize(postDto);
             return Ok(new
             {
                 error = false,
@@ -231,6 +327,8 @@ namespace backend.Controllers
             {
                 Caption = request.Caption,
                 Location = request.Location,
+                Longitude = request.Longitude,
+                Latitude = request.Latitude,
                 UserId = user.Id,
                 User = user
             };

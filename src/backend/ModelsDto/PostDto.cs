@@ -7,6 +7,8 @@ public class PostDto
     public long Date { get; set; }
     public string Location { get; set; }
     public string Caption { get; set; }
+    public string Longitude { get; set; }
+    public string Latitude { get; set; }
     public int NumberOfLikes { get; set; }
     public int NumberOfComments { get; set; }
     public bool LikedByMe { get; set; }
