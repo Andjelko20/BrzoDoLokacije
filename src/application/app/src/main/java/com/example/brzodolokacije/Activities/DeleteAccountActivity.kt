@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.ContextThemeWrapper
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -26,7 +27,7 @@ class DeleteAccountActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_delete_account)
 
-        builder = AlertDialog.Builder(this)
+        builder = AlertDialog.Builder(ContextThemeWrapper(this, R.style.AlertDialogCustom))
 
         builder.setTitle("Accout Deletion")
             .setMessage(R.string.account_deletion)
