@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,8 +34,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class PostAdapter(val photoList: MutableList<Photo?>, val context: Context, val activity: Context) :
-    RecyclerView.Adapter<PostAdapter.MainViewHolder>() {
+class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, val activity: Context) :
+    RecyclerView.Adapter<HomePostAdapter.MainViewHolder>() {
 
     var dataList : MutableList<Photo?> = photoList
     private val VIEW_TYPE_ITEM = 0
@@ -102,7 +101,6 @@ class PostAdapter(val photoList: MutableList<Photo?>, val context: Context, val 
                 //list of likes
                 likes.text = photo.numberOfLikes.toString()
                 likes.setOnClickListener{
-
                     val view : View = LayoutInflater.from(context).inflate(R.layout.fragment_like_section,null)
                     loadLikes(view,photo)
 

@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Activities.ActivityAddPost
-import com.example.brzodolokacije.Adapters.PostAdapter
+import com.example.brzodolokacije.Adapters.HomePostAdapter
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
@@ -53,7 +53,7 @@ class HomeFragment : Fragment() {
     private var lastPosition : Int = 0
     private var topViewRv = 0
 
-    private var myAdapter : RecyclerView.Adapter<PostAdapter.MainViewHolder>? = null
+    private var myAdapter : RecyclerView.Adapter<HomePostAdapter.MainViewHolder>? = null
     private var mylayoutManager : RecyclerView.LayoutManager? = null
     private lateinit var recyclerView : RecyclerView
 
@@ -193,7 +193,7 @@ class HomeFragment : Fragment() {
                         recyclerView=view.findViewById(R.id.homePostsRv)
                         recyclerView.layoutManager=mylayoutManager
                         recyclerView.setHasFixedSize(true)
-                        myAdapter = this.context?.let { PostAdapter(feed,it,requireActivity()) }
+                        myAdapter = this.context?.let { HomePostAdapter(feed,it,requireActivity()) }
                         recyclerView.adapter=myAdapter
                     }
                     view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.GONE)
@@ -227,7 +227,7 @@ class HomeFragment : Fragment() {
             recyclerView=view.findViewById(R.id.homePostsRv)
             recyclerView.layoutManager=mylayoutManager
             recyclerView.setHasFixedSize(true)
-            myAdapter = this.context?.let { PostAdapter(feed,it,requireActivity()) }
+            myAdapter = this.context?.let { HomePostAdapter(feed,it,requireActivity()) }
             recyclerView.adapter=myAdapter
         }
         view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.GONE)

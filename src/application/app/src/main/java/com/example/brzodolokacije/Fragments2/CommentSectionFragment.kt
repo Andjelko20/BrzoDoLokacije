@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.brzodolokacije.Adapters.CommentsAdapter
-import com.example.brzodolokacije.Adapters.PostAdapter
 import com.example.brzodolokacije.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
