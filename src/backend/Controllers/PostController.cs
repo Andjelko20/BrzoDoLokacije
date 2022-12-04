@@ -327,8 +327,8 @@ namespace backend.Controllers
             {
                 Caption = request.Caption,
                 Location = request.Location,
-                Longitude = "37.34812537483451", //request.Longitude,
-                Latitude = "-122.01554685831071", //request.Latitude,
+                Longitude = request.Longitude,
+                Latitude = request.Latitude,
                 UserId = user.Id,
                 User = user
             };
