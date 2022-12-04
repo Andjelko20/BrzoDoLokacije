@@ -44,14 +44,14 @@ class MainActivity : AppCompatActivity() {
         PrivremeneSlikeZaFeed.addPhotos()
 
         val wrapper: Context = ContextThemeWrapper(this, R.style.MyPopupMenu)
-        if(savedInstanceState!=null)
-        {
-            homeFragment = supportFragmentManager.findFragmentByTag(homeKey) as HomeFragment
-        }
-        else
-        {
+//        if(savedInstanceState!=null)
+//        {
+//            homeFragment = supportFragmentManager.findFragmentByTag(homeKey) as HomeFragment
+//        }
+//        else
+//        {
             homeFragment = HomeFragment()
-        }
+//        }
 
         options_meni.setOnClickListener{
             val popupMenu = PopupMenu(wrapper, it)

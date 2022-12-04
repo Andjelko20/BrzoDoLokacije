@@ -83,4 +83,7 @@ interface Api {
 
     @GET("Post/getAll/{page}")
     fun getAll(@Path("page") page : Int) : Call<DefaultResponse>
+
+    @POST("Auth/check-password")
+    fun checkPassword(@Body checkPasswordDto: CheckPasswordDto) : Call<DefaultResponse>
 }
