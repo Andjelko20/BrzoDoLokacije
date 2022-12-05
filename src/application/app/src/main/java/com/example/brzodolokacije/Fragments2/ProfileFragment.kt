@@ -1,6 +1,7 @@
 package com.example.brzodolokacije.Fragments2
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Base64
@@ -34,6 +35,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
+import java.util.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -57,6 +59,15 @@ class ProfileFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+        val languageToLoad = "US"
+        val locale = Locale(languageToLoad)
+        Locale.setDefault(locale)
+        val config = Configuration()
+        config.locale = locale
+        activity?.getBaseContext()?.getResources()?.updateConfiguration(
+            config,
+            activity?.getBaseContext()?.getResources()?.getDisplayMetrics()
+        )
     }
 
     override fun onCreateView(
