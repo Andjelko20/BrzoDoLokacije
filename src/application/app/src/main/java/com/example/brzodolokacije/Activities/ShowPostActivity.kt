@@ -14,6 +14,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Adapters.CommentsAdapter
 import com.example.brzodolokacije.Adapters.CommentsAdapterZaActivity
+import com.example.brzodolokacije.Adapters.LikesAdapter
+import com.example.brzodolokacije.Adapters.LikesAdapterZaActivity
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Constants.Constants
 import com.example.brzodolokacije.Fragments2.HomeFragment
@@ -22,10 +24,7 @@ import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.NewCommentDto
 import com.example.brzodolokacije.Models.PostDetails
 import com.example.brzodolokacije.Models.UserProfile
-import com.example.brzodolokacije.Posts.Comment
-import com.example.brzodolokacije.Posts.HomeFragmentState
-import com.example.brzodolokacije.Posts.Photo
-import com.example.brzodolokacije.Posts.Stats
+import com.example.brzodolokacije.Posts.*
 import com.example.brzodolokacije.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -98,6 +97,29 @@ class ShowPostActivity : AppCompatActivity() {
                         else likeButton.setBackgroundResource(R.drawable.unliked)
                         likeButton.setOnClickListener{
                             likeUnlike(postDetails)
+                        }
+
+                        postNumberOfLikes.setOnClickListener{
+                            val view : View = LayoutInflater.from(this@ShowPostActivity).inflate(R.layout.fragment_like_section,null)
+                            loadLikes(view,postDetails)
+
+                            //refreshing the list of likes
+                            val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayoutLikes)
+                            refresh.setOnRefreshListener {
+                                android.os.Handler(Looper.getMainLooper()).postDelayed({
+
+                                    loadLikes(view,postDetails)
+                                    refreshPost(postDetails)
+                                    refresh.isRefreshing = false
+                                }, 1500)
+                            }
+                            val dialog = BottomSheetDialog(this@ShowPostActivity)
+                            dialog.setContentView(view)
+                            dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                            //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
+                            dialog.show()
+
+                            refreshPost(postDetails)
                         }
 
                         //comments
@@ -215,6 +237,39 @@ class ShowPostActivity : AppCompatActivity() {
             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                 Toast.makeText(this@ShowPostActivity,"Something went wrong", Toast.LENGTH_SHORT).show()
             }
+        })
+    }
+
+    private fun loadLikes(view : View, postDetails: PostDetails)
+    {
+        val retrofit = Client(this).buildService(Api::class.java)
+        retrofit.getLikes(postDetails.id.toString()).enqueue(object: Callback<DefaultResponse>
+        {
+            override fun onResponse(
+                call: Call<DefaultResponse>,
+                response: Response<DefaultResponse>
+            ) {
+                if(response.body()?.error.toString()=="false")
+                {
+                    val listOfLikesStr: String = response.body()?.message.toString();
+
+                    val typeToken = object : TypeToken<List<Like>>() {}.type
+                    val likesList = Gson().fromJson<List<Like>>(listOfLikesStr, typeToken)
+
+
+                    val rvLikes = view.findViewById<RecyclerView>(R.id.rv_likes)
+                    if(likesList.isNotEmpty()) rvLikes.adapter = LikesAdapterZaActivity(likesList,this@ShowPostActivity)
+                }
+                else
+                {
+                    Toast.makeText(this@ShowPostActivity,"Error loading likes",Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                Toast.makeText(this@ShowPostActivity,"Error loading likes. Something went wrong",Toast.LENGTH_SHORT).show()
+            }
+
         })
     }
 
