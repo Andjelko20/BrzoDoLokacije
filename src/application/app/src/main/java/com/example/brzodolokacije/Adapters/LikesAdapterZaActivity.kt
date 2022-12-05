@@ -35,14 +35,14 @@ class LikesAdapterZaActivity(val likesList : List<Like>, val context : Context):
             Picasso.get().load(Constants.BASE_URL + "User/avatar/" + like.owner).into(ownerImage)
             owner.text=like.owner
 
-//            wholeLike.setOnClickListener{
-//                HomeFragmentState.shouldSave(true)
-//                val intent = Intent(activity, ProfileVisitActivity::class.java)
-//                intent.putExtra("visit",like.owner)
-//                Handler(Looper.getMainLooper()).postDelayed({
-//                    activity.startActivity(intent)
-//                }, 30)
-//            }
+            wholeLike.setOnClickListener{
+                HomeFragmentState.shouldSave(true)
+                val intent = Intent(context, ProfileVisitActivity::class.java)
+                intent.putExtra("visit",like.owner)
+                Handler(Looper.getMainLooper()).postDelayed({
+                    context.startActivity(intent)
+                }, 30)
+            }
         }
     }
 
