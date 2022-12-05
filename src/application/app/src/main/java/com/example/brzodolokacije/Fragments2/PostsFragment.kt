@@ -94,7 +94,17 @@ class PostsFragment : Fragment() {
                             layoutManager = GridLayoutManager(context, 3)
                             myAdapter = this.context?.let { ProfilePostsAdapter(ids, it, object: ProfilePostsAdapter.OnItemClickListener {
                                 override fun OnItemClick(position: Int) {
-                                    Toast.makeText(requireActivity(), "Item $position clicked", Toast.LENGTH_SHORT).show()
+                                    var clickedId = -1
+                                    var i = 0;
+                                    for(postId in postsIds)
+                                    {
+                                        if(i == position)
+                                        {
+                                            clickedId = postId
+                                        }
+                                        i++
+                                    }
+                                    Toast.makeText(requireActivity(), "Item $position clicked, id: $clickedId", Toast.LENGTH_SHORT).show()
                                 }
                             }) }
                             recyclerView.layoutManager=layoutManager
