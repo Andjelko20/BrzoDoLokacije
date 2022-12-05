@@ -223,7 +223,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/likesAndComments"/>
 
             <TextView
-                android:id="@+id/postComments"
+                android:id="@+id/postPhotoComments"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/backgroundLightTheme"
@@ -251,7 +251,7 @@
                 android:textStyle="italic"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/postComments"
+                app:layout_constraintTop_toBottomOf="@+id/postPhotoComments"
                 tools:text="Date of the post" />
 
 
