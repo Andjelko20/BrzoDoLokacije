@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.brzodolokacije.API.Api
@@ -35,6 +36,8 @@ class PostsFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    private var postsIds : List<Int> = mutableListOf<Int>()
 
     private var myAdapter : RecyclerView.Adapter<ProfilePostsAdapter.MainViewHolder>? = null
     private var mylayoutManager : RecyclerView.LayoutManager? = null
@@ -74,6 +77,11 @@ class PostsFragment : Fragment() {
 //                        Log.d("json", json)
                         val typeToken = object : TypeToken<List<Int>>() {}.type
                         val idList = Gson().fromJson<List<Int>>(json, typeToken)
+                        postsIds = idList
+//                        for(postId in postsIds)
+//                        {
+//                            Log.d("id", postId.toString())
+//                        }
 
                         val ids = mutableListOf<String>()
                         for(id in idList){
@@ -84,7 +92,11 @@ class PostsFragment : Fragment() {
                         profilePostsRv.apply {
                             recyclerView=view.findViewById(R.id.profilePostsRv)
                             layoutManager = GridLayoutManager(context, 3)
-                            myAdapter = this.context?.let { ProfilePostsAdapter(ids, it) }
+                            myAdapter = this.context?.let { ProfilePostsAdapter(ids, it, object: ProfilePostsAdapter.OnItemClickListener {
+                                override fun OnItemClick(position: Int) {
+                                    Toast.makeText(requireActivity(), "Item $position clicked", Toast.LENGTH_SHORT).show()
+                                }
+                            }) }
                             recyclerView.layoutManager=layoutManager
                             recyclerView.adapter=myAdapter
                         }
@@ -98,7 +110,6 @@ class PostsFragment : Fragment() {
             })
         }
     }
-
 
     companion object {
         /**
