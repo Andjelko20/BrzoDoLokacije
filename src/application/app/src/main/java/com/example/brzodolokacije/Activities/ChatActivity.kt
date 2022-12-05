@@ -13,7 +13,7 @@ class ChatActivity : AppCompatActivity() {
 
         replaceFragment(DirectMessageFragment())
 
-        
+
 
     }
 
