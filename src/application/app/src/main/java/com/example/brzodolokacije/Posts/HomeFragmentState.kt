@@ -9,6 +9,10 @@ object HomeFragmentState {
     private var listFeed : MutableList<Photo?>? = null
     private var page : Int = 1
     private var maxPages : Int = 1
+    var likesOpened = false
+    var commentsOpened = false
+    var lastPosition = 0
+    var offset = 0
 
 //    fun setVisit(owner : String)
 //    {

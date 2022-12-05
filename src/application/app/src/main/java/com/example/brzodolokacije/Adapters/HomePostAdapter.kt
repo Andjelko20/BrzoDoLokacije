@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.brzodolokacije.API.Api
@@ -48,6 +49,9 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
         {
             if(t == VIEW_TYPE_ITEM)
             {
+                HomeFragmentState.lastPosition = 0
+                HomeFragmentState.offset = 0
+
                 val photo = p!!
 
                 val owner = itemView.findViewById<TextView>(R.id.postOwner)
@@ -104,6 +108,20 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
                     val view : View = LayoutInflater.from(context).inflate(R.layout.fragment_like_section,null)
                     loadLikes(view,photo)
 
+                    val likesRv = view.findViewById<RecyclerView>(R.id.rv_likes)
+                    likesRv.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+                        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                            super.onScrolled(recyclerView, dx, dy)
+
+                            val lastPosition = (likesRv.layoutManager as? LinearLayoutManager)?.findFirstVisibleItemPosition()!!
+                            val v = (likesRv.layoutManager as? LinearLayoutManager)?.getChildAt(0)
+                            val offset = if(v == null) 0 else v.top - (likesRv.layoutManager as? LinearLayoutManager)?.paddingTop!!
+
+                            HomeFragmentState.lastPosition=lastPosition
+                            HomeFragmentState.offset = offset
+                        }
+                    })
+
                     //refreshing the list of likes
                     val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayoutLikes)
                     refresh.setOnRefreshListener {
@@ -122,6 +140,51 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
 
                     refreshPost(itemView,photo)
                 }
+                if(HomeFragmentState.likesOpened)
+                {
+                    HomeFragmentState.likesOpened = false
+
+                    val view : View = LayoutInflater.from(context).inflate(R.layout.fragment_like_section,null)
+                    loadLikes(view,photo)
+
+                    val likesRv = view.findViewById<RecyclerView>(R.id.rv_likes)
+                    likesRv.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+                        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                            super.onScrolled(recyclerView, dx, dy)
+
+                            val lastPosition = (likesRv.layoutManager as? LinearLayoutManager)?.findFirstVisibleItemPosition()!!
+                            val v = (likesRv.layoutManager as? LinearLayoutManager)?.getChildAt(0)
+                            val offset = if(v == null) 0 else v.top - (likesRv.layoutManager as? LinearLayoutManager)?.paddingTop!!
+
+                            HomeFragmentState.lastPosition=lastPosition
+                            HomeFragmentState.offset = offset
+                        }
+                    })
+                    likesRv.stopScroll()
+                    val lastPosition = HomeFragmentState.lastPosition
+                    val offset = HomeFragmentState.offset
+                    HomeFragmentState.lastPosition = 0
+                    HomeFragmentState.offset = 0
+                    (likesRv.layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(lastPosition,offset)
+                    //refreshing the list of likes
+                    val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayoutLikes)
+                    refresh.setOnRefreshListener {
+                        android.os.Handler(Looper.getMainLooper()).postDelayed({
+
+                            loadLikes(view,photo)
+                            refreshPost(itemView,photo)
+                            refresh.isRefreshing = false
+                        }, 1500)
+                    }
+                    val dialog = BottomSheetDialog(activity)
+                    dialog.setContentView(view)
+                    dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                    //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
+                    dialog.show()
+
+                    refreshPost(itemView,photo)
+                }
+/////////////////////////////////////////////////////////////////////////////////////////////////
 
                 //list and number of comments
                 if(photo.numberOfComments != 0) comments.text="View all ${photo.numberOfComments} comments"
