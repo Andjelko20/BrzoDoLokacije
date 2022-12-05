@@ -1,5 +1,6 @@
 package com.example.brzodolokacije.Fragments2
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -10,6 +11,8 @@ import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.brzodolokacije.API.Api
+import com.example.brzodolokacije.Activities.MainActivity
+import com.example.brzodolokacije.Activities.ShowPostActivity
 import com.example.brzodolokacije.Adapters.ProfilePostsAdapter
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Constants.Constants
@@ -104,7 +107,13 @@ class PostsFragment : Fragment() {
                                         }
                                         i++
                                     }
-                                    Toast.makeText(requireActivity(), "Item $position clicked, id: $clickedId", Toast.LENGTH_SHORT).show()
+//                                    Toast.makeText(requireActivity(), "Item $position clicked, id: $clickedId", Toast.LENGTH_SHORT).show()
+                                    if(clickedId != -1)
+                                    {
+                                        val intent = Intent(it, ShowPostActivity::class.java)
+                                        intent.putExtra("showPost", clickedId.toString());
+                                        startActivity(intent)
+                                    }
                                 }
                             }) }
                             recyclerView.layoutManager=layoutManager
