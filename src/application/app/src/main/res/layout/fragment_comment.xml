@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context=".Fragments2.CommentSectionFragment">
-
-    <LinearLayout
-        android:id="@+id/commentSection"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:behavior_peekHeight="800dp"
-        android:background="@drawable/commentsectiondesigne"
-        android:orientation="vertical">
+    android:layout_height="match_parent"
+    tools:context=".Fragments2.CommentSectionFragment"
+    android:id="@+id/commentSection"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+    app:behavior_peekHeight="500dp"
+    android:background="@drawable/commentsectiondesigne"
+    android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -24,7 +20,8 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:paddingBottom="16dp"
-            android:paddingTop="3dp">
+            android:paddingTop="3dp"
+            android:nestedScrollingEnabled="false">
 
             <ImageView
                 android:id="@+id/dragCommentSection"
@@ -109,7 +106,5 @@
             android:layout_marginTop="10dp"/>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+ </LinearLayout>
 
-    </LinearLayout>
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
