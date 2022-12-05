@@ -13,6 +13,8 @@ object HomeFragmentState {
     var commentsOpened = false
     var lastPosition = 0
     var offset = 0
+    var likes : List<Like>? = null
+    var comments : List<Comment>? = null
 
 //    fun setVisit(owner : String)
 //    {
