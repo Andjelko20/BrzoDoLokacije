@@ -6,9 +6,11 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.*
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import android.widget.Toast
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -84,7 +86,9 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        val view = inflater.inflate(R.layout.fragment_home, container, false)
+        view.findViewById<LinearLayout>(R.id.notFollowingAnyoneHomeFragment).setVisibility(View.GONE)
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -169,6 +173,7 @@ class HomeFragment : Fragment() {
 
     private fun requestLoadFeed(view : View)
     {
+        view.findViewById<LinearLayout>(R.id.notFollowingAnyoneHomeFragment).setVisibility(View.GONE)
         page = 1
 //        Toast.makeText(requireActivity(),page.toString(),Toast.LENGTH_SHORT).show()
         val retrofit = Client(requireActivity()).buildService(Api::class.java)
@@ -200,8 +205,10 @@ class HomeFragment : Fragment() {
                 }
                 else
                 {
-                    Toast.makeText(requireActivity(),"You don't follow anyone",Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(requireActivity(),"You don't follow anyone",Toast.LENGTH_SHORT).show()
                     view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.GONE)
+                    view.findViewById<LinearLayout>(R.id.notFollowingAnyoneHomeFragment).setVisibility(View.VISIBLE)
+                    view.findViewById<TextView>(R.id.endlessTextHomeFragment).isSelected = true
                 }
             }
 
