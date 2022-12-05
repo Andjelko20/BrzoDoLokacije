@@ -18,7 +18,9 @@ import com.example.brzodolokacije.Fragments2.ProfileFragment
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.PostDetails
 import com.example.brzodolokacije.Models.UserProfile
+import com.example.brzodolokacije.Posts.HomeFragmentState
 import com.example.brzodolokacije.Posts.Photo
+import com.example.brzodolokacije.Posts.Stats
 import com.example.brzodolokacije.R
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
@@ -90,6 +92,13 @@ class ShowPostActivity : AppCompatActivity() {
                             likeUnlike(postDetails)
                         }
 
+                        //comments
+                        if(postDetails.numberOfComments != 0)
+                        {
+                            postPhotoComments.text="View all ${postDetails.numberOfComments} comments"
+                        }
+                        else postPhotoComments.text="No comments yet. Add yours?"
+
                         //caption
                         if(postDetails.caption == "")
                         {
@@ -153,7 +162,7 @@ class ShowPostActivity : AppCompatActivity() {
                         postDetails.likedByMe = false
                     }
 
-//                    refreshPost(itemView,photo)
+                    refreshPost(postDetails)
                 }
                 else
                 {
@@ -164,6 +173,43 @@ class ShowPostActivity : AppCompatActivity() {
             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                 Toast.makeText(this@ShowPostActivity,"Something went wrong", Toast.LENGTH_SHORT).show()
             }
+        })
+    }
+
+    private fun refreshPost(postDetails: PostDetails)
+    {
+        var likes = findViewById<TextView>(R.id.postNumberOfLikes)
+        var comments = findViewById<TextView>(R.id.postPhotoComments)
+
+        val retrofit = Client(this).buildService(Api::class.java)
+        retrofit.refrestPost(postDetails.id.toString()).enqueue(object: Callback<DefaultResponse>
+        {
+            override fun onResponse(
+                call: Call<DefaultResponse>,
+                response: Response<DefaultResponse>
+            ) {
+                if(response.body()?.error.toString()=="false")
+                {
+                    val newStatsStr = response.body()?.message.toString()
+                    val newStats : Stats = Gson().fromJson(newStatsStr, Stats :: class.java)
+
+                    likes.text = newStats.numOfLikes.toString()
+                    postDetails.numberOfComments = newStats.numOfComments.toInt()
+                    postDetails.numberOfLikes = newStats.numOfLikes.toInt()
+                    if(newStats.numOfComments.toInt() != 0) comments.text="View all ${newStats.numOfComments} comments"
+                    else comments.text="No comments yet. Add yours?"
+
+                }
+                else
+                {
+                    Toast.makeText(this@ShowPostActivity,"Error refreshing",Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                Toast.makeText(this@ShowPostActivity,"Something went wrong while refreshing",Toast.LENGTH_SHORT).show()
+            }
+
         })
     }
 }
