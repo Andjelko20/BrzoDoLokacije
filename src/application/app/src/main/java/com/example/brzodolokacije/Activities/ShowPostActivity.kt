@@ -11,7 +11,10 @@ import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Fragments2.HomeFragment
 import com.example.brzodolokacije.Fragments2.ProfileFragment
 import com.example.brzodolokacije.Models.DefaultResponse
+import com.example.brzodolokacije.Models.PostDetails
+import com.example.brzodolokacije.Models.UserProfile
 import com.example.brzodolokacije.R
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -44,8 +47,17 @@ class ShowPostActivity : AppCompatActivity() {
                 ) {
                     if(response.body()?.error.toString() == "false")
                     {
-                        val json = response.body()?.message.toString()
-                        Log.d("data", json)
+                        val postDetailsStr = response.body()?.message.toString()
+                        Log.d("data", postDetailsStr)
+                        val gson = Gson()
+                        val postDetails: PostDetails = gson.fromJson(postDetailsStr, PostDetails::class.java)
+
+                        //proba
+                        Log.d("owner", postDetails.owner)
+                        Log.d("location", postDetails.location)
+                        Log.d("likedByMe", postDetails.likedByMe.toString())
+                        Log.d("numberOfComments", postDetails.numberOfComments.toString())
+
                     }
                     else
                     {

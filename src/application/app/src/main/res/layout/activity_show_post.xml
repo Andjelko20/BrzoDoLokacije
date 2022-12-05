@@ -110,7 +110,6 @@
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
                 android:padding="0dp"
-                android:src="@drawable/defaultpicture"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/postHeader" />
