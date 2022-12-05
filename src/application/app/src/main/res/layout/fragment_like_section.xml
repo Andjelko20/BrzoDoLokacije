@@ -63,7 +63,8 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/rv_like"
                 tools:itemCount="1"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="10dp"
+                android:nestedScrollingEnabled="false"/>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>

@@ -20,8 +20,7 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:paddingBottom="16dp"
-            android:paddingTop="3dp"
-            android:nestedScrollingEnabled="false">
+            android:paddingTop="3dp">
 
             <ImageView
                 android:id="@+id/dragCommentSection"
@@ -103,7 +102,8 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/rv_comment"
             tools:itemCount="1"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="10dp"
+            android:nestedScrollingEnabled="false"/>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
  </LinearLayout>

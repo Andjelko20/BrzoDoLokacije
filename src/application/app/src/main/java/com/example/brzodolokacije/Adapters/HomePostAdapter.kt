@@ -135,7 +135,7 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
                     }
                     val dialog = BottomSheetDialog(activity)
                     dialog.setContentView(view)
-                    dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                    dialog.behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
                     //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
                     dialog.show()
 
@@ -181,7 +181,7 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
                     }
                     val dialog = BottomSheetDialog(activity)
                     dialog.setContentView(view)
-                    dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                    dialog.behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
                     //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
                     dialog.show()
 
@@ -362,7 +362,10 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
 
 
                     val rvComments = view.findViewById<RecyclerView>(R.id.rv_comments)
-                    if(commentsList.isNotEmpty()) rvComments.adapter = CommentsAdapter(commentsList,context,activity)
+                    if(commentsList.isNotEmpty()) {
+                        rvComments.adapter = CommentsAdapter(commentsList,context,activity)
+                        rvComments.layoutManager=LinearLayoutManager(context)
+                    }
                 }
                 else
                 {
@@ -467,7 +470,10 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
 
 
                     val rvLikes = view.findViewById<RecyclerView>(R.id.rv_likes)
-                    if(likesList.isNotEmpty()) rvLikes.adapter = LikesAdapter(likesList,context,activity)
+                    if(likesList.isNotEmpty()) {
+                        rvLikes.adapter = LikesAdapter(likesList,context,activity)
+                        rvLikes.layoutManager=LinearLayoutManager(context)
+                    }
                 }
                 else
                 {
