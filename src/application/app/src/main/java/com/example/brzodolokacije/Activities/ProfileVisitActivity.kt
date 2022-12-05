@@ -13,6 +13,7 @@ import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Constants.Constants
 import com.example.brzodolokacije.Fragments2.LocationsFragment
+import com.example.brzodolokacije.Fragments2.ProfileVisitLocationsFragment
 import com.example.brzodolokacije.Fragments2.ProfileVisitPostsFragment
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
@@ -40,9 +41,14 @@ class ProfileVisitActivity : AppCompatActivity() {
         username = intent.getStringExtra("visit").toString()
 
         val profileVisitPostFragment = ProfileVisitPostsFragment()
+        val profileVisitLocationsFragment = ProfileVisitLocationsFragment()
+
         val bundle = Bundle()
         bundle.putString("username",username)
+
         profileVisitPostFragment.arguments = bundle
+        profileVisitLocationsFragment.arguments = bundle
+
         replaceFragmentOnProfile(profileVisitPostFragment)
 
         val bubbleTabBarProfileVisit = findViewById<BubbleTabBar>(R.id.bubbleTabBarProfileProfileVisit)
@@ -50,7 +56,7 @@ class ProfileVisitActivity : AppCompatActivity() {
             override fun onBubbleClick(id: Int) {
                 when(id){
                     R.id.posts -> replaceFragmentOnProfile(profileVisitPostFragment)
-                    R.id.visitedLocations -> replaceFragmentOnProfile(LocationsFragment()) //napraviti poseban fragment gde ce se prikazivati lokacije korisnika (zavisi od implementacije Location fragmenta)
+                    R.id.visitedLocations -> replaceFragmentOnProfile(profileVisitLocationsFragment)
 
                     else -> {}
                 }
