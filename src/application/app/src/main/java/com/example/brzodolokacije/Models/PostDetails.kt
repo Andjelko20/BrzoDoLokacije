@@ -4,32 +4,32 @@ import com.google.gson.annotations.SerializedName
 
 data class PostDetails(
     @SerializedName("Id")
-    val id: Int,
+    var id: Int,
 
     @SerializedName("Owner")
-    val owner: String,
+    var owner: String,
 
     @SerializedName("Date")
-    val date: Long,
+    var date: Long,
 
     @SerializedName("Location")
-    val location: String,
+    var location: String,
 
     @SerializedName("Caption")
-    val caption: String,
+    var caption: String,
 
     @SerializedName("Longitude")
-    val longitude: String,
+    var longitude: String,
 
     @SerializedName("Latitude")
-    val latitude: String,
+    var latitude: String,
 
     @SerializedName("NumberOfLikes")
-    val numberOfLikes: Int,
+    var numberOfLikes: Int,
 
     @SerializedName("NumberOfComments")
-    val numberOfComments: Int,
+    var numberOfComments: Int,
 
     @SerializedName("LikedByMe")
-    val likedByMe: Boolean
+    var likedByMe: Boolean
 )

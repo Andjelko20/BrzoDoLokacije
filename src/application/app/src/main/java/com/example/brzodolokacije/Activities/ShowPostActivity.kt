@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Constants.Constants
@@ -17,6 +18,7 @@ import com.example.brzodolokacije.Fragments2.ProfileFragment
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.PostDetails
 import com.example.brzodolokacije.Models.UserProfile
+import com.example.brzodolokacije.Posts.Photo
 import com.example.brzodolokacije.R
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
@@ -29,6 +31,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class ShowPostActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_post)
@@ -45,7 +48,6 @@ class ShowPostActivity : AppCompatActivity() {
             intent.putExtra("backToProfile", "returnToProfile");
             startActivity(intent)
         }
-
         val retrofit = Client(this).buildService(Api::class.java)
         if (postId != null) {
             retrofit.getPostData(postId).enqueue(object : Callback<DefaultResponse>{
@@ -82,6 +84,11 @@ class ShowPostActivity : AppCompatActivity() {
 
                         //likes
                         postNumberOfLikes.text = postDetails.numberOfLikes.toString()
+                        if(postDetails.likedByMe) likeButton.setBackgroundResource(R.drawable.liked)
+                        else likeButton.setBackgroundResource(R.drawable.unliked)
+                        likeButton.setOnClickListener{
+                            likeUnlike(postDetails)
+                        }
 
                         //caption
                         if(postDetails.caption == "")
@@ -118,5 +125,45 @@ class ShowPostActivity : AppCompatActivity() {
         val tickAtEpoche= 621355968000000000L
         val ticksPerMiliSec = 10000
         return format.format(Date((time-tickAtEpoche)/ticksPerMiliSec))
+    }
+
+    private fun likeUnlike(postDetails: PostDetails)
+    {
+        val likedByMe = findViewById<ImageView>(R.id.likeButton)
+        val retrofit = Client(this).buildService(Api::class.java)
+        retrofit.likPost(postDetails.id.toString()).enqueue(object: Callback<DefaultResponse>
+        {
+            override fun onResponse(
+                call: Call<DefaultResponse>,
+                response: Response<DefaultResponse>
+            ) {
+                if(response.body()?.error.toString()=="false")
+                {
+                    val state = response.body()?.message.toString()
+
+                    if(state=="liked")
+                    {
+                        likedByMe.setBackgroundResource(R.drawable.liked)
+                        postDetails.likedByMe = true
+                    }
+
+                    else
+                    {
+                        likedByMe.setBackgroundResource(R.drawable.unliked)
+                        postDetails.likedByMe = false
+                    }
+
+//                    refreshPost(itemView,photo)
+                }
+                else
+                {
+                    Toast.makeText(this@ShowPostActivity,"Unable to like post", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                Toast.makeText(this@ShowPostActivity,"Something went wrong", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }
