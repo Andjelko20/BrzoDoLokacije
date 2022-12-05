@@ -2,6 +2,7 @@ package com.example.brzodolokacije.Fragments2
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.location.Address
@@ -71,6 +72,16 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
+        val languageToLoad = "US"
+        val locale = Locale(languageToLoad)
+        Locale.setDefault(locale)
+        val config = Configuration()
+        config.locale = locale
+        activity?.getBaseContext()?.getResources()?.updateConfiguration(
+            config,
+            activity?.getBaseContext()?.getResources()?.getDisplayMetrics()
+        )
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
