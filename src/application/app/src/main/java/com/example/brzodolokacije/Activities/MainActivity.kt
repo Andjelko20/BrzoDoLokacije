@@ -50,48 +50,80 @@ class MainActivity : AppCompatActivity() {
 //        {
             homeFragment = HomeFragment()
 //        }
-
-        options_meni.setOnClickListener{
-            val popupMenu = PopupMenu(wrapper, it)
-            popupMenu.setOnMenuItemClickListener { item ->
-                when(item.itemId){
-                    R.id.editProfileMeni ->{
-                        val intent = Intent(this, ActivityEditProfile::class.java)
-                        startActivity(intent)
-                        true
-                    }
-                    R.id.logoutMeni ->{
-                        logOut()
-                        true
-                    }
-                    R.id.changePasswordMeni ->{
-                        val intent = Intent(this, ChangePasswordActivity::class.java)
-                        startActivity(intent)
-                        true
-                    }
-                    R.id.deleteAccountMeni ->{
-                        val intent = Intent(this, DeleteAccountActivity::class.java)
-                        startActivity(intent)
-                        true
-                    }
-                    else -> false
-                }
-
-            }
-            popupMenu.inflate(R.menu.meni)
-            popupMenu.show()
-        }
+        options_meni.setVisibility(View.GONE)
+//        options_meni.setOnClickListener{
+//            val popupMenu = PopupMenu(wrapper, it)
+//            popupMenu.setOnMenuItemClickListener { item ->
+//                when(item.itemId){
+//                    R.id.editProfileMeni ->{
+//                        val intent = Intent(this, ActivityEditProfile::class.java)
+//                        startActivity(intent)
+//                        true
+//                    }
+//                    R.id.logoutMeni ->{
+//                        logOut()
+//                        true
+//                    }
+//                    R.id.changePasswordMeni ->{
+//                        val intent = Intent(this, ChangePasswordActivity::class.java)
+//                        startActivity(intent)
+//                        true
+//                    }
+//                    R.id.deleteAccountMeni ->{
+//                        val intent = Intent(this, DeleteAccountActivity::class.java)
+//                        startActivity(intent)
+//                        true
+//                    }
+//                    else -> false
+//                }
+//
+//            }
+//            popupMenu.inflate(R.menu.meni)
+//            popupMenu.show()
+//        }
 
         val intent = getIntent()
         val provera = intent.getStringExtra("backToProfile");
         if (provera != null)
         {
+            options_meni.setVisibility(View.VISIBLE)
+            options_meni.setOnClickListener{
+                val popupMenu = PopupMenu(wrapper, it)
+                popupMenu.setOnMenuItemClickListener { item ->
+                    when(item.itemId){
+                        R.id.editProfileMeni ->{
+                            val intent = Intent(this@MainActivity, ActivityEditProfile::class.java)
+                            startActivity(intent)
+                            true
+                        }
+                        R.id.logoutMeni ->{
+                            logOut()
+                            true
+                        }
+                        R.id.changePasswordMeni ->{
+                            val intent = Intent(this@MainActivity, ChangePasswordActivity::class.java)
+                            startActivity(intent)
+                            true
+                        }
+                        R.id.deleteAccountMeni ->{
+                            val intent = Intent(this@MainActivity, DeleteAccountActivity::class.java)
+                            startActivity(intent)
+                            true
+                        }
+                        else -> false
+                    }
+
+                }
+                popupMenu.inflate(R.menu.meni)
+                popupMenu.show()
+            }
             replaceFragment(ProfileFragment()) //vraca na profil ako smo isli na edit profila
             bubbleTabBar.visibility = View.INVISIBLE;
             bubbleTabBar2.visibility = View.VISIBLE;
         }
         else
         {
+            options_meni.setVisibility(View.GONE)
             replaceFragment(HomeFragment()) //ide na home kad prvi put otvorimo main i kad se vratimo iz bilo kod drugog aktivitija
             bubbleTabBar.visibility = View.VISIBLE;
             bubbleTabBar2.visibility = View.INVISIBLE;
@@ -100,9 +132,50 @@ class MainActivity : AppCompatActivity() {
         bubbleTabBar.addBubbleListener(object : OnBubbleClickListener{
             override fun onBubbleClick(id: Int) {
                 when(id){
-                    R.id.explore -> replaceFragment(ExploreFragment())
-                    R.id.home -> replaceFragment(homeFragment!!) //ovde da proverim da l postoji sacuvano stanje
-                    R.id.profile -> replaceFragment(ProfileFragment())
+                    R.id.explore -> {
+                        options_meni.setVisibility(View.GONE)
+                        replaceFragment(ExploreFragment())
+                    }
+
+                    R.id.home -> {
+                        options_meni.setVisibility(View.GONE)
+                        replaceFragment(homeFragment!!)
+                    } //ovde da proverim da l postoji sacuvano stanje
+
+                    R.id.profile -> {
+                        replaceFragment(ProfileFragment())
+                        options_meni.setVisibility(View.VISIBLE)
+                        options_meni.setOnClickListener{
+                            val popupMenu = PopupMenu(wrapper, it)
+                            popupMenu.setOnMenuItemClickListener { item ->
+                                when(item.itemId){
+                                    R.id.editProfileMeni ->{
+                                        val intent = Intent(this@MainActivity, ActivityEditProfile::class.java)
+                                        startActivity(intent)
+                                        true
+                                    }
+                                    R.id.logoutMeni ->{
+                                        logOut()
+                                        true
+                                    }
+                                    R.id.changePasswordMeni ->{
+                                        val intent = Intent(this@MainActivity, ChangePasswordActivity::class.java)
+                                        startActivity(intent)
+                                        true
+                                    }
+                                    R.id.deleteAccountMeni ->{
+                                        val intent = Intent(this@MainActivity, DeleteAccountActivity::class.java)
+                                        startActivity(intent)
+                                        true
+                                    }
+                                    else -> false
+                                }
+
+                            }
+                            popupMenu.inflate(R.menu.meni)
+                            popupMenu.show()
+                        }
+                    }
 
                     else -> {}
                 }
@@ -113,9 +186,50 @@ class MainActivity : AppCompatActivity() {
         bubbleTabBar2.addBubbleListener(object : OnBubbleClickListener{
             override fun onBubbleClick(id: Int) {
                 when(id){
-                    R.id.explore -> replaceFragment(ExploreFragment())
-                    R.id.home -> replaceFragment(homeFragment!!) //ovde da proverim da li postoji sacuvano stanje
-                    R.id.profile -> replaceFragment(ProfileFragment())
+                    R.id.explore -> {
+                        options_meni.setVisibility(View.GONE)
+                        replaceFragment(ExploreFragment())
+                    }
+
+                    R.id.home -> {
+                        options_meni.setVisibility(View.GONE)
+                        replaceFragment(homeFragment!!)
+                    } //ovde da proverim da li postoji sacuvano stanje
+
+                    R.id.profile -> {
+                        replaceFragment(ProfileFragment())
+                        options_meni.setVisibility(View.VISIBLE)
+                        options_meni.setOnClickListener{
+                            val popupMenu = PopupMenu(wrapper, it)
+                            popupMenu.setOnMenuItemClickListener { item ->
+                                when(item.itemId){
+                                    R.id.editProfileMeni ->{
+                                        val intent = Intent(this@MainActivity, ActivityEditProfile::class.java)
+                                        startActivity(intent)
+                                        true
+                                    }
+                                    R.id.logoutMeni ->{
+                                        logOut()
+                                        true
+                                    }
+                                    R.id.changePasswordMeni ->{
+                                        val intent = Intent(this@MainActivity, ChangePasswordActivity::class.java)
+                                        startActivity(intent)
+                                        true
+                                    }
+                                    R.id.deleteAccountMeni ->{
+                                        val intent = Intent(this@MainActivity, DeleteAccountActivity::class.java)
+                                        startActivity(intent)
+                                        true
+                                    }
+                                    else -> false
+                                }
+
+                            }
+                            popupMenu.inflate(R.menu.meni)
+                            popupMenu.show()
+                        }
+                    }
 
                     else -> {}
                 }
