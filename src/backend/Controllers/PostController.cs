@@ -159,7 +159,7 @@ namespace backend.Controllers
         [HttpGet("onMap/{location}")]
         public async Task<ActionResult<string>> MapLocationLocation(string location)
         {
-            List<Post> posts = await _context.Posts.Where(p => p.Location == location).ToListAsync();
+            List<Post> posts = await _context.Posts.Where(p => p.Location.Contains(location)).ToListAsync();
             List<PostOnMapDto> onMap = new List<PostOnMapDto>();
             foreach (Post post in posts)
             {
