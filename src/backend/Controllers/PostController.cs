@@ -104,7 +104,7 @@ namespace backend.Controllers
                     error = true,
                     message = "Error"
                 });
-            List<Post> posts = await _context.Posts.Where(p => p.Location == request.Location).ToListAsync();
+            List<Post> posts = await _context.Posts.Where(p => p.Location.Contains(request.Location)).ToListAsync();
                 /*
                 var pageResults = 3f;
                 var pageCount = Math.Ceiling(posts.Count / pageResults);
