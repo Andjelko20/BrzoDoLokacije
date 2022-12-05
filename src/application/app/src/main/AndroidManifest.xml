@@ -21,13 +21,6 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".ChatActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
             android:name=".Activities.ShowPostActivity"
             android:exported="false">
             <meta-data
@@ -52,6 +45,15 @@
         </activity>
         <activity
             android:name=".Activities.ChangePasswordActivity"
+            android:exported="false"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+        <activity
+            android:name=".Activities.ChatActivity"
             android:exported="false"
             android:screenOrientation="portrait">
             <meta-data

@@ -7,12 +7,12 @@
     tools:context=".Activities.ProfileVisitActivity"
     android:background="@color/postHeader">
 
-    <LinearLayout
-        android:id="@+id/chatActivitySection"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/postHeader"
-        android:orientation="vertical">
+<!--    <LinearLayout-->
+<!--        android:id="@+id/chatActivitySection"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:background="@color/postHeader"-->
+<!--        android:orientation="vertical">-->
 
 <!--        <RelativeLayout-->
 <!--            android:layout_width="match_parent"-->
@@ -57,6 +57,6 @@
         </FrameLayout>
 
 
-    </LinearLayout>
+<!--    </LinearLayout>-->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
