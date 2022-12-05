@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
@@ -36,6 +37,16 @@ class ActivityMaps : AppCompatActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
+        val languageToLoad = "US"
+        val locale = Locale(languageToLoad)
+        Locale.setDefault(locale)
+        val config = Configuration()
+        config.locale = locale
+        getBaseContext().getResources().updateConfiguration(
+            config,
+            getBaseContext().getResources().getDisplayMetrics()
+        )
+
         setContentView(R.layout.activity_maps)
 
         val mapFragment = SupportMapFragment.newInstance()

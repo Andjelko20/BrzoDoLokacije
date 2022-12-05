@@ -1,17 +1,17 @@
 package com.example.brzodolokacije.Fragments2
 
+import android.content.res.Configuration
 import android.location.Location
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
-import com.example.brzodolokacije.ModelsDto.PaginationResponse
 import com.example.brzodolokacije.ModelsDto.PinDto
 import com.example.brzodolokacije.R
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -25,6 +25,7 @@ import com.google.gson.reflect.TypeToken
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -51,6 +52,16 @@ class LocationsFragment : Fragment(),OnMapReadyCallback {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
+        val languageToLoad = "US"
+        val locale = Locale(languageToLoad)
+        Locale.setDefault(locale)
+        val config = Configuration()
+        config.locale = locale
+        activity?.getBaseContext()?.getResources()?.updateConfiguration(
+            config,
+            activity?.getBaseContext()?.getResources()?.getDisplayMetrics()
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
