@@ -37,6 +37,7 @@ class LikesAdapter(val likesList : List<Like>, val context : Context, val activi
 
             wholeLike.setOnClickListener{
                 HomeFragmentState.shouldSave(true)
+                HomeFragmentState.likesOpened = true
                 val intent = Intent(activity, ProfileVisitActivity::class.java)
                 intent.putExtra("visit",like.owner)
                 Handler(Looper.getMainLooper()).postDelayed({
