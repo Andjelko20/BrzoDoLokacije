@@ -117,7 +117,7 @@ class LocationsFragment : Fragment(),OnMapReadyCallback {
                         val typeToken = object : TypeToken<List<PinDto>>() {}.type
                         val pins = Gson().fromJson<List<PinDto>>(listOfPins, typeToken)
 
-                        Toast.makeText(requireActivity(),pins.toString(),Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(requireActivity(),pins.toString(),Toast.LENGTH_SHORT).show()
                         var i = 0
                         while(i < pins!!.size) {
                             val latLng = LatLng(pins[i].latitude.toDouble(), pins[i].longitude.toDouble())
