@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     tools:context=".Fragments2.DirectMessageFragment"
     android:background="#d4e9e4">
 
@@ -33,6 +32,7 @@
             android:layout_marginStart="10dp">
         </Button>
         <TextView
+            android:id="@+id/chatingWithUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
@@ -47,15 +47,15 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMessages"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/topBarDirectMessage"/>
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/sendMessageLayout"
+        app:layout_constraintTop_toBottomOf="@+id/topBarDirectMessage"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <RelativeLayout
         android:id="@+id/sendMessageLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/rvMessages"
-        android:layout_alignParentBottom="true"
         android:orientation="horizontal"
         android:layout_marginBottom="5dp"
         app:layout_constraintStart_toStartOf="parent"
