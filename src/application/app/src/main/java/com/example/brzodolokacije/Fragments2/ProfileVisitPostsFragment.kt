@@ -86,7 +86,11 @@ class ProfileVisitPostsFragment : Fragment() {
                         profilePostsVisitRv.apply {
                             pvLayoutManager = GridLayoutManager(context, 3)
                             pvRecyclerView = view.findViewById(R.id.profilePostsRv)
-                            pvAdapter = this.context?.let { ProfilePostsAdapter(ids, it) }
+                            pvAdapter = this.context?.let { ProfilePostsAdapter(ids, it, object: ProfilePostsAdapter.OnItemClickListener {
+                                override fun OnItemClick(position: Int) {
+                                    Toast.makeText(requireActivity(), "Item $position clicked", Toast.LENGTH_SHORT).show()
+                                }
+                            }) }
                             pvRecyclerView.layoutManager = pvLayoutManager
                             pvRecyclerView.adapter = pvAdapter
                         }

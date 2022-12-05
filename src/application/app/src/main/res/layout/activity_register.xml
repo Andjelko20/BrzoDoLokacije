@@ -66,7 +66,7 @@
     <RelativeLayout
         android:id="@+id/forma"
         android:layout_width="320dp"
-        android:layout_height="300dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/shape"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -82,7 +82,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginStart="25dp"
             android:layout_marginEnd="25dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="10dp"
             android:textColorHint="@color/dark_blue">
 
             <EditText
@@ -152,6 +152,7 @@
             android:layout_marginStart="25dp"
             android:layout_marginEnd="25dp"
             android:layout_marginTop="10dp"
+            android:layout_marginBottom="25dp"
             android:textColorHint="@color/dark_blue">
 
             <EditText

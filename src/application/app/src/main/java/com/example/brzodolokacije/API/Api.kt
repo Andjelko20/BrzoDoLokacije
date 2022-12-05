@@ -98,4 +98,7 @@ interface Api {
 
     @GET("Post/onMapUser/{username}")
     fun getLocationsByUser(@Path("username") username : String) : Call<DefaultResponse>
+
+    @GET("Post/getOne/{id}")
+    fun getPostData(@Path("id") id: Int) : Call<DefaultResponse>
 }
