@@ -4,25 +4,33 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Looper
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.brzodolokacije.API.Api
+import com.example.brzodolokacije.Adapters.CommentsAdapter
+import com.example.brzodolokacije.Adapters.CommentsAdapterZaActivity
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Constants.Constants
 import com.example.brzodolokacije.Fragments2.HomeFragment
 import com.example.brzodolokacije.Fragments2.ProfileFragment
 import com.example.brzodolokacije.Models.DefaultResponse
+import com.example.brzodolokacije.Models.NewCommentDto
 import com.example.brzodolokacije.Models.PostDetails
 import com.example.brzodolokacije.Models.UserProfile
+import com.example.brzodolokacije.Posts.Comment
 import com.example.brzodolokacije.Posts.HomeFragmentState
 import com.example.brzodolokacije.Posts.Photo
 import com.example.brzodolokacije.Posts.Stats
 import com.example.brzodolokacije.R
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -99,6 +107,40 @@ class ShowPostActivity : AppCompatActivity() {
                         }
                         else postPhotoComments.text="No comments yet. Add yours?"
 
+                        postPhotoComments.setOnClickListener{
+                            val view : View = LayoutInflater.from(this@ShowPostActivity).inflate(R.layout.fragment_comment,null)
+                            loadComments(view, postDetails)
+
+                            //adding a new comment
+                            val addCommentButton = view.findViewById<ImageView>(R.id.addCommentBtn)
+                            val addCommentText = view.findViewById<EditText>(R.id.addCommentText)
+                            addCommentButton.setOnClickListener{
+                                if(addCommentText.text.toString()!="")
+                                {
+                                    val ct=addCommentText.text.toString().trim()
+                                    val newComment = NewCommentDto(postDetails.id.toString(),ct)
+                                    addNewComment(view, postDetails,newComment)
+                                    refreshPost(postDetails)
+                                }
+                            }
+                            //refreshing the list of comments
+                            val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayoutComments)
+                            refresh.setOnRefreshListener {
+                                android.os.Handler(Looper.getMainLooper()).postDelayed({
+
+                                    loadComments(view, postDetails)
+                                    refreshPost(postDetails)
+                                    refresh.isRefreshing = false
+                                }, 1500)
+                            }
+                            val dialog = BottomSheetDialog(this@ShowPostActivity)
+                            dialog.setContentView(view)
+                            dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                            //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
+                            dialog.show()
+                            refreshPost(postDetails)
+                        }
+
                         //caption
                         if(postDetails.caption == "")
                         {
@@ -173,6 +215,70 @@ class ShowPostActivity : AppCompatActivity() {
             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                 Toast.makeText(this@ShowPostActivity,"Something went wrong", Toast.LENGTH_SHORT).show()
             }
+        })
+    }
+
+    private fun loadComments(view: View, postDetails: PostDetails)
+    {
+        val retrofit = Client(this).buildService(Api::class.java)
+        retrofit.getComments(postDetails.id.toString()).enqueue(object: Callback<DefaultResponse>
+        {
+            override fun onResponse(
+                call: Call<DefaultResponse>,
+                response: Response<DefaultResponse>
+            ) {
+                if(response.body()?.error.toString()=="false")
+                {
+                    val listOfCommentsStr: String = response.body()?.message.toString();
+
+                    val typeToken = object : TypeToken<List<Comment>>() {}.type
+                    val commentsList = Gson().fromJson<List<Comment>>(listOfCommentsStr, typeToken)
+
+
+                    val rvComments = view.findViewById<RecyclerView>(R.id.rv_comments)
+                    if(commentsList.isNotEmpty()) rvComments.adapter = CommentsAdapterZaActivity(commentsList,this@ShowPostActivity)
+                }
+                else
+                {
+                    Toast.makeText(this@ShowPostActivity,"Error loading comments",Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                Toast.makeText(this@ShowPostActivity,"Error loading comments. Something went wrong",Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
+
+    private fun addNewComment(view: View, postDetails: PostDetails, newComment : NewCommentDto)
+    {
+        val retrofit = Client(this).buildService(Api::class.java)
+        retrofit.addComment(newComment).enqueue(object: Callback<DefaultResponse>
+        {
+            override fun onResponse(
+                call: Call<DefaultResponse>,
+                response: Response<DefaultResponse>
+            ) {
+                if(response.body()?.error.toString()=="false")
+                {
+                    //Toast.makeText(activity,"Comment added",Toast.LENGTH_SHORT).show()
+                    val newNumOfComments=response.body()?.message.toString().trim()
+                    findViewById<TextView>(R.id.postPhotoComments).text = "View all ${newNumOfComments} comments"
+                    view.findViewById<TextView>(R.id.addCommentText).text=""
+                    loadComments(view, postDetails)
+                    refreshPost(postDetails)
+                }
+                else
+                {
+                    Toast.makeText(this@ShowPostActivity,"Error",Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                Toast.makeText(this@ShowPostActivity,"Something else went wrong",Toast.LENGTH_SHORT).show()
+            }
+
         })
     }
 
