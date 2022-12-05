@@ -28,7 +28,7 @@ namespace backend.Controllers
         }
 
         [HttpGet("getAll/{page}")]
-        public async Task<ActionResult<List<Post>>> getAll(int page)
+        public async Task<ActionResult<string>> getAll(int page)
         {
             var me = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
             if (me == null)
@@ -95,7 +95,7 @@ namespace backend.Controllers
         }
         
         [HttpPost("getByLocation")]
-        public async Task<ActionResult<List<Post>>> getAll(GetByALocationDto request)
+        public async Task<ActionResult<string>> getAll(GetByALocationDto request)
         {
             var me = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
             if (me == null)
@@ -157,7 +157,7 @@ namespace backend.Controllers
         }
         
         [HttpGet("onMap/{location}")]
-        public async Task<ActionResult<List<Post>>> getAllUser(string location)
+        public async Task<ActionResult<string>> MapLocationLocation(string location)
         {
             List<Post> posts = await _context.Posts.Where(p => p.Location == location).ToListAsync();
             List<PostOnMapDto> onMap = new List<PostOnMapDto>();
@@ -179,7 +179,7 @@ namespace backend.Controllers
         }
         
         [HttpGet("onMapUser/{username}")]
-        public async Task<ActionResult<List<Post>>> getAll(string username)
+        public async Task<ActionResult<string>> MapLocationUser(string username)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
             if (user == null)
