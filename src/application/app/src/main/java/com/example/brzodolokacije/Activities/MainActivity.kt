@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
             popupMenu.setOnMenuItemClickListener { item ->
                 when(item.itemId){
                     R.id.editProfileMeni ->{
-                        val intent = Intent(this, ActivityEditProfile::class.java)
+                        val intent = Intent(this, TestMapa::class.java)
                         startActivity(intent)
                         true
                     }

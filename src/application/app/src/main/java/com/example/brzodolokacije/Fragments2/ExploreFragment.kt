@@ -2,10 +2,13 @@ package com.example.brzodolokacije.Fragments2
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +19,7 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
+import com.example.brzodolokacije.Constants.Constants
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.ModelsDto.PinDto
@@ -26,6 +30,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
@@ -37,6 +42,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 import java.util.*
+import java.util.concurrent.Executors
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -121,7 +127,7 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
                                     while(i < pins!!.size) {
                                         val latLng = LatLng(pins[i].latitude.toDouble(), pins[i].longitude.toDouble())
 
-                                        mMap.addMarker(MarkerOptions().position(latLng).title(pins[i].id.toString()))
+                                        loadImage(latLng, Constants.BASE_URL + "Post/postPhoto/" + pins[i].id.toString())
                                         i++
                                     }
 
@@ -219,6 +225,35 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
         markerOptions.title("")
 
         mMap.addMarker(markerOptions)
+    }
+    private fun loadImage(longlat : LatLng, path : String)
+    {
+        //image.layoutParams.height=Constants.screenHeight
+        val executor = Executors.newSingleThreadExecutor()
+
+        val handler = android.os.Handler(Looper.getMainLooper())
+
+        var i: Bitmap? = null
+        executor.execute {
+
+            // Image URL
+            val imageURL = path
+            try {
+                val `in` = java.net.URL(imageURL).openStream()
+                i = BitmapFactory.decodeStream(`in`)
+                handler.post {
+                    val smallMarker = Bitmap.createScaledBitmap(i!!, 150, 150, false)
+                    mMap.addMarker(
+                        MarkerOptions()
+                            .position(longlat)
+                            .icon(BitmapDescriptorFactory.fromBitmap(smallMarker!!))
+                    )
+
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
     override fun onMarkerClick(p0: Marker): Boolean = false
