@@ -22,4 +22,6 @@ public class User
     public List<Comment> Comments { get; set; }
     public List<Follow> Followers { get; set; }
     public List<Follow> Followees { get; set; }
+    public List<Message> Senders { get; set; }
+    public List<Message> Receivers { get; set; }
 }

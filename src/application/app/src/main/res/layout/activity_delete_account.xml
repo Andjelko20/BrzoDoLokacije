@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.DeleteAccountActivity"
+    android:background="#d4e9e4">
+
+    <ImageView
+        android:id="@+id/imageViewClouds"
+        android:layout_width="match_parent"
+        android:layout_height="277dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:padding="0dp"
+        android:paddingStart="0dp"
+        android:paddingLeft="0dp"
+        android:paddingTop="0dp"
+        android:paddingEnd="0dp"
+        android:paddingRight="0dp"
+        android:paddingBottom="0dp"
+        android:layout_marginTop="-10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/clouds"  />
+
+    <io.ak1.BubbleTabBar
+        android:id="@+id/bubbleTabBarTopDeleteAccount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/light_blue"
+        android:elevation="16dp"
+        android:padding="3dp"
+        app:bubbletab_horizontal_padding="20dp"
+        app:bubbletab_title_size="16sp"
+        app:bubbletab_icon_padding="5sp"
+        app:bubbletab_vertical_padding="10dp"
+        app:bubbletab_tab_corner_radius="25dp">
+        <Button
+            android:id="@+id/backButtonDeleteAccount"
+            android:padding="0dp"
+            android:drawableLeft="@drawable/ic_arrow_back"
+            android:background="@color/transparent"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp">
+        </Button>
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/whitelogo"
+            android:layout_marginTop="4dp" />
+    </io.ak1.BubbleTabBar>
+
+    <TextView
+        android:id="@+id/deleteAccountTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/delete_account"
+        android:textSize="22dp"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="100dp"
+        android:textColor="@color/blue_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bubbleTabBarTopDeleteAccount">
+    </TextView>
+
+    <TextView
+        android:id="@+id/deleteAccountSubtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Please enter your password below"
+        android:textSize="18dp"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/blue_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/deleteAccountTitle">
+    </TextView>
+
+    <RelativeLayout
+        android:id="@+id/formaDeleteAccount"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape"
+        android:paddingBottom="40dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintBottom_toTopOf="@+id/confirmAccountDeletionButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/deleteAccountSubtitle">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/userPasswordWrap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="20dp"
+            android:textColorHint="@color/dark_blue"
+            app:boxBackgroundColor="@color/light_blue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <EditText
+                android:id="@+id/userPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter your password"
+                android:inputType="textPassword"
+                android:textColor="@color/light_text"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/confirmAccountDeletionButton"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:backgroundTint="@color/light_blue"
+        android:text="Confirm"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/formaDeleteAccount">
+    </Button>
+
+    <Button
+        android:id="@+id/cancelAccountDeletionButton"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/light_blue"
+        android:text="Cancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/confirmAccountDeletionButton">
+    </Button>
+
+    <ImageView
+        android:id="@+id/imageViewMountains"
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:layout_alignParentBottom="true"
+        android:padding="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="-50dp"
+        app:srcCompat="@drawable/mountains" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

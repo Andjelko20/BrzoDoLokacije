@@ -12,4 +12,8 @@
         android:id="@+id/logoutMeni"
         android:title="Logout"
         />
+    <item
+        android:id="@+id/deleteAccountMeni"
+        android:title="Delete account"
+        />
 </menu>

@@ -122,6 +122,10 @@ class RegisterActivity : AppCompatActivity() {
                                                     if(response.body()?.error.toString() == "false") {
                                                         var username = response.body()?.message.toString()
                                                         sessionManager.saveUsername(username)
+
+                                                        val intent = Intent(this@RegisterActivity, MainActivity::class.java)
+                                                        startActivity(intent)
+                                                        finish()
                                                     }
                                                 }
 
@@ -132,9 +136,6 @@ class RegisterActivity : AppCompatActivity() {
                                             })
                                             
 //                                            reset()
-                                            val intent = Intent(this@RegisterActivity, MainActivity::class.java)
-                                            startActivity(intent)
-                                            finish()
                                         }
 
                                         override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {

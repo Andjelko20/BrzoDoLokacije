@@ -26,6 +26,7 @@ import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.ModelsDto.NewPostDto
+import com.example.brzodolokacije.Posts.SelectedPhoto
 import com.example.brzodolokacije.R
 import kotlinx.android.synthetic.main.activity_addpost.*
 import okhttp3.MediaType
@@ -58,28 +59,44 @@ class ActivityAddPost : AppCompatActivity() {
         else{
             editLocationSection.setText("")
         }
-
-
-
-        editLocationSection.setOnClickListener{
-            val intent = Intent(this@ActivityAddPost, ActivityMaps::class.java)
-            val banana = pickedBitMap?.let { encodeImage(it) }
-            intent.putExtra("bit",banana)
-            startActivity(intent)
+        val longitude = intent.getStringExtra("longitude")
+        val latitude = intent.getStringExtra("latitude")
+        if(longitude != "null" && latitude != "null") {
+            Log.d("stampaj1", longitude.toString())
+            Log.d("stampaj2", latitude.toString())
         }
-        val test = intent.getStringExtra("bitslike");
-        if(test.toString() != "null")
+
+
+
+
+        if(SelectedPhoto.returnSavedBitmap() != null)
         {
-            val imageBytes =Base64.decode(test,0);
-            val image=BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size);
-            pickedBitMap = image
+            pickedBitMap = SelectedPhoto.returnSavedBitmap()
+            SelectedPhoto.saveBitmap(null)
             previewPic.setImageBitmap(pickedBitMap)
             file = bitmapToFile(pickedBitMap!!, "slika.jpeg")
         }
 
+        editLocationSection.setOnClickListener{
+            val intent = Intent(this@ActivityAddPost, ActivityMaps::class.java)
+            val banana = pickedBitMap?.let { encodeImage(it) }
+//            intent.putExtra("bit",banana)
+            if(pickedBitMap != null) SelectedPhoto.saveBitmap(pickedBitMap)
+            startActivity(intent)
+        }
+//        val test = intent.getStringExtra("bitslike");
+//        if(test.toString() != "null")
+//        {
+//            val imageBytes =Base64.decode(test,0);
+//            val image=BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size);
+//            pickedBitMap = image
+//            previewPic.setImageBitmap(pickedBitMap)
+//            file = bitmapToFile(pickedBitMap!!, "slika.jpeg")
+//        }
+
         backButton.setOnClickListener{
             val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("backPressed", "returnToProfile");
+//            intent.putExtra("backPressed", "returnToProfile");
             startActivity(intent)
         }
 
@@ -90,11 +107,21 @@ class ActivityAddPost : AppCompatActivity() {
                         file!!.name,
                         RequestBody.create(MediaType.parse("image/*"), file)
                     )
-                    Log.d("File",picture.toString())
+//                    Log.d("File",picture.toString())
 //                var location = editLocationSection.text.toString().trim()
+
+
                 var caption = editCaptionSection.text.toString().trim()
                 var location = intent.getStringExtra("sb").toString()
-                var newPost = NewPostDto(location, caption)
+                    var newPost : NewPostDto? = null;
+                    if(nesto == "null"){
+                        editLocationSection.error = "Please enter your current location"
+                        editLocationSection.requestFocus()
+                        return@setOnClickListener
+                    }
+                    else
+                    {
+                        newPost = NewPostDto(location, caption,latitude.toString(),longitude.toString())
 
                 retrofit.addNewPost(newPost).enqueue(object : Callback<DefaultResponse> {
                     override fun onResponse(
@@ -110,23 +137,23 @@ class ActivityAddPost : AppCompatActivity() {
                                 ) {
                                     Toast.makeText(this@ActivityAddPost, "Post uploaded",Toast.LENGTH_SHORT).show()
 //                                    Log.d("uploadSlike",response.body()?.message.toString())
-                                }
 
+                                }
                                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                                     Toast.makeText(this@ActivityAddPost, t.message.toString(), Toast.LENGTH_SHORT).show()
 //                                    Log.d("Greska",t.message.toString())
                                 }
 
                             })
-
                         val intent = Intent(this@ActivityAddPost, MainActivity::class.java)
+                        intent.putExtra("postAdded", "refresh again");
                         startActivity(intent)
                     }
 
                     override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                         Toast.makeText(this@ActivityAddPost, t.message.toString(), Toast.LENGTH_SHORT).show()
                     }
-                })
+                })}
             }
         }
     }
@@ -200,4 +227,10 @@ class ActivityAddPost : AppCompatActivity() {
         return Base64.encodeToString(b, Base64.DEFAULT)
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(this, MainActivity::class.java)
+//        intent.putExtra("backPressed", "returnToProfile");
+        startActivity(intent)
+    }
 }

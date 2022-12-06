@@ -11,6 +11,8 @@ public class Post
     public string Caption { get; set; } = string.Empty;
     public string ImagePath { get; set; } = string.Empty;
     public long Date { get; set; } = DateTime.Now.Ticks;
+    public string Longitude { get; set; } = string.Empty;
+    public string Latitude { get; set; } = string.Empty;
     [JsonIgnore]
     public User User { get; set; }
     public int UserId { get; set; }

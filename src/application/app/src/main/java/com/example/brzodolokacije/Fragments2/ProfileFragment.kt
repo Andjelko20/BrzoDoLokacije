@@ -1,6 +1,7 @@
 package com.example.brzodolokacije.Fragments2
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Base64
@@ -21,6 +22,7 @@ import com.example.brzodolokacije.Constants.Constants
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.UserProfile
+import com.example.brzodolokacije.Posts.HomeFragmentState
 import com.example.brzodolokacije.R
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
@@ -33,6 +35,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
+import java.util.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -56,6 +59,15 @@ class ProfileFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+        val languageToLoad = "US"
+        val locale = Locale(languageToLoad)
+        Locale.setDefault(locale)
+        val config = Configuration()
+        config.locale = locale
+        activity?.getBaseContext()?.getResources()?.updateConfiguration(
+            config,
+            activity?.getBaseContext()?.getResources()?.getDisplayMetrics()
+        )
     }
 
     override fun onCreateView(
@@ -80,6 +92,7 @@ class ProfileFragment : Fragment() {
             activity?.let{
                 val intent = Intent (it, ActivityAddPost::class.java)
                 it.startActivity(intent)
+                HomeFragmentState.shouldSave(false)
             }
 
         }
@@ -131,6 +144,28 @@ class ProfileFragment : Fragment() {
                         likesNum.text = userProfileInfo.totalNumOfLikes.toString();
                         imeprezime.text = userProfileInfo.name;
                         opis.text = userProfileInfo.description;
+
+                        if(opis.text == "" && imeprezime.text == "")
+                        {
+                            opis.setVisibility(View.GONE)
+                            imeprezime.setVisibility(View.GONE)
+                        }
+                        else if(opis.text != "" && imeprezime.text != "")
+                        {
+                            opis.setVisibility(View.VISIBLE)
+                            imeprezime.setVisibility(View.VISIBLE)
+                        }
+                        else if(opis.text != "" && imeprezime.text == "")
+                        {
+                            imeprezime.setVisibility(View.GONE)
+                            opis.setVisibility(View.VISIBLE)
+                        }
+                        else if(opis.text == "" && imeprezime.text != "")
+                        {
+                            opis.setVisibility(View.GONE)
+                            imeprezime.setVisibility(View.VISIBLE)
+                        }
+
 
 //                        val avatarEncoded = userProfileInfo.profilePicture;
 

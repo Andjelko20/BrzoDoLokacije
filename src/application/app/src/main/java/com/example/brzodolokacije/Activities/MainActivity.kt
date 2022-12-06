@@ -9,10 +9,8 @@ import android.view.ContextThemeWrapper
 import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
@@ -21,11 +19,9 @@ import com.example.brzodolokacije.Fragments2.HomeFragment
 import com.example.brzodolokacije.Fragments2.ProfileFragment
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
-import com.example.brzodolokacije.Posts.PrivremeneSlikeZaFeed
-import com.example.brzodolokacije.Posts.VisitUserProfile
+import com.example.brzodolokacije.Posts.HomeFragmentState
 import com.example.brzodolokacije.R
 import com.example.brzodolokacije.databinding.ActivityMainBinding
-import io.ak1.BubbleTabBar
 import io.ak1.OnBubbleClickListener
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
@@ -44,56 +40,91 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        PrivremeneSlikeZaFeed.addPhotos()
 
         val wrapper: Context = ContextThemeWrapper(this, R.style.MyPopupMenu)
-        if(savedInstanceState!=null)
-        {
-            homeFragment = supportFragmentManager.findFragmentByTag(homeKey) as HomeFragment
-            //Toast.makeText(this,"postoji home",Toast.LENGTH_SHORT).show()
-        }
-        else
-        {
+//        if(savedInstanceState!=null)
+//        {
+//            homeFragment = supportFragmentManager.findFragmentByTag(homeKey) as HomeFragment
+//        }
+//        else
+//        {
             homeFragment = HomeFragment()
-        }
-
-        options_meni.setOnClickListener{
-            val popupMenu = PopupMenu(wrapper, it)
-            popupMenu.setOnMenuItemClickListener { item ->
-                when(item.itemId){
-                    R.id.editProfileMeni ->{
-                        val intent = Intent(this, ActivityEditProfile::class.java)
-                        startActivity(intent)
-                        true
-                    }
-                    R.id.logoutMeni ->{
-                        logOut()
-                        true
-                    }
-                    R.id.changePasswordMeni ->{
-                        val intent = Intent(this, ChangePasswordActivity::class.java)
-                        startActivity(intent)
-                        true
-                    }
-                    else -> false
-                }
-
-            }
-            popupMenu.inflate(R.menu.meni)
-            popupMenu.show()
-        }
+//        }
+        options_meni.setVisibility(View.GONE)
+//        options_meni.setOnClickListener{
+//            val popupMenu = PopupMenu(wrapper, it)
+//            popupMenu.setOnMenuItemClickListener { item ->
+//                when(item.itemId){
+//                    R.id.editProfileMeni ->{
+//                        val intent = Intent(this, ActivityEditProfile::class.java)
+//                        startActivity(intent)
+//                        true
+//                    }
+//                    R.id.logoutMeni ->{
+//                        logOut()
+//                        true
+//                    }
+//                    R.id.changePasswordMeni ->{
+//                        val intent = Intent(this, ChangePasswordActivity::class.java)
+//                        startActivity(intent)
+//                        true
+//                    }
+//                    R.id.deleteAccountMeni ->{
+//                        val intent = Intent(this, DeleteAccountActivity::class.java)
+//                        startActivity(intent)
+//                        true
+//                    }
+//                    else -> false
+//                }
+//
+//            }
+//            popupMenu.inflate(R.menu.meni)
+//            popupMenu.show()
+//        }
 
         val intent = getIntent()
         val provera = intent.getStringExtra("backToProfile");
         if (provera != null)
         {
+            options_meni.setVisibility(View.VISIBLE)
+            options_meni.setOnClickListener{
+                val popupMenu = PopupMenu(wrapper, it)
+                popupMenu.setOnMenuItemClickListener { item ->
+                    when(item.itemId){
+                        R.id.editProfileMeni ->{
+                            val intent = Intent(this@MainActivity, ActivityEditProfile::class.java)
+                            startActivity(intent)
+                            true
+                        }
+                        R.id.logoutMeni ->{
+                            logOut()
+                            true
+                        }
+                        R.id.changePasswordMeni ->{
+                            val intent = Intent(this@MainActivity, ChangePasswordActivity::class.java)
+                            startActivity(intent)
+                            true
+                        }
+                        R.id.deleteAccountMeni ->{
+                            val intent = Intent(this@MainActivity, DeleteAccountActivity::class.java)
+                            startActivity(intent)
+                            true
+                        }
+                        else -> false
+                    }
+
+                }
+                popupMenu.inflate(R.menu.meni)
+                popupMenu.show()
+            }
             replaceFragment(ProfileFragment()) //vraca na profil ako smo isli na edit profila
             bubbleTabBar.visibility = View.INVISIBLE;
             bubbleTabBar2.visibility = View.VISIBLE;
         }
         else
         {
-            replaceFragment(HomeFragment()) //ide na home kad prvi put otvorimo main i kad se vratimo iz biilo kod drugog aktivitija
+            options_meni.setVisibility(View.GONE)
+            replaceFragment(HomeFragment()) //ide na home kad prvi put otvorimo main i kad se vratimo iz bilo kod drugog aktivitija
             bubbleTabBar.visibility = View.VISIBLE;
             bubbleTabBar2.visibility = View.INVISIBLE;
         }
@@ -101,9 +132,50 @@ class MainActivity : AppCompatActivity() {
         bubbleTabBar.addBubbleListener(object : OnBubbleClickListener{
             override fun onBubbleClick(id: Int) {
                 when(id){
-                    R.id.explore -> replaceFragment(ExploreFragment())
-                    R.id.home -> replaceFragment(homeFragment!!) //ovde da proverim da l postoji sacuvano stanje
-                    R.id.profile -> replaceFragment(ProfileFragment())
+                    R.id.explore -> {
+                        options_meni.setVisibility(View.GONE)
+                        replaceFragment(ExploreFragment())
+                    }
+
+                    R.id.home -> {
+                        options_meni.setVisibility(View.GONE)
+                        replaceFragment(homeFragment!!)
+                    } //ovde da proverim da l postoji sacuvano stanje
+
+                    R.id.profile -> {
+                        replaceFragment(ProfileFragment())
+                        options_meni.setVisibility(View.VISIBLE)
+                        options_meni.setOnClickListener{
+                            val popupMenu = PopupMenu(wrapper, it)
+                            popupMenu.setOnMenuItemClickListener { item ->
+                                when(item.itemId){
+                                    R.id.editProfileMeni ->{
+                                        val intent = Intent(this@MainActivity, ActivityEditProfile::class.java)
+                                        startActivity(intent)
+                                        true
+                                    }
+                                    R.id.logoutMeni ->{
+                                        logOut()
+                                        true
+                                    }
+                                    R.id.changePasswordMeni ->{
+                                        val intent = Intent(this@MainActivity, ChangePasswordActivity::class.java)
+                                        startActivity(intent)
+                                        true
+                                    }
+                                    R.id.deleteAccountMeni ->{
+                                        val intent = Intent(this@MainActivity, DeleteAccountActivity::class.java)
+                                        startActivity(intent)
+                                        true
+                                    }
+                                    else -> false
+                                }
+
+                            }
+                            popupMenu.inflate(R.menu.meni)
+                            popupMenu.show()
+                        }
+                    }
 
                     else -> {}
                 }
@@ -114,9 +186,50 @@ class MainActivity : AppCompatActivity() {
         bubbleTabBar2.addBubbleListener(object : OnBubbleClickListener{
             override fun onBubbleClick(id: Int) {
                 when(id){
-                    R.id.explore -> replaceFragment(ExploreFragment())
-                    R.id.home -> replaceFragment(homeFragment!!) //ovde da proverim da li postoji sacuvano stanje
-                    R.id.profile -> replaceFragment(ProfileFragment())
+                    R.id.explore -> {
+                        options_meni.setVisibility(View.GONE)
+                        replaceFragment(ExploreFragment())
+                    }
+
+                    R.id.home -> {
+                        options_meni.setVisibility(View.GONE)
+                        replaceFragment(homeFragment!!)
+                    } //ovde da proverim da li postoji sacuvano stanje
+
+                    R.id.profile -> {
+                        replaceFragment(ProfileFragment())
+                        options_meni.setVisibility(View.VISIBLE)
+                        options_meni.setOnClickListener{
+                            val popupMenu = PopupMenu(wrapper, it)
+                            popupMenu.setOnMenuItemClickListener { item ->
+                                when(item.itemId){
+                                    R.id.editProfileMeni ->{
+                                        val intent = Intent(this@MainActivity, ActivityEditProfile::class.java)
+                                        startActivity(intent)
+                                        true
+                                    }
+                                    R.id.logoutMeni ->{
+                                        logOut()
+                                        true
+                                    }
+                                    R.id.changePasswordMeni ->{
+                                        val intent = Intent(this@MainActivity, ChangePasswordActivity::class.java)
+                                        startActivity(intent)
+                                        true
+                                    }
+                                    R.id.deleteAccountMeni ->{
+                                        val intent = Intent(this@MainActivity, DeleteAccountActivity::class.java)
+                                        startActivity(intent)
+                                        true
+                                    }
+                                    else -> false
+                                }
+
+                            }
+                            popupMenu.inflate(R.menu.meni)
+                            popupMenu.show()
+                        }
+                    }
 
                     else -> {}
                 }
@@ -148,7 +261,9 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         if (backPressedTime + 3000 > System.currentTimeMillis()) {
             super.onBackPressed()
-            VisitUserProfile.profileVisit(0)
+            HomeFragmentState.shouldSave(false)
+//            HomeFragmentState.saveFeed("")
+            HomeFragmentState.list(null)
             finish()
         } /*else {
             Toast.makeText(this, "Press back again to leave the app.", Toast.LENGTH_SHORT).show()
@@ -165,6 +280,9 @@ class MainActivity : AppCompatActivity() {
 
     fun logOut()
     {
+        HomeFragmentState.shouldSave(false)
+//        HomeFragmentState.saveFeed("")
+        HomeFragmentState.list(null)
         val sessionManager = SessionManager(this)
         val retrofit = Client(this).buildService(Api::class.java)
         retrofit.authentication().enqueue(object:
@@ -178,7 +296,6 @@ class MainActivity : AppCompatActivity() {
                 {
                     sessionManager.deleteAuthToken()
                     sessionManager.deleteUsername()
-                    VisitUserProfile.setVisit("")
 
                     val intent = Intent(this@MainActivity, LoginActivity::class.java)
                     startActivity(intent)

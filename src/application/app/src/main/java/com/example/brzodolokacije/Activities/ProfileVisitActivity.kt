@@ -13,14 +13,13 @@ import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Constants.Constants
 import com.example.brzodolokacije.Fragments2.LocationsFragment
-import com.example.brzodolokacije.Fragments2.PostsFragment
+import com.example.brzodolokacije.Fragments2.ProfileVisitLocationsFragment
 import com.example.brzodolokacije.Fragments2.ProfileVisitPostsFragment
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
-import com.example.brzodolokacije.Models.UserProfile
 import com.example.brzodolokacije.Models.UserProfileVisit
 import com.example.brzodolokacije.R
-import com.example.brzodolokacije.Posts.VisitUserProfile
+import com.example.brzodolokacije.Posts.HomeFragmentState
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
@@ -33,18 +32,31 @@ import retrofit2.Response
 
 class ProfileVisitActivity : AppCompatActivity() {
 
+    private lateinit var username : String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile_visit)
 
-        replaceFragmentOnProfile(PostsFragment())
+        username = intent.getStringExtra("visit").toString()
+
+        val profileVisitPostFragment = ProfileVisitPostsFragment()
+        val profileVisitLocationsFragment = ProfileVisitLocationsFragment()
+
+        val bundle = Bundle()
+        bundle.putString("username",username)
+
+        profileVisitPostFragment.arguments = bundle
+        profileVisitLocationsFragment.arguments = bundle
+
+        replaceFragmentOnProfile(profileVisitPostFragment)
 
         val bubbleTabBarProfileVisit = findViewById<BubbleTabBar>(R.id.bubbleTabBarProfileProfileVisit)
         bubbleTabBarProfileVisit.addBubbleListener(object : OnBubbleClickListener {
             override fun onBubbleClick(id: Int) {
                 when(id){
-                    R.id.posts -> replaceFragmentOnProfile(ProfileVisitPostsFragment())
-                    R.id.visitedLocations -> replaceFragmentOnProfile(LocationsFragment()) //napraviti poseban fragment gde ce se prikazivati lokacije korisnika (zavisi od implementacije Location fragmenta)
+                    R.id.posts -> replaceFragmentOnProfile(profileVisitPostFragment)
+                    R.id.visitedLocations -> replaceFragmentOnProfile(profileVisitLocationsFragment)
 
                     else -> {}
                 }
@@ -54,9 +66,8 @@ class ProfileVisitActivity : AppCompatActivity() {
 
         val retrofit = Client(this).buildService(Api::class.java)
         val sessionManager = SessionManager(this)
-        if (VisitUserProfile.getVisit()!=""){
+        if (username!="null"){
             val appUser=sessionManager.fetchUsername()
-            val username=VisitUserProfile.getVisit()
             retrofit.fetchUserProfileInfo(username).enqueue(object: Callback<DefaultResponse>
             {
                 override fun onResponse(
@@ -134,6 +145,11 @@ class ProfileVisitActivity : AppCompatActivity() {
                                                     t: Throwable
                                                 ) {
                                                     Log.d("follows","greska menjanje br pratilaca")
+                                                    findViewById<Button>(R.id.exitProfileVisit).setOnClickListener{
+                                                        val intent = Intent(this@ProfileVisitActivity,MainActivity::class.java)
+                                                        startActivity(intent)
+                                                        finish()
+                                                    }
                                                 }
 
                                             })
@@ -145,6 +161,11 @@ class ProfileVisitActivity : AppCompatActivity() {
                                         t: Throwable
                                     ) {
                                         Toast.makeText(this@ProfileVisitActivity,"Something went wrong. Try again later",Toast.LENGTH_SHORT).show()
+                                        findViewById<Button>(R.id.exitProfileVisit).setOnClickListener{
+                                            val intent = Intent(this@ProfileVisitActivity,MainActivity::class.java)
+                                            startActivity(intent)
+                                            finish()
+                                        }
                                     }
 
                                 })
@@ -162,9 +183,28 @@ class ProfileVisitActivity : AppCompatActivity() {
                         likesNum.text = userProfileInfo.totalNumOfLikes.toString();
                         imeprezime.text = userProfileInfo.name;
                         opis.text = userProfileInfo.description;
+                        if(opis.text == "" && imeprezime.text == "")
+                        {
+                            opis.setVisibility(View.GONE)
+                            imeprezime.setVisibility(View.GONE)
+                        }
+                        else if(opis.text != "" && imeprezime.text != "")
+                        {
+                            opis.setVisibility(View.VISIBLE)
+                            imeprezime.setVisibility(View.VISIBLE)
+                        }
+                        else if(opis.text != "" && imeprezime.text == "")
+                        {
+                            imeprezime.setVisibility(View.GONE)
+                            opis.setVisibility(View.VISIBLE)
+                        }
+                        else if(opis.text == "" && imeprezime.text != "")
+                        {
+                            opis.setVisibility(View.GONE)
+                            imeprezime.setVisibility(View.VISIBLE)
+                        }
 
                         exit.setOnClickListener{
-                            VisitUserProfile.setVisit("")
                             val intent = Intent(this@ProfileVisitActivity,MainActivity::class.java)
                             startActivity(intent)
                             finish()
@@ -173,11 +213,21 @@ class ProfileVisitActivity : AppCompatActivity() {
                     else
                     {
                         Toast.makeText(this@ProfileVisitActivity,"Unable to get user info",Toast.LENGTH_SHORT).show()
+                        findViewById<Button>(R.id.exitProfileVisit).setOnClickListener{
+                            val intent = Intent(this@ProfileVisitActivity,MainActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
                     }
                 }
 
                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                    Toast.makeText(this@ProfileVisitActivity,"Something went wrong. Try again later",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@ProfileVisitActivity,"Something went wrong. Try again later.",Toast.LENGTH_SHORT).show()
+                    findViewById<Button>(R.id.exitProfileVisit).setOnClickListener{
+                        val intent = Intent(this@ProfileVisitActivity,MainActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
                 }
 
             })

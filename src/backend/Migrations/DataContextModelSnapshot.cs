@@ -97,6 +97,33 @@ namespace backend.Migrations
                     b.ToTable("Likes");
                 });
 
+            modelBuilder.Entity("backend.Models.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("ReceiverId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SenderId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("Messages");
+                });
+
             modelBuilder.Entity("backend.Models.Post", b =>
                 {
                     b.Property<int>("Id")
@@ -116,7 +143,15 @@ namespace backend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Latitude")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Longitude")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -234,6 +269,25 @@ namespace backend.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("backend.Models.Message", b =>
+                {
+                    b.HasOne("backend.Models.User", "Receiver")
+                        .WithMany("Senders")
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("backend.Models.User", "Sender")
+                        .WithMany("Receivers")
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Receiver");
+
+                    b.Navigation("Sender");
+                });
+
             modelBuilder.Entity("backend.Models.Post", b =>
                 {
                     b.HasOne("backend.Models.User", "User")
@@ -263,6 +317,10 @@ namespace backend.Migrations
                     b.Navigation("Likes");
 
                     b.Navigation("Posts");
+
+                    b.Navigation("Receivers");
+
+                    b.Navigation("Senders");
                 });
 #pragma warning restore 612, 618
         }

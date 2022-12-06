@@ -80,4 +80,25 @@ interface Api {
 
     @GET("User/refreshUser/{username}")
     fun refreshFollows(@Path("username") username : String) : Call<DefaultResponse>
+
+    @GET("Post/getAll/{page}")
+    fun getAll(@Path("page") page : Int) : Call<DefaultResponse>
+
+    @POST("Auth/check-password")
+    fun checkPassword(@Body checkPasswordDto: CheckPasswordDto) : Call<DefaultResponse>
+
+    @DELETE("User/delete/{username}")
+    fun deleteUser(@Path ("username") username : String) : Call<DefaultResponse>
+
+    @GET("Post/onMap/{location}")
+    fun onMapLocation(@Path("location") location : String) : Call<DefaultResponse>
+
+    @POST("Post/getByLocation")
+    fun getByLocation(@Body filterDto: FilterDto) : Call<DefaultResponse>
+
+    @GET("Post/onMapUser/{username}")
+    fun getLocationsByUser(@Path("username") username : String) : Call<DefaultResponse>
+
+    @GET("Post/getOne/{id}")
+    fun getPostData(@Path("id") id: Int) : Call<DefaultResponse>
 }

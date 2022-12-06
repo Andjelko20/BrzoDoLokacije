@@ -1,20 +1,22 @@
 package com.example.brzodolokacije.Fragments2
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.brzodolokacije.API.Api
+import com.example.brzodolokacije.Activities.ShowPostActivity
 import com.example.brzodolokacije.Adapters.ProfilePostsAdapter
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Constants.Constants
 import com.example.brzodolokacije.Models.DefaultResponse
-import com.example.brzodolokacije.Posts.PrivremeneSlikeZaFeed
-import com.example.brzodolokacije.Posts.VisitUserProfile
+import com.example.brzodolokacije.Posts.HomeFragmentState
 import com.example.brzodolokacije.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -41,6 +43,8 @@ class ProfileVisitPostsFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var user : String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -54,17 +58,17 @@ class ProfileVisitPostsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_posts, container, false)
+        val view =  inflater.inflate(R.layout.fragment_posts, container, false)
+        user = arguments?.getString("username").toString()
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val profilePostsVisitRv = view.findViewById<RecyclerView>(R.id.profilePostsRv)
 
-        val user=VisitUserProfile.getVisit()
-
         val retrofit = Client(requireActivity()).buildService(Api::class.java)
-        if (user != "") {
+        if (user != "null") {
             retrofit.getUserPosts(user).enqueue(object : Callback<DefaultResponse> {
                 override fun onResponse(
                     call: Call<DefaultResponse>,
@@ -84,7 +88,28 @@ class ProfileVisitPostsFragment : Fragment() {
                         profilePostsVisitRv.apply {
                             pvLayoutManager = GridLayoutManager(context, 3)
                             pvRecyclerView = view.findViewById(R.id.profilePostsRv)
-                            pvAdapter = this.context?.let { ProfilePostsAdapter(ids, it) }
+                            pvAdapter = this.context?.let { ProfilePostsAdapter(ids, it, object: ProfilePostsAdapter.OnItemClickListener {
+                                override fun OnItemClick(position: Int) {
+                                    var clickedId = -1
+                                    var i = 0;
+                                    for(postId in idList)
+                                    {
+                                        if(i == position)
+                                        {
+                                            clickedId = postId
+                                        }
+                                        i++
+                                    }
+//                                    Toast.makeText(requireActivity(), "Item $position clicked, id: $clickedId", Toast.LENGTH_SHORT).show()
+                                    if(clickedId != -1)
+                                    {
+                                        val intent = Intent(it, ShowPostActivity::class.java)
+                                        intent.putExtra("showPost", clickedId.toString())
+                                        intent.putExtra("profileVisit","profileVisit")
+                                        startActivity(intent)
+                                    }
+                                }
+                            }) }
                             pvRecyclerView.layoutManager = pvLayoutManager
                             pvRecyclerView.adapter = pvAdapter
                         }
@@ -96,6 +121,10 @@ class ProfileVisitPostsFragment : Fragment() {
                 }
 
             })
+        }
+        else
+        {
+            Toast.makeText(requireActivity(),"Error loading images",Toast.LENGTH_SHORT).show()
         }
     }
 

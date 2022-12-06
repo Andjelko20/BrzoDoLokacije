@@ -28,6 +28,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/rv_photopost"/>
 
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleLarge"
@@ -39,8 +40,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addPostHome"
@@ -55,10 +54,49 @@
         android:src="@drawable/camera"
         app:fabCustomSize="70dp"
         app:maxImageSize="50dp"
-        app:tint="@color/backgroundLightTheme">
+        app:tint="@color/backgroundLightTheme"/>
+    <LinearLayout
+        android:id="@+id/notFollowingAnyoneHomeFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-    </com.google.android.material.floatingactionbutton.FloatingActionButton>
+        <TextView
+            android:id="@+id/endlessTextHomeFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="30dp"
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:text="Explore  new  places,  share your  favourite  memories  and  connect  with  other  travel  enthusiasts"
+            android:textColor="@color/text_dark"
+            android:textSize="24sp"
+            android:textStyle="italic" />
 
+        <ImageView
+            android:layout_width="225dp"
+            android:layout_height="225dp"
+            android:src="@drawable/planeearth"
+            android:layout_marginBottom="80dp"/>
 
+        <pl.droidsonroids.gif.GifImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="100dp"
+            android:src="@drawable/arrow"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:rotation="-15"/>
 
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

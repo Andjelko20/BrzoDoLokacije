@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace backend.Migrations
 {
     /// <inheritdoc />
-    public partial class followers : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -57,6 +57,33 @@ namespace backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Messages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Content = table.Column<string>(type: "text", nullable: false),
+                    SenderId = table.Column<int>(type: "integer", nullable: false),
+                    ReceiverId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Messages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Messages_Users_ReceiverId",
+                        column: x => x.ReceiverId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Messages_Users_SenderId",
+                        column: x => x.SenderId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Posts",
                 columns: table => new
                 {
@@ -66,6 +93,8 @@ namespace backend.Migrations
                     Caption = table.Column<string>(type: "text", nullable: false),
                     ImagePath = table.Column<string>(type: "text", nullable: false),
                     Date = table.Column<long>(type: "bigint", nullable: false),
+                    Longitude = table.Column<string>(type: "text", nullable: false),
+                    Latitude = table.Column<string>(type: "text", nullable: false),
                     UserId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -164,6 +193,16 @@ namespace backend.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Messages_ReceiverId",
+                table: "Messages",
+                column: "ReceiverId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Messages_SenderId",
+                table: "Messages",
+                column: "SenderId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Posts_UserId",
                 table: "Posts",
                 column: "UserId");
@@ -192,6 +231,9 @@ namespace backend.Migrations
 
             migrationBuilder.DropTable(
                 name: "Likes");
+
+            migrationBuilder.DropTable(
+                name: "Messages");
 
             migrationBuilder.DropTable(
                 name: "Posts");

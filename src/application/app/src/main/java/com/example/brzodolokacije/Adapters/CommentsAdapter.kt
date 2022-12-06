@@ -2,10 +2,12 @@ package com.example.brzodolokacije.Adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.graphics.drawable.BitmapDrawable
+import android.os.Handler
 import android.os.Looper
 import android.text.Html
 import android.util.Base64
@@ -19,8 +21,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
+import com.example.brzodolokacije.Activities.ProfileVisitActivity
 import com.example.brzodolokacije.Constants.Constants
 import com.example.brzodolokacije.Posts.Comment
+import com.example.brzodolokacije.Posts.HomeFragmentState
 import com.example.brzodolokacije.Posts.Photo
 import com.example.brzodolokacije.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -48,6 +52,29 @@ class CommentsAdapter(commentList : List<Comment>, val context : Context, val ac
             Picasso.get().load(Constants.BASE_URL + "User/avatar/" + comment.owner).into(ownerImage)
             owner.text=comment.owner
             text.text=comment.content
+
+            owner.setOnClickListener{
+                HomeFragmentState.shouldSave(true)
+                HomeFragmentState.commentsOpened = true
+                HomeFragmentState.lastPosition = index
+//                Toast.makeText(activity,index.toString(),Toast.LENGTH_SHORT).show()
+                val intent = Intent(activity, ProfileVisitActivity::class.java)
+                intent.putExtra("visit",comment.owner)
+                Handler(Looper.getMainLooper()).postDelayed({
+                    activity.startActivity(intent)
+                }, 30)
+            }
+
+            ownerImage.setOnClickListener{
+                HomeFragmentState.shouldSave(true)
+                HomeFragmentState.commentsOpened = true
+                HomeFragmentState.lastPosition = index
+                val intent = Intent(activity, ProfileVisitActivity::class.java)
+                intent.putExtra("visit",comment.owner)
+                Handler(Looper.getMainLooper()).postDelayed({
+                    activity.startActivity(intent)
+                }, 30)
+            }
         }
     }
 

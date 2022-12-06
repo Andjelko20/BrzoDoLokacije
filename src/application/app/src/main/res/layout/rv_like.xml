@@ -28,15 +28,15 @@
             android:paddingRight="15dp"
             android:paddingTop="10dp"
             android:paddingBottom="15dp"
-            android:background="@color/backgroundLightTheme">
+            android:background="@color/backgroundLightTheme"
+            android:clickable="true"
+            android:focusable="true">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/likeOwnerPhoto"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                android:clickable="true"
-                android:focusable="true"/>
+                android:layout_marginTop="10dp"/>
 
             <TextView
                 android:id="@+id/likeOwner"
@@ -47,9 +47,7 @@
                 tools:text="likeOwner"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@color/text_dark"
-                android:clickable="true"
-                android:focusable="true"/>
+                android:textColor="@color/text_dark"/>
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

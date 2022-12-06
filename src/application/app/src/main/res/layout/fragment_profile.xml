@@ -149,7 +149,6 @@
                 android:id="@+id/imeprezime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ime Prezime"
                 android:textSize="20dp"
                 android:textColor="@color/dark_blue"
                 android:layout_marginStart="20dp"/>
@@ -158,7 +157,6 @@
                 android:id="@+id/opis"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Opis"
                 android:textSize="18dp"
                 android:textColor="@color/dark_blue"
                 android:layout_marginStart="20dp"

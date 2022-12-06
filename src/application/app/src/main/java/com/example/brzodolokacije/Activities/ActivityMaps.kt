@@ -4,12 +4,15 @@ import android.Manifest
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
+import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
@@ -34,6 +37,16 @@ class ActivityMaps : AppCompatActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
+        val languageToLoad = "US"
+        val locale = Locale(languageToLoad)
+        Locale.setDefault(locale)
+        val config = Configuration()
+        config.locale = locale
+        getBaseContext().getResources().updateConfiguration(
+            config,
+            getBaseContext().getResources().getDisplayMetrics()
+        )
+
         setContentView(R.layout.activity_maps)
 
         val mapFragment = SupportMapFragment.newInstance()
@@ -43,7 +56,32 @@ class ActivityMaps : AppCompatActivity(), OnMapReadyCallback {
             .commit()
 
         mapFragment.getMapAsync(this)
-        searchMap.visibility = View.INVISIBLE
+
+        goToLocationPosts.visibility = View.INVISIBLE
+        searchMap.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                val location: String = searchMap.getQuery().toString().trim()
+                var addressList: List<Address>? = null
+                if (location != null || location == "") {
+                    val geocoder = Geocoder(this@ActivityMaps)
+                    try {
+                        addressList = geocoder.getFromLocationName(location, 1)
+                        val address: Address = addressList!![0]
+                        val latLng = LatLng(address.getLatitude(), address.getLongitude())
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10f))
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        Toast.makeText(this@ActivityMaps,"Location misspelled",Toast.LENGTH_SHORT).show()
+                        // Log.d("Adress", e.printStackTrace().toString())
+                    }
+                }
+                return false
+            }
+            override fun onQueryTextChange(p0: String?): Boolean {
+                return false
+            }
+
+        })
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
     }
 
@@ -77,14 +115,15 @@ class ActivityMaps : AppCompatActivity(), OnMapReadyCallback {
                     val builder = AlertDialog.Builder(this@ActivityMaps)
                     val bit = intent.getStringExtra("bit")
 //                    Log.d("bit",bit.toString())
+//                    Toast.makeText(this@ActivityMaps,location.latitude.toString()+", "+location.longitude.toString(),Toast.LENGTH_SHORT).show()
                     builder.setTitle("Confirm location")
 //                    builder.setMessage("Test")
                     builder.setPositiveButton("Yes"){dialogInterface, which ->
                         Intent(this@ActivityMaps,ActivityAddPost::class.java).also{
                             it.putExtra("sb",sb.toString())
-                            it.putExtra("bitslike",bit)
-                            it.putExtra("latitude",location.latitude)
-                            it.putExtra("longitude",location.longitude)
+//                            it.putExtra("bitslike",bit)
+                            it.putExtra("latitude",location.latitude.toString())
+                            it.putExtra("longitude",location.longitude.toString())
                             startActivity(it)
                         }
                     }

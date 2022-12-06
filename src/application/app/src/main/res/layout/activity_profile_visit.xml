@@ -74,18 +74,20 @@
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/profilePictureProfileVisit"
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
+                        android:layout_width="10dp"
+                        android:layout_height="105dp"
                         android:layout_gravity="left"
-                        android:layout_marginStart="15dp"/>
+                        android:layout_marginStart="15dp"
+                        android:layout_weight="1"/>
 
                     <LinearLayout
                         android:id="@+id/prviDeoDesnoProfileVisit"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_gravity="right"
-                        android:layout_marginStart="5dp">
+                        android:layout_marginStart="5dp"
+                        android:layout_weight="3">
 
                         <TextView
                             android:id="@+id/usernameProfileVisit"
@@ -95,7 +97,7 @@
                             android:layout_marginTop="15dp"
                             android:text="username"
                             android:textColor="@color/dark_blue"
-                            android:textSize="22dp" />
+                            android:textSize="21dp" />
 
                         <LinearLayout
                             android:id="@+id/prviDeoDesnoIspodProfileVisit"
@@ -115,7 +117,7 @@
                                 <TextView
                                     android:id="@+id/postsNumProfileVisit"
                                     android:text="0"
-                                    android:textSize="20dp"
+                                    android:textSize="19dp"
                                     android:textAlignment="center"
                                     android:textColor="@color/dark_blue"
                                     android:layout_width="match_parent"
@@ -124,7 +126,7 @@
                                 <TextView
                                     android:id="@+id/wordPostsProfileVisit"
                                     android:text="Posts"
-                                    android:textSize="18dp"
+                                    android:textSize="17dp"
                                     android:textColor="@color/dark_blue"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"/>
@@ -144,7 +146,7 @@
                                     android:text="0"
                                     android:textAlignment="center"
                                     android:textColor="@color/dark_blue"
-                                    android:textSize="20dp" />
+                                    android:textSize="19sp" />
 
                                 <TextView
                                     android:id="@+id/wordFollowersProfileVisit"
@@ -152,7 +154,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="Followers"
                                     android:textColor="@color/dark_blue"
-                                    android:textSize="18dp" />
+                                    android:textSize="17sp" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -164,7 +166,7 @@
                                 <TextView
                                     android:id="@+id/likesNumProfileVisit"
                                     android:text="0"
-                                    android:textSize="20dp"
+                                    android:textSize="19sp"
                                     android:textAlignment="center"
                                     android:textColor="@color/dark_blue"
                                     android:layout_width="match_parent"
@@ -173,7 +175,7 @@
                                 <TextView
                                     android:id="@+id/wordLikesProfileVisit"
                                     android:text="Likes"
-                                    android:textSize="18dp"
+                                    android:textSize="17sp"
                                     android:textColor="@color/dark_blue"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"/>
@@ -198,7 +200,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Ime Prezime"
-                        android:textSize="20dp"
+                        android:textSize="19sp"
                         android:textColor="@color/dark_blue"
                         android:layout_marginStart="20dp"/>
 
@@ -207,7 +209,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Opis"
-                        android:textSize="18dp"
+                        android:textSize="17sp"
                         android:textColor="@color/dark_blue"
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="5dp"
@@ -220,38 +222,36 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_below="@+id/drugiDeoProfileVisit"
-                    android:layout_centerHorizontal="true"
-                    android:layout_gravity="center"
+                    android:layout_gravity="center_horizontal"
                     android:layout_marginBottom="10dp"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp">
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp">
 
                     <Button
                         android:id="@+id/followBtnProfileVisit"
-                        android:layout_width="182dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
                         android:backgroundTint="@color/dark_blue"
                         android:backgroundTintMode="src_atop"
                         android:text="Follow"
                         android:textAlignment="center"
                         android:textAllCaps="false"
                         android:textColor="@color/light_text"
-                        android:textSize="16sp"
-                        android:layout_marginRight="5dp"/>
+                        android:textSize="15sp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_weight="1"/>
                     <Button
                         android:id="@+id/messageBtnProfileVisit"
-                        android:layout_width="182dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
                         android:backgroundTint="@color/light_blue"
                         android:backgroundTintMode="src_atop"
-                        android:text="Message"
                         android:textAlignment="center"
+                        android:text="Message"
                         android:textAllCaps="false"
                         android:textColor="@color/light_text"
-                        android:textSize="16sp" />
+                        android:textSize="15sp"
+                        android:layout_weight="1"/>
                 </LinearLayout>
 
             </LinearLayout>

@@ -13,9 +13,9 @@ import com.example.brzodolokacije.R
 import com.squareup.picasso.Picasso
 import java.util.concurrent.Executors
 
-class ProfilePostsAdapter(val postsList: List<String>, val context: Context) : RecyclerView.Adapter<ProfilePostsAdapter.MainViewHolder>()
+class ProfilePostsAdapter(val postsList: List<String>, val context: Context, val listener: OnItemClickListener) : RecyclerView.Adapter<ProfilePostsAdapter.MainViewHolder>()
 {
-    inner class MainViewHolder(private val itemView: View) :RecyclerView.ViewHolder(itemView) {
+    inner class MainViewHolder(private val itemView: View) :RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
         fun bindData(url : String, index : Int)
         {
@@ -23,6 +23,20 @@ class ProfilePostsAdapter(val postsList: List<String>, val context: Context) : R
 
             Picasso.get().load(url).into(image);
         }
+        init {
+            itemView.setOnClickListener(this)
+        }
+
+        override fun onClick(p0: View?) {
+            val position: Int = adapterPosition
+            if(position != RecyclerView.NO_POSITION){
+                listener.OnItemClick(position)
+            }
+        }
+    }
+
+    interface OnItemClickListener{
+        fun OnItemClick(position : Int)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {

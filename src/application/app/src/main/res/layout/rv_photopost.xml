@@ -103,19 +103,26 @@
                 <TextView
                     android:id="@+id/location"
                     android:layout_width="wrap_content"
+                    android:maxWidth="350dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:padding="10dp"
+                    android:layout_marginEnd="5dp"
                     android:textColor="@color/text_light"
-                    android:textSize="23sp"
+                    android:textSize="21sp"
                     android:textStyle="bold"
                     android:background="#33748c8c"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/locationImg"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Image Location"
-                    android:maxLines="2"
-                    android:paddingRight="8dp"/>
+                    tools:text="Image Location nesto nesto nesto nesto nesto nesto nesto nesto "
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:paddingEnd="8dp"
+                    android:paddingStart="8dp"/>
+                <!--android:ellipsize="end"
+                    android:maxLines="1"-->
+                <!--android:maxLines="2"-->
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout

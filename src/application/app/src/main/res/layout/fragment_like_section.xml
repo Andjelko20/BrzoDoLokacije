@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context=".Fragments2.LikeSectionFragment"
-    android:background="@color/postHeader">
-
-    <LinearLayout
-        android:id="@+id/commentSection"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:behavior_peekHeight="800dp"
-        android:background="@drawable/commentsectiondesigne"
-        android:orientation="vertical">
+    android:id="@+id/likeSection"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+    app:behavior_peekHeight="500dp"
+    android:background="@drawable/commentsectiondesigne"
+    android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -68,10 +63,8 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/rv_like"
                 tools:itemCount="1"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="10dp"
+                android:nestedScrollingEnabled="false"/>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-    </LinearLayout>
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</LinearLayout>

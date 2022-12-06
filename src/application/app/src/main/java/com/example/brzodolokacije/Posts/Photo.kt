@@ -16,15 +16,21 @@ data class Photo (
     @SerializedName("Location")
     val location : String, //za sad je string, mozda se menja
 
+    @SerializedName("Latitude")
+    val latitude : String,
+
+    @SerializedName("Longitude")
+    val longitude : String,
+
     @SerializedName("Caption")
     val caption : String,
 
     @SerializedName("NumberOfLikes")
-    val numberOfLikes : Int,
+    var numberOfLikes : Int,
 
     @SerializedName("NumberOfComments")
-    val numberOfComments : Int,
+    var numberOfComments : Int,
 
     @SerializedName("LikedByMe")
-    val likedByMe : Boolean
+    var likedByMe : Boolean
 )

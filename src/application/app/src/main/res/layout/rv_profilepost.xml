@@ -8,9 +8,9 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewProfilePost"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_margin="2dp"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_margin="1dp"
         card_view:cardUseCompatPadding="false">
 
         <ImageView

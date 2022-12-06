@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".Activities.ProfileVisitActivity"
+    android:background="@color/postHeader">
+
+    <LinearLayout
+        android:id="@+id/chatActivitySection"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/postHeader"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/light_blue"
+            android:gravity="left"
+            android:orientation="horizontal"
+            android:paddingStart="0dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="3dp"
+            android:paddingTop="3dp">
+
+            <Button
+                android:id="@+id/exitChatSection"
+                android:padding="10dp"
+                android:drawableLeft="@drawable/ic_arrow_back"
+                android:background="@color/transparent"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp">
+            </Button>
+
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="8dp"
+                android:layout_toEndOf="@+id/exitChatSection"
+                app:srcCompat="@drawable/whitelogo" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/postHeader" />
+
+        <FrameLayout
+            android:id="@+id/chatSectionFrameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </FrameLayout>
+
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
