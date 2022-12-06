@@ -5,9 +5,13 @@ import android.content.Context;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.brzodolokacije.Adapters.MessageAdapter;
+import com.example.brzodolokacije.ModelsDto.MessageDto;
 import com.microsoft.signalr.HubConnection;
 import com.microsoft.signalr.HubConnectionBuilder;
 import com.microsoft.signalr.HubConnectionState;
+
+import java.util.List;
 
 public class SignalRListener {
     private static SignalRListener instance;
@@ -65,5 +69,10 @@ public class SignalRListener {
             return true;
         }
         return false;
+    }
+
+    public void setListMessage(List<MessageDto> list, MessageAdapter adapter)
+    {
+
     }
 }

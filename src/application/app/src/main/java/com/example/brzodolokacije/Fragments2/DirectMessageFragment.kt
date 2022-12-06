@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import com.example.brzodolokacije.Managers.SignalRListener
 import com.example.brzodolokacije.R
 
 // TODO: Rename parameter arguments, choose names that match
@@ -26,6 +27,8 @@ class DirectMessageFragment : Fragment() {
 
     private var user: String? = null
 
+    private lateinit var signalRListener : SignalRListener
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -42,6 +45,7 @@ class DirectMessageFragment : Fragment() {
         val chatingWithUser = view.findViewById<TextView>(R.id.chatingWithUser)
         user = arguments?.getString("username").toString()
         chatingWithUser.text = user
+        signalRListener = SignalRListener.getInstance()
         return view
     }
 
@@ -52,6 +56,8 @@ class DirectMessageFragment : Fragment() {
         exitDirectMessage.setOnClickListener{
             requireActivity().finish()
         }
+
+
     }
 
     companion object {
