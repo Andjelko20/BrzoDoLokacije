@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 import kotlin.jvm.internal.markers.KMutableList;
 
@@ -42,7 +43,7 @@ public class SignalRListener {
             MessageDto newMessage=new MessageDto(sender,message);
             listMessages.add(newMessage);
             adapter.notifyItemInserted(listMessages.size()-1);
-//            recyclerView.getLayoutManager().scrollToPosition(listMessages.size()-1);
+            ((LinearLayoutManager) Objects.requireNonNull(recyclerView.getLayoutManager())).scrollToPosition(listMessages.size()-1);
 
         }, String.class,String.class);
     }
@@ -78,7 +79,7 @@ public class SignalRListener {
             MessageDto newMessage=new MessageDto(sender,message);
             listMessages.add(newMessage);
             adapter.notifyItemInserted(listMessages.size()-1);
-//            recyclerView.getLayoutManager().scrollToPosition(listMessages.size()-1);
+            ((LinearLayoutManager) Objects.requireNonNull(recyclerView.getLayoutManager())).scrollToPosition(listMessages.size()-1);
         }
     }
 
