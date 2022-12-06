@@ -1,6 +1,7 @@
 package com.example.brzodolokacije.Managers;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.View;
 import android.widget.Toast;
 
@@ -12,18 +13,22 @@ public class SignalRListener {
     private static SignalRListener instance;
     HubConnection hubConnection;
 
-    private SignalRListener(Activity activity)
+    private SignalRListener()
     {
         hubConnection = HubConnectionBuilder.create("http://softeng.pmf.kg.ac.rs:10051/chathub").build();
 
         hubConnection.on("Logged", (message) -> {
-            Toast.makeText(activity, "Post uploaded", Toast.LENGTH_SHORT).show();
+            //
         }, String.class);
+
+        hubConnection.on("ReceiveMessage", (sender , message) -> {
+            //logika kad stigne poruka
+        }, String.class,String.class);
     }
 
-    public static SignalRListener getInstance(Activity activity) {
+    public static SignalRListener getInstance() {
         if(instance == null)
-            instance=new SignalRListener(activity);
+            instance=new SignalRListener();
         return instance;
     }
 
@@ -41,6 +46,14 @@ public class SignalRListener {
     {
         if(hubConnection.getConnectionState() == HubConnectionState.CONNECTED) {
             hubConnection.send("AddNewConnection", username);
+        }
+    }
+
+    public void sendMessage(String sender, String receiver, String message)
+    {
+        if(hubConnection.getConnectionState() == HubConnectionState.CONNECTED)
+        {
+            hubConnection.send("SendPrivateMessage", sender,receiver,message);
         }
     }
 

@@ -18,17 +18,19 @@ import java.lang.reflect.Member
 class ChatActivity : AppCompatActivity() {
 
     lateinit var signalRListener: SignalRListener
-    val sessionManager = SessionManager(this)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
 
-    signalRListener = SignalRListener.getInstance(this@ChatActivity)
-        val connected = signalRListener.startConnection()
-        if(connected) {
-            signalRListener.registerMe(sessionManager.fetchUsername())
-        }
+        val sessionManager = SessionManager(this)
+
+        signalRListener = SignalRListener.getInstance()
+
+        signalRListener.startConnection()
+        signalRListener.registerMe(sessionManager.fetchUsername())
+
+
+
         val intent = getIntent()
         val username = intent.getStringExtra("messageUser")
 //        Log.d("username", username.toString())
