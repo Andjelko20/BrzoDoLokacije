@@ -12,7 +12,7 @@ class ChatActivity : AppCompatActivity() {
         setContentView(R.layout.activity_chat)
 
         replaceFragment(DirectMessageFragment())
-        
+
     }
 
     private fun replaceFragment(fragment: Fragment) {
