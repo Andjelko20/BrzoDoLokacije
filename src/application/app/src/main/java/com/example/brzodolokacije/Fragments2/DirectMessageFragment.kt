@@ -100,6 +100,7 @@ class DirectMessageFragment : Fragment() {
                 val message = sendMessageText.text.toString().trim()
                 val sender = sessionManager?.fetchUsername()
                 val receiver = user
+                signalRListener.sendMessage(sender,receiver,message)
             }
         }
     }
