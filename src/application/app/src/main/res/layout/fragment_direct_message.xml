@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Fragments2.DirectMessageFragment"
+    android:background="#d4e9e4">
+
+    <RelativeLayout
+        android:id="@+id/topBarDirectMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/light_blue"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal"
+        android:paddingStart="0dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="3dp"
+        android:paddingTop="3dp">
+
+        <Button
+            android:id="@+id/exitDirectMessage"
+            android:padding="10dp"
+            android:drawableLeft="@drawable/ic_arrow_back"
+            android:background="@color/transparent"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp">
+        </Button>
+        <TextView
+            android:id="@+id/chatingWithUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@+id/exitDirectMessage"
+            tools:text="username"
+            android:textSize="24sp"
+            android:textColor="@color/light_text"
+            android:textStyle="bold"/>
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvMessages"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/sendMessageLayout"
+        android:layout_below="@+id/topBarDirectMessage"
+        app:layout_constraintBottom_toTopOf="@+id/sendMessageLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:listitem="@layout/rv_sentmessage" />
+
+    <RelativeLayout
+        android:id="@+id/sendMessageLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/light_text"
+        android:paddingBottom="5dp">
+
+        <EditText
+            android:id="@+id/sendMessageText"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/add_comment_field"
+            android:hint="Send Message"
+            android:inputType="text"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingRight="70dp"
+            android:paddingBottom="10dp"
+            android:textColor="@color/text_dark"
+            android:textColorHint="@color/text_dark"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/sendMessageBtn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignTop="@id/sendMessageText"
+            android:layout_alignBottom="@id/sendMessageText"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="15dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@android:drawable/ic_menu_send" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

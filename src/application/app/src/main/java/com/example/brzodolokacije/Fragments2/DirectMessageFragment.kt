@@ -1,0 +1,159 @@
+package com.example.brzodolokacije.Fragments2
+
+import android.os.Bundle
+import android.util.Log
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.brzodolokacije.API.Api
+import com.example.brzodolokacije.Adapters.HomePostAdapter
+import kotlinx.android.synthetic.main.fragment_direct_message.*
+import com.example.brzodolokacije.Adapters.MessageAdapter
+import com.example.brzodolokacije.Client.Client
+import com.example.brzodolokacije.Managers.SessionManager
+import com.example.brzodolokacije.Managers.SignalRListener
+import com.example.brzodolokacije.Models.DefaultResponse
+import com.example.brzodolokacije.Models.UserProfile
+import com.example.brzodolokacije.ModelsDto.MessageDto
+import com.example.brzodolokacije.ModelsDto.PaginationResponse
+import com.example.brzodolokacije.R
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import retrofit2.Call
+import retrofit2.Response
+import javax.security.auth.callback.Callback
+
+// TODO: Rename parameter arguments, choose names that match
+// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+private const val ARG_PARAM1 = "param1"
+private const val ARG_PARAM2 = "param2"
+
+/**
+ * A simple [Fragment] subclass.
+ * Use the [DirectMessageFragment.newInstance] factory method to
+ * create an instance of this fragment.
+ */
+class DirectMessageFragment : Fragment() {
+    // TODO: Rename and change types of parameters
+    private var param1: String? = null
+    private var param2: String? = null
+
+    private var user: String? = null
+
+    private lateinit var signalRListener : SignalRListener
+    private lateinit var messageList : MutableList<MessageDto>
+
+    private var myMessageAdapter : RecyclerView.Adapter<MessageAdapter.MainViewHolder>? = null
+    private var mylayoutManager : RecyclerView.LayoutManager? = null
+    private lateinit var messageRecyclerView : RecyclerView
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            param1 = it.getString(ARG_PARAM1)
+            param2 = it.getString(ARG_PARAM2)
+        }
+
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view =  inflater.inflate(R.layout.fragment_direct_message, container, false)
+        val chatingWithUser = view.findViewById<TextView>(R.id.chatingWithUser)
+        user = arguments?.getString("username").toString()
+        chatingWithUser.text = user
+
+        val list : MutableList<MessageDto> = mutableListOf()
+        messageList=list
+
+
+        signalRListener = SignalRListener.getInstance()
+        messageRecyclerView = view.findViewById(R.id.rvMessages)
+
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val exitDirectMessage = view.findViewById<Button>(R.id.exitDirectMessage)
+        exitDirectMessage.setOnClickListener{
+            requireActivity().finish()
+        }
+
+        signalRListener.setRecycleView(rvMessages)
+        signalRListener.setContext(context)
+        signalRListener.setActivity(requireActivity())
+
+        val retrofit = Client(requireActivity()).buildService(Api::class.java)
+        retrofit.getMessages(user.toString()).enqueue(object: retrofit2.Callback<DefaultResponse> {
+            override fun onResponse(
+                call: Call<DefaultResponse>,
+                response: Response<DefaultResponse>
+            ) {
+                if(response.body()?.error.toString() == "false")
+                {
+                    val res = response.body()?.message.toString()
+                    Log.d("response", res.toString())
+                    val typeToken = object : TypeToken<MutableList<MessageDto>>() {}.type
+                    val messages = Gson().fromJson<MutableList<MessageDto>>(res, typeToken)
+                    messageList = messages
+                    signalRListener.setList(messageList)
+                }
+                else
+                {
+                    Toast.makeText(requireActivity(), "An error occurred", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                Log.d("failed", "")
+            }
+
+        })
+
+        val sessionManager= this.context?.let { SessionManager(it) }
+        val sendMessageBtn = view.findViewById<ImageView>(R.id.sendMessageBtn)
+        val sendMessageText = view.findViewById<EditText>(R.id.sendMessageText)
+        sendMessageBtn.setOnClickListener{
+            if(sendMessageText.text.toString().trim() != "")
+            {
+                val message = sendMessageText.text.toString().trim()
+                sendMessageText.text.clear()
+                val sender = sessionManager?.fetchUsername()
+                val receiver = user
+                signalRListener.sendMessage(sender,receiver,message)
+            }
+        }
+    }
+
+    companion object {
+        /**
+         * Use this factory method to create a new instance of
+         * this fragment using the provided parameters.
+         *
+         * @param param1 Parameter 1.
+         * @param param2 Parameter 2.
+         * @return A new instance of fragment DirectMessageFragment.
+         */
+        // TODO: Rename and change types and number of parameters
+        @JvmStatic
+        fun newInstance(param1: String, param2: String) =
+            DirectMessageFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
+                }
+            }
+    }
+}

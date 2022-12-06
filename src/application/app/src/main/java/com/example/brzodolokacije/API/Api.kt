@@ -101,4 +101,7 @@ interface Api {
 
     @GET("Post/getOne/{id}")
     fun getPostData(@Path("id") id: Int) : Call<DefaultResponse>
+
+    @GET("Message/directMessages/{receiverUsername}")
+    fun getMessages(@Path("receiverUsername") receiverUsername: String) : Call<DefaultResponse>
 }
