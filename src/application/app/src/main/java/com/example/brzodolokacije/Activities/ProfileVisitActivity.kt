@@ -176,7 +176,7 @@ class ProfileVisitActivity : AppCompatActivity() {
                                 val intent = Intent(this@ProfileVisitActivity, ChatActivity::class.java)
                                 intent.putExtra("messageUser",username)
                                 startActivity(intent)
-                                finish()
+//                                finish()
                             }
                         }
                         val path : String= Constants.BASE_URL + "User/avatar/" + username
