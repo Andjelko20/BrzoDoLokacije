@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -91,7 +92,7 @@ class DirectMessageFragment : Fragment() {
         signalRListener.setMessageAdapter(myMessageAdapter)
 
         val sessionManager= this.context?.let { SessionManager(it) }
-        val sendMessageBtn = view.findViewById<Button>(R.id.sendMessageBtn)
+        val sendMessageBtn = view.findViewById<ImageView>(R.id.sendMessageBtn)
         val sendMessageText = view.findViewById<EditText>(R.id.sendMessageText)
         sendMessageBtn.setOnClickListener{
             if(sendMessageText.text.toString().trim() != "")
