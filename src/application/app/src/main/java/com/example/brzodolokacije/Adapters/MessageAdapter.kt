@@ -32,7 +32,6 @@ class MessageAdapter(messageList : MutableList<MessageDto>, val context : Contex
             {
                 val sentMessage= itemView.findViewById<TextView>(R.id.sentMessageText)
                 sentMessage.text = message.message
-                Toast.makeText(activity,sentMessage.text,Toast.LENGTH_LONG).show()
             }
             else if(t==RECEIVED_MESSAGE)
             {
