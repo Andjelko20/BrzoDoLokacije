@@ -45,9 +45,12 @@ public class SignalRListener {
         hubConnection.on("ReceiveMessage", (sender , message) -> {
             MessageDto newMessage=new MessageDto(sender,message);
             listMessages.add(newMessage);
-            adapter.notifyItemInserted(listMessages.size()-1);
-            recyclerView.stopScroll();
-            ((LinearLayoutManager) Objects.requireNonNull(recyclerView.getLayoutManager())).scrollToPositionWithOffset(listMessages.size()-1,0);
+            recyclerView.post(new Runnable(){ @Override public void run(){
+                adapter.notifyItemInserted(listMessages.size()-1);
+                recyclerView.stopScroll();
+                ((LinearLayoutManager) Objects.requireNonNull(recyclerView.getLayoutManager())).scrollToPositionWithOffset(listMessages.size()-1,0);
+            }
+            });
         }, String.class,String.class);
     }
 
