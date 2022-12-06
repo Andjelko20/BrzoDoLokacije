@@ -18,6 +18,7 @@ import java.lang.reflect.Member
 class ChatActivity : AppCompatActivity() {
 
     lateinit var signalRListener: SignalRListener
+    val sessionManager = SessionManager(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +27,7 @@ class ChatActivity : AppCompatActivity() {
     signalRListener = SignalRListener.getInstance(this@ChatActivity)
         val connected = signalRListener.startConnection()
         if(connected) {
-            signalRListener.registerMe("dragan")
+            signalRListener.registerMe(sessionManager.fetchUsername())
         }
         val intent = getIntent()
         val username = intent.getStringExtra("messageUser")
