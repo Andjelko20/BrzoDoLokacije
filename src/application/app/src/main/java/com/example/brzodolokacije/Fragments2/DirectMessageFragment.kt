@@ -6,12 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.brzodolokacije.Adapters.HomePostAdapter
 import kotlinx.android.synthetic.main.fragment_direct_message.*
 import com.example.brzodolokacije.Adapters.MessageAdapter
+import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Managers.SignalRListener
 import com.example.brzodolokacije.ModelsDto.MessageDto
 import com.example.brzodolokacije.R
@@ -87,6 +89,18 @@ class DirectMessageFragment : Fragment() {
 
         signalRListener.setListMessage(messageList)
         signalRListener.setMessageAdapter(myMessageAdapter)
+
+        val sessionManager= this.context?.let { SessionManager(it) }
+        val sendMessageBtn = view.findViewById<Button>(R.id.sendMessageBtn)
+        val sendMessageText = view.findViewById<EditText>(R.id.sendMessageText)
+        sendMessageBtn.setOnClickListener{
+            if(sendMessageText.text.toString().trim() != "")
+            {
+                val message = sendMessageText.text.toString().trim()
+                val sender = sessionManager?.fetchUsername()
+                val receiver = user
+            }
+        }
     }
 
     companion object {
