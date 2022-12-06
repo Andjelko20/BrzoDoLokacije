@@ -11,7 +11,7 @@ import com.example.brzodolokacije.ModelsDto.MessageDto
 import com.example.brzodolokacije.Posts.Photo
 import com.example.brzodolokacije.R
 
-class MessageAdapter(messageList : List<MessageDto>, val context : Context, val activity : Context):
+class MessageAdapter(messageList : MutableList<MessageDto>, val context : Context, val activity : Context):
     RecyclerView.Adapter<MessageAdapter.MainViewHolder>() {
     var dataList = messageList
 

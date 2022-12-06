@@ -7,8 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.brzodolokacije.Adapters.HomePostAdapter
+import kotlinx.android.synthetic.main.fragment_direct_message.*
 import com.example.brzodolokacije.Adapters.MessageAdapter
 import com.example.brzodolokacije.Managers.SignalRListener
 import com.example.brzodolokacije.ModelsDto.MessageDto
@@ -18,10 +20,6 @@ import com.example.brzodolokacije.R
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
-
-private var myMessageAdapter : RecyclerView.Adapter<MessageAdapter.MainViewHolder>? = null
-private var mylayoutManager : RecyclerView.LayoutManager? = null
-private lateinit var messageRecyclerView : RecyclerView
 
 /**
  * A simple [Fragment] subclass.
@@ -37,6 +35,10 @@ class DirectMessageFragment : Fragment() {
 
     private lateinit var signalRListener : SignalRListener
     private var messageList : MutableList<MessageDto>? = null
+
+    private var myMessageAdapter : RecyclerView.Adapter<MessageAdapter.MainViewHolder>? = null
+    private var mylayoutManager : RecyclerView.LayoutManager? = null
+    private lateinit var messageRecyclerView : RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,7 +69,14 @@ class DirectMessageFragment : Fragment() {
             requireActivity().finish()
         }
 
-
+        rvMessages.apply{
+            mylayoutManager = LinearLayoutManager(context) //activity
+            messageRecyclerView=view.findViewById(R.id.rvMessages)
+            messageRecyclerView.layoutManager=mylayoutManager
+            messageRecyclerView.setHasFixedSize(true)
+            myMessageAdapter = messageList?.let { MessageAdapter(it,context,requireActivity()) }
+            messageRecyclerView.adapter=myAdapter
+        }
     }
 
     companion object {
