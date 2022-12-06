@@ -47,15 +47,23 @@ class ShowPostActivity : AppCompatActivity() {
 
         val intent = getIntent()
         val postIdStr = intent.getStringExtra("showPost");
+        val profileVisit = intent.getStringExtra("profileVisit")
 //        Log.d("clicked id", postIdStr.toString())
 
         val postId = postIdStr?.toInt()
 
         val backButtonPostDetails = findViewById<Button>(R.id.backButtonPostDetails)
         backButtonPostDetails.setOnClickListener{
-            val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("backToProfile", "returnToProfile");
-            startActivity(intent)
+            if(profileVisit == "profileVisit")
+            {
+                finish()
+            }
+            else
+            {
+                val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("backToProfile", "returnToProfile");
+                startActivity(intent)
+            }
         }
         val retrofit = Client(this).buildService(Api::class.java)
         if (postId != null) {
