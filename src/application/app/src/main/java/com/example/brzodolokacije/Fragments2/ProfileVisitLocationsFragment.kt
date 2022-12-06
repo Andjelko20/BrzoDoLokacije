@@ -1,7 +1,10 @@
 package com.example.brzodolokacije.Fragments2
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.location.Location
 import android.os.Bundle
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
+import com.example.brzodolokacije.Constants.Constants
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.ModelsDto.PaginationResponse
@@ -18,6 +22,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.gson.Gson
@@ -25,6 +30,7 @@ import com.google.gson.reflect.TypeToken
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.concurrent.Executors
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -124,7 +130,7 @@ class ProfileVisitLocationsFragment : Fragment(),OnMapReadyCallback {
                         while(i < pins!!.size) {
                             val latLng = LatLng(pins[i].latitude.toDouble(), pins[i].longitude.toDouble())
 
-                            mMap.addMarker(MarkerOptions().position(latLng).title(pins[i].id.toString()))
+                            loadImage(latLng, Constants.BASE_URL + "Post/postPhoto/" + pins[i].id.toString())
                             i++
                         }
                     }
@@ -139,6 +145,36 @@ class ProfileVisitLocationsFragment : Fragment(),OnMapReadyCallback {
                 }
 
             })
+        }
+    }
+
+    private fun loadImage(longlat : LatLng, path : String)
+    {
+        //image.layoutParams.height=Constants.screenHeight
+        val executor = Executors.newSingleThreadExecutor()
+
+        val handler = android.os.Handler(Looper.getMainLooper())
+
+        var i: Bitmap? = null
+        executor.execute {
+
+            // Image URL
+            val imageURL = path
+            try {
+                val `in` = java.net.URL(imageURL).openStream()
+                i = BitmapFactory.decodeStream(`in`)
+                handler.post {
+                    val smallMarker = Bitmap.createScaledBitmap(i!!, 150, 150, false)
+                    mMap.addMarker(
+                        MarkerOptions()
+                            .position(longlat)
+                            .icon(BitmapDescriptorFactory.fromBitmap(smallMarker!!))
+                    )
+
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 }
