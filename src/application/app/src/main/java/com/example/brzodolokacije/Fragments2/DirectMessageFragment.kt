@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import com.example.brzodolokacije.R
 
 // TODO: Rename parameter arguments, choose names that match
@@ -22,6 +24,8 @@ class DirectMessageFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private var user: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -34,8 +38,20 @@ class DirectMessageFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_direct_message, container, false)
+        val view =  inflater.inflate(R.layout.fragment_direct_message, container, false)
+        val chatingWithUser = view.findViewById<TextView>(R.id.chatingWithUser)
+        user = arguments?.getString("username").toString()
+        chatingWithUser.text = user
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val exitDirectMessage = view.findViewById<Button>(R.id.exitDirectMessage)
+        exitDirectMessage.setOnClickListener{
+            requireActivity().finish()
+        }
     }
 
     companion object {
