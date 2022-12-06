@@ -118,8 +118,10 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
                         var sb = StringBuilder()
                         if(grad == "")
                             sb.append(drzava)
-                        else
-                            sb.append(grad).append(", ").append(drzava)
+
+                        else if(drzava=="") sb.append(grad)
+
+                        else  sb.append(grad).append(", ").append(drzava)
 //                        mMap.addMarker(MarkerOptions().position(latLng).title(sb.toString()))
                         val retrofit = Client(requireActivity()).buildService(Api::class.java)
                         retrofit.onMapLocation(sb.toString()).enqueue(object: Callback<DefaultResponse>{

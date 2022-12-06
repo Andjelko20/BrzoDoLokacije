@@ -167,8 +167,8 @@ class LocationsFragment : Fragment(),OnMapReadyCallback {
                         var i = 0
                         while(i < pins!!.size) {
                             val latLng = LatLng(pins[i].latitude.toDouble(), pins[i].longitude.toDouble())
-
-                            loadImage(latLng, Constants.BASE_URL + "Post/postPhoto/" + pins[i].id.toString())
+                            mMap.addMarker(MarkerOptions().position(latLng).title(pins[i].id.toString()))
+//                            loadImage(latLng, Constants.BASE_URL + "Post/postPhoto/" + pins[i].id.toString())
                             i++
                         }
 
