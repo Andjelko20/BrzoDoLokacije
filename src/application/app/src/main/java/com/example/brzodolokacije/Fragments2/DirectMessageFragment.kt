@@ -34,7 +34,7 @@ class DirectMessageFragment : Fragment() {
     private var user: String? = null
 
     private lateinit var signalRListener : SignalRListener
-    private var messageList : MutableList<MessageDto>? = null
+    private lateinit var messageList : MutableList<MessageDto>
 
     private var myMessageAdapter : RecyclerView.Adapter<MessageAdapter.MainViewHolder>? = null
     private var mylayoutManager : RecyclerView.LayoutManager? = null
@@ -46,6 +46,7 @@ class DirectMessageFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
     }
 
     override fun onCreateView(
@@ -56,8 +57,14 @@ class DirectMessageFragment : Fragment() {
         val chatingWithUser = view.findViewById<TextView>(R.id.chatingWithUser)
         user = arguments?.getString("username").toString()
         chatingWithUser.text = user
+
+        val list : MutableList<MessageDto> = mutableListOf()
+        messageList=list
+
+
         signalRListener = SignalRListener.getInstance()
         messageRecyclerView = view.findViewById(R.id.rvMessages)
+
         return view
     }
 
@@ -77,6 +84,9 @@ class DirectMessageFragment : Fragment() {
             myMessageAdapter = messageList?.let { MessageAdapter(it,context,requireActivity()) }
             messageRecyclerView.adapter=myAdapter
         }
+
+        signalRListener.setListMessage(messageList)
+        signalRListener.setMessageAdapter(myMessageAdapter)
     }
 
     companion object {

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.brzodolokacije.Managers.SessionManager
+import com.example.brzodolokacije.Managers.SignalRListener
 import com.example.brzodolokacije.ModelsDto.MessageDto
 import com.example.brzodolokacije.Posts.Photo
 import com.example.brzodolokacije.R
@@ -17,6 +18,8 @@ class MessageAdapter(messageList : MutableList<MessageDto>, val context : Contex
 
     private val SENT_MESSAGE = 0
     private val RECEIVED_MESSAGE = 1
+
+    private lateinit var signalRListener : SignalRListener
 
     inner class MainViewHolder(itemView: View, type : Int) : RecyclerView.ViewHolder(itemView){
         val t = type

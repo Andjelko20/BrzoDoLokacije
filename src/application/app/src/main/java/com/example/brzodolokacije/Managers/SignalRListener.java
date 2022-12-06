@@ -5,6 +5,8 @@ import android.content.Context;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.brzodolokacije.Adapters.MessageAdapter;
 import com.example.brzodolokacije.ModelsDto.MessageDto;
 import com.microsoft.signalr.HubConnection;
@@ -13,9 +15,13 @@ import com.microsoft.signalr.HubConnectionState;
 
 import java.util.List;
 
+import kotlin.jvm.internal.markers.KMutableList;
+
 public class SignalRListener {
     private static SignalRListener instance;
     HubConnection hubConnection;
+    List<MessageDto> listMessages;
+    RecyclerView.Adapter<MessageAdapter.MainViewHolder> adapter;
 
     private SignalRListener()
     {
@@ -26,7 +32,9 @@ public class SignalRListener {
         }, String.class);
 
         hubConnection.on("ReceiveMessage", (sender , message) -> {
-            //logika kad stigne poruka
+            MessageDto newMessage=new MessageDto(sender,message);
+            listMessages.add(newMessage);
+            adapter.notifyItemInserted(listMessages.size()-1);
         }, String.class,String.class);
     }
 
@@ -71,8 +79,13 @@ public class SignalRListener {
         return false;
     }
 
-    public void setListMessage(List<MessageDto> list, MessageAdapter adapter)
+    public void setListMessage(List<MessageDto> list)
     {
+        listMessages=list;
+    }
 
+    public void setMessageAdapter(RecyclerView.Adapter<MessageAdapter.MainViewHolder> adapter)
+    {
+        this.adapter=adapter;
     }
 }
