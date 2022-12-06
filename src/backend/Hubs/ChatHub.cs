@@ -9,7 +9,7 @@ namespace backend.Hubs;
 public class ChatHub : Hub
 {
     private readonly DataContext _context;
-    private readonly static List<UserChat> _connectedUsers = new List<UserChat>();
+    private static List<UserChat> _connectedUsers = new List<UserChat>();
     public ChatHub(DataContext context)
     {
         _context = context;
