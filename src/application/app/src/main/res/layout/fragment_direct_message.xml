@@ -44,10 +44,12 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMessages"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/sendMessageLayout"
+        android:layout_below="@+id/topBarDirectMessage"
         app:layout_constraintBottom_toTopOf="@+id/sendMessageLayout"
-        app:layout_constraintTop_toBottomOf="@+id/topBarDirectMessage"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        tools:listitem="@layout/rv_sentmessage" />
 
     <RelativeLayout
         android:id="@+id/sendMessageLayout"

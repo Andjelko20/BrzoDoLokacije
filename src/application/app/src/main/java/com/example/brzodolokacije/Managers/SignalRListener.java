@@ -43,9 +43,6 @@ public class SignalRListener {
 //            listMessages.add(newMessage);
 //            adapter.notifyItemInserted(listMessages.size()-1);
 
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(adapter);
-
         }, String.class,String.class);
     }
 
@@ -109,5 +106,7 @@ public class SignalRListener {
     public void setActivity(FragmentActivity requireActivity) {
         activity=requireActivity;
         adapter=new MessageAdapter(listMessages,context,activity);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setAdapter(adapter);
     }
 }
