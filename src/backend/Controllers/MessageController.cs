@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using backend.ModelsDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -33,9 +34,18 @@ namespace backend.Controllers
                     error = true,
                     message = "Error"
                 });
-            var messages = await _context.Messages.Where(m => m.SenderId == sender.Id || m.ReceiverId == receiver.Id)
+            var messages = await _context.Messages.Where(m => (m.SenderId == sender.Id && m.ReceiverId == receiver.Id) || (m.SenderId == receiver.Id && m.ReceiverId == sender.Id))
                 .OrderBy(m => m.Date).ToListAsync();
-            string json = JsonSerializer.Serialize(messages);
+            List<MessageDto> messageDtos = new List<MessageDto>();
+            foreach (var message in messages)
+            {
+                messageDtos.Add(new MessageDto
+                {
+                    Sender = message.SenderId == sender.Id ? sender.Username : receiver.Username,
+                    Text = message.Content
+                });
+            }
+            string json = JsonSerializer.Serialize(messageDtos);
             return Ok(new
             {
                 error = false,
