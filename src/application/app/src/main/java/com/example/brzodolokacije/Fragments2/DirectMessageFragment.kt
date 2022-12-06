@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.brzodolokacije.Adapters.HomePostAdapter
@@ -78,20 +80,22 @@ class DirectMessageFragment : Fragment() {
             requireActivity().finish()
         }
 
-        rvMessages.apply{
-            mylayoutManager = LinearLayoutManager(context) //activity
-            messageRecyclerView=view.findViewById(R.id.rvMessages)
-            messageRecyclerView.layoutManager=mylayoutManager
-            messageRecyclerView.setHasFixedSize(true)
-            myMessageAdapter = messageList?.let { MessageAdapter(it,context,requireActivity()) }
-            messageRecyclerView.adapter=myAdapter
-        }
+//        rvMessages.apply{
+//            mylayoutManager = LinearLayoutManager(context) //activity
+//            messageRecyclerView=view.findViewById(R.id.rvMessages)
+//            messageRecyclerView.layoutManager=mylayoutManager
+//            messageRecyclerView.setHasFixedSize(true)
+//            myMessageAdapter = messageList?.let { MessageAdapter(it,context,requireActivity()) }
+//            messageRecyclerView.adapter=myAdapter
+//        }
 
-        signalRListener.setListMessage(messageList)
-        signalRListener.setMessageAdapter(myMessageAdapter)
+        signalRListener.setRecycleView(rvMessages)
+        signalRListener.setContext(context)
+        signalRListener.setList(messageList)
+        signalRListener.setActivity(requireActivity())
 
         val sessionManager= this.context?.let { SessionManager(it) }
-        val sendMessageBtn = view.findViewById<Button>(R.id.sendMessageBtn)
+        val sendMessageBtn = view.findViewById<ImageView>(R.id.sendMessageBtn)
         val sendMessageText = view.findViewById<EditText>(R.id.sendMessageText)
         sendMessageBtn.setOnClickListener{
             if(sendMessageText.text.toString().trim() != "")

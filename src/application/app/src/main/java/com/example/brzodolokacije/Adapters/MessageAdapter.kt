@@ -1,10 +1,12 @@
 package com.example.brzodolokacije.Adapters
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Managers.SignalRListener
@@ -30,6 +32,7 @@ class MessageAdapter(messageList : MutableList<MessageDto>, val context : Contex
             {
                 val sentMessage= itemView.findViewById<TextView>(R.id.sentMessageText)
                 sentMessage.text = message.message
+                Toast.makeText(activity,sentMessage.text,Toast.LENGTH_LONG).show()
             }
             else if(t==RECEIVED_MESSAGE)
             {
