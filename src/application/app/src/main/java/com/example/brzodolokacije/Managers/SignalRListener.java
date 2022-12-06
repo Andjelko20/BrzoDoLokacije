@@ -2,6 +2,8 @@ package com.example.brzodolokacije.Managers;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Toast;
 
@@ -20,6 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.LogRecord;
 
 import kotlin.jvm.internal.markers.KMutableList;
 
@@ -43,8 +46,8 @@ public class SignalRListener {
             MessageDto newMessage=new MessageDto(sender,message);
             listMessages.add(newMessage);
             adapter.notifyItemInserted(listMessages.size()-1);
-            ((LinearLayoutManager) Objects.requireNonNull(recyclerView.getLayoutManager())).scrollToPosition(listMessages.size()-1);
-
+            recyclerView.stopScroll();
+            ((LinearLayoutManager) Objects.requireNonNull(recyclerView.getLayoutManager())).scrollToPositionWithOffset(listMessages.size()-1,0);
         }, String.class,String.class);
     }
 
