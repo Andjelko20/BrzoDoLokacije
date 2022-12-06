@@ -1,6 +1,7 @@
 package com.example.brzodolokacije.Fragments2
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,13 +13,23 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Adapters.HomePostAdapter
 import kotlinx.android.synthetic.main.fragment_direct_message.*
 import com.example.brzodolokacije.Adapters.MessageAdapter
+import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Managers.SignalRListener
+import com.example.brzodolokacije.Models.DefaultResponse
+import com.example.brzodolokacije.Models.UserProfile
 import com.example.brzodolokacije.ModelsDto.MessageDto
+import com.example.brzodolokacije.ModelsDto.PaginationResponse
 import com.example.brzodolokacije.R
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import retrofit2.Call
+import retrofit2.Response
+import javax.security.auth.callback.Callback
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -80,19 +91,36 @@ class DirectMessageFragment : Fragment() {
             requireActivity().finish()
         }
 
-//        rvMessages.apply{
-//            mylayoutManager = LinearLayoutManager(context) //activity
-//            messageRecyclerView=view.findViewById(R.id.rvMessages)
-//            messageRecyclerView.layoutManager=mylayoutManager
-//            messageRecyclerView.setHasFixedSize(true)
-//            myMessageAdapter = messageList?.let { MessageAdapter(it,context,requireActivity()) }
-//            messageRecyclerView.adapter=myAdapter
-//        }
-
         signalRListener.setRecycleView(rvMessages)
         signalRListener.setContext(context)
-        signalRListener.setList(messageList)
         signalRListener.setActivity(requireActivity())
+
+        val retrofit = Client(requireActivity()).buildService(Api::class.java)
+        retrofit.getMessages(user.toString()).enqueue(object: retrofit2.Callback<DefaultResponse> {
+            override fun onResponse(
+                call: Call<DefaultResponse>,
+                response: Response<DefaultResponse>
+            ) {
+                if(response.body()?.error.toString() == "false")
+                {
+                    val res = response.body()?.message.toString()
+                    Log.d("response", res.toString())
+                    val typeToken = object : TypeToken<MutableList<MessageDto>>() {}.type
+                    val messages = Gson().fromJson<MutableList<MessageDto>>(res, typeToken)
+                    messageList = messages
+                    signalRListener.setList(messageList)
+                }
+                else
+                {
+                    Toast.makeText(requireActivity(), "An error occurred", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                Log.d("failed", "")
+            }
+
+        })
 
         val sessionManager= this.context?.let { SessionManager(it) }
         val sendMessageBtn = view.findViewById<ImageView>(R.id.sendMessageBtn)

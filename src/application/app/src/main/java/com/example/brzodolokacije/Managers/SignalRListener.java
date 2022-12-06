@@ -110,12 +110,16 @@ public class SignalRListener {
 
     public void setList(List<MessageDto> messageList) {
         listMessages=messageList;
+        adapter=new MessageAdapter(listMessages,context,activity);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setAdapter(adapter);
+        if(listMessages.size() > 0)
+        {
+            ((LinearLayoutManager) Objects.requireNonNull(recyclerView.getLayoutManager())).scrollToPosition(listMessages.size()-1);
+        }
     }
 
     public void setActivity(FragmentActivity requireActivity) {
         activity=requireActivity;
-        adapter=new MessageAdapter(listMessages,context,activity);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(adapter);
     }
 }
