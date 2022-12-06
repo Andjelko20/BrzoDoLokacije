@@ -7,13 +7,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import com.example.brzodolokacije.Adapters.HomePostAdapter
+import com.example.brzodolokacije.Adapters.MessageAdapter
 import com.example.brzodolokacije.Managers.SignalRListener
+import com.example.brzodolokacije.ModelsDto.MessageDto
 import com.example.brzodolokacije.R
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+
+private var myMessageAdapter : RecyclerView.Adapter<MessageAdapter.MainViewHolder>? = null
+private var mylayoutManager : RecyclerView.LayoutManager? = null
+private lateinit var messageRecyclerView : RecyclerView
 
 /**
  * A simple [Fragment] subclass.
@@ -28,6 +36,7 @@ class DirectMessageFragment : Fragment() {
     private var user: String? = null
 
     private lateinit var signalRListener : SignalRListener
+    private var messageList : MutableList<MessageDto>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +55,7 @@ class DirectMessageFragment : Fragment() {
         user = arguments?.getString("username").toString()
         chatingWithUser.text = user
         signalRListener = SignalRListener.getInstance()
+        messageRecyclerView = view.findViewById(R.id.rvMessages)
         return view
     }
 
