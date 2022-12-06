@@ -42,7 +42,7 @@ public class SignalRListener {
             MessageDto newMessage=new MessageDto(sender,message);
             listMessages.add(newMessage);
             adapter.notifyItemInserted(listMessages.size()-1);
-            recyclerView.getLayoutManager().scrollToPosition(listMessages.size()-1);
+//            recyclerView.getLayoutManager().scrollToPosition(listMessages.size()-1);
 
         }, String.class,String.class);
     }
@@ -78,7 +78,7 @@ public class SignalRListener {
             MessageDto newMessage=new MessageDto(sender,message);
             listMessages.add(newMessage);
             adapter.notifyItemInserted(listMessages.size()-1);
-            recyclerView.getLayoutManager().scrollToPosition(listMessages.size()-1);
+//            recyclerView.getLayoutManager().scrollToPosition(listMessages.size()-1);
         }
     }
 
