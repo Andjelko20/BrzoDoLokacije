@@ -52,7 +52,7 @@ class ForgotPasswordEmailActivity : AppCompatActivity() {
                             ) {
                                 if(response.body()?.error.toString() == "false")
                                 {
-                                    Toast.makeText(this@ForgotPasswordEmailActivity,"E-mail sent",Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(this@ForgotPasswordEmailActivity,"E-mail sent, check your (spam) inbox",Toast.LENGTH_SHORT).show()
                                     val intent = Intent(
                                         this@ForgotPasswordEmailActivity,
                                         LoginActivity::class.java
