@@ -104,4 +104,7 @@ interface Api {
 
     @GET("Message/directMessages/{receiverUsername}")
     fun getMessages(@Path("receiverUsername") receiverUsername: String) : Call<DefaultResponse>
+
+    @GET("User/followers/{username}")
+    fun getFollowers(@Path("username") username : String) : Call<DefaultResponse>
 }

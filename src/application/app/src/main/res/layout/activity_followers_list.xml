@@ -5,52 +5,67 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.FollowersListActivity"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:weightSum="1"
-    android:layout_marginBottom="5dp">
+    android:id="@+id/likeSection"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+    app:behavior_peekHeight="500dp"
+    android:background="@drawable/commentsectiondesigne"
+    android:orientation="vertical">
 
-    <androidx.cardview.widget.CardView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/cardViewFollower"
-        card_view:cardCornerRadius="10dp"
-        card_view:cardElevation="5dp"
-        card_view:cardUseCompatPadding="false"
-        android:layout_margin="4dp">
+        android:background="@color/light_blue"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="16dp"
+        android:paddingTop="3dp">
 
-        <LinearLayout
-            android:id="@+id/followers"
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/dragFollowersSection"
+            android:gravity="center|center_horizontal"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center_vertical"
-            android:minHeight="50dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="15dp"
-            android:background="@color/backgroundLightTheme"
-            android:clickable="true"
-            android:focusable="true">
+            android:src="@drawable/ic_drag_sheet"/>
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/followerProfilePhoto"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp"/>
+        <TextView
+            android:layout_below="@+id/dragFollowersSection"
+            android:id="@+id/followersSectionHeaderText"
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:drawablePadding="8dp"
+            android:text="Your followers"
+            android:textColor="@color/backgroundLightTheme"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+    </RelativeLayout>
 
-            <TextView
-                android:id="@+id/follower"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="22dp"
-                android:layout_marginLeft="10dp"
-                tools:text="follower"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_dark"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/postHeader" />
 
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refreshLayoutFollowers"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/followersList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/postHeader"
+            android:padding="5dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/rv_followers"
+            tools:itemCount="1"
+            android:layout_marginTop="10dp"
+            android:nestedScrollingEnabled="false"/>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </LinearLayout>
