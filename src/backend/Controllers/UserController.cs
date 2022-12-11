@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using backend.Models;
 using backend.ModelsDto;
@@ -184,7 +185,35 @@ namespace backend.Controllers
             }
 
         }
-        
+
+        [HttpGet("followers/{username}")]
+        public async Task<ActionResult<string>> getFollowers(string username)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+            var followers = await _context.Follows.Where(f => f.FolloweeId == user.Id).ToListAsync();
+            if (user == null || followers == null)
+                return BadRequest(new
+                {
+                    error = true,
+                    message = "Error"
+                });
+            List<FollowDto> followDtos = new List<FollowDto>();
+            foreach (Follow follow in followers)
+            {
+                followDtos.Add(new FollowDto
+                {
+                    Follower = (await _context.Users.FirstOrDefaultAsync(u=>u.Id==follow.FollowerId)).Username
+                });
+            }
+
+            string json = JsonSerializer.Serialize(followDtos);
+            return Ok(new
+            {
+                error = false,
+                message = json
+            });
+        }
+
         [HttpGet("refreshUser/{username}")]
         public async Task<ActionResult<string>> refreshUser(string username)
         {
