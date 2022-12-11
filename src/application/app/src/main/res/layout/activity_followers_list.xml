@@ -1,71 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.FollowersListActivity"
-    android:id="@+id/likeSection"
-    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-    app:behavior_peekHeight="500dp"
-    android:background="@drawable/commentsectiondesigne"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/postHeader">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
+    <io.ak1.BubbleTabBar
+        android:id="@+id/bubbleTabBarTopShowFollowers"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         android:background="@color/light_blue"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="16dp"
-        android:paddingTop="3dp">
-
-        <ImageView
-            android:id="@+id/dragFollowersSection"
-            android:gravity="center|center_horizontal"
-            android:layout_width="wrap_content"
+        android:elevation="16dp"
+        android:padding="3dp"
+        app:bubbletab_horizontal_padding="20dp"
+        app:bubbletab_title_size="16sp"
+        app:bubbletab_icon_padding="5sp"
+        app:bubbletab_vertical_padding="10dp"
+        app:bubbletab_tab_corner_radius="25dp">
+        <Button
+            android:id="@+id/backButtonFollowersSection"
+            android:padding="0dp"
+            android:drawableLeft="@drawable/ic_arrow_back"
+            android:background="@color/transparent"
+            android:layout_width="30dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_drag_sheet"/>
-
+            android:layout_marginStart="10dp">
+        </Button>
         <TextView
-            android:layout_below="@+id/dragFollowersSection"
-            android:id="@+id/followersSectionHeaderText"
-            android:gravity="center_horizontal"
+            android:id="@+id/naslovFollowers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:drawablePadding="8dp"
             android:text="Your followers"
-            android:textColor="@color/backgroundLightTheme"
+            android:gravity="center_vertical"
             android:textSize="18sp"
-            android:textStyle="bold"/>
-    </RelativeLayout>
+            android:textStyle="bold"
+            android:textColor="@color/backgroundLightTheme"
+            android:layout_marginBottom="2dp">
+        </TextView>
+    </io.ak1.BubbleTabBar>
 
-    <View
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/followersList"
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/postHeader" />
-
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/refreshLayoutFollowers"
+        android:layout_height="match_parent"
+        android:padding="5dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/rv_followers"
+        tools:itemCount="1"
         android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:nestedScrollingEnabled="false"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/followersList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/postHeader"
-            android:padding="5dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/rv_followers"
-            tools:itemCount="1"
-            android:layout_marginTop="10dp"
-            android:nestedScrollingEnabled="false"/>
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
