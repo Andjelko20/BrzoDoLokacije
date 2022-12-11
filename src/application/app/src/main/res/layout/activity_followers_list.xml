@@ -51,7 +51,6 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/bubbleTabBarTopShowFollowers"
         android:padding="5dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/rv_followers"
         tools:itemCount="1"
         android:layout_marginTop="10dp"

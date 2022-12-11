@@ -18,6 +18,7 @@ import com.example.brzodolokacije.Posts.Follower
 import com.example.brzodolokacije.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.android.synthetic.main.activity_followers_list.*
 import retrofit2.Call
 import retrofit2.Response
 import javax.security.auth.callback.Callback
@@ -55,13 +56,15 @@ class FollowersListActivity : AppCompatActivity() {
                         val typeToken = object : TypeToken<List<Follower>>() {}.type
                         val followersList = Gson().fromJson<List<Follower>>(followersListStr, typeToken)
 
-                        val followersListRv = findViewById<RecyclerView>(R.id.followersListRv)
+                        Log.d("lista", followersList.toString())
+
                         followersListRv.apply {
-                            mylayoutManager = LinearLayoutManager(context)
+                            mylayoutManager = LinearLayoutManager(this@FollowersListActivity)
                             recyclerView=findViewById(R.id.followersListRv)
-                            myAdapter = FollowersAdapter(followersList, context)
-                            recyclerView.layoutManager=layoutManager
+                            myAdapter = FollowersAdapter(followersList, this@FollowersListActivity)
+                            recyclerView.layoutManager=mylayoutManager
                             recyclerView.adapter=myAdapter
+                            recyclerView.setHasFixedSize(true)
                         }
 
 //                        Log.d("items", followersListRv.adapter?.getItemCount().toString())

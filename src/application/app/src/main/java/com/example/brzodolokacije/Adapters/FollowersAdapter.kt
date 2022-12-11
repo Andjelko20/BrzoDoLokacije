@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,6 +32,7 @@ class FollowersAdapter(val followersList : List<Follower>, val context : Context
             val followerUsername = itemView.findViewById<TextView>(R.id.followerUsername)
             val wholeFollower = itemView.findViewById<LinearLayout>(R.id.followerLinLayout)
 
+//            Log.d("follower", follower.follower)
             Picasso.get().load(Constants.BASE_URL + "User/avatar/" + follower.follower).into(followerPfp)
             followerUsername.text=follower.follower
 
