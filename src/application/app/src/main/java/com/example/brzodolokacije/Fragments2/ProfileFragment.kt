@@ -173,7 +173,6 @@ class ProfileFragment : Fragment() {
                             activity?.let{
                                 val intent = Intent (it, FollowersListActivity::class.java)
                                 it.startActivity(intent)
-                                HomeFragmentState.shouldSave(false)
                             }
                         }
 
