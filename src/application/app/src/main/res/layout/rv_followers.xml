@@ -17,7 +17,7 @@
         android:layout_margin="4dp">
 
         <LinearLayout
-            android:id="@+id/followers"
+            android:id="@+id/followerLinLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -38,7 +38,7 @@
                 android:layout_marginTop="10dp"/>
 
             <TextView
-                android:id="@+id/follower"
+                android:id="@+id/followerUsername"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="22dp"
