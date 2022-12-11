@@ -137,7 +137,7 @@ class HomeFragment : Fragment() {
 
                 savePosition(lastPosition,topViewRv)
 //                Toast.makeText(requireActivity(),isLoading.toString(),Toast.LENGTH_SHORT).show()
-                if(!isLoading && page < HomeFragmentState.returnMaxPages())
+                if((!isLoading) && (page+1 <= HomeFragmentState.returnMaxPages()))
                 {
                     val lastCompletelyVisible = (homePostsRv.layoutManager as? LinearLayoutManager)?.findLastCompletelyVisibleItemPosition()!!
                     if(lastCompletelyVisible == feed.size-1)
@@ -206,6 +206,17 @@ class HomeFragment : Fragment() {
                 else
                 {
 //                    Toast.makeText(requireActivity(),"You don't follow anyone",Toast.LENGTH_SHORT).show()
+                    val praznaLista= mutableListOf<Photo?>();
+                    feed=praznaLista;
+                    HomeFragmentState.list(feed)
+                    homePostsRv.apply {
+                        mylayoutManager = LinearLayoutManager(context) //activity
+                        recyclerView=view.findViewById(R.id.homePostsRv)
+                        recyclerView.layoutManager=mylayoutManager
+                        recyclerView.setHasFixedSize(true)
+                        myAdapter = this.context?.let { HomePostAdapter(feed,it,requireActivity()) }
+                        recyclerView.adapter=myAdapter
+                    }
                     view.findViewById<ProgressBar>(R.id.progressBar).setVisibility(View.GONE)
                     view.findViewById<LinearLayout>(R.id.notFollowingAnyoneHomeFragment).setVisibility(View.VISIBLE)
                     view.findViewById<TextView>(R.id.endlessTextHomeFragment).isSelected = true
@@ -273,7 +284,7 @@ class HomeFragment : Fragment() {
                         val typeToken = object : TypeToken<PaginationResponse>() {}.type
                         val pagination = Gson().fromJson<PaginationResponse>(listOfPhotosStr, typeToken)
                         val photosList  = pagination.posts
-                        //HomeFragmentState.changeMaxPages(pagination.numberOfPages)
+                        HomeFragmentState.changeMaxPages(pagination.numberOfPages)
                         var i = 0
                         var j = 0
                         var flag = true
