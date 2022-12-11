@@ -108,6 +108,7 @@ class ProfileVisitActivity : AppCompatActivity() {
                             }
 
                             follow.setOnClickListener{
+                                HomeFragmentState.shouldSave(false)
                                 retrofit.followUnfollow(username).enqueue(object: Callback<DefaultResponse>
                                 {
                                     override fun onResponse(

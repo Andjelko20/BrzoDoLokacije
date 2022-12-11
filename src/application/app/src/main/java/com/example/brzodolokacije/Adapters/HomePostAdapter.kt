@@ -145,60 +145,8 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
                 }
                 if(HomeFragmentState.likesOpened)
                 {
-                    HomeFragmentState.likesOpened = false
-
-                    val view : View = LayoutInflater.from(context).inflate(R.layout.fragment_like_section,null)
-//                    loadLikes(view,photo)
-                    val likesList = HomeFragmentState.likes!!
-
-                    val likesRv = view.findViewById<RecyclerView>(R.id.rv_likes)
-                    likesRv.apply{
-                        val recyclerView = view.findViewById<RecyclerView>(R.id.rv_likes)
-                        recyclerView.layoutManager = LinearLayoutManager(context)
-                        recyclerView.setHasFixedSize(true)
-                        recyclerView.adapter = LikesAdapter(likesList,context,activity)
-                    }
-//                    rvLikes.adapter = LikesAdapter(likesList,context,activity)
-//                    rvLikes.layoutManager=LinearLayoutManager(context)
-                    likesRv.stopScroll()
-                    val lastPosition = HomeFragmentState.lastPosition
-                    val offset = HomeFragmentState.offset
-                    (likesRv.layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(lastPosition,offset)
-
-                    likesRv.addOnScrollListener(object : RecyclerView.OnScrollListener(){
-                        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                            super.onScrolled(recyclerView, dx, dy)
-
-                            val lp = (likesRv.layoutManager as? LinearLayoutManager)?.findFirstVisibleItemPosition()!!
-                            val v = (likesRv.layoutManager as? LinearLayoutManager)?.getChildAt(0)
-                            val off = if(v == null) 0 else v.top - (likesRv.layoutManager as? LinearLayoutManager)?.paddingTop!!
-
-                            HomeFragmentState.lastPosition=lp
-                            HomeFragmentState.offset = off
-                        }
-                    })
-
-                    //refreshing the list of likes
-                    val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayoutLikes)
-                    refresh.setOnRefreshListener {
-                        android.os.Handler(Looper.getMainLooper()).postDelayed({
-
-                            loadLikes(view,photo)
-                            refreshPost(itemView,photo)
-                            refresh.isRefreshing = false
-                            HomeFragmentState.lastPosition = 0
-                            HomeFragmentState.offset = 0
-                        }, 1500)
-                    }
-                    val dialog = BottomSheetDialog(activity)
-                    dialog.setContentView(view)
-                    dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
-                    //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
-                    dialog.show()
-
-                    refreshPost(itemView,photo)
+                    showLikesWhereWeLeftOff(photo, itemView)
                 }
-/////////////////////////////////////////////////////////////////////////////////////////////////
 
                 //list and number of comments
                 if(photo.numberOfComments != 0) comments.text="View all ${photo.numberOfComments} comments"
@@ -257,76 +205,9 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
                 }
                 if(HomeFragmentState.commentsOpened)
                 {
-                    HomeFragmentState.commentsOpened = false
-//                    Log.d("position3", HomeFragmentState.lastPosition.toString()+" "+HomeFragmentState.offset.toString())
-
-                    val view : View = LayoutInflater.from(context).inflate(R.layout.fragment_comment,null)
-//                    loadComments(view,photo)
-                    val commentsList = HomeFragmentState.comments!!
-
-                    val commentsRv = view.findViewById<RecyclerView>(R.id.rv_comments)
-                    commentsRv.apply {
-                        val recyclerView = view.findViewById<RecyclerView>(R.id.rv_comments)
-                        recyclerView.layoutManager = LinearLayoutManager(context)
-                        recyclerView.setHasFixedSize(true)
-                        recyclerView.adapter = CommentsAdapter(commentsList,context,activity)
-                    }
-                    commentsRv.stopScroll()
-                    val lastPosition = HomeFragmentState.lastPosition
-                    val offset = HomeFragmentState.offset
-//                    Toast.makeText(activity,lastPosition.toString()+" "+offset.toString(),Toast.LENGTH_SHORT).show()
-                    HomeFragmentState.lastPosition = 0
-                    HomeFragmentState.offset = 0
-                    (commentsRv.layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(lastPosition,offset)
-
-                    commentsRv.addOnScrollListener(object : RecyclerView.OnScrollListener(){
-                        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                            super.onScrolled(recyclerView, dx, dy)
-
-                            val lp = (commentsRv.layoutManager as? LinearLayoutManager)?.findFirstVisibleItemPosition()!!
-                            val v = (commentsRv.layoutManager as? LinearLayoutManager)?.getChildAt(0)
-                            val off = if(v == null) 0 else v.top - (commentsRv.layoutManager as? LinearLayoutManager)?.paddingTop!!
-
-                            HomeFragmentState.lastPosition=lp
-                            HomeFragmentState.offset = off
-                        }
-                    })
-
-                    //adding a new comment
-                    val addCommentButton = view.findViewById<ImageView>(R.id.addCommentBtn)
-                    val addCommentText = view.findViewById<EditText>(R.id.addCommentText)
-                    addCommentButton.setOnClickListener{
-                        if(addCommentText.text.toString()!="")
-                        {
-                            val ct=addCommentText.text.toString().trim()
-                            val newComment = NewCommentDto(photo.id,ct)
-                            addNewComment(view,photo,newComment,itemView)
-                            refreshPost(itemView,photo)
-                            HomeFragmentState.lastPosition = 0
-                            HomeFragmentState.offset = 0
-                        }
-                    }
-                    //refreshing the list of comments
-                    val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayoutComments)
-                    refresh.setOnRefreshListener {
-                        android.os.Handler(Looper.getMainLooper()).postDelayed({
-
-                            loadComments(view,photo)
-                            refreshPost(itemView,photo)
-                            refresh.isRefreshing = false
-                            HomeFragmentState.lastPosition = 0
-                            HomeFragmentState.offset = 0
-                        }, 1500)
-                    }
-                    val dialog = BottomSheetDialog(activity)
-                    dialog.setContentView(view)
-                    dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
-                    //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
-                    dialog.show()
-                    refreshPost(itemView,photo)
-                    (commentsRv.layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(lastPosition,offset)
+                    showCommentsWhereWeLeftOff(photo, itemView)
                 }
-///////////////////////////////////////////////////////////////////////////////
+
                 //image in the post
                 val imagePath=Constants.BASE_URL+"Post/postPhoto/${photo.id}"
                 Picasso.get().load(imagePath).into(image);
@@ -551,6 +432,135 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
 
         })
     }
+
+    private fun showCommentsWhereWeLeftOff(photo : Photo, itemView: View)
+    {
+        HomeFragmentState.commentsOpened = false
+//                    Log.d("position3", HomeFragmentState.lastPosition.toString()+" "+HomeFragmentState.offset.toString())
+
+        val view : View = LayoutInflater.from(context).inflate(R.layout.fragment_comment,null)
+//                    loadComments(view,photo)
+        val commentsList = HomeFragmentState.comments!!
+
+        val commentsRv = view.findViewById<RecyclerView>(R.id.rv_comments)
+        commentsRv.apply {
+            val recyclerView = view.findViewById<RecyclerView>(R.id.rv_comments)
+            recyclerView.layoutManager = LinearLayoutManager(context)
+            recyclerView.setHasFixedSize(true)
+            recyclerView.adapter = CommentsAdapter(commentsList,context,activity)
+        }
+        commentsRv.stopScroll()
+        val lastPosition = HomeFragmentState.lastPosition
+        val offset = HomeFragmentState.offset
+//                    Toast.makeText(activity,lastPosition.toString()+" "+offset.toString(),Toast.LENGTH_SHORT).show()
+        HomeFragmentState.lastPosition = 0
+        HomeFragmentState.offset = 0
+        (commentsRv.layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(lastPosition,offset)
+
+        commentsRv.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val lp = (commentsRv.layoutManager as? LinearLayoutManager)?.findFirstVisibleItemPosition()!!
+                val v = (commentsRv.layoutManager as? LinearLayoutManager)?.getChildAt(0)
+                val off = if(v == null) 0 else v.top - (commentsRv.layoutManager as? LinearLayoutManager)?.paddingTop!!
+
+                HomeFragmentState.lastPosition=lp
+                HomeFragmentState.offset = off
+            }
+        })
+
+        //adding a new comment
+        val addCommentButton = view.findViewById<ImageView>(R.id.addCommentBtn)
+        val addCommentText = view.findViewById<EditText>(R.id.addCommentText)
+        addCommentButton.setOnClickListener{
+            if(addCommentText.text.toString()!="")
+            {
+                val ct=addCommentText.text.toString().trim()
+                val newComment = NewCommentDto(photo.id,ct)
+                addNewComment(view,photo,newComment,itemView)
+                refreshPost(itemView,photo)
+                HomeFragmentState.lastPosition = 0
+                HomeFragmentState.offset = 0
+            }
+        }
+        //refreshing the list of comments
+        val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayoutComments)
+        refresh.setOnRefreshListener {
+            android.os.Handler(Looper.getMainLooper()).postDelayed({
+
+                loadComments(view,photo)
+                refreshPost(itemView,photo)
+                refresh.isRefreshing = false
+                HomeFragmentState.lastPosition = 0
+                HomeFragmentState.offset = 0
+            }, 1500)
+        }
+        val dialog = BottomSheetDialog(activity)
+        dialog.setContentView(view)
+        dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
+        dialog.show()
+        refreshPost(itemView,photo)
+        (commentsRv.layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(lastPosition,offset)
+    }
+
+    private fun showLikesWhereWeLeftOff(photo: Photo, itemView: View)
+    {
+        HomeFragmentState.likesOpened = false
+
+        val view : View = LayoutInflater.from(context).inflate(R.layout.fragment_like_section,null)
+//                    loadLikes(view,photo)
+        val likesList = HomeFragmentState.likes!!
+
+        val likesRv = view.findViewById<RecyclerView>(R.id.rv_likes)
+        likesRv.apply{
+            val recyclerView = view.findViewById<RecyclerView>(R.id.rv_likes)
+            recyclerView.layoutManager = LinearLayoutManager(context)
+            recyclerView.setHasFixedSize(true)
+            recyclerView.adapter = LikesAdapter(likesList,context,activity)
+        }
+//                    rvLikes.adapter = LikesAdapter(likesList,context,activity)
+//                    rvLikes.layoutManager=LinearLayoutManager(context)
+        likesRv.stopScroll()
+        val lastPosition = HomeFragmentState.lastPosition
+        val offset = HomeFragmentState.offset
+        (likesRv.layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(lastPosition,offset)
+
+        likesRv.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val lp = (likesRv.layoutManager as? LinearLayoutManager)?.findFirstVisibleItemPosition()!!
+                val v = (likesRv.layoutManager as? LinearLayoutManager)?.getChildAt(0)
+                val off = if(v == null) 0 else v.top - (likesRv.layoutManager as? LinearLayoutManager)?.paddingTop!!
+
+                HomeFragmentState.lastPosition=lp
+                HomeFragmentState.offset = off
+            }
+        })
+
+        //refreshing the list of likes
+        val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayoutLikes)
+        refresh.setOnRefreshListener {
+            android.os.Handler(Looper.getMainLooper()).postDelayed({
+
+                loadLikes(view,photo)
+                refreshPost(itemView,photo)
+                refresh.isRefreshing = false
+                HomeFragmentState.lastPosition = 0
+                HomeFragmentState.offset = 0
+            }, 1500)
+        }
+        val dialog = BottomSheetDialog(activity)
+        dialog.setContentView(view)
+        dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
+        dialog.show()
+
+        refreshPost(itemView,photo)
+    }
+
     private fun currentTimeToLong(): Long {
         return System.currentTimeMillis()
     }

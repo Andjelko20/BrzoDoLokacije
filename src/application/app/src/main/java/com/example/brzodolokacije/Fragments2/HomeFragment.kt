@@ -7,10 +7,10 @@ import android.os.Looper
 import android.util.Log
 import android.view.*
 import android.widget.LinearLayout
-import androidx.fragment.app.Fragment
-import android.widget.Toast
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -21,8 +21,8 @@ import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.ModelsDto.PaginationResponse
-import com.example.brzodolokacije.Posts.Photo
 import com.example.brzodolokacije.Posts.HomeFragmentState
+import com.example.brzodolokacije.Posts.Photo
 import com.example.brzodolokacije.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -247,6 +247,8 @@ class HomeFragment : Fragment() {
     private fun loadMorePhotos(sessionManager : SessionManager,view : View)
     {
         page++
+        val last = sessionManager.fetchLast()
+        val lastOffset= sessionManager.fetchLastOffset()
         feed.add(null)
         myAdapter!!.notifyItemInserted(feed.size -1)
         ScrollToPosition(feed.size-1,0)
@@ -261,9 +263,12 @@ class HomeFragment : Fragment() {
                 if(response.body()?.error.toString() == "false")
                 {
                     Handler(Looper.getMainLooper()).postDelayed({
+                        val p = feed.size -1
                         feed.removeAt(feed.size-1)
-                        val last = sessionManager.fetchLast()
-                        val lastOffset= sessionManager.fetchLastOffset()
+                        recyclerView.post {
+                            myAdapter!!.notifyItemRemoved(p)
+                            recyclerView.setHasFixedSize(true)
+                        }
                         val listOfPhotosStr: String = response.body()?.message.toString()
                         val typeToken = object : TypeToken<PaginationResponse>() {}.type
                         val pagination = Gson().fromJson<PaginationResponse>(listOfPhotosStr, typeToken)
@@ -287,14 +292,24 @@ class HomeFragment : Fragment() {
                             if(flag)
                             {
                                 feed.add(photosList.get(i))
+                                recyclerView.post {
+                                    recyclerView.stopScroll()
+                                    myAdapter!!.notifyItemInserted(feed.size-1)
+                                    recyclerView.setHasFixedSize(true)
+                                    //ScrollToPosition(last,lastOffset)
+                                }
                             }
                             flag = true
                             i++
                         }
                         HomeFragmentState.list(feed)
-                        myAdapter!!.notifyDataSetChanged()
+//                        recyclerView.post {
+//                            recyclerView.stopScroll()
+//                            myAdapter!!.notifyDataSetChanged()
+//                            recyclerView.setHasFixedSize(true)
+//                            //ScrollToPosition(last,lastOffset)
+//                        }
                         isLoading=false
-                        ScrollToPosition(last,lastOffset)
 
                     }, 2000)
                 }
