@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Activities.ActivityAddPost
 import com.example.brzodolokacije.Activities.ActivityEditProfile
+import com.example.brzodolokacije.Activities.FollowersListActivity
 import com.example.brzodolokacije.Activities.MainActivity
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Constants.Constants
@@ -164,6 +165,14 @@ class ProfileFragment : Fragment() {
                         {
                             opis.setVisibility(View.GONE)
                             imeprezime.setVisibility(View.VISIBLE)
+                        }
+
+                        followersNum.setOnClickListener{
+                            activity?.let{
+                                val intent = Intent (it, FollowersListActivity::class.java)
+                                it.startActivity(intent)
+                                HomeFragmentState.shouldSave(false)
+                            }
                         }
 
 
