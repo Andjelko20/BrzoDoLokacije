@@ -53,5 +53,29 @@ namespace backend.Controllers
             });
         }
         
+        [HttpGet("myInbox")]
+        public async Task<ActionResult<string>> MyInbox()
+        {
+            var me = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
+            var messages = await _context.Messages.Where(m => m.SenderId == me.Id || m.ReceiverId == me.Id).OrderByDescending(m=>m.Date).ToListAsync();
+            List<InboxDto> messageDtos = new List<InboxDto>();
+            foreach (var message in messages)
+            {
+                messageDtos.Add(new InboxDto()
+                {
+                    ConvoWith= (message.ReceiverId == me.Id) ? (await _context.Users.FindAsync(message.SenderId)).Username : (await _context.Users.FindAsync(message.ReceiverId)).Username,
+                    MessagePreview = message.Content
+                });
+            }
+
+            messageDtos = messageDtos.GroupBy(m => m.ConvoWith).Select(x => x.First()).ToList();
+            string json = JsonSerializer.Serialize(messageDtos);
+            return Ok(new
+            {
+                error = false,
+                message = json
+            });
+        }
+
     }
 }
