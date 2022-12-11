@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
@@ -33,6 +34,7 @@ import com.google.gson.reflect.TypeToken
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.rv_photopost.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -99,6 +101,13 @@ class ShowPostActivity : AppCompatActivity() {
                         //location
                         postLocation.text = postDetails.location
 
+
+                        postOwnerUsername.setOnClickListener{
+
+                                val intent = Intent(this@ShowPostActivity,ProfileVisitActivity::class.java)
+                                intent.putExtra("visit",postOwnerUsername.text.toString())
+                                startActivity(intent)
+                        }
                         //likes
                         postNumberOfLikes.text = postDetails.numberOfLikes.toString()
                         if(postDetails.likedByMe) likeButton.setBackgroundResource(R.drawable.liked)
