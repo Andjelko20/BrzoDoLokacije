@@ -1,5 +1,6 @@
 package com.example.brzodolokacije.Fragments2
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.location.Location
@@ -11,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.example.brzodolokacije.API.Api
+import com.example.brzodolokacije.Activities.ShowPostActivity
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Constants.Constants
 import com.example.brzodolokacije.Managers.SessionManager
@@ -129,8 +131,8 @@ class ProfileVisitLocationsFragment : Fragment(),OnMapReadyCallback {
                         var i = 0
                         while(i < pins!!.size) {
                             val latLng = LatLng(pins[i].latitude.toDouble(), pins[i].longitude.toDouble())
-                            mMap.addMarker(MarkerOptions().position(latLng).title(pins[i].id.toString()))
-//                            loadImage(latLng, Constants.BASE_URL + "Post/postPhoto/" + pins[i].id.toString())
+//                            mMap.addMarker(MarkerOptions().position(latLng).title(pins[i].id.toString()))
+                            loadImage(latLng, Constants.BASE_URL + "Post/postPhoto/" + pins[i].id.toString(),pins[i].id.toString())
                             i++
                         }
                     }
@@ -148,7 +150,7 @@ class ProfileVisitLocationsFragment : Fragment(),OnMapReadyCallback {
         }
     }
 
-    private fun loadImage(longlat : LatLng, path : String)
+    private fun loadImage(longlat : LatLng, path : String,id : String)
     {
         //image.layoutParams.height=Constants.screenHeight
         val executor = Executors.newSingleThreadExecutor()
@@ -170,6 +172,12 @@ class ProfileVisitLocationsFragment : Fragment(),OnMapReadyCallback {
                             .position(longlat)
                             .icon(BitmapDescriptorFactory.fromBitmap(smallMarker!!))
                     )
+                    mMap.setOnMarkerClickListener {
+                        val intent = Intent(requireActivity(), ShowPostActivity::class.java)
+                        intent.putExtra("showPost", id);
+                        startActivity(intent)
+                        true
+                    }
 
                 }
             } catch (e: Exception) {
