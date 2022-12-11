@@ -24,6 +24,7 @@ import com.example.brzodolokacije.ModelsDto.PaginationResponse
 import com.example.brzodolokacije.Posts.HomeFragmentState
 import com.example.brzodolokacije.Posts.Photo
 import com.example.brzodolokacije.R
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -88,6 +89,7 @@ class HomeFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
         view.findViewById<LinearLayout>(R.id.notFollowingAnyoneHomeFragment).setVisibility(View.GONE)
+        view.findViewById<FloatingActionButton>(R.id.refreshPostHome).setVisibility(View.GONE)
         return view
     }
 
@@ -136,15 +138,38 @@ class HomeFragment : Fragment() {
                 topViewRv = if(v == null) 0 else v.top - (homePostsRv.layoutManager as? LinearLayoutManager)?.paddingTop!!
 
                 savePosition(lastPosition,topViewRv)
-//                Toast.makeText(requireActivity(),isLoading.toString(),Toast.LENGTH_SHORT).show()
-                if((!isLoading) && (page+1 <= HomeFragmentState.returnMaxPages()))
+                if(lastPosition==0 && topViewRv==0)
+                    view.findViewById<FloatingActionButton>(R.id.refreshPostHome).setVisibility(View.GONE)
+//                Toast.makeText(requireActivity(),lastPosition.toString()+" "+topViewRv.toString(),Toast.LENGTH_SHORT).show()
+                if(!isLoading)
                 {
-                    val lastCompletelyVisible = (homePostsRv.layoutManager as? LinearLayoutManager)?.findLastCompletelyVisibleItemPosition()!!
-                    if(lastCompletelyVisible == feed.size-1)
+                    if(page+1 <= HomeFragmentState.returnMaxPages())
                     {
-                        //bottom of the list, load more
-                        loadMorePhotos(sessionManager,view)
-                        isLoading = true
+                        val lastCompletelyVisible = (homePostsRv.layoutManager as? LinearLayoutManager)?.findLastCompletelyVisibleItemPosition()!!
+                        if(lastCompletelyVisible == feed.size-1)
+                        {
+                            //bottom of the list, load more
+                            loadMorePhotos(sessionManager,view)
+                            isLoading = true
+                        }
+                    }
+                    else
+                    {
+                        if(sessionManager.fetchLast()==feed.size-2)
+                        {
+                            val backToTop=view.findViewById<FloatingActionButton>(R.id.refreshPostHome)
+                            backToTop.setVisibility(View.VISIBLE)
+                            backToTop.setOnClickListener{
+                                recyclerView.stopScroll()
+                                ScrollToPosition(0,0)
+                                refresh.isRefreshing = true
+                                Handler(Looper.getMainLooper()).postDelayed({
+                                    requestLoadFeed(view)
+                                    refresh.isRefreshing = false
+                                }, 1500)
+                            }
+                        }
+                        else view.findViewById<FloatingActionButton>(R.id.refreshPostHome).setVisibility(View.GONE)
                     }
                 }
             }

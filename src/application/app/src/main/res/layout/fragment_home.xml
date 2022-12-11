@@ -99,4 +99,18 @@
             android:rotation="-15"/>
 
     </LinearLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/refreshPostHome"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:backgroundTint="@color/postHeader"
+        android:hapticFeedbackEnabled="false"
+        android:src="@drawable/ic_go_to_top"
+        app:fabCustomSize="40dp"
+        app:maxImageSize="30dp"
+        app:tint="@color/text_dark"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
