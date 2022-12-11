@@ -34,7 +34,6 @@ class FollowersAdapter(val followersList : List<Follower>, val context : Context
             Picasso.get().load(Constants.BASE_URL + "User/avatar/" + follower.follower).into(followerPfp)
             followerUsername.text=follower.follower
 
-            //mozda ne treba
             wholeFollower.setOnClickListener{
                 val intent = Intent(context, ProfileVisitActivity::class.java)
                 intent.putExtra("visit",follower.follower)

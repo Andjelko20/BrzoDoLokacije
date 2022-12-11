@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -131,6 +132,7 @@ class ProfileFragment : Fragment() {
                         val gson = Gson()
                         val userProfileInfo: UserProfile = gson.fromJson(userProfileInfoStr, UserProfile::class.java)
 
+                        val followersLayout = view.findViewById<LinearLayout>(R.id.prviDeoFollowers)
                         val username = view.findViewById<TextView>(R.id.username)
                         val postsNum = view.findViewById<TextView>(R.id.postsNum)
                         val followersNum = view.findViewById<TextView>(R.id.followersNum)
@@ -167,7 +169,7 @@ class ProfileFragment : Fragment() {
                             imeprezime.setVisibility(View.VISIBLE)
                         }
 
-                        followersNum.setOnClickListener{
+                        followersLayout.setOnClickListener{
                             activity?.let{
                                 val intent = Intent (it, FollowersListActivity::class.java)
                                 it.startActivity(intent)
