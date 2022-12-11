@@ -264,6 +264,7 @@ class MainActivity : AppCompatActivity() {
             HomeFragmentState.shouldSave(false)
 //            HomeFragmentState.saveFeed("")
             HomeFragmentState.list(null)
+            finishAffinity()
             finish()
         } /*else {
             Toast.makeText(this, "Press back again to leave the app.", Toast.LENGTH_SHORT).show()
