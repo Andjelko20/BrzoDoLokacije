@@ -62,7 +62,7 @@ class PostsByLocationActivity : AppCompatActivity() {
                         startActivity(intent)
                         true
                     }
-                    R.id.deleteAccountMeni ->{
+                    R.id.dateMeni ->{
                         val intent = Intent(this, PostsByLocationActivity::class.java)
                         intent.putExtra("location",lokacija)
                         intent.putExtra("filter","date")
