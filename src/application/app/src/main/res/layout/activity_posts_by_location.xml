@@ -43,17 +43,23 @@
         </TextView>
     </io.ak1.BubbleTabBar>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/PostsByLocationRv"
+    <FrameLayout
+        android:id="@+id/PostsByLocationHolder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/bubbleTabBarTopLocation"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bubbleTabBarTopLocation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="1dp"
-        android:layout_marginEnd="1dp"
-        android:paddingTop="1dp"
-        tools:listitem="@layout/rv_profilepost"/>
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/PostsByLocationRv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="1dp"
+            android:layout_marginEnd="1dp"
+            android:paddingTop="1dp"
+            tools:listitem="@layout/rv_profilepost"
+            android:layout_marginBottom="50dp"/>
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
