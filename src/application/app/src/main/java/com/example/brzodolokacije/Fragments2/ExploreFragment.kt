@@ -95,12 +95,7 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
             .commit()
 
 
-        val goToLocationPosts = view.findViewById<FloatingActionButton>(R.id.goToLocationPosts)
-        goToLocationPosts.setOnClickListener{
-            Log.d("clicked", "")
-            val intent = Intent(requireActivity(), PostsByLocationActivity::class.java)
-            startActivity(intent)
-        }
+
 
         searchMap.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -110,6 +105,13 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
                 Log.d("Lokacija",location)
                 if (location != null || location == "") {
                     mMap.clear()
+                    val goToLocationPosts = view.findViewById<FloatingActionButton>(R.id.goToLocationPosts)
+                    goToLocationPosts.setOnClickListener{
+                        Log.d("clicked", "")
+                        val intent = Intent(requireActivity(), PostsByLocationActivity::class.java)
+                        intent.putExtra("location",location)
+                        startActivity(intent)
+                    }
                     val geocoder = Geocoder(activity)
                     try {
                         addressList = geocoder.getFromLocationName(location, 1)
