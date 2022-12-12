@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.brzodolokacije.Activities.ProfileVisitActivity
 import com.example.brzodolokacije.Constants.Constants
 import com.example.brzodolokacije.Posts.Follower
 import com.example.brzodolokacije.Posts.Like
@@ -33,14 +34,13 @@ class FollowersAdapter(val followersList : List<Follower>, val context : Context
             Picasso.get().load(Constants.BASE_URL + "User/avatar/" + follower.follower).into(followerPfp)
             followerUsername.text=follower.follower
 
-//            //mozda ne treba
-//            wholeFollower.setOnClickListener{
-//                val intent = Intent(context, ProfileVisitActivity::class.java)
-//                intent.putExtra("visit",follower.follower)
-//                Handler(Looper.getMainLooper()).postDelayed({
-//                    context.startActivity(intent)
-//                }, 30)
-//            }
+            wholeFollower.setOnClickListener{
+                val intent = Intent(context, ProfileVisitActivity::class.java)
+                intent.putExtra("visit",follower.follower)
+                Handler(Looper.getMainLooper()).postDelayed({
+                    context.startActivity(intent)
+                }, 30)
+            }
         }
     }
 
