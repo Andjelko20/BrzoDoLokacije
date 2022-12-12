@@ -15,7 +15,6 @@
         android:layout_height="wrap_content"
         android:background="@color/light_blue"
         android:gravity="center"
-        android:orientation="horizontal"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:paddingBottom="16dp"
@@ -24,7 +23,7 @@
         <ImageView
             android:id="@+id/dragFollowerSection"
             android:gravity="center|center_horizontal"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_drag_sheet"/>
 
@@ -32,11 +31,11 @@
             android:layout_below="@+id/dragFollowerSection"
             android:id="@+id/followerSectionHeaderText"
             android:gravity="center_horizontal"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
+            android:text="Followers"
             android:drawablePadding="8dp"
-            android:text="    Your followers"
             android:textColor="@color/backgroundLightTheme"
             android:textSize="18sp"
             android:textStyle="bold"/>
