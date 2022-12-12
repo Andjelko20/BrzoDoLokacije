@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.recyclerview.widget.RecyclerView
 import com.example.brzodolokacije.API.Api
+import com.example.brzodolokacije.Adapters.ProfilePostsAdapter
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.PostDetails
@@ -20,6 +22,11 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class PostsByLocationActivity : AppCompatActivity() {
+
+    private var myAdapter : RecyclerView.Adapter<ProfilePostsAdapter.MainViewHolder>? = null
+    private var mylayoutManager : RecyclerView.LayoutManager? = null
+    private lateinit var recyclerView : RecyclerView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_posts_by_location)
@@ -46,6 +53,16 @@ class PostsByLocationActivity : AppCompatActivity() {
                     val typeToken = object : TypeToken<List<PostDetails>>() {}.type
                     val posts = Gson().fromJson<List<PostDetails>>(listOfPosts, typeToken)
                     Log.d("lista",posts.toString())
+
+                    val postsIds = mutableListOf<Int>()
+                    var i = 0
+                    while(i < posts.size)
+                    {
+                        postsIds.add(posts[i].id)
+//                        Log.d("proba", posts[i].id.toString())
+                    }
+
+                    Log.d("ids",postsIds.toString())
                 }
             }
 
