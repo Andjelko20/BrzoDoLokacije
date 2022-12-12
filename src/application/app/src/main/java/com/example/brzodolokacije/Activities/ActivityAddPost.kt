@@ -203,7 +203,8 @@ class ActivityAddPost : AppCompatActivity() {
     fun bitmapToFile(bitmap: Bitmap, fileNameToSave: String): File? {
         var file: File? = null
         return try {
-            file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() + File.separator + fileNameToSave)
+            val cacheDir = getCacheDir()
+            file = File(cacheDir.toString() + File.separator + fileNameToSave)
             file.createNewFile()
 
             val bos = ByteArrayOutputStream()
