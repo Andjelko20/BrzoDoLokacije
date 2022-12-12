@@ -50,6 +50,7 @@ class ActivityEditProfile : AppCompatActivity() {
     var pickedPhoto : Uri? = null
     var pickedBitMap : Bitmap? = null
     var file: File? = null
+    var fileNameToSave: String = "slika.jpeg"
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -105,6 +106,14 @@ class ActivityEditProfile : AppCompatActivity() {
                         if(response.body()?.error.toString() == "false")
                         {
 //                            Log.d("uspesno", "")
+                            val fdelete = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() + File.separator + fileNameToSave)
+                            if (fdelete.exists()) {
+                                if (fdelete.delete()) {
+                                    System.out.println("file deleted")
+                                } else {
+                                    System.out.println("file not deleted")
+                                }
+                            }
                             sendData(newData, sessionManager, retrofit)
                         }
                         else if(response.body()?.error.toString() == "true")
@@ -222,13 +231,13 @@ class ActivityEditProfile : AppCompatActivity() {
                     pickedBitMap = ImageDecoder.decodeBitmap(source)
                     editProfilePicture.setImageBitmap(pickedBitMap)
 
-                    file = bitmapToFile(pickedBitMap!!, "slika.jpeg")
+                    file = bitmapToFile(pickedBitMap!!, fileNameToSave)
                 }
                 else {
                     pickedBitMap = MediaStore.Images.Media.getBitmap(this.contentResolver,pickedPhoto)
                     editProfilePicture.setImageBitmap(pickedBitMap)
 
-                    file = bitmapToFile(pickedBitMap!!, "slika.jpeg")
+                    file = bitmapToFile(pickedBitMap!!, fileNameToSave)
                 }
             }
         }
