@@ -95,6 +95,7 @@ class DirectMessageFragment : Fragment() {
             if(isDirect=="direct message") requireActivity().finish()
         }
 
+        signalRListener.setDirectMessage(true)
         signalRListener.setRecycleView(rvMessages)
         signalRListener.setContext(context)
         signalRListener.setActivity(requireActivity())

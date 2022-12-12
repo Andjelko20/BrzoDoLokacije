@@ -24,7 +24,6 @@ class InboxAdapter(chatList : MutableList<InboxDto>, val context : Context, val 
     inner class MainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     {
         fun bindData(chat : InboxDto, index: Int) {
-
             val ownerImage = itemView.findViewById<CircleImageView>(R.id.chatOwnerPhoto)
             val owner = itemView.findViewById<TextView>(R.id.chatOwnerUsername)
             val text = itemView.findViewById<TextView>(R.id.lastMessageText)

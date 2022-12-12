@@ -15,12 +15,14 @@ import com.example.brzodolokacije.Adapters.HomePostAdapter
 import com.example.brzodolokacije.Adapters.InboxAdapter
 import com.example.brzodolokacije.Adapters.MessageAdapter
 import com.example.brzodolokacije.Client.Client
+import com.example.brzodolokacije.Managers.SignalRListener
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.ModelsDto.InboxDto
 import com.example.brzodolokacije.ModelsDto.MessageDto
 import com.example.brzodolokacije.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.android.synthetic.main.fragment_direct_message.*
 import retrofit2.Call
 import retrofit2.Response
 
@@ -40,6 +42,7 @@ class InboxFragment : Fragment() {
     private var param2: String? = null
 
     private lateinit var chatList : MutableList<InboxDto>
+    private lateinit var signalRListener : SignalRListener
 
     private var myMessageAdapter : RecyclerView.Adapter<InboxAdapter.MainViewHolder>? = null
     private var mylayoutManager : RecyclerView.LayoutManager? = null
@@ -60,17 +63,23 @@ class InboxFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_inbox, container, false)
         val list : MutableList<InboxDto> = mutableListOf()
+        signalRListener = SignalRListener.getInstance()
         chatList = list
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        val rvInbox= view.findViewById<RecyclerView>(R.id.rvInbocChats)
         val exitInbox= view.findViewById<Button>(R.id.exitInbox)
         exitInbox.setOnClickListener{
             requireActivity().finish()
         }
+
+        signalRListener.setDirectMessage(false)
+        signalRListener.setRecycleView(rvInbox)
+        signalRListener.setContext(context)
+        signalRListener.setActivity(requireActivity())
 
         val retrofit = Client(requireActivity()).buildService(Api::class.java)
         retrofit.getInbox().enqueue(object: retrofit2.Callback<DefaultResponse>
@@ -86,10 +95,10 @@ class InboxFragment : Fragment() {
                     val typeToken = object : TypeToken<MutableList<InboxDto>>() {}.type
                     val inbox = Gson().fromJson<MutableList<InboxDto>>(res, typeToken)
                     chatList = inbox
+                    signalRListener.setListInbox(chatList)
                     //Log.d("inbox",inbox.toString())
-                    val rvInbox= view.findViewById<RecyclerView>(R.id.rvInbocChats)
-                    rvInbox.layoutManager = LinearLayoutManager(context)
-                    rvInbox.adapter = context?.let { InboxAdapter(chatList, it,requireActivity()) }
+//                    rvInbox.layoutManager = LinearLayoutManager(context)
+//                    rvInbox.adapter = context?.let { InboxAdapter(chatList, it,requireActivity()) }
                 }
                 else
                 {
