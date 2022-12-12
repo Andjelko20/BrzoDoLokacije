@@ -49,12 +49,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:text="chatOwner"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_dark"
                     android:clickable="true"
-                    android:focusable="true"/>
+                    android:focusable="true"
+                    android:text="chatOwner"
+                    android:textColor="@color/text_dark"
+                    android:textSize="20sp"
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/lastMessageText"
@@ -62,11 +62,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
+                    android:layout_marginBottom="3dp"
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:text="Sve naj, ljubi brat! Nek ti se sve zelje ispune"
-                    android:textColor="@color/text_dark"
-                    android:textSize="18sp"/>
+                    android:textColor="#6a7877"
+                    android:textSize="15sp"/>
             </LinearLayout>
 
         </LinearLayout>
