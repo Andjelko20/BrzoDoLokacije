@@ -27,6 +27,8 @@ class PostsByLocationActivity : AppCompatActivity() {
     private var mylayoutManager : RecyclerView.LayoutManager? = null
     private lateinit var recyclerView : RecyclerView
 
+    private var postsIds : List<Int> = mutableListOf<Int>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_posts_by_location)
@@ -54,15 +56,7 @@ class PostsByLocationActivity : AppCompatActivity() {
                     val posts = Gson().fromJson<List<PostDetails>>(listOfPosts, typeToken)
                     Log.d("lista",posts.toString())
 
-                    val postsIds = mutableListOf<Int>()
-                    var i = 0
-                    while(i < posts.size)
-                    {
-                        postsIds.add(posts[i].id)
-//                        Log.d("proba", posts[i].id.toString())
-                    }
-
-                    Log.d("ids",postsIds.toString())
+                    //Log.d("ids",postsIds.toString())
                 }
             }
 

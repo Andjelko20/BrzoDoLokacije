@@ -102,16 +102,11 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
 
                 val location: String = searchMap.getQuery().toString().trim()
                 var addressList: List<Address>? = null
-                Log.d("Lokacija",location)
+//                Log.d("Lokacija",location)
                 if (location != null || location == "") {
+
                     mMap.clear()
-                    val goToLocationPosts = view.findViewById<FloatingActionButton>(R.id.goToLocationPosts)
-                    goToLocationPosts.setOnClickListener{
-                        Log.d("clicked", "")
-                        val intent = Intent(requireActivity(), PostsByLocationActivity::class.java)
-                        intent.putExtra("location",location)
-                        startActivity(intent)
-                    }
+
                     val geocoder = Geocoder(activity)
                     try {
                         addressList = geocoder.getFromLocationName(location, 1)
@@ -135,7 +130,15 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
 
                         else  sb.append(grad).append(", ").append(drzava)
 //                        mMap.addMarker(MarkerOptions().position(latLng).title(sb.toString()))
+                        val goToLocationPosts = view.findViewById<FloatingActionButton>(R.id.goToLocationPosts)
+                        goToLocationPosts.setOnClickListener{
+                            Log.d("clicked", "")
+                            val intent = Intent(requireActivity(), PostsByLocationActivity::class.java)
+                            intent.putExtra("location",sb.toString())
+                            startActivity(intent)
+                        }
                         val retrofit = Client(requireActivity()).buildService(Api::class.java)
+
                         retrofit.onMapLocation(sb.toString()).enqueue(object: Callback<DefaultResponse>{
                             override fun onResponse(
                                 call: Call<DefaultResponse>,
