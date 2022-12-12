@@ -75,7 +75,7 @@ class ShowPostActivity : AppCompatActivity() {
                     if(response.body()?.error.toString() == "false")
                     {
                         val postDetailsStr = response.body()?.message.toString()
-                        Log.d("data", postDetailsStr)
+//                        Log.d("data", postDetailsStr)
                         val gson = Gson()
                         val postDetails: PostDetails = gson.fromJson(postDetailsStr, PostDetails::class.java)
 
