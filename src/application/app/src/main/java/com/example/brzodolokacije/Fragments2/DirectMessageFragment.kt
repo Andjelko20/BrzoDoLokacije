@@ -1,6 +1,7 @@
 package com.example.brzodolokacije.Fragments2
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,6 +13,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.brzodolokacije.API.Api
@@ -20,6 +22,7 @@ import com.example.brzodolokacije.Adapters.HomePostAdapter
 import kotlinx.android.synthetic.main.fragment_direct_message.*
 import com.example.brzodolokacije.Adapters.MessageAdapter
 import com.example.brzodolokacije.Client.Client
+import com.example.brzodolokacije.Managers.InboxChatCommunicator
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Managers.SignalRListener
 import com.example.brzodolokacije.Models.DefaultResponse
@@ -67,6 +70,7 @@ class DirectMessageFragment : Fragment() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -93,6 +97,11 @@ class DirectMessageFragment : Fragment() {
         val exitDirectMessage = view.findViewById<Button>(R.id.exitDirectMessage)
         exitDirectMessage.setOnClickListener{
             if(isDirect=="direct message") requireActivity().finish()
+            else
+            {
+                val communicator = activity as InboxChatCommunicator
+                communicator.backToInbox()
+            }
         }
 
         signalRListener.setDirectMessage(true)
