@@ -1,5 +1,6 @@
 package com.example.brzodolokacije.Activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -33,6 +34,7 @@ class ChatActivity : AppCompatActivity() {
 
         val intent = getIntent()
         val username = intent.getStringExtra("messageUser")
+        val directMessage= intent.getStringExtra("directMessage")
 //        Log.d("username", username.toString())
 
         val bundle = Bundle()
@@ -41,7 +43,11 @@ class ChatActivity : AppCompatActivity() {
         val directMessageFragment = DirectMessageFragment()
         directMessageFragment.arguments = bundle
 
-        replaceFragment(directMessageFragment)
+        if(directMessage=="directMessage")
+        {
+            bundle.putString("directMessage","direct message")
+            replaceFragment(directMessageFragment)
+        }
     }
 
     private fun replaceFragment(fragment: Fragment) {
@@ -55,4 +61,14 @@ class ChatActivity : AppCompatActivity() {
         super.onDestroy()
         signalRListener.stopConnection()
     }
+//    override fun onBackPressed() { ne treba za sad
+//        super.onBackPressed()
+//        val intent = Intent(this@ProfileVisitActivity,MainActivity::class.java)
+//        if(backToProfile == "returnToProfile")
+//        {
+//            intent.putExtra("backToProfile", "returnToProfile")
+//        }
+//        startActivity(intent)
+//        finish()
+//    }
 }

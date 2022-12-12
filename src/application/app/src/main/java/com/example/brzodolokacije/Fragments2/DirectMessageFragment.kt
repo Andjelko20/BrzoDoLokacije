@@ -1,5 +1,6 @@
 package com.example.brzodolokacije.Fragments2
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -14,6 +15,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.brzodolokacije.API.Api
+import com.example.brzodolokacije.Activities.MainActivity
 import com.example.brzodolokacije.Adapters.HomePostAdapter
 import kotlinx.android.synthetic.main.fragment_direct_message.*
 import com.example.brzodolokacije.Adapters.MessageAdapter
@@ -47,6 +49,7 @@ class DirectMessageFragment : Fragment() {
     private var param2: String? = null
 
     private var user: String? = null
+    private lateinit var isDirect : String
 
     private lateinit var signalRListener : SignalRListener
     private lateinit var messageList : MutableList<MessageDto>
@@ -71,6 +74,7 @@ class DirectMessageFragment : Fragment() {
         val view =  inflater.inflate(R.layout.fragment_direct_message, container, false)
         val chatingWithUser = view.findViewById<TextView>(R.id.chatingWithUser)
         user = arguments?.getString("username").toString()
+        isDirect = arguments?.getString("directMessage").toString()
         chatingWithUser.text = user
 
         val list : MutableList<MessageDto> = mutableListOf()
@@ -88,7 +92,7 @@ class DirectMessageFragment : Fragment() {
 
         val exitDirectMessage = view.findViewById<Button>(R.id.exitDirectMessage)
         exitDirectMessage.setOnClickListener{
-            requireActivity().finish()
+            if(isDirect=="direct message") requireActivity().finish()
         }
 
         signalRListener.setRecycleView(rvMessages)
