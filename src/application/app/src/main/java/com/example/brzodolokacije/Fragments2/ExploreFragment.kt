@@ -21,6 +21,7 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Activities.ShowPostActivity
+import com.example.brzodolokacije.Activities.PostsByLocationActivity
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Constants.Constants
 import com.example.brzodolokacije.Managers.SessionManager
@@ -37,6 +38,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_maps.*
@@ -94,14 +96,18 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
             .commit()
 
 
+
+
         searchMap.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
 
                 val location: String = searchMap.getQuery().toString().trim()
                 var addressList: List<Address>? = null
-                Log.d("Lokacija",location)
+//                Log.d("Lokacija",location)
                 if (location != null || location == "") {
+
                     mMap.clear()
+
                     val geocoder = Geocoder(activity)
                     try {
                         addressList = geocoder.getFromLocationName(location, 1)
@@ -125,7 +131,14 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
 
                         else  sb.append(grad).append(", ").append(drzava)
 //                        mMap.addMarker(MarkerOptions().position(latLng).title(sb.toString()))
+                        val goToLocationPosts = view.findViewById<FloatingActionButton>(R.id.goToLocationPosts)
+                        goToLocationPosts.setOnClickListener{
+                            val intent = Intent(requireActivity(), PostsByLocationActivity::class.java)
+                            intent.putExtra("location",sb.toString())
+                            startActivity(intent)
+                        }
                         val retrofit = Client(requireActivity()).buildService(Api::class.java)
+
                         retrofit.onMapLocation(sb.toString()).enqueue(object: Callback<DefaultResponse>{
                             override fun onResponse(
                                 call: Call<DefaultResponse>,
