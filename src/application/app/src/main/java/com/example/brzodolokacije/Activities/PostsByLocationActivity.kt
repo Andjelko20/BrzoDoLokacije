@@ -80,10 +80,15 @@ class PostsByLocationActivity : AppCompatActivity() {
 
         var filterDto = FilterDto(lokacija,"")
         val filter = intent.getStringExtra("filter")
-        if(filter != "null")
+        Log.d("filter",filter.toString())
+        if(filter == "date")
         {
             filterDto = FilterDto(lokacija,"date")
         }
+//        else if(filter == "popularity")
+//        {
+//            filterDto = FilterDto(lokacija,"popularity")
+//        }
 
         retrofit.getByLocation(filterDto).enqueue(object : Callback<DefaultResponse>{
             override fun onResponse(
