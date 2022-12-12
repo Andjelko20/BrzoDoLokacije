@@ -60,6 +60,7 @@ class CommentsAdapter(commentList : List<Comment>, val context : Context, val ac
 //                Toast.makeText(activity,index.toString(),Toast.LENGTH_SHORT).show()
                 val intent = Intent(activity, ProfileVisitActivity::class.java)
                 intent.putExtra("visit",comment.owner)
+                intent.putExtra("saveHomeState","saveIt")
                 Handler(Looper.getMainLooper()).postDelayed({
                     activity.startActivity(intent)
                 }, 30)
@@ -71,6 +72,7 @@ class CommentsAdapter(commentList : List<Comment>, val context : Context, val ac
                 HomeFragmentState.lastPosition = index
                 val intent = Intent(activity, ProfileVisitActivity::class.java)
                 intent.putExtra("visit",comment.owner)
+                intent.putExtra("saveHomeState","saveIt")
                 Handler(Looper.getMainLooper()).postDelayed({
                     activity.startActivity(intent)
                 }, 30)

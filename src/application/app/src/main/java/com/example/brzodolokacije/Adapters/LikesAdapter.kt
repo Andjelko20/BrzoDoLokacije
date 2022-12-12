@@ -41,6 +41,29 @@ class LikesAdapter(val likesList : List<Like>, val context : Context, val activi
                 HomeFragmentState.lastPosition = index
                 val intent = Intent(activity, ProfileVisitActivity::class.java)
                 intent.putExtra("visit",like.owner)
+                intent.putExtra("saveHomeState","saveIt")
+                Handler(Looper.getMainLooper()).postDelayed({
+                    activity.startActivity(intent)
+                }, 30)
+            }
+            owner.setOnClickListener{
+                HomeFragmentState.shouldSave(true)
+                HomeFragmentState.likesOpened = true
+                HomeFragmentState.lastPosition = index
+                val intent = Intent(activity, ProfileVisitActivity::class.java)
+                intent.putExtra("visit",like.owner)
+                intent.putExtra("saveHomeState","saveIt")
+                Handler(Looper.getMainLooper()).postDelayed({
+                    activity.startActivity(intent)
+                }, 30)
+            }
+            ownerImage.setOnClickListener{
+                HomeFragmentState.shouldSave(true)
+                HomeFragmentState.likesOpened = true
+                HomeFragmentState.lastPosition = index
+                val intent = Intent(activity, ProfileVisitActivity::class.java)
+                intent.putExtra("visit",like.owner)
+                intent.putExtra("saveHomeState","saveIt")
                 Handler(Looper.getMainLooper()).postDelayed({
                     activity.startActivity(intent)
                 }, 30)

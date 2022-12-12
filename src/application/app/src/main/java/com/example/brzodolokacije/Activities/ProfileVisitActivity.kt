@@ -33,12 +33,14 @@ import retrofit2.Response
 class ProfileVisitActivity : AppCompatActivity() {
 
     private lateinit var username : String
+    private lateinit var shouldSave : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile_visit)
 
         username = intent.getStringExtra("visit").toString()
+        shouldSave=intent.getStringExtra("saveHomeState").toString()
 
         val profileVisitPostFragment = ProfileVisitPostsFragment()
         val profileVisitLocationsFragment = ProfileVisitLocationsFragment()
@@ -108,7 +110,7 @@ class ProfileVisitActivity : AppCompatActivity() {
                             }
 
                             follow.setOnClickListener{
-                                HomeFragmentState.shouldSave(false)
+                                if(shouldSave=="saveIt") HomeFragmentState.shouldSave(false)
                                 retrofit.followUnfollow(username).enqueue(object: Callback<DefaultResponse>
                                 {
                                     override fun onResponse(

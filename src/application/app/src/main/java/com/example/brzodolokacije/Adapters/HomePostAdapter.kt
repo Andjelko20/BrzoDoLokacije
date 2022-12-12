@@ -80,6 +80,7 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
                     HomeFragmentState.shouldSave(true)
                     val intent = Intent(activity,ProfileVisitActivity::class.java)
                     intent.putExtra("visit",photo.owner)
+                    intent.putExtra("saveHomeState","saveIt")
                     Handler(Looper.getMainLooper()).postDelayed({
                         activity.startActivity(intent)
                     }, 30)
