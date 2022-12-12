@@ -1,5 +1,6 @@
 package com.example.brzodolokacije.Fragments2
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -12,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.brzodolokacije.API.Api
+import com.example.brzodolokacije.Activities.ShowPostActivity
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Constants.Constants
 import com.example.brzodolokacije.Managers.SessionManager
@@ -20,10 +22,13 @@ import com.example.brzodolokacije.ModelsDto.PinDto
 import com.example.brzodolokacije.R
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -43,7 +48,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [LocationsFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class LocationsFragment : Fragment(),OnMapReadyCallback {
+class LocationsFragment : Fragment(),OnMapReadyCallback{
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -87,7 +92,7 @@ class LocationsFragment : Fragment(),OnMapReadyCallback {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_locations, container, false)
     }
-    private fun loadImage(longlat : LatLng, path : String)
+    private fun loadImage(longlat : LatLng, path : String,id : String)
     {
         //image.layoutParams.height=Constants.screenHeight
         val executor = Executors.newSingleThreadExecutor()
@@ -109,6 +114,14 @@ class LocationsFragment : Fragment(),OnMapReadyCallback {
                             .position(longlat)
                             .icon(BitmapDescriptorFactory.fromBitmap(smallMarker!!))
                     )
+                    mMap.setOnMarkerClickListener {
+                        val intent = Intent(requireActivity(), ShowPostActivity::class.java)
+                        intent.putExtra("showPost", id);
+                        startActivity(intent)
+                        true
+                    }
+
+
 
                 }
             } catch (e: Exception) {
@@ -167,8 +180,9 @@ class LocationsFragment : Fragment(),OnMapReadyCallback {
                         var i = 0
                         while(i < pins!!.size) {
                             val latLng = LatLng(pins[i].latitude.toDouble(), pins[i].longitude.toDouble())
-                            mMap.addMarker(MarkerOptions().position(latLng).title(pins[i].id.toString()))
-//                            loadImage(latLng, Constants.BASE_URL + "Post/postPhoto/" + pins[i].id.toString())
+//                            mMap.addMarker(MarkerOptions().position(latLng).title(pins[i].id.toString()))
+                            loadImage(latLng, Constants.BASE_URL + "Post/postPhoto/" + pins[i].id.toString(),pins[i].id.toString())
+
                             i++
                         }
 
@@ -182,4 +196,7 @@ class LocationsFragment : Fragment(),OnMapReadyCallback {
             })
         }
     }
+
+
+
 }
