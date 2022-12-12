@@ -51,6 +51,12 @@ class MainActivity : AppCompatActivity() {
             homeFragment = HomeFragment()
 //        }
         options_meni.setVisibility(View.GONE)
+        inboxIcon.setVisibility(View.VISIBLE)
+        inboxIcon.setOnClickListener{
+            val intent = Intent(this@MainActivity, ChatActivity::class.java)
+            intent.putExtra("inbox","inbox")
+            startActivity(intent)
+        }
 //        options_meni.setOnClickListener{
 //            val popupMenu = PopupMenu(wrapper, it)
 //            popupMenu.setOnMenuItemClickListener { item ->
@@ -86,6 +92,8 @@ class MainActivity : AppCompatActivity() {
         val provera = intent.getStringExtra("backToProfile");
         if (provera != null)
         {
+            replaceFragment(ProfileFragment())
+            inboxIcon.setVisibility(View.GONE)
             options_meni.setVisibility(View.VISIBLE)
             options_meni.setOnClickListener{
                 val popupMenu = PopupMenu(wrapper, it)
@@ -117,14 +125,21 @@ class MainActivity : AppCompatActivity() {
                 popupMenu.inflate(R.menu.meni)
                 popupMenu.show()
             }
-            replaceFragment(ProfileFragment()) //vraca na profil ako smo isli na edit profila
+//            replaceFragment(ProfileFragment()) //vraca na profil ako smo isli na edit profila
             bubbleTabBar.visibility = View.INVISIBLE;
             bubbleTabBar2.visibility = View.VISIBLE;
         }
         else
         {
+            replaceFragment(HomeFragment())
             options_meni.setVisibility(View.GONE)
-            replaceFragment(HomeFragment()) //ide na home kad prvi put otvorimo main i kad se vratimo iz bilo kod drugog aktivitija
+            inboxIcon.setVisibility(View.VISIBLE)
+            inboxIcon.setOnClickListener{
+                val intent = Intent(this@MainActivity, ChatActivity::class.java)
+                intent.putExtra("inbox","inbox")
+                startActivity(intent)
+            }
+//            replaceFragment(HomeFragment()) //ide na home kad prvi put otvorimo main i kad se vratimo iz bilo kod drugog aktivitija
             bubbleTabBar.visibility = View.VISIBLE;
             bubbleTabBar2.visibility = View.INVISIBLE;
         }
@@ -133,17 +148,27 @@ class MainActivity : AppCompatActivity() {
             override fun onBubbleClick(id: Int) {
                 when(id){
                     R.id.explore -> {
-                        options_meni.setVisibility(View.GONE)
                         replaceFragment(ExploreFragment())
+                        options_meni.setVisibility(View.GONE)
+                        inboxIcon.setVisibility(View.GONE)
+//                        replaceFragment(ExploreFragment())
                     }
 
                     R.id.home -> {
-                        options_meni.setVisibility(View.GONE)
                         replaceFragment(homeFragment!!)
+                        options_meni.setVisibility(View.GONE)
+                        inboxIcon.setVisibility(View.VISIBLE)
+                        inboxIcon.setOnClickListener{
+                            val intent = Intent(this@MainActivity, ChatActivity::class.java)
+                            intent.putExtra("inbox","inbox")
+                            startActivity(intent)
+                        }
+//                        replaceFragment(homeFragment!!)
                     } //ovde da proverim da l postoji sacuvano stanje
 
                     R.id.profile -> {
                         replaceFragment(ProfileFragment())
+                        inboxIcon.setVisibility(View.GONE)
                         options_meni.setVisibility(View.VISIBLE)
                         options_meni.setOnClickListener{
                             val popupMenu = PopupMenu(wrapper, it)
@@ -187,17 +212,27 @@ class MainActivity : AppCompatActivity() {
             override fun onBubbleClick(id: Int) {
                 when(id){
                     R.id.explore -> {
-                        options_meni.setVisibility(View.GONE)
                         replaceFragment(ExploreFragment())
+                        options_meni.setVisibility(View.GONE)
+                        inboxIcon.setVisibility(View.GONE)
+//                        replaceFragment(ExploreFragment())
                     }
 
                     R.id.home -> {
-                        options_meni.setVisibility(View.GONE)
                         replaceFragment(homeFragment!!)
+                        options_meni.setVisibility(View.GONE)
+                        inboxIcon.setVisibility(View.VISIBLE)
+                        inboxIcon.setOnClickListener{
+                            val intent = Intent(this@MainActivity, ChatActivity::class.java)
+                            intent.putExtra("inbox","inbox")
+                            startActivity(intent)
+                        }
+//                        replaceFragment(homeFragment!!)
                     } //ovde da proverim da li postoji sacuvano stanje
 
                     R.id.profile -> {
                         replaceFragment(ProfileFragment())
+                        inboxIcon.setVisibility(View.GONE)
                         options_meni.setVisibility(View.VISIBLE)
                         options_meni.setOnClickListener{
                             val popupMenu = PopupMenu(wrapper, it)

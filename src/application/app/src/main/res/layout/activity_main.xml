@@ -52,6 +52,17 @@
                 android:layout_marginRight="5dp"
                 android:visibility="visible"
                 />
+            <TextView
+                android:id="@+id/inboxIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_inbox_icon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginRight="5dp"
+                android:visibility="visible"
+                />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </io.ak1.BubbleTabBar>

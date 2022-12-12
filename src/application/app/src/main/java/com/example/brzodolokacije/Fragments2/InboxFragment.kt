@@ -1,11 +1,22 @@
 package com.example.brzodolokacije.Fragments2
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import com.example.brzodolokacije.API.Api
+import com.example.brzodolokacije.Client.Client
+import com.example.brzodolokacije.Models.DefaultResponse
+import com.example.brzodolokacije.ModelsDto.InboxDto
+import com.example.brzodolokacije.ModelsDto.MessageDto
 import com.example.brzodolokacije.R
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import retrofit2.Call
+import retrofit2.Response
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -36,6 +47,37 @@ class InboxFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_inbox, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val retrofit = Client(requireActivity()).buildService(Api::class.java)
+        retrofit.getInbox().enqueue(object: retrofit2.Callback<DefaultResponse>
+        {
+            override fun onResponse(
+                call: Call<DefaultResponse>,
+                response: Response<DefaultResponse>
+            ) {
+                if(response.body()?.error.toString() == "false")
+                {
+                    val res = response.body()?.message.toString()
+                    Log.d("inboxresponse", res.toString())
+                    val typeToken = object : TypeToken<MutableList<InboxDto>>() {}.type
+                    val inbox = Gson().fromJson<MutableList<InboxDto>>(res, typeToken)
+                    Log.d("inbox",inbox.toString())
+                }
+                else
+                {
+                    Toast.makeText(requireActivity(), "Unable to load inbox", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                Log.d("inboxError","")
+            }
+
+        })
     }
 
     companion object {

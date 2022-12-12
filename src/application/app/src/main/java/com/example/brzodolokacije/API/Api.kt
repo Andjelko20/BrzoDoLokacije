@@ -107,4 +107,7 @@ interface Api {
 
     @GET("User/followers/{username}")
     fun getFollowers(@Path("username") username : String) : Call<DefaultResponse>
+
+    @GET("Message/myInbox")
+    fun getInbox() : Call<DefaultResponse>
 }

@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.brzodolokacije.Fragments2.DirectMessageFragment
+import com.example.brzodolokacije.Fragments2.InboxFragment
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Managers.SignalRListener
 import com.example.brzodolokacije.R
@@ -35,18 +36,22 @@ class ChatActivity : AppCompatActivity() {
         val intent = getIntent()
         val username = intent.getStringExtra("messageUser")
         val directMessage= intent.getStringExtra("directMessage")
+        val inbox = intent.getStringExtra("inbox")
 //        Log.d("username", username.toString())
-
-        val bundle = Bundle()
-        bundle.putString("username", username)
-
-        val directMessageFragment = DirectMessageFragment()
-        directMessageFragment.arguments = bundle
-
         if(directMessage=="directMessage")
         {
+            val bundle = Bundle()
+            bundle.putString("username", username)
+
+            val directMessageFragment = DirectMessageFragment()
+            directMessageFragment.arguments = bundle
+
             bundle.putString("directMessage","direct message")
             replaceFragment(directMessageFragment)
+        }
+        else if(inbox=="inbox")
+        {
+            replaceFragment(InboxFragment())
         }
     }
 
