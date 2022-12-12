@@ -84,13 +84,6 @@ class ActivityMaps : AppCompatActivity(), OnMapReadyCallback {
 
         })
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
-        val goToLocationPosts = findViewById<FloatingActionButton>(R.id.goToLocationPosts)
-        goToLocationPosts.setOnClickListener{
-            Log.d("clicked", "")
-            val intent = Intent(this@ActivityMaps, PostsByLocationActivity::class.java)
-            startActivity(intent)
-        }
     }
 
     override fun onMapReady(googleMap: GoogleMap) {

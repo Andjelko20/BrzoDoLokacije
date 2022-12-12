@@ -1,6 +1,7 @@
 package com.example.brzodolokacije.Fragments2
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Bitmap
@@ -19,6 +20,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.example.brzodolokacije.API.Api
+import com.example.brzodolokacije.Activities.PostsByLocationActivity
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Constants.Constants
 import com.example.brzodolokacije.Managers.SessionManager
@@ -35,6 +37,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_maps.*
@@ -91,6 +94,13 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
             .add(R.id.maps, mapFragment)
             .commit()
 
+
+        val goToLocationPosts = view.findViewById<FloatingActionButton>(R.id.goToLocationPosts)
+        goToLocationPosts.setOnClickListener{
+            Log.d("clicked", "")
+            val intent = Intent(requireActivity(), PostsByLocationActivity::class.java)
+            startActivity(intent)
+        }
 
         searchMap.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
