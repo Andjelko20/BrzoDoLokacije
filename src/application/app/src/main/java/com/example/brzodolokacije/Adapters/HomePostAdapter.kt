@@ -138,8 +138,8 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
                     }
                     val dialog = BottomSheetDialog(activity)
                     dialog.setContentView(view)
-                    dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
-                    //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
+                    dialog.behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+                    //dialog.behavior.peekHeight = 1000
                     dialog.show()
 
                     refreshPost(itemView,photo)
@@ -199,7 +199,7 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
                     }
                     val dialog = BottomSheetDialog(activity)
                     dialog.setContentView(view)
-                    dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                    dialog.behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
                     //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
                     dialog.show()
                     refreshPost(itemView,photo)
@@ -499,7 +499,7 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
         }
         val dialog = BottomSheetDialog(activity)
         dialog.setContentView(view)
-        dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        dialog.behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
         //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
         dialog.show()
         refreshPost(itemView,photo)
@@ -555,7 +555,7 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
         }
         val dialog = BottomSheetDialog(activity)
         dialog.setContentView(view)
-        dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        dialog.behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
         //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
         dialog.show()
 

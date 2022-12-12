@@ -65,7 +65,7 @@
                     android:layout_marginBottom="3dp"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:text="Sve naj, ljubi brat! Nek ti se sve zelje ispune"
+                    android:text="Sve naj, ljubi brat! Nek ti se sve zelje ispune hihihihi"
                     android:textColor="#6a7877"
                     android:textSize="15sp"/>
             </LinearLayout>
