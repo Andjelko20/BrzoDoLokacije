@@ -22,7 +22,7 @@
         app:bubbletab_vertical_padding="10dp"
         app:bubbletab_tab_corner_radius="25dp">
         <Button
-            android:id="@+id/backButton"
+            android:id="@+id/backButtonPostsByLocation"
             android:padding="0dp"
             android:drawableLeft="@drawable/ic_arrow_back"
             android:background="@color/transparent"

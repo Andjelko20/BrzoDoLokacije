@@ -132,7 +132,6 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
 //                        mMap.addMarker(MarkerOptions().position(latLng).title(sb.toString()))
                         val goToLocationPosts = view.findViewById<FloatingActionButton>(R.id.goToLocationPosts)
                         goToLocationPosts.setOnClickListener{
-                            Log.d("clicked", "")
                             val intent = Intent(requireActivity(), PostsByLocationActivity::class.java)
                             intent.putExtra("location",sb.toString())
                             startActivity(intent)

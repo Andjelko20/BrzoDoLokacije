@@ -4,11 +4,14 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Adapters.ProfilePostsAdapter
 import com.example.brzodolokacije.Client.Client
+import com.example.brzodolokacije.Constants.Constants
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.PostDetails
 import com.example.brzodolokacije.ModelsDto.FilterDto
@@ -17,6 +20,7 @@ import com.example.brzodolokacije.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_addpost.*
+import kotlinx.android.synthetic.main.activity_posts_by_location.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,7 +40,9 @@ class PostsByLocationActivity : AppCompatActivity() {
         val lokacija = intent.getStringExtra("location")
         val retrofit = Client(this).buildService(Api::class.java)
 
-        backButton.setOnClickListener{
+        naslovLokacija.text = lokacija
+
+        backButtonPostsByLocation.setOnClickListener{
             val intent = Intent(this, MainActivity::class.java)
 //            intent.putExtra("backPressed", "returnToProfile");
             startActivity(intent)
@@ -56,12 +62,57 @@ class PostsByLocationActivity : AppCompatActivity() {
                     val posts = Gson().fromJson<List<PostDetails>>(listOfPosts, typeToken)
                     Log.d("lista",posts.toString())
 
-                    //Log.d("ids",postsIds.toString())
+                    val postsIds = mutableListOf<Int>()
+                    var i = 0
+                    while(i < posts.size)
+                    {
+                        postsIds.add(posts.get(i).id)
+                        i++
+                    }
+
+                    val ids = mutableListOf<String>()
+                    for(id in postsIds){
+                        ids.add(Constants.BASE_URL + "Post/postPhoto/" + id.toString())
+                    }
+
+                    val PostsByLocationRv = findViewById<RecyclerView>(R.id.PostsByLocationRv)
+                    PostsByLocationRv.apply {
+                        recyclerView=findViewById(R.id.PostsByLocationRv)
+                        mylayoutManager = GridLayoutManager(this@PostsByLocationActivity, 3)
+                        myAdapter = this.context?.let { ProfilePostsAdapter(ids, it, object: ProfilePostsAdapter.OnItemClickListener {
+                            override fun OnItemClick(position: Int) {
+                                var clickedId = -1
+                                var i = 0;
+                                for(postId in postsIds)
+                                {
+                                    if(i == position)
+                                    {
+                                        clickedId = postId
+                                    }
+                                    i++
+                                }
+//                                    Toast.makeText(requireActivity(), "Item $position clicked, id: $clickedId", Toast.LENGTH_SHORT).show()
+                                if(clickedId != -1)
+                                {
+                                    val intent = Intent(it, ShowPostActivity::class.java)
+                                    intent.putExtra("showPost", clickedId.toString());
+                                    startActivity(intent)
+                                }
+                            }
+                        }) }
+                        recyclerView.layoutManager=mylayoutManager
+                        recyclerView.adapter=myAdapter
+                    }
+
+                }
+                else
+                {
+                    Log.d("error", response.body()?.error.toString())
                 }
             }
 
             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                TODO("Not yet implemented")
+                Log.d("failed", "")
             }
 
         })
