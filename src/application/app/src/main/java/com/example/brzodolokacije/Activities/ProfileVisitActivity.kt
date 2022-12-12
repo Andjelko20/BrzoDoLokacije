@@ -191,6 +191,7 @@ class ProfileVisitActivity : AppCompatActivity() {
 //                                Toast.makeText(this@ProfileVisitActivity,"message",Toast.LENGTH_SHORT).show()
                                 val intent = Intent(this@ProfileVisitActivity, ChatActivity::class.java)
                                 intent.putExtra("messageUser",username)
+                                intent.putExtra("directMessage","directMessage")
                                 startActivity(intent)
 //                                finish()
                             }

@@ -1,11 +1,13 @@
 package com.example.brzodolokacije.Activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.brzodolokacije.Fragments2.DirectMessageFragment
+import com.example.brzodolokacije.Fragments2.InboxFragment
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Managers.SignalRListener
 import com.example.brzodolokacije.R
@@ -33,15 +35,24 @@ class ChatActivity : AppCompatActivity() {
 
         val intent = getIntent()
         val username = intent.getStringExtra("messageUser")
+        val directMessage= intent.getStringExtra("directMessage")
+        val inbox = intent.getStringExtra("inbox")
 //        Log.d("username", username.toString())
+        if(directMessage=="directMessage")
+        {
+            val bundle = Bundle()
+            bundle.putString("username", username)
 
-        val bundle = Bundle()
-        bundle.putString("username", username)
+            val directMessageFragment = DirectMessageFragment()
+            directMessageFragment.arguments = bundle
 
-        val directMessageFragment = DirectMessageFragment()
-        directMessageFragment.arguments = bundle
-
-        replaceFragment(directMessageFragment)
+            bundle.putString("directMessage","direct message")
+            replaceFragment(directMessageFragment)
+        }
+        else if(inbox=="inbox")
+        {
+            replaceFragment(InboxFragment())
+        }
     }
 
     private fun replaceFragment(fragment: Fragment) {
@@ -55,4 +66,14 @@ class ChatActivity : AppCompatActivity() {
         super.onDestroy()
         signalRListener.stopConnection()
     }
+//    override fun onBackPressed() { ne treba za sad
+//        super.onBackPressed()
+//        val intent = Intent(this@ProfileVisitActivity,MainActivity::class.java)
+//        if(backToProfile == "returnToProfile")
+//        {
+//            intent.putExtra("backToProfile", "returnToProfile")
+//        }
+//        startActivity(intent)
+//        finish()
+//    }
 }
