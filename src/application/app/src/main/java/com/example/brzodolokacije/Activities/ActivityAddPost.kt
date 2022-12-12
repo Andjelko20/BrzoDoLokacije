@@ -217,7 +217,7 @@ class ActivityAddPost : AppCompatActivity() {
             file.createNewFile()
 
             val bos = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, bos)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 40, bos)
             val bitmapdata = bos.toByteArray()
 
             val fos = FileOutputStream(file)

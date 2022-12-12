@@ -254,7 +254,7 @@ class ActivityEditProfile : AppCompatActivity() {
 
             //Convert bitmap to byte array
             val bos = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 40, bos)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 30, bos)
             val bitmapdata = bos.toByteArray()
 
             //write the bytes in file
