@@ -1,9 +1,12 @@
 package com.example.brzodolokacije.Activities
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.ContextThemeWrapper
+import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
@@ -39,7 +42,7 @@ class PostsByLocationActivity : AppCompatActivity() {
 
         val lokacija = intent.getStringExtra("location")
         val retrofit = Client(this).buildService(Api::class.java)
-
+        val wrapper: Context = ContextThemeWrapper(this, R.style.MyPopupMenu)
         naslovLokacija.text = lokacija
 
         backButtonPostsByLocation.setOnClickListener{
@@ -48,7 +51,39 @@ class PostsByLocationActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val filterDto = FilterDto(lokacija,"")
+            optionsMeniZaPostove.setOnClickListener{
+            val popupMenu = PopupMenu(wrapper, it)
+            popupMenu.setOnMenuItemClickListener { item ->
+                when(item.itemId){
+                    R.id.popularityMeni ->{
+                        val intent = Intent(this, PostsByLocationActivity::class.java)
+                        intent.putExtra("location",lokacija)
+                        intent.putExtra("filter","")
+                        startActivity(intent)
+                        true
+                    }
+                    R.id.deleteAccountMeni ->{
+                        val intent = Intent(this, PostsByLocationActivity::class.java)
+                        intent.putExtra("location",lokacija)
+                        intent.putExtra("filter","date")
+                        startActivity(intent)
+                        true
+                    }
+                    else -> false
+                }
+
+            }
+            popupMenu.inflate(R.menu.filter)
+            popupMenu.show()
+        }
+
+
+        var filterDto = FilterDto(lokacija,"")
+        val filter = intent.getStringExtra("filter")
+        if(filter != "null")
+        {
+            filterDto = FilterDto(lokacija,"date")
+        }
 
         retrofit.getByLocation(filterDto).enqueue(object : Callback<DefaultResponse>{
             override fun onResponse(
