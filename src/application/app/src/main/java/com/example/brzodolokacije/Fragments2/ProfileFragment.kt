@@ -10,21 +10,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Activities.ActivityAddPost
 import com.example.brzodolokacije.Activities.ActivityEditProfile
 import com.example.brzodolokacije.Activities.MainActivity
+import com.example.brzodolokacije.Adapters.FollowersAdapter
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Constants.Constants
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.UserProfile
+import com.example.brzodolokacije.Posts.Follower
 import com.example.brzodolokacije.Posts.HomeFragmentState
 import com.example.brzodolokacije.R
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import io.ak1.BubbleTabBar
@@ -130,6 +138,7 @@ class ProfileFragment : Fragment() {
                         val gson = Gson()
                         val userProfileInfo: UserProfile = gson.fromJson(userProfileInfoStr, UserProfile::class.java)
 
+                        val followersLinLayout = view.findViewById<LinearLayout>(R.id.prviDeoFollowers)
                         val username = view.findViewById<TextView>(R.id.username)
                         val postsNum = view.findViewById<TextView>(R.id.postsNum)
                         val followersNum = view.findViewById<TextView>(R.id.followersNum)
@@ -164,6 +173,44 @@ class ProfileFragment : Fragment() {
                         {
                             opis.setVisibility(View.GONE)
                             imeprezime.setVisibility(View.VISIBLE)
+                        }
+
+                        followersLinLayout.setOnClickListener{
+                            retrofit.getFollowers(usernameSm).enqueue(object: Callback<DefaultResponse>{
+                                override fun onResponse(
+                                    call: Call<DefaultResponse>,
+                                    response: Response<DefaultResponse>
+                                ) {
+                                    if(response.body()?.error.toString() == "false")
+                                    {
+                                        val followersListStr: String = response.body()?.message.toString()
+
+                                        val typeToken = object : TypeToken<List<Follower>>() {}.type
+                                        val followersList = Gson().fromJson<List<Follower>>(followersListStr, typeToken)
+
+                                        val bottomSheet: View = LayoutInflater.from(context).inflate(R.layout.followers_section,null)
+
+                                        val rvFollower = bottomSheet.findViewById<RecyclerView>(R.id.rv_followers)
+                                        rvFollower.adapter = FollowersAdapter(followersList, requireContext())
+                                        rvFollower.layoutManager= LinearLayoutManager(context)
+
+                                        val dialog = BottomSheetDialog(requireActivity())
+                                        dialog.setContentView(bottomSheet)
+                                        dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                                        dialog.show()
+                                    }
+                                    else
+                                    {
+                                        Log.d("error", response.body()?.error.toString());
+                                    }
+
+                                }
+
+                                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                                    Log.d("failed", "")
+                                }
+
+                            })
                         }
 
 
