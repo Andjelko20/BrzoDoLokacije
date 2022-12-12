@@ -37,6 +37,7 @@ class FollowersAdapter(val followersList : List<Follower>, val context : Context
             wholeFollower.setOnClickListener{
                 val intent = Intent(context, ProfileVisitActivity::class.java)
                 intent.putExtra("visit",follower.follower)
+                intent.putExtra("backToProfile", "returnToProfile")
                 Handler(Looper.getMainLooper()).postDelayed({
                     context.startActivity(intent)
                 }, 30)

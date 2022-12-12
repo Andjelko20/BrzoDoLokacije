@@ -34,6 +34,7 @@ class ProfileVisitActivity : AppCompatActivity() {
 
     private lateinit var username : String
     private lateinit var shouldSave : String
+    private lateinit var backToProfile : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +42,8 @@ class ProfileVisitActivity : AppCompatActivity() {
 
         username = intent.getStringExtra("visit").toString()
         shouldSave=intent.getStringExtra("saveHomeState").toString()
+        backToProfile = intent.getStringExtra("backToProfile").toString()
+
 
         val profileVisitPostFragment = ProfileVisitPostsFragment()
         val profileVisitLocationsFragment = ProfileVisitLocationsFragment()
@@ -213,6 +216,10 @@ class ProfileVisitActivity : AppCompatActivity() {
 
                         exit.setOnClickListener{
                             val intent = Intent(this@ProfileVisitActivity,MainActivity::class.java)
+                            if(backToProfile == "returnToProfile")
+                            {
+                                intent.putExtra("backToProfile", "returnToProfile")
+                            }
                             startActivity(intent)
                             finish()
                         }
@@ -253,5 +260,16 @@ class ProfileVisitActivity : AppCompatActivity() {
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.fragment_container_profileProfileVisit, fragment)
         fragmentTransaction.commit()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(this@ProfileVisitActivity,MainActivity::class.java)
+        if(backToProfile == "returnToProfile")
+        {
+            intent.putExtra("backToProfile", "returnToProfile")
+        }
+        startActivity(intent)
+        finish()
     }
 }
