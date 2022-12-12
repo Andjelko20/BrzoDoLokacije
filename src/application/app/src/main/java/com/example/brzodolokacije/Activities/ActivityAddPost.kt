@@ -45,6 +45,8 @@ class ActivityAddPost : AppCompatActivity() {
     var pickedPhoto : Uri? = null
     var pickedBitMap : Bitmap? = null
     var file: File? = null
+    var fileName: String = "slika.jpeg"
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -137,7 +139,14 @@ class ActivityAddPost : AppCompatActivity() {
                                 ) {
                                     Toast.makeText(this@ActivityAddPost, "Post uploaded",Toast.LENGTH_SHORT).show()
 //                                    Log.d("uploadSlike",response.body()?.message.toString())
-
+                                    val fdelete = File(getCacheDir().toString() + File.separator + fileName)
+                                    if (fdelete.exists()) {
+                                        if (fdelete.delete()) {
+                                            System.out.println("file deleted")
+                                        } else {
+                                            System.out.println("file not deleted")
+                                        }
+                                    }
                                 }
                                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                                     Toast.makeText(this@ActivityAddPost, t.message.toString(), Toast.LENGTH_SHORT).show()
@@ -189,12 +198,12 @@ class ActivityAddPost : AppCompatActivity() {
                     val source = ImageDecoder.createSource(this.contentResolver,pickedPhoto!!)
                     pickedBitMap = ImageDecoder.decodeBitmap(source)
                     previewPic.setImageBitmap(pickedBitMap)
-                    file = bitmapToFile(pickedBitMap!!, "slika.jpeg")
+                    file = bitmapToFile(pickedBitMap!!, fileName)
                 }
                 else {
                     pickedBitMap = MediaStore.Images.Media.getBitmap(this.contentResolver,pickedPhoto)
                     previewPic.setImageBitmap(pickedBitMap)
-                    file = bitmapToFile(pickedBitMap!!, "slika.jpeg")
+                    file = bitmapToFile(pickedBitMap!!, fileName)
                 }
             }
         }
