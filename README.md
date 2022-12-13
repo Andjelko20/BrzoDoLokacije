@@ -46,7 +46,7 @@ Mejlovi su isti kao na teamsu
 
 #### Pretraga lokacija
 
-- Pretraga po gradu ili samo po drzavi
+- Pretraga po gradu ili samo po drzavi `(treba vremena da se slike povuku sa servera)`
 - Prikaz objava na mapi
 - Filtriranje po popularnosti (lajkovi i komentari) ili po skorasnjosti
 - Prikaz odredjene objave klikom na sliku na mapi
