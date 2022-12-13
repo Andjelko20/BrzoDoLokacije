@@ -167,7 +167,7 @@ namespace backend.Controllers
                 return Ok(new
                 {
                     error = true,
-                    message = "Avatar must contain only one face"
+                    message = "Avatar must contain only one face and be in a frontal view"
                 });
             
             string path = CreatePathToDataRoot(user.Id, picture.FileName);
