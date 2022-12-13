@@ -231,7 +231,6 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
                     } catch (e: Exception) {
                         e.printStackTrace()
                         Toast.makeText(activity,"Location misspelled",Toast.LENGTH_SHORT).show()
-                       // Log.d("Adress", e.printStackTrace().toString())
                     }
                 }
                 return false

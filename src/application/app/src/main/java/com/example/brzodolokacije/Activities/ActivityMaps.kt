@@ -73,7 +73,6 @@ class ActivityMaps : AppCompatActivity(), OnMapReadyCallback {
                     } catch (e: Exception) {
                         e.printStackTrace()
                         Toast.makeText(this@ActivityMaps,"Location misspelled",Toast.LENGTH_SHORT).show()
-                        // Log.d("Adress", e.printStackTrace().toString())
                     }
                 }
                 return false
@@ -112,17 +111,12 @@ class ActivityMaps : AppCompatActivity(), OnMapReadyCallback {
                     var drzava = getCountryName(location.latitude,location.longitude)
                     var sb = StringBuilder()
                     sb.append(grad).append(", ").append(drzava)
-//                    Log.d("Lokacija",sb.toString())
                     val builder = AlertDialog.Builder(this@ActivityMaps)
                     val bit = intent.getStringExtra("bit")
-//                    Log.d("bit",bit.toString())
-//                    Toast.makeText(this@ActivityMaps,location.latitude.toString()+", "+location.longitude.toString(),Toast.LENGTH_SHORT).show()
                     builder.setTitle("Confirm location")
-//                    builder.setMessage("Test")
                     builder.setPositiveButton("Yes"){dialogInterface, which ->
                         Intent(this@ActivityMaps,ActivityAddPost::class.java).also{
                             it.putExtra("sb",sb.toString())
-//                            it.putExtra("bitslike",bit)
                             it.putExtra("latitude",location.latitude.toString())
                             it.putExtra("longitude",location.longitude.toString())
                             startActivity(it)
