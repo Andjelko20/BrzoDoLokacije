@@ -62,6 +62,7 @@ class DeleteAccountActivity : AppCompatActivity() {
 
                         override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
 //                            Log.d("failed", "")
+                            Toast.makeText(this@DeleteAccountActivity, "An error occurred", Toast.LENGTH_SHORT).show()
                         }
 
                     })
@@ -117,6 +118,7 @@ class DeleteAccountActivity : AppCompatActivity() {
 
                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
 //                    Log.d("failed", "")
+                    Toast.makeText(this@DeleteAccountActivity, "An error occurred", Toast.LENGTH_SHORT).show()
                 }
 
             })

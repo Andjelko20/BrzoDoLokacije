@@ -151,9 +151,9 @@ class ActivityAddPost : AppCompatActivity() {
                                             File(getCacheDir().toString() + File.separator + fileName)
                                         if (fdelete.exists()) {
                                             if (fdelete.delete()) {
-                                                System.out.println("file deleted")
+//                                                System.out.println("file deleted")
                                             } else {
-                                                System.out.println("file not deleted")
+//                                                System.out.println("file not deleted")
                                             }
                                         }
                                         val intent = Intent(
@@ -165,13 +165,17 @@ class ActivityAddPost : AppCompatActivity() {
                                     }
                                     else if(response.body()?.error.toString() == "true")
                                     {
-                                        val message = response.body()?.message.toString()
+//                                        val message = response.body()?.message.toString()
 //                                        Log.v("Usao u failure",message)
-                                        Toast.makeText(this@ActivityAddPost,message,Toast.LENGTH_LONG).show()
+                                        Toast.makeText(this@ActivityAddPost,"An error occurred",Toast.LENGTH_LONG).show()
+                                    }
+                                    else
+                                    {
+                                        Toast.makeText(this@ActivityAddPost,"An error occurred",Toast.LENGTH_LONG).show()
                                     }
                                 }
                                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                                    Toast.makeText(this@ActivityAddPost, t.message.toString(), Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(this@ActivityAddPost, "An error occurred", Toast.LENGTH_SHORT).show()
 //                                    Log.d("Greska",t.message.toString())
                                 }
 
@@ -182,7 +186,7 @@ class ActivityAddPost : AppCompatActivity() {
                     }
 
                     override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                        Toast.makeText(this@ActivityAddPost, t.message.toString(), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@ActivityAddPost, "An error occurred", Toast.LENGTH_SHORT).show()
                     }
                 })}
             }

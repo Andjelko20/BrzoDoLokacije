@@ -224,11 +224,13 @@ class ProfileFragment : Fragment() {
                     else
                     {
 //                        Log.d("error not false", "")
+                        Toast.makeText(requireActivity(),"An error occurred",Toast.LENGTH_SHORT).show()
                     }
                 }
 
                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
 //                    Log.d("failed", "")
+                    Toast.makeText(requireActivity(),"An error occurred",Toast.LENGTH_SHORT).show()
                 }
 
             })

@@ -69,7 +69,7 @@ class LoginActivity : AppCompatActivity() {
                             }
 
                             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                                Toast.makeText(this@LoginActivity,t.toString(),Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this@LoginActivity, "An error occurred",Toast.LENGTH_SHORT).show()
                             }
 
                         })
@@ -82,7 +82,7 @@ class LoginActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                    Toast.makeText(this@LoginActivity,t.toString(),Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@LoginActivity,"An error occurred",Toast.LENGTH_SHORT).show()
                 }
 
             }

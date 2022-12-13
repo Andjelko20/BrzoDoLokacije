@@ -294,7 +294,7 @@ class MainActivity : AppCompatActivity(),HomeToExploreCommunication {
             }
 
             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                Toast.makeText(this@MainActivity,t.toString(), Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "An error occurred", Toast.LENGTH_SHORT).show()
             }
         })
     }

@@ -113,11 +113,13 @@ class ChangePasswordActivity : AppCompatActivity() {
                     else{
 //                        Log.d("error", response.body()?.error.toString())
 //                        Log.d("message", response.body()?.message.toString())
+                        Toast.makeText(this@ChangePasswordActivity, "An error occurred", Toast.LENGTH_SHORT).show()
                     }
                 }
 
                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
 //                    Log.d("failure", "")
+                    Toast.makeText(this@ChangePasswordActivity, "An error occurred", Toast.LENGTH_SHORT).show()
                 }
 
             })

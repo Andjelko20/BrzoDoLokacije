@@ -124,11 +124,13 @@ class ActivityEditProfile : AppCompatActivity() {
                         else
                         {
 //                            Log.d("error - " + response.body()?.error.toString(), " message " + response.body()?.message.toString())
+                            Toast.makeText(this@ActivityEditProfile, "An error occurred", Toast.LENGTH_LONG).show()
                         }
                     }
 
                     override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
 //                        Log.d("failed slika", t.message.toString())
+                        Toast.makeText(this@ActivityEditProfile, "An error occurred", Toast.LENGTH_LONG).show()
                     }
                 })
             }
@@ -170,7 +172,7 @@ class ActivityEditProfile : AppCompatActivity() {
                         }
 
                         override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                            Toast.makeText(this@ActivityEditProfile, t.toString(), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@ActivityEditProfile, "An error occurred", Toast.LENGTH_SHORT).show()
                         }
                     })
 
@@ -193,6 +195,7 @@ class ActivityEditProfile : AppCompatActivity() {
 
             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
 //                Log.d("edit profile failed", "")
+                Toast.makeText(this@ActivityEditProfile, "An error occurred", Toast.LENGTH_SHORT).show()
             }
 
         })
