@@ -191,12 +191,12 @@ namespace backend.Controllers
             List<Post> posts = await _context.Posts.Where(p => p.UserId == user.Id)
                 .GroupBy(p=>p.Location).Select(p=>p.First())
                 .ToListAsync();
-            List<PostOnMapDto> onMap = new List<PostOnMapDto>();
+            List<PostsOnMapUserDto> onMap = new List<PostsOnMapUserDto>();
             foreach (Post post in posts)
             {
-                onMap.Add(new PostOnMapDto
+                onMap.Add(new PostsOnMapUserDto
                 {
-                    Id = post.Id,
+                    Location = post.Location,
                     Latitude = post.Latitude,
                     Longitude = post.Longitude
                 });
