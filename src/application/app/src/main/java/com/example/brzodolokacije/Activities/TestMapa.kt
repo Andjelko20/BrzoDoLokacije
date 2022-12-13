@@ -76,7 +76,7 @@ class TestMapa : AppCompatActivity() , OnMapReadyCallback , GoogleMap.OnMarkerCl
 
     override fun onMapReady(map: GoogleMap) {
         mMap = map
-        Log.d("Log" ,"onMapReady() called with");
+//        Log.d("Log" ,"onMapReady() called with");
         MapsInitializer.initialize(this);
         addCustomMarker();
 
@@ -110,7 +110,7 @@ class TestMapa : AppCompatActivity() , OnMapReadyCallback , GoogleMap.OnMarkerCl
     }
 
     private fun addCustomMarker() {
-        Log.d("TAG", "addCustomMarker()")
+//        Log.d("TAG", "addCustomMarker()")
         if (mMap == null) {
             return
         }
@@ -133,11 +133,11 @@ class TestMapa : AppCompatActivity() , OnMapReadyCallback , GoogleMap.OnMarkerCl
                         val ids = mutableListOf<String>()
                         for (id in idList) {
                             ids.add(Constants.BASE_URL + "Post/postPhoto/" + id.toString())
-                            Log.d("id",id.toString())
+//                            Log.d("id",id.toString())
                         }
 
                         for (id in ids) {
-                            Log.d("idl",id)
+//                            Log.d("idl",id)
                         }
                         val mDummyLatLng = LatLng(44.014772, 20.914728)
                         loadImage(mDummyLatLng,ids.get(0))
@@ -146,7 +146,7 @@ class TestMapa : AppCompatActivity() , OnMapReadyCallback , GoogleMap.OnMarkerCl
                 }
 
                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                    Log.d("failure", "")
+//                    Log.d("failure", "")
                 }
             })
         }

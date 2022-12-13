@@ -101,4 +101,13 @@ interface Api {
 
     @GET("Post/getOne/{id}")
     fun getPostData(@Path("id") id: Int) : Call<DefaultResponse>
+
+    @GET("Message/directMessages/{receiverUsername}")
+    fun getMessages(@Path("receiverUsername") receiverUsername: String) : Call<DefaultResponse>
+
+    @GET("User/followers/{username}")
+    fun getFollowers(@Path("username") username : String) : Call<DefaultResponse>
+
+    @GET("Message/myInbox")
+    fun getInbox() : Call<DefaultResponse>
 }

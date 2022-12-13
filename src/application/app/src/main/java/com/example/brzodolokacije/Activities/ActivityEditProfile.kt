@@ -50,6 +50,7 @@ class ActivityEditProfile : AppCompatActivity() {
     var pickedPhoto : Uri? = null
     var pickedBitMap : Bitmap? = null
     var file: File? = null
+    var fileName: String = "slika.jpeg"
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -105,20 +106,31 @@ class ActivityEditProfile : AppCompatActivity() {
                         if(response.body()?.error.toString() == "false")
                         {
 //                            Log.d("uspesno", "")
+                            val fdelete = File(getCacheDir().toString() + File.separator + fileName)
+                            if (fdelete.exists()) {
+                                if (fdelete.delete()) {
+//                                    System.out.println("file deleted")
+                                } else {
+//                                    System.out.println("file not deleted")
+                                }
+                            }
                             sendData(newData, sessionManager, retrofit)
                         }
                         else if(response.body()?.error.toString() == "true")
                         {
-                            Log.d("error true", response.body()?.message.toString())
+                            val message = response.body()?.message.toString()
+                            Toast.makeText(this@ActivityEditProfile,message,Toast.LENGTH_LONG).show()
                         }
                         else
                         {
-                            Log.d("error - " + response.body()?.error.toString(), " message " + response.body()?.message.toString())
+//                            Log.d("error - " + response.body()?.error.toString(), " message " + response.body()?.message.toString())
+                            Toast.makeText(this@ActivityEditProfile, "An error occurred", Toast.LENGTH_LONG).show()
                         }
                     }
 
                     override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                        Log.d("failed slika", t.message.toString())
+//                        Log.d("failed slika", t.message.toString())
+                        Toast.makeText(this@ActivityEditProfile, "An error occurred", Toast.LENGTH_LONG).show()
                     }
                 })
             }
@@ -160,7 +172,7 @@ class ActivityEditProfile : AppCompatActivity() {
                         }
 
                         override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                            Toast.makeText(this@ActivityEditProfile, t.toString(), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@ActivityEditProfile, "An error occurred", Toast.LENGTH_SHORT).show()
                         }
                     })
 
@@ -182,7 +194,8 @@ class ActivityEditProfile : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                Log.d("edit profile failed", "")
+//                Log.d("edit profile failed", "")
+                Toast.makeText(this@ActivityEditProfile, "An error occurred", Toast.LENGTH_SHORT).show()
             }
 
         })
@@ -222,13 +235,13 @@ class ActivityEditProfile : AppCompatActivity() {
                     pickedBitMap = ImageDecoder.decodeBitmap(source)
                     editProfilePicture.setImageBitmap(pickedBitMap)
 
-                    file = bitmapToFile(pickedBitMap!!, "slika.jpeg")
+                    file = bitmapToFile(pickedBitMap!!, fileName)
                 }
                 else {
                     pickedBitMap = MediaStore.Images.Media.getBitmap(this.contentResolver,pickedPhoto)
                     editProfilePicture.setImageBitmap(pickedBitMap)
 
-                    file = bitmapToFile(pickedBitMap!!, "slika.jpeg")
+                    file = bitmapToFile(pickedBitMap!!, fileName)
                 }
             }
         }
@@ -239,12 +252,13 @@ class ActivityEditProfile : AppCompatActivity() {
         //create a file to write bitmap data
         var file: File? = null
         return try {
-            file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() + File.separator + fileNameToSave)
+            val cacheDir = getCacheDir()
+            file = File(cacheDir.toString() + File.separator + fileNameToSave)
             file.createNewFile()
 
             //Convert bitmap to byte array
             val bos = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 40, bos)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 30, bos)
             val bitmapdata = bos.toByteArray()
 
             //write the bytes in file
@@ -296,12 +310,12 @@ class ActivityEditProfile : AppCompatActivity() {
                     }
                     else
                     {
-                        Log.d("error not false", "");
+//                        Log.d("error not false", "");
                     }
                 }
 
                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                    Log.d("failed","");
+//                    Log.d("failed","");
                 }
 
             })

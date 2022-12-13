@@ -26,6 +26,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_maps.*
 import java.util.*
@@ -47,7 +48,7 @@ class ActivityMaps : AppCompatActivity(), OnMapReadyCallback {
             getBaseContext().getResources().getDisplayMetrics()
         )
 
-        setContentView(R.layout.activity_maps)
+        setContentView(R.layout.findlocationmaps)
 
         val mapFragment = SupportMapFragment.newInstance()
         supportFragmentManager
@@ -72,7 +73,6 @@ class ActivityMaps : AppCompatActivity(), OnMapReadyCallback {
                     } catch (e: Exception) {
                         e.printStackTrace()
                         Toast.makeText(this@ActivityMaps,"Location misspelled",Toast.LENGTH_SHORT).show()
-                        // Log.d("Adress", e.printStackTrace().toString())
                     }
                 }
                 return false
@@ -82,7 +82,7 @@ class ActivityMaps : AppCompatActivity(), OnMapReadyCallback {
             }
 
         })
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -111,17 +111,12 @@ class ActivityMaps : AppCompatActivity(), OnMapReadyCallback {
                     var drzava = getCountryName(location.latitude,location.longitude)
                     var sb = StringBuilder()
                     sb.append(grad).append(", ").append(drzava)
-//                    Log.d("Lokacija",sb.toString())
                     val builder = AlertDialog.Builder(this@ActivityMaps)
                     val bit = intent.getStringExtra("bit")
-//                    Log.d("bit",bit.toString())
-//                    Toast.makeText(this@ActivityMaps,location.latitude.toString()+", "+location.longitude.toString(),Toast.LENGTH_SHORT).show()
                     builder.setTitle("Confirm location")
-//                    builder.setMessage("Test")
                     builder.setPositiveButton("Yes"){dialogInterface, which ->
                         Intent(this@ActivityMaps,ActivityAddPost::class.java).also{
                             it.putExtra("sb",sb.toString())
-//                            it.putExtra("bitslike",bit)
                             it.putExtra("latitude",location.latitude.toString())
                             it.putExtra("longitude",location.longitude.toString())
                             startActivity(it)

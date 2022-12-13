@@ -117,7 +117,8 @@ class ProfileVisitPostsFragment : Fragment() {
                 }
 
                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                    Log.d("failure", "")
+//                    Log.d("failure", "")
+                    Toast.makeText(requireActivity(),"An error occurred",Toast.LENGTH_SHORT).show()
                 }
 
             })

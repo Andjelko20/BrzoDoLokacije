@@ -45,6 +45,8 @@ class ActivityAddPost : AppCompatActivity() {
     var pickedPhoto : Uri? = null
     var pickedBitMap : Bitmap? = null
     var file: File? = null
+    var fileName: String = "slika.jpeg"
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -62,12 +64,9 @@ class ActivityAddPost : AppCompatActivity() {
         val longitude = intent.getStringExtra("longitude")
         val latitude = intent.getStringExtra("latitude")
         if(longitude != "null" && latitude != "null") {
-            Log.d("stampaj1", longitude.toString())
-            Log.d("stampaj2", latitude.toString())
+//            Log.d("stampaj1", longitude.toString())
+//            Log.d("stampaj2", latitude.toString())
         }
-
-
-
 
         if(SelectedPhoto.returnSavedBitmap() != null)
         {
@@ -129,29 +128,65 @@ class ActivityAddPost : AppCompatActivity() {
                         response: Response<DefaultResponse>
                     ) {
 //                        Log.d("uploadPosta",response.body()?.message.toString())
+                        Toast.makeText(
+                            this@ActivityAddPost,
+                            "Uploading... Please wait for our Artificial Intelligence services to finish checking your image",
+                            Toast.LENGTH_LONG
+                        ).show()
                         retrofit.uploadPostPhoto(picture, response.body()?.message.toString())
                             .enqueue(object : Callback<DefaultResponse> {
                                 override fun onResponse(
                                     call: Call<DefaultResponse>,
                                     response: Response<DefaultResponse>
                                 ) {
-                                    Toast.makeText(this@ActivityAddPost, "Post uploaded",Toast.LENGTH_SHORT).show()
+//                                    Log.v("Dobio response","yes")
+                                    if(response.body()?.error.toString()=="false") {
+                                        Toast.makeText(
+                                            this@ActivityAddPost,
+                                            "Post uploaded",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
 //                                    Log.d("uploadSlike",response.body()?.message.toString())
-
+                                        val fdelete =
+                                            File(getCacheDir().toString() + File.separator + fileName)
+                                        if (fdelete.exists()) {
+                                            if (fdelete.delete()) {
+//                                                System.out.println("file deleted")
+                                            } else {
+//                                                System.out.println("file not deleted")
+                                            }
+                                        }
+                                        val intent = Intent(
+                                            this@ActivityAddPost,
+                                            MainActivity::class.java
+                                        )
+                                        intent.putExtra("postAdded", "refresh again");
+                                        startActivity(intent)
+                                    }
+                                    else if(response.body()?.error.toString() == "true")
+                                    {
+//                                        val message = response.body()?.message.toString()
+//                                        Log.v("Usao u failure",message)
+                                        Toast.makeText(this@ActivityAddPost,"An error occurred",Toast.LENGTH_LONG).show()
+                                    }
+                                    else
+                                    {
+                                        Toast.makeText(this@ActivityAddPost,"An error occurred",Toast.LENGTH_LONG).show()
+                                    }
                                 }
                                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                                    Toast.makeText(this@ActivityAddPost, t.message.toString(), Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(this@ActivityAddPost, "An error occurred", Toast.LENGTH_SHORT).show()
 //                                    Log.d("Greska",t.message.toString())
                                 }
 
                             })
-                        val intent = Intent(this@ActivityAddPost, MainActivity::class.java)
-                        intent.putExtra("postAdded", "refresh again");
-                        startActivity(intent)
+//                        val intent = Intent(this@ActivityAddPost, MainActivity::class.java)
+//                        intent.putExtra("postAdded", "refresh again");
+//                        startActivity(intent)
                     }
 
                     override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                        Toast.makeText(this@ActivityAddPost, t.message.toString(), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@ActivityAddPost, "An error occurred", Toast.LENGTH_SHORT).show()
                     }
                 })}
             }
@@ -189,12 +224,12 @@ class ActivityAddPost : AppCompatActivity() {
                     val source = ImageDecoder.createSource(this.contentResolver,pickedPhoto!!)
                     pickedBitMap = ImageDecoder.decodeBitmap(source)
                     previewPic.setImageBitmap(pickedBitMap)
-                    file = bitmapToFile(pickedBitMap!!, "slika.jpeg")
+                    file = bitmapToFile(pickedBitMap!!, fileName)
                 }
                 else {
                     pickedBitMap = MediaStore.Images.Media.getBitmap(this.contentResolver,pickedPhoto)
                     previewPic.setImageBitmap(pickedBitMap)
-                    file = bitmapToFile(pickedBitMap!!, "slika.jpeg")
+                    file = bitmapToFile(pickedBitMap!!, fileName)
                 }
             }
         }
@@ -203,11 +238,12 @@ class ActivityAddPost : AppCompatActivity() {
     fun bitmapToFile(bitmap: Bitmap, fileNameToSave: String): File? {
         var file: File? = null
         return try {
-            file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() + File.separator + fileNameToSave)
+            val cacheDir = getCacheDir()
+            file = File(cacheDir.toString() + File.separator + fileNameToSave)
             file.createNewFile()
 
             val bos = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, bos)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 40, bos)
             val bitmapdata = bos.toByteArray()
 
             val fos = FileOutputStream(file)

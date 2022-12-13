@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using backend.Models;
 using backend.ModelsDto;
@@ -23,6 +25,7 @@ namespace backend.Controllers
     {
         private readonly DataContext _context;
         private readonly IConfiguration _configuration;
+        private static readonly HttpClient _client = new HttpClient();
 
         public UserController(DataContext context,IConfiguration configuration)
         {
@@ -113,7 +116,7 @@ namespace backend.Controllers
                 message = token
             });
         }
-
+        
         [HttpPut("updateAvatar")]
         public async Task<ActionResult<string>> updateAvatar(IFormFile picture)
         {
@@ -130,6 +133,43 @@ namespace backend.Controllers
                     error = true,
                     message = "Error"
                 });
+            
+            using var _x = picture.OpenReadStream();
+
+            var fileStreamContent = new StreamContent(_x);
+            fileStreamContent.Headers.ContentType = new MediaTypeHeaderValue("image/*");
+
+            var multipartFormContent = new MultipartFormDataContent();
+            multipartFormContent.Add(fileStreamContent, name: "picture", fileName: picture.FileName);
+
+            var url = _configuration.GetSection("Microservice").Value + "/avatar";
+
+            string responseString = null;
+            try 
+            {
+                var response = await _client.PostAsync(url, multipartFormContent);
+                response.EnsureSuccessStatusCode();
+                responseString = await response.Content.ReadAsStringAsync();
+            }
+            catch(HttpRequestException e)
+            {
+                Console.WriteLine("\nException Caught!");	
+                Console.WriteLine("Message :{0} ", e.Message);
+
+                return BadRequest(new
+                {
+                    error=true,
+                    message="Error with microservice"
+                });
+            }
+
+            if (responseString.Contains("false"))
+                return Ok(new
+                {
+                    error = true,
+                    message = "Avatar must contain only one face and be in a frontal view"
+                });
+            
             string path = CreatePathToDataRoot(user.Id, picture.FileName);
             var stream = new FileStream(path, FileMode.Create);
             await picture.CopyToAsync(stream);
@@ -184,7 +224,35 @@ namespace backend.Controllers
             }
 
         }
-        
+
+        [HttpGet("followers/{username}")]
+        public async Task<ActionResult<string>> getFollowers(string username)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+            var followers = await _context.Follows.Where(f => f.FolloweeId == user.Id).ToListAsync();
+            if (user == null || followers == null)
+                return BadRequest(new
+                {
+                    error = true,
+                    message = "Error"
+                });
+            List<FollowDto> followDtos = new List<FollowDto>();
+            foreach (Follow follow in followers)
+            {
+                followDtos.Add(new FollowDto
+                {
+                    Follower = (await _context.Users.FirstOrDefaultAsync(u=>u.Id==follow.FollowerId)).Username
+                });
+            }
+
+            string json = JsonSerializer.Serialize(followDtos);
+            return Ok(new
+            {
+                error = false,
+                message = json
+            });
+        }
+
         [HttpGet("refreshUser/{username}")]
         public async Task<ActionResult<string>> refreshUser(string username)
         {

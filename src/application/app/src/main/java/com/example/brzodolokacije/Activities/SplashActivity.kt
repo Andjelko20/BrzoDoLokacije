@@ -57,6 +57,7 @@ class SplashActivity : AppCompatActivity() {
                 }
                 else
                 {
+                    Toast.makeText(this@SplashActivity,"Connection error",Toast.LENGTH_SHORT).show()
                     val intent = Intent(this@SplashActivity, LoginActivity::class.java)
                     startActivity(intent)
                     finish()
@@ -64,7 +65,7 @@ class SplashActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                Toast.makeText(this@SplashActivity,t.toString(),Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@SplashActivity,"An error occurred",Toast.LENGTH_SHORT).show()
             }
 
         })

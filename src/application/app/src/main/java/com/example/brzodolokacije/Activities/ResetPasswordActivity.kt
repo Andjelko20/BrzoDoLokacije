@@ -35,15 +35,13 @@ class ResetPasswordActivity : AppCompatActivity() {
         }
         uri = intent.data
 
-
-
         if (uri != null) {
 
             val parameters = uri!!.pathSegments
 
 
             val param = parameters[parameters.size - 1]
-            Log.d("Token",param)
+//            Log.d("Token",param)
 
 
             retrofit.checkIfTokenExists(param).enqueue(object : Callback<DefaultResponse>{
@@ -105,7 +103,7 @@ class ResetPasswordActivity : AppCompatActivity() {
                                     ) {
                                         Toast.makeText(
                                             this@ResetPasswordActivity,
-                                            t.toString(),
+                                            "An error occurred",
                                             Toast.LENGTH_SHORT
                                         ).show()
                                     }
@@ -130,7 +128,7 @@ class ResetPasswordActivity : AppCompatActivity() {
                     }
 
                     override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                        Toast.makeText(this@ResetPasswordActivity,t.toString(),Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@ResetPasswordActivity,"An error occurred",Toast.LENGTH_SHORT).show()
                     }
 
 

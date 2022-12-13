@@ -123,7 +123,7 @@ class PostsFragment : Fragment() {
                 }
 
                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                    Log.d("failure", "")
+                    Toast.makeText(requireActivity(),"An error occurred",Toast.LENGTH_SHORT).show()
                 }
 
             })

@@ -25,7 +25,7 @@
             <ImageView
                 android:id="@+id/dragLikeSection"
                 android:gravity="center|center_horizontal"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_drag_sheet"/>
 
@@ -33,11 +33,11 @@
                 android:layout_below="@+id/dragLikeSection"
                 android:id="@+id/likeSectionHeaderText"
                 android:gravity="center_horizontal"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:drawablePadding="8dp"
-                android:text="Peope that like this"
+                android:text="People that like this"
                 android:textColor="@color/backgroundLightTheme"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
@@ -50,7 +50,7 @@
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/refreshLayoutLikes"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="6dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 

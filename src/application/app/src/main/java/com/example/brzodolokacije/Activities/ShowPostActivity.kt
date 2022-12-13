@@ -4,11 +4,13 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.brzodolokacije.API.Api
@@ -33,6 +35,7 @@ import com.google.gson.reflect.TypeToken
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.rv_photopost.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -46,15 +49,16 @@ class ShowPostActivity : AppCompatActivity() {
         setContentView(R.layout.activity_show_post)
 
         val intent = getIntent()
-        val postIdStr = intent.getStringExtra("showPost");
+        val postIdStr = intent.getStringExtra("showPost")
         val profileVisit = intent.getStringExtra("profileVisit")
+        val fromExplore = intent.getStringExtra("backToExplore")
 //        Log.d("clicked id", postIdStr.toString())
 
         val postId = postIdStr?.toInt()
 
         val backButtonPostDetails = findViewById<Button>(R.id.backButtonPostDetails)
         backButtonPostDetails.setOnClickListener{
-            if(profileVisit == "profileVisit")
+            if(profileVisit == "profileVisit" || fromExplore == "backToExplore")
             {
                 finish()
             }
@@ -75,10 +79,11 @@ class ShowPostActivity : AppCompatActivity() {
                     if(response.body()?.error.toString() == "false")
                     {
                         val postDetailsStr = response.body()?.message.toString()
-                        Log.d("data", postDetailsStr)
+//                        Log.d("data", postDetailsStr)
                         val gson = Gson()
                         val postDetails: PostDetails = gson.fromJson(postDetailsStr, PostDetails::class.java)
 
+                        val postOwnerProfile = findViewById<ConstraintLayout>(R.id.postOwnerProfile)
                         val userProfilePicture = findViewById<CircleImageView>(R.id.userProfilePicture)
                         val postOwnerUsername = findViewById<TextView>(R.id.postOwnerUsername)
                         val postPicture = findViewById<ImageView>(R.id.postPicture)
@@ -98,6 +103,15 @@ class ShowPostActivity : AppCompatActivity() {
 
                         //location
                         postLocation.text = postDetails.location
+
+                        //for visiting post owner's profile
+                        postOwnerProfile.setOnClickListener{
+                            val intent = Intent(this@ShowPostActivity, ProfileVisitActivity::class.java)
+                            intent.putExtra("visit", postDetails.owner)
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                startActivity(intent)
+                            }, 30)
+                        }
 
                         //likes
                         postNumberOfLikes.text = postDetails.numberOfLikes.toString()
@@ -187,12 +201,14 @@ class ShowPostActivity : AppCompatActivity() {
                     }
                     else
                     {
-                        Log.d("error", response.body()?.error.toString())
+//                        Log.d("error", response.body()?.error.toString())
+                        Toast.makeText(this@ShowPostActivity,"An error occurred",Toast.LENGTH_SHORT).show()
                     }
                 }
 
                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                    Log.d("failed", "")
+//                    Log.d("failed", "")
+                    Toast.makeText(this@ShowPostActivity,"An error occurred",Toast.LENGTH_SHORT).show()
                 }
 
             })
