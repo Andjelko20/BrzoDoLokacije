@@ -130,7 +130,7 @@ class RegisterActivity : AppCompatActivity() {
                                                 }
 
                                                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                                                    Toast.makeText(this@RegisterActivity,t.toString(),Toast.LENGTH_SHORT).show()
+                                                    Toast.makeText(this@RegisterActivity,"An error occurred",Toast.LENGTH_SHORT).show()
                                                 }
 
                                             })
@@ -139,7 +139,7 @@ class RegisterActivity : AppCompatActivity() {
                                         }
 
                                         override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                                            Toast.makeText(this@RegisterActivity,t.toString(),Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(this@RegisterActivity,"An error occurred",Toast.LENGTH_SHORT).show()
                                         }
 
                                     })
@@ -147,14 +147,16 @@ class RegisterActivity : AppCompatActivity() {
                             }
 
                             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                                Log.e("Failed username", "")
+//                                Log.e("Failed username", "")
+                                Toast.makeText(this@RegisterActivity,"An error occurred",Toast.LENGTH_SHORT).show()
                             }
                         })
                     }
                 }
 
                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                    Log.e("Failed email", "")
+//                    Log.e("Failed email", "")
+                    Toast.makeText(this@RegisterActivity,"An error occurred",Toast.LENGTH_SHORT).show()
                 }
             })
 

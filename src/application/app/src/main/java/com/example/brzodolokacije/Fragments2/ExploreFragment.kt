@@ -154,14 +154,14 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
                                 }
                             }
                             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                                TODO("Not yet implemented")
+                                Toast.makeText(requireActivity(),"An error occurred",Toast.LENGTH_SHORT).show()
                             }
 
                         })
 
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10f))
                     } catch (e: Exception) {
-                        Toast.makeText(requireActivity(),e.message.toString(),Toast.LENGTH_LONG).show()
+                        Toast.makeText(requireActivity(),"An error occurred",Toast.LENGTH_LONG).show()
                     }
                 }
                 return false
@@ -290,7 +290,7 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
                                     }
                                 }
                                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                                    TODO("Not yet implemented")
+                                    Toast.makeText(requireActivity(),"An error occurred",Toast.LENGTH_SHORT).show()
                                 }
 
                             })

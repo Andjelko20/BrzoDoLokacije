@@ -49,7 +49,7 @@ class ShowPostActivity : AppCompatActivity() {
         setContentView(R.layout.activity_show_post)
 
         val intent = getIntent()
-        val postIdStr = intent.getStringExtra("showPost");
+        val postIdStr = intent.getStringExtra("showPost")
         val profileVisit = intent.getStringExtra("profileVisit")
 //        Log.d("clicked id", postIdStr.toString())
 
@@ -201,11 +201,13 @@ class ShowPostActivity : AppCompatActivity() {
                     else
                     {
 //                        Log.d("error", response.body()?.error.toString())
+                        Toast.makeText(this@ShowPostActivity,"An error occurred",Toast.LENGTH_SHORT).show()
                     }
                 }
 
                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
 //                    Log.d("failed", "")
+                    Toast.makeText(this@ShowPostActivity,"An error occurred",Toast.LENGTH_SHORT).show()
                 }
 
             })

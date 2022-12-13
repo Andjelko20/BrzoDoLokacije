@@ -148,11 +148,13 @@ class PostsByLocationActivity : AppCompatActivity() {
                 else
                 {
 //                    Log.d("error", response.body()?.error.toString())
+                    Toast.makeText(this@PostsByLocationActivity, "An error occurred", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
 //                Log.d("failed", "")
+                Toast.makeText(this@PostsByLocationActivity, "An error occurred", Toast.LENGTH_SHORT).show()
             }
 
         })

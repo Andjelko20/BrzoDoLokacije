@@ -155,7 +155,7 @@ class LocationsFragment : Fragment(),OnMapReadyCallback{
                 }
 
                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                    Toast.makeText(requireActivity(),"Provera da li radi",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireActivity(),"An error occurred",Toast.LENGTH_SHORT).show()
                 }
 
             })

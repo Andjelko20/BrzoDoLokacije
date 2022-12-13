@@ -74,15 +74,6 @@ class HomeFragment : Fragment() {
         inflater.inflate(R.menu.meni,menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.editProfileMeni ->{
-                Log.e("inside","Selected")
-            }
-        }
-        return true
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
