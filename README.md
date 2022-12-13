@@ -16,7 +16,7 @@ Lozinka za pristup je `123passwd123`
 
 ## Example accounts
 
-- Username : password
+- filip_bojovic : Sifra123
 - Username : password
 
 ## App Functionality
