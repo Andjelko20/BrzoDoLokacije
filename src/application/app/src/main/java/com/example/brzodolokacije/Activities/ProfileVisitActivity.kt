@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Adapters.FollowersAdapter
+import com.example.brzodolokacije.Adapters.ProfileVisitFollowersAdapter
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Constants.Constants
 import com.example.brzodolokacije.Fragments2.LocationsFragment
@@ -162,8 +163,6 @@ class ProfileVisitActivity : AppCompatActivity() {
                                                 ) {
 //                                                    Log.d("follows","greska menjanje br pratilaca")
                                                     findViewById<Button>(R.id.exitProfileVisit).setOnClickListener{
-                                                        val intent = Intent(this@ProfileVisitActivity,MainActivity::class.java)
-                                                        startActivity(intent)
                                                         finish()
                                                     }
                                                 }
@@ -178,8 +177,6 @@ class ProfileVisitActivity : AppCompatActivity() {
                                     ) {
                                         Toast.makeText(this@ProfileVisitActivity,"Something went wrong. Try again later",Toast.LENGTH_SHORT).show()
                                         findViewById<Button>(R.id.exitProfileVisit).setOnClickListener{
-                                            val intent = Intent(this@ProfileVisitActivity,MainActivity::class.java)
-                                            startActivity(intent)
                                             finish()
                                         }
                                     }
@@ -226,12 +223,14 @@ class ProfileVisitActivity : AppCompatActivity() {
                         }
 
                         exit.setOnClickListener{
-                            val intent = Intent(this@ProfileVisitActivity,MainActivity::class.java)
+
                             if(backToProfile == "returnToProfile")
                             {
+                                val intent = Intent(this@ProfileVisitActivity,MainActivity::class.java)
                                 intent.putExtra("backToProfile", "returnToProfile")
+                                startActivity(intent)
+                                finish()
                             }
-                            startActivity(intent)
                             finish()
                         }
 
@@ -254,7 +253,7 @@ class ProfileVisitActivity : AppCompatActivity() {
                                         val bottomSheet: View = LayoutInflater.from(this@ProfileVisitActivity).inflate(R.layout.followers_section,null)
 
                                         val rvFollower = bottomSheet.findViewById<RecyclerView>(R.id.rv_followers)
-                                        rvFollower.adapter = FollowersAdapter(followersList, this@ProfileVisitActivity)
+                                        rvFollower.adapter = ProfileVisitFollowersAdapter(followersList, this@ProfileVisitActivity)
                                         rvFollower.layoutManager= LinearLayoutManager(this@ProfileVisitActivity)
 
                                         val dialog = BottomSheetDialog(this@ProfileVisitActivity)
@@ -282,8 +281,6 @@ class ProfileVisitActivity : AppCompatActivity() {
                     {
                         Toast.makeText(this@ProfileVisitActivity,"Unable to get user info",Toast.LENGTH_SHORT).show()
                         findViewById<Button>(R.id.exitProfileVisit).setOnClickListener{
-                            val intent = Intent(this@ProfileVisitActivity,MainActivity::class.java)
-                            startActivity(intent)
                             finish()
                         }
                     }
@@ -292,8 +289,6 @@ class ProfileVisitActivity : AppCompatActivity() {
                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                     Toast.makeText(this@ProfileVisitActivity,"Something went wrong. Try again later.",Toast.LENGTH_SHORT).show()
                     findViewById<Button>(R.id.exitProfileVisit).setOnClickListener{
-                        val intent = Intent(this@ProfileVisitActivity,MainActivity::class.java)
-                        startActivity(intent)
                         finish()
                     }
                 }
@@ -315,12 +310,13 @@ class ProfileVisitActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        val intent = Intent(this@ProfileVisitActivity,MainActivity::class.java)
         if(backToProfile == "returnToProfile")
         {
+            val intent = Intent(this@ProfileVisitActivity,MainActivity::class.java)
             intent.putExtra("backToProfile", "returnToProfile")
+            startActivity(intent)
+            finish()
         }
-        startActivity(intent)
         finish()
     }
 }

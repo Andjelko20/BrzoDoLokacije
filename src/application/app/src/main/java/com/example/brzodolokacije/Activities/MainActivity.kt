@@ -44,16 +44,7 @@ class MainActivity : AppCompatActivity(),HomeToExploreCommunication {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
-                ExploreFragment.LOCATION_REQUEST_CODE
-            )
 
-            return
-        }
 
         val wrapper: Context = ContextThemeWrapper(this, R.style.MyPopupMenu)
 
