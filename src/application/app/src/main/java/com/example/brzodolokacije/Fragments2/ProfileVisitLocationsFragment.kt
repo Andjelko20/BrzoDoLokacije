@@ -19,6 +19,7 @@ import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.ModelsDto.PaginationResponse
 import com.example.brzodolokacije.ModelsDto.PinDto
+import com.example.brzodolokacije.ModelsDto.PostsLocationDto
 import com.example.brzodolokacije.R
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.GoogleMap
@@ -127,15 +128,14 @@ class ProfileVisitLocationsFragment : Fragment(),OnMapReadyCallback {
                     if(response.body()?.error.toString() == "false")
                     {
                         val listOfPins: String = response.body()?.message.toString()
-                        val typeToken = object : TypeToken<List<PinDto>>() {}.type
-                        val pins = Gson().fromJson<List<PinDto>>(listOfPins, typeToken)
+                        val typeToken = object : TypeToken<List<PostsLocationDto>>() {}.type
+                        val pins = Gson().fromJson<List<PostsLocationDto>>(listOfPins, typeToken)
 
 //                        Toast.makeText(requireActivity(),pins.toString(),Toast.LENGTH_SHORT).show()
                         var i = 0
                         while(i < pins!!.size) {
                             val latLng = LatLng(pins[i].latitude.toDouble(), pins[i].longitude.toDouble())
-//                            mMap.addMarker(MarkerOptions().position(latLng).title(pins[i].id.toString()))
-                            loadImage(latLng, Constants.BASE_URL + "Post/postPhoto/" + pins[i].id.toString(),pins[i].id.toString())
+                            mMap.addMarker(MarkerOptions().position(latLng).title(pins[i].location))
                             i++
                         }
                     }
@@ -153,40 +153,4 @@ class ProfileVisitLocationsFragment : Fragment(),OnMapReadyCallback {
         }
     }
 
-    private fun loadImage(longlat : LatLng, path : String,id : String)
-    {
-        //image.layoutParams.height=Constants.screenHeight
-        val executor = Executors.newSingleThreadExecutor()
-
-        val handler = android.os.Handler(Looper.getMainLooper())
-
-        var i: Bitmap? = null
-        executor.execute {
-
-            // Image URL
-            val imageURL = path
-            try {
-                val `in` = java.net.URL(imageURL).openStream()
-                i = BitmapFactory.decodeStream(`in`)
-                handler.post {
-                    val smallMarker = Bitmap.createScaledBitmap(i!!, 150, 150, false)
-                    mMap.addMarker(
-                        MarkerOptions()
-                            .position(longlat)
-                            .icon(BitmapDescriptorFactory.fromBitmap(smallMarker!!))
-                    )
-                    hashMarker?.put(myMarker!!,id)
-                    mMap.setOnMarkerClickListener {
-                        val intent = Intent(requireActivity(), ShowPostActivity::class.java)
-                        intent.putExtra("showPost", hashMarker?.get(it));
-                        startActivity(intent)
-                        true
-                    }
-
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-    }
 }
