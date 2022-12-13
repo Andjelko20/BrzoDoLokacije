@@ -70,7 +70,7 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
     private lateinit var mMap : GoogleMap
     private lateinit var lastLocation : Location
     private lateinit var fusedLocationClient : FusedLocationProviderClient
-
+    private lateinit var lokacija : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,7 +78,6 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-
         val languageToLoad = "US"
         val locale = Locale(languageToLoad)
         Locale.setDefault(locale)
@@ -97,8 +96,84 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
             .add(R.id.maps, mapFragment)
             .commit()
 
+        if(lokacija != "null") {
+            searchMap.setQuery(lokacija,true)
+            val location: String = lokacija
+            var addressList: List<Address>? = null
+//                Log.d("Lokacija",location)
+            if (location != null || location == "") {
 
 
+                val geocoder = Geocoder(activity)
+                try {
+                    addressList = geocoder.getFromLocationName(location, 1)
+                    val address: Address = addressList!![0]
+                    val latLng = LatLng(address.getLatitude(), address.getLongitude())
+                    var grad = "";
+                    try {
+                        grad = getAdressName(address.getLatitude(),address.getLongitude())
+                    }
+                    catch (e : Exception){
+                        e.printStackTrace()
+                    }
+
+                    Log.d("grad",grad)
+                    var drzava = getCountryName(address.getLatitude(),address.getLongitude())
+                    var sb = StringBuilder()
+                    if(grad == "")
+                        sb.append(drzava)
+
+                    else if(drzava=="") sb.append(grad)
+
+                    else  sb.append(grad).append(", ").append(drzava)
+//                        mMap.addMarker(MarkerOptions().position(latLng).title(sb.toString()))
+                    val goToLocationPosts = view.findViewById<FloatingActionButton>(R.id.goToLocationPosts)
+                    goToLocationPosts.setOnClickListener{
+                        val intent = Intent(requireActivity(), PostsByLocationActivity::class.java)
+                        intent.putExtra("location",sb.toString())
+                        startActivity(intent)
+                    }
+                    val retrofit = Client(requireActivity()).buildService(Api::class.java)
+
+                    retrofit.onMapLocation(sb.toString()).enqueue(object: Callback<DefaultResponse>{
+                        override fun onResponse(
+                            call: Call<DefaultResponse>,
+                            response: Response<DefaultResponse>
+                        ) {
+                            if(response.body()?.error.toString() == "false")
+                            {
+                                val listOfPins: String = response.body()?.message.toString()
+                                val typeToken = object : TypeToken<List<PinDto>>() {}.type
+                                val pins = Gson().fromJson<List<PinDto>>(listOfPins, typeToken)
+
+//                                    Toast.makeText(requireActivity(),pins.toString(),Toast.LENGTH_SHORT).show()
+                                var i = 0
+                                while(i < pins!!.size) {
+                                    val latLng = LatLng(pins[i].latitude.toDouble(), pins[i].longitude.toDouble())
+
+                                    loadImage(latLng, Constants.BASE_URL + "Post/postPhoto/" + pins[i].id.toString(),pins[i].id.toString())
+                                    i++
+                                }
+
+                            }
+                        }
+
+                        override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                            TODO("Not yet implemented")
+                        }
+
+                    })
+
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10f))
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Toast.makeText(activity,"Location misspelled",Toast.LENGTH_SHORT).show()
+                    // Log.d("Adress", e.printStackTrace().toString())
+                }
+            }
+
+
+        }
 
         searchMap.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -193,7 +268,9 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.activity_maps, container, false)
+        val view = inflater.inflate(R.layout.activity_maps, container, false)
+        lokacija = arguments?.getString("showLocation").toString()
+        return view
     }
 
     companion object {

@@ -18,6 +18,7 @@ import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Activities.ProfileVisitActivity
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Constants.Constants
+import com.example.brzodolokacije.Managers.HomeToExploreCommunication
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Models.NewCommentDto
 import com.example.brzodolokacije.Posts.*
@@ -92,6 +93,11 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
                 //location
                 val text= photo.location //Html.fromHtml("<i>"+photo.location+"</i>")
                 location.text = text //=photo.location
+
+                location.setOnClickListener {
+                    val communicator = activity as HomeToExploreCommunication
+                    communicator.proslediLokaciju(location.text.toString())
+                }
 
                 //caption
                 if(photo.caption == "")

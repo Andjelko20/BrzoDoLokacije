@@ -17,6 +17,7 @@ import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Fragments2.ExploreFragment
 import com.example.brzodolokacije.Fragments2.HomeFragment
 import com.example.brzodolokacije.Fragments2.ProfileFragment
+import com.example.brzodolokacije.Managers.HomeToExploreCommunication
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.Posts.HomeFragmentState
@@ -28,7 +29,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),HomeToExploreCommunication {
 
     private lateinit var binding: ActivityMainBinding
     private var backPressedTime: Long = 0
@@ -344,5 +345,13 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+    override fun proslediLokaciju(lokacija: String) {
+        val bundle = Bundle()
+        bundle.putString("showLocation",lokacija)
+        val exploreFragment = ExploreFragment()
+        exploreFragment.arguments = bundle
+        replaceFragment(exploreFragment)
     }
 }
