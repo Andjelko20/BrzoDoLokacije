@@ -1,7 +1,9 @@
 package com.example.brzodolokacije.Activities
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.ContextMenu
@@ -11,6 +13,7 @@ import android.view.View
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.example.brzodolokacije.API.Api
 import com.example.brzodolokacije.Client.Client
@@ -41,6 +44,18 @@ class MainActivity : AppCompatActivity(),HomeToExploreCommunication {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                ExploreFragment.LOCATION_REQUEST_CODE
+            )
+
+            return
+        }
+
 
         val wrapper: Context = ContextThemeWrapper(this, R.style.MyPopupMenu)
 //        if(savedInstanceState!=null)

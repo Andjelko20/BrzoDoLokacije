@@ -96,74 +96,6 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
             .add(R.id.maps, mapFragment)
             .commit()
 
-        if(lokacija != "null") {
-            searchMap.setQuery(lokacija,true)
-            val location: String = lokacija
-            var addressList: List<Address>? = null
-            if (location != null || location == "") {
-                val geocoder = Geocoder(activity)
-                try {
-                    addressList = geocoder.getFromLocationName(location, 1)
-                    val address: Address = addressList!![0]
-                    val latLng = LatLng(address.getLatitude(), address.getLongitude())
-                    var grad = "";
-                    try {
-                        grad = getAdressName(address.getLatitude(),address.getLongitude())
-                    }
-                    catch (e : Exception){
-                        e.printStackTrace()
-                    }
-
-                    var drzava = getCountryName(address.getLatitude(),address.getLongitude())
-                    var sb = StringBuilder()
-                    if(grad == "")
-                        sb.append(drzava)
-
-                    else if(drzava=="") sb.append(grad)
-
-                    else  sb.append(grad).append(", ").append(drzava)
-                    val goToLocationPosts = view.findViewById<FloatingActionButton>(R.id.goToLocationPosts)
-                    goToLocationPosts.setOnClickListener{
-                        val intent = Intent(requireActivity(), PostsByLocationActivity::class.java)
-                        intent.putExtra("location",sb.toString())
-                        startActivity(intent)
-                    }
-                    val retrofit = Client(requireActivity()).buildService(Api::class.java)
-                    retrofit.onMapLocation(sb.toString()).enqueue(object: Callback<DefaultResponse>{
-                        override fun onResponse(
-                            call: Call<DefaultResponse>,
-                            response: Response<DefaultResponse>
-                        ) {
-                            if(response.body()?.error.toString() == "false")
-                            {
-                                val listOfPins: String = response.body()?.message.toString()
-                                val typeToken = object : TypeToken<List<PinDto>>() {}.type
-                                val pins = Gson().fromJson<List<PinDto>>(listOfPins, typeToken)
-
-//                                    Toast.makeText(requireActivity(),pins.toString(),Toast.LENGTH_SHORT).show()
-                                var i = 0
-                                while(i < pins!!.size) {
-                                    val latLng = LatLng(pins[i].latitude.toDouble(), pins[i].longitude.toDouble())
-
-                                    loadImage(latLng, Constants.BASE_URL + "Post/postPhoto/" + pins[i].id.toString(),pins[i].id.toString())
-                                    i++
-                                }
-                            }
-                        }
-                        override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                            TODO("Not yet implemented")
-                        }
-
-                    })
-
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10f))
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    Toast.makeText(activity,"Location misspelled",Toast.LENGTH_SHORT).show()
-
-                }
-            }
-        }
 
         searchMap.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -229,8 +161,7 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
 
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10f))
                     } catch (e: Exception) {
-                        e.printStackTrace()
-                        Toast.makeText(activity,"Location misspelled",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireActivity(),e.message.toString(),Toast.LENGTH_LONG).show()
                     }
                 }
                 return false
@@ -239,6 +170,7 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
                 return false
             }
         })
+
         mapFragment.getMapAsync(this)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this.requireActivity())
@@ -255,7 +187,7 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
     }
 
     companion object {
-        private const val LOCATION_REQUEST_CODE = 1;
+        const val LOCATION_REQUEST_CODE = 1;
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
@@ -301,8 +233,77 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
                 var drzava = getCountryName(currentLatLong.latitude,currentLatLong.longitude)
                 var sb = StringBuilder()
                 sb.append(grad).append(", ").append(drzava)
-//                mMap.addMarker(MarkerOptions().position(currentLatLong).title(sb.toString()))
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLong,12f))
+//                mMap.addMarker(MarkerOptions().position(currentLatLong).title(sb.toString()))
+                if(lokacija != "null") {
+                    searchMap.setQuery(lokacija,true)
+                    val location: String = lokacija
+                    var addressList: List<Address>? = null
+                    if (location != null || location == "") {
+                        val geocoder = Geocoder(activity)
+                        try {
+                            addressList = geocoder.getFromLocationName(location, 1)
+                            val address: Address = addressList!![0]
+                            val latLng = LatLng(address.getLatitude(), address.getLongitude())
+                            var grad = "";
+                            try {
+                                grad = getAdressName(address.getLatitude(),address.getLongitude())
+                            }
+                            catch (e : Exception){
+                                e.printStackTrace()
+                            }
+
+                            var drzava = getCountryName(address.getLatitude(),address.getLongitude())
+                            var sb = StringBuilder()
+                            if(grad == "")
+                                sb.append(drzava)
+
+                            else if(drzava=="") sb.append(grad)
+
+                            else  sb.append(grad).append(", ").append(drzava)
+                            val goToLocationPosts = requireView().findViewById<FloatingActionButton>(R.id.goToLocationPosts)
+                            goToLocationPosts.setOnClickListener{
+                                val intent = Intent(requireActivity(), PostsByLocationActivity::class.java)
+                                intent.putExtra("location",sb.toString())
+                                startActivity(intent)
+                            }
+                            val retrofit = Client(requireActivity()).buildService(Api::class.java)
+                            retrofit.onMapLocation(sb.toString()).enqueue(object: Callback<DefaultResponse>{
+                                override fun onResponse(
+                                    call: Call<DefaultResponse>,
+                                    response: Response<DefaultResponse>
+                                ) {
+                                    if(response.body()?.error.toString() == "false")
+                                    {
+                                        val listOfPins: String = response.body()?.message.toString()
+                                        val typeToken = object : TypeToken<List<PinDto>>() {}.type
+                                        val pins = Gson().fromJson<List<PinDto>>(listOfPins, typeToken)
+
+//                                    Toast.makeText(requireActivity(),pins.toString(),Toast.LENGTH_SHORT).show()
+                                        var i = 0
+                                        while(i < pins!!.size) {
+                                            val latLng = LatLng(pins[i].latitude.toDouble(), pins[i].longitude.toDouble())
+
+                                            loadImage(latLng, Constants.BASE_URL + "Post/postPhoto/" + pins[i].id.toString(),pins[i].id.toString())
+                                            i++
+                                        }
+                                    }
+                                }
+                                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                                    TODO("Not yet implemented")
+                                }
+
+                            })
+
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10f))
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            Toast.makeText(activity,"Location misspelled",Toast.LENGTH_SHORT).show()
+
+                        }
+                    }
+                }
+
             }
         }
     }

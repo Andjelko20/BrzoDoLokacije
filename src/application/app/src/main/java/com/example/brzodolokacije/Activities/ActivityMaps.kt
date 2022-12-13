@@ -48,7 +48,7 @@ class ActivityMaps : AppCompatActivity(), OnMapReadyCallback {
             getBaseContext().getResources().getDisplayMetrics()
         )
 
-        setContentView(R.layout.activity_maps)
+        setContentView(R.layout.findlocationmaps)
 
         val mapFragment = SupportMapFragment.newInstance()
         supportFragmentManager
