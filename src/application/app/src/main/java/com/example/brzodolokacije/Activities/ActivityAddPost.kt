@@ -131,21 +131,46 @@ class ActivityAddPost : AppCompatActivity() {
                         response: Response<DefaultResponse>
                     ) {
 //                        Log.d("uploadPosta",response.body()?.message.toString())
+                        Toast.makeText(
+                            this@ActivityAddPost,
+                            "Uploading... Please wait for our Artificial Intelligence services to finish checking your image",
+                            Toast.LENGTH_LONG
+                        ).show()
                         retrofit.uploadPostPhoto(picture, response.body()?.message.toString())
                             .enqueue(object : Callback<DefaultResponse> {
                                 override fun onResponse(
                                     call: Call<DefaultResponse>,
                                     response: Response<DefaultResponse>
                                 ) {
-                                    Toast.makeText(this@ActivityAddPost, "Post uploaded",Toast.LENGTH_SHORT).show()
+//                                    Log.v("Dobio response","yes")
+                                    if(response.body()?.error.toString()=="false") {
+                                        Toast.makeText(
+                                            this@ActivityAddPost,
+                                            "Post uploaded",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
 //                                    Log.d("uploadSlike",response.body()?.message.toString())
-                                    val fdelete = File(getCacheDir().toString() + File.separator + fileName)
-                                    if (fdelete.exists()) {
-                                        if (fdelete.delete()) {
-                                            System.out.println("file deleted")
-                                        } else {
-                                            System.out.println("file not deleted")
+                                        val fdelete =
+                                            File(getCacheDir().toString() + File.separator + fileName)
+                                        if (fdelete.exists()) {
+                                            if (fdelete.delete()) {
+                                                System.out.println("file deleted")
+                                            } else {
+                                                System.out.println("file not deleted")
+                                            }
                                         }
+                                        val intent = Intent(
+                                            this@ActivityAddPost,
+                                            MainActivity::class.java
+                                        )
+                                        intent.putExtra("postAdded", "refresh again");
+                                        startActivity(intent)
+                                    }
+                                    else if(response.body()?.error.toString() == "true")
+                                    {
+                                        val message = response.body()?.message.toString()
+//                                        Log.v("Usao u failure",message)
+                                        Toast.makeText(this@ActivityAddPost,message,Toast.LENGTH_LONG).show()
                                     }
                                 }
                                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
@@ -154,9 +179,9 @@ class ActivityAddPost : AppCompatActivity() {
                                 }
 
                             })
-                        val intent = Intent(this@ActivityAddPost, MainActivity::class.java)
-                        intent.putExtra("postAdded", "refresh again");
-                        startActivity(intent)
+//                        val intent = Intent(this@ActivityAddPost, MainActivity::class.java)
+//                        intent.putExtra("postAdded", "refresh again");
+//                        startActivity(intent)
                     }
 
                     override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
