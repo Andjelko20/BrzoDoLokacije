@@ -118,7 +118,8 @@ class ActivityEditProfile : AppCompatActivity() {
                         }
                         else if(response.body()?.error.toString() == "true")
                         {
-                            Log.d("error true", response.body()?.message.toString())
+                            val message = response.body()?.message.toString()
+                            Toast.makeText(this@ActivityEditProfile,message,Toast.LENGTH_LONG).show()
                         }
                         else
                         {

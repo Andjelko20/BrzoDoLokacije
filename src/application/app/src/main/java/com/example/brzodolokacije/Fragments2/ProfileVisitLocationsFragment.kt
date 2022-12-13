@@ -26,6 +26,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -51,6 +52,8 @@ class ProfileVisitLocationsFragment : Fragment(),OnMapReadyCallback {
 
     private lateinit var user : String
 
+    private var hashMarker: HashMap<Marker,String>? = HashMap<Marker,String>()
+    private var myMarker: Marker? = null
     private lateinit var mMap : GoogleMap
     private lateinit var lastLocation : Location
     private lateinit var fusedLocationClient : FusedLocationProviderClient
@@ -172,9 +175,10 @@ class ProfileVisitLocationsFragment : Fragment(),OnMapReadyCallback {
                             .position(longlat)
                             .icon(BitmapDescriptorFactory.fromBitmap(smallMarker!!))
                     )
+                    hashMarker?.put(myMarker!!,id)
                     mMap.setOnMarkerClickListener {
                         val intent = Intent(requireActivity(), ShowPostActivity::class.java)
-                        intent.putExtra("showPost", id);
+                        intent.putExtra("showPost", hashMarker?.get(it));
                         startActivity(intent)
                         true
                     }
