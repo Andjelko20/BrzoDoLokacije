@@ -57,12 +57,13 @@ Lozinka za pristup je `123passwd123`
 - Komentarisanje
 - Lajkovanje
 - Posecivanje profila korisnika koji je izbacio objavu
+- Prikaz lokacije na mapi kada se klikne na nju
 
 #### Bezbednost i korektnosti
 
 - Validacija unosa
 - Samo jedan korisnik moze imati odgovarajuci username i email
-- Do profila nekog korisnika je moguce doci samo preko preko pretrage objava, ne postoji pretraga korisnika sem ako nije u listi pratilaca, lajkova ili komentara
+- Do profila nekog korisnika je moguce doci samo preko preko pretrage objava, u listi pratilaca korisnika, lajkova ili komentara objave
 
 ### Pozeljne funkcionalnosti
 
