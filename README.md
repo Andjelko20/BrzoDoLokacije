@@ -17,7 +17,9 @@ Lozinka za pristup je `123passwd123`
 ## Example accounts
 
 - filip_bojovic : Sifra123
-- Username : password
+- filip_andric : Sifra123
+
+Mejlovi su isto kao na teamsu
 
 ## App Functionality
 
