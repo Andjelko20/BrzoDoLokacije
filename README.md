@@ -23,9 +23,10 @@ Figma prototip mozete videti na sledecem [linku](https://www.figma.com/file/X1pf
 - Prijava / Registracija / Vracanje zaboravljenje sifre preko mejla
 - Menjanje imena i prezimena, opisa profila, korisnickog imena, lozinke i profilne slike `(known bug: ostaje stara profilna dok se ponovo ne pokrene aplikacija ili se menja automatski ako se u isto vreme promeni i username zbog ??? razloga, tako je samo korisniku ciji je profil dok drugi korisnici vide promenu, isto tako ce i image recognition da gleda novu profilnu, ona se ispravno ubaci na server i pozove ali se aplikacija tad zbuni, radilo je kako treba pre nego sto smo dodali prikaz objava na profilu)`
 - Lista objava korisika
-- Pinovane razlicite lokacije na kojima je bio Korisnik
+- Pinovane razlicite lokacije na kojima je bio korisnik
 - Lista pratilaca
 - Broj objava, pratilaca i ukupan broj lajkova svih objava
+- Brisanje profila
 
 #### Objava
 
@@ -34,6 +35,7 @@ Figma prototip mozete videti na sledecem [linku](https://www.figma.com/file/X1pf
 - Mogucnost komentarisanja
 - Prikaz lokacije na mapi kada se klikne na nju
 - Posecivanje profila korisnika koji je izbacio objavu
+- Posecivanje profila korisnika koji je lajkovao ili komentarisao
 
 #### Pretraga lokacija
 
