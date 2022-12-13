@@ -14,7 +14,7 @@ Aplikaciju mozete preuzeti na sledecem [linku](http://softeng.pmf.kg.ac.rs:10051
 
 Lozinka za pristup je `123passwd123`
 
-## Example accunts
+## Example accounts
 
 - Username : password
 - Username : password
