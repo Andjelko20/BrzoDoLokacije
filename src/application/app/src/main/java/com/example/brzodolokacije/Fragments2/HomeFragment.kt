@@ -117,7 +117,7 @@ class HomeFragment : Fragment() {
                 refresh.isRefreshing = false
             }, 1500)
         }
-        if(HomeFragmentState.isSaved() && HomeFragmentState.getList() != null)
+        if(HomeFragmentState.isSaved() && HomeFragmentState.getList() != null && !(HomeFragmentState.getList())?.isEmpty()!!)
         {
             loadPhotos(sessionManager,view)
         }
