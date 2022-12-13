@@ -100,10 +100,7 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
             searchMap.setQuery(lokacija,true)
             val location: String = lokacija
             var addressList: List<Address>? = null
-//                Log.d("Lokacija",location)
             if (location != null || location == "") {
-
-
                 val geocoder = Geocoder(activity)
                 try {
                     addressList = geocoder.getFromLocationName(location, 1)
@@ -117,7 +114,6 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
                         e.printStackTrace()
                     }
 
-                    Log.d("grad",grad)
                     var drzava = getCountryName(address.getLatitude(),address.getLongitude())
                     var sb = StringBuilder()
                     if(grad == "")
@@ -126,7 +122,6 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
                     else if(drzava=="") sb.append(grad)
 
                     else  sb.append(grad).append(", ").append(drzava)
-//                        mMap.addMarker(MarkerOptions().position(latLng).title(sb.toString()))
                     val goToLocationPosts = view.findViewById<FloatingActionButton>(R.id.goToLocationPosts)
                     goToLocationPosts.setOnClickListener{
                         val intent = Intent(requireActivity(), PostsByLocationActivity::class.java)
@@ -134,7 +129,6 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
                         startActivity(intent)
                     }
                     val retrofit = Client(requireActivity()).buildService(Api::class.java)
-
                     retrofit.onMapLocation(sb.toString()).enqueue(object: Callback<DefaultResponse>{
                         override fun onResponse(
                             call: Call<DefaultResponse>,
@@ -154,10 +148,8 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
                                     loadImage(latLng, Constants.BASE_URL + "Post/postPhoto/" + pins[i].id.toString(),pins[i].id.toString())
                                     i++
                                 }
-
                             }
                         }
-
                         override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                             TODO("Not yet implemented")
                         }
@@ -168,11 +160,9 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
                 } catch (e: Exception) {
                     e.printStackTrace()
                     Toast.makeText(activity,"Location misspelled",Toast.LENGTH_SHORT).show()
-                    // Log.d("Adress", e.printStackTrace().toString())
+
                 }
             }
-
-
         }
 
         searchMap.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -180,11 +170,9 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
 
                 val location: String = searchMap.getQuery().toString().trim()
                 var addressList: List<Address>? = null
-//                Log.d("Lokacija",location)
+
                 if (location != null || location == "") {
-
                     mMap.clear()
-
                     val geocoder = Geocoder(activity)
                     try {
                         addressList = geocoder.getFromLocationName(location, 1)
@@ -197,17 +185,13 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
                         catch (e : Exception){
                             e.printStackTrace()
                         }
-
-                        Log.d("grad",grad)
                         var drzava = getCountryName(address.getLatitude(),address.getLongitude())
                         var sb = StringBuilder()
                         if(grad == "")
                             sb.append(drzava)
 
                         else if(drzava=="") sb.append(grad)
-
                         else  sb.append(grad).append(", ").append(drzava)
-//                        mMap.addMarker(MarkerOptions().position(latLng).title(sb.toString()))
                         val goToLocationPosts = view.findViewById<FloatingActionButton>(R.id.goToLocationPosts)
                         goToLocationPosts.setOnClickListener{
                             val intent = Intent(requireActivity(), PostsByLocationActivity::class.java)
@@ -235,10 +219,8 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
                                         loadImage(latLng, Constants.BASE_URL + "Post/postPhoto/" + pins[i].id.toString(),pins[i].id.toString())
                                         i++
                                     }
-
                                 }
                             }
-
                             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                                 TODO("Not yet implemented")
                             }
