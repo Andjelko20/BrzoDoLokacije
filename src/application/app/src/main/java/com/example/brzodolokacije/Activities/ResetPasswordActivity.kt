@@ -43,7 +43,7 @@ class ResetPasswordActivity : AppCompatActivity() {
 
 
             val param = parameters[parameters.size - 1]
-            Log.d("Token",param)
+//            Log.d("Token",param)
 
 
             retrofit.checkIfTokenExists(param).enqueue(object : Callback<DefaultResponse>{

@@ -56,12 +56,12 @@ class DeleteAccountActivity : AppCompatActivity() {
                             }
                             else
                             {
-                                Log.d("error", response.body()?.error.toString())
+//                                Log.d("error", response.body()?.error.toString())
                             }
                         }
 
                         override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                            Log.d("failed", "")
+//                            Log.d("failed", "")
                         }
 
                     })
@@ -116,7 +116,7 @@ class DeleteAccountActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                    Log.d("failed", "")
+//                    Log.d("failed", "")
                 }
 
             })

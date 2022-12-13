@@ -201,13 +201,13 @@ class ProfileFragment : Fragment() {
                                     }
                                     else
                                     {
-                                        Log.d("error", response.body()?.error.toString());
+//                                        Log.d("error", response.body()?.error.toString());
                                     }
 
                                 }
 
                                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                                    Log.d("failed", "")
+//                                    Log.d("failed", "")
                                 }
 
                             })
@@ -223,12 +223,12 @@ class ProfileFragment : Fragment() {
                     }
                     else
                     {
-                        Log.d("error not false", "");
+//                        Log.d("error not false", "")
                     }
                 }
 
                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                    Log.d("failed","");
+//                    Log.d("failed", "")
                 }
 
             })

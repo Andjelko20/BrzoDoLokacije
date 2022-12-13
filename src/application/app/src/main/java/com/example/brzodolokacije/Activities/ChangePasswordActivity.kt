@@ -101,7 +101,7 @@ class ChangePasswordActivity : AppCompatActivity() {
                         startActivity(intent)
                     }
                     else if(response.body()?.error.toString() == "true"){
-                        Log.d("error true", response.body()?.message.toString())
+//                        Log.d("error true", response.body()?.message.toString())
                         val message = response.body()?.message.toString()
                         if(message != "Error"){
                             Toast.makeText(this@ChangePasswordActivity, message, Toast.LENGTH_SHORT).show()
@@ -111,13 +111,13 @@ class ChangePasswordActivity : AppCompatActivity() {
                         }
                     }
                     else{
-                        Log.d("error", response.body()?.error.toString())
-                        Log.d("message", response.body()?.message.toString())
+//                        Log.d("error", response.body()?.error.toString())
+//                        Log.d("message", response.body()?.message.toString())
                     }
                 }
 
                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                    Log.d("failure", "")
+//                    Log.d("failure", "")
                 }
 
             })

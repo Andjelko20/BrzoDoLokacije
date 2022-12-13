@@ -80,7 +80,7 @@ class PostsByLocationActivity : AppCompatActivity() {
 
         var filterDto = FilterDto(lokacija,"")
         val filter = intent.getStringExtra("filter")
-        Log.d("filter",filter.toString())
+//        Log.d("filter",filter.toString())
         if(filter == "date")
         {
             filterDto = FilterDto(lokacija,"date")
@@ -100,7 +100,7 @@ class PostsByLocationActivity : AppCompatActivity() {
                     val listOfPosts: String = response.body()?.message.toString()
                     val typeToken = object : TypeToken<List<PostDetails>>() {}.type
                     val posts = Gson().fromJson<List<PostDetails>>(listOfPosts, typeToken)
-                    Log.d("lista",posts.toString())
+//                    Log.d("lista",posts.toString())
 
                     val postsIds = mutableListOf<Int>()
                     var i = 0
@@ -147,12 +147,12 @@ class PostsByLocationActivity : AppCompatActivity() {
                 }
                 else
                 {
-                    Log.d("error", response.body()?.error.toString())
+//                    Log.d("error", response.body()?.error.toString())
                 }
             }
 
             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                Log.d("failed", "")
+//                Log.d("failed", "")
             }
 
         })

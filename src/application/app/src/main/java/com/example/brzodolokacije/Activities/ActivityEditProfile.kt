@@ -109,9 +109,9 @@ class ActivityEditProfile : AppCompatActivity() {
                             val fdelete = File(getCacheDir().toString() + File.separator + fileName)
                             if (fdelete.exists()) {
                                 if (fdelete.delete()) {
-                                    System.out.println("file deleted")
+//                                    System.out.println("file deleted")
                                 } else {
-                                    System.out.println("file not deleted")
+//                                    System.out.println("file not deleted")
                                 }
                             }
                             sendData(newData, sessionManager, retrofit)
@@ -123,12 +123,12 @@ class ActivityEditProfile : AppCompatActivity() {
                         }
                         else
                         {
-                            Log.d("error - " + response.body()?.error.toString(), " message " + response.body()?.message.toString())
+//                            Log.d("error - " + response.body()?.error.toString(), " message " + response.body()?.message.toString())
                         }
                     }
 
                     override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                        Log.d("failed slika", t.message.toString())
+//                        Log.d("failed slika", t.message.toString())
                     }
                 })
             }
@@ -192,7 +192,7 @@ class ActivityEditProfile : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                Log.d("edit profile failed", "")
+//                Log.d("edit profile failed", "")
             }
 
         })
@@ -307,12 +307,12 @@ class ActivityEditProfile : AppCompatActivity() {
                     }
                     else
                     {
-                        Log.d("error not false", "");
+//                        Log.d("error not false", "");
                     }
                 }
 
                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                    Log.d("failed","");
+//                    Log.d("failed","");
                 }
 
             })

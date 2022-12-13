@@ -89,7 +89,7 @@ class ProfileVisitActivity : AppCompatActivity() {
                     response: Response<DefaultResponse>
                 ) {
                     if(response.body()?.error.toString() == "false") {
-                        //                    Log.d(response.body()?.error.toString(), response.body()?.message.toString());
+                        //Log.d(response.body()?.error.toString(), response.body()?.message.toString());
                         val userProfileInfoStr: String = response.body()?.message.toString();
                         val gson = Gson()
                         val userProfileInfo: UserProfileVisit = gson.fromJson(userProfileInfoStr, UserProfileVisit::class.java)
@@ -160,7 +160,7 @@ class ProfileVisitActivity : AppCompatActivity() {
                                                     call: Call<DefaultResponse>,
                                                     t: Throwable
                                                 ) {
-                                                    Log.d("follows","greska menjanje br pratilaca")
+//                                                    Log.d("follows","greska menjanje br pratilaca")
                                                     findViewById<Button>(R.id.exitProfileVisit).setOnClickListener{
                                                         val intent = Intent(this@ProfileVisitActivity,MainActivity::class.java)
                                                         startActivity(intent)
@@ -264,13 +264,13 @@ class ProfileVisitActivity : AppCompatActivity() {
                                     }
                                     else
                                     {
-                                        Log.d("error", response.body()?.error.toString());
+//                                        Log.d("error", response.body()?.error.toString());
                                     }
 
                                 }
 
                                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                                    Log.d("failed", "")
+//                                    Log.d("failed", "")
                                 }
 
                             })

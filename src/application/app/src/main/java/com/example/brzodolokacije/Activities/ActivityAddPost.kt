@@ -64,12 +64,9 @@ class ActivityAddPost : AppCompatActivity() {
         val longitude = intent.getStringExtra("longitude")
         val latitude = intent.getStringExtra("latitude")
         if(longitude != "null" && latitude != "null") {
-            Log.d("stampaj1", longitude.toString())
-            Log.d("stampaj2", latitude.toString())
+//            Log.d("stampaj1", longitude.toString())
+//            Log.d("stampaj2", latitude.toString())
         }
-
-
-
 
         if(SelectedPhoto.returnSavedBitmap() != null)
         {
