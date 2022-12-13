@@ -1,6 +1,5 @@
 package com.example.brzodolokacije.Fragments2
 
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -14,11 +13,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.brzodolokacije.API.Api
-import com.example.brzodolokacije.Activities.MainActivity
-import com.example.brzodolokacije.Adapters.HomePostAdapter
 import kotlinx.android.synthetic.main.fragment_direct_message.*
 import com.example.brzodolokacije.Adapters.MessageAdapter
 import com.example.brzodolokacije.Client.Client
@@ -26,15 +22,12 @@ import com.example.brzodolokacije.Managers.InboxChatCommunicator
 import com.example.brzodolokacije.Managers.SessionManager
 import com.example.brzodolokacije.Managers.SignalRListener
 import com.example.brzodolokacije.Models.DefaultResponse
-import com.example.brzodolokacije.Models.UserProfile
 import com.example.brzodolokacije.ModelsDto.MessageDto
-import com.example.brzodolokacije.ModelsDto.PaginationResponse
 import com.example.brzodolokacije.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import retrofit2.Call
 import retrofit2.Response
-import javax.security.auth.callback.Callback
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -57,8 +50,6 @@ class DirectMessageFragment : Fragment() {
     private lateinit var signalRListener : SignalRListener
     private lateinit var messageList : MutableList<MessageDto>
 
-    private var myMessageAdapter : RecyclerView.Adapter<MessageAdapter.MainViewHolder>? = null
-    private var mylayoutManager : RecyclerView.LayoutManager? = null
     private lateinit var messageRecyclerView : RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,7 +58,6 @@ class DirectMessageFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -83,7 +73,6 @@ class DirectMessageFragment : Fragment() {
 
         val list : MutableList<MessageDto> = mutableListOf()
         messageList=list
-
 
         signalRListener = SignalRListener.getInstance()
         messageRecyclerView = view.findViewById(R.id.rvMessages)
@@ -118,7 +107,6 @@ class DirectMessageFragment : Fragment() {
                 if(response.body()?.error.toString() == "false")
                 {
                     val res = response.body()?.message.toString()
-                    Log.d("response", res.toString())
                     val typeToken = object : TypeToken<MutableList<MessageDto>>() {}.type
                     val messages = Gson().fromJson<MutableList<MessageDto>>(res, typeToken)
                     messageList = messages
@@ -129,13 +117,10 @@ class DirectMessageFragment : Fragment() {
                     Toast.makeText(requireActivity(), "An error occurred", Toast.LENGTH_SHORT).show()
                 }
             }
-
             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                Log.d("failed", "")
+                Toast.makeText(requireActivity(), "An error occurred", Toast.LENGTH_SHORT).show()
             }
-
         })
-
         val sessionManager= this.context?.let { SessionManager(it) }
         val sendMessageBtn = view.findViewById<ImageView>(R.id.sendMessageBtn)
         val sendMessageText = view.findViewById<EditText>(R.id.sendMessageText)

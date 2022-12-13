@@ -51,9 +51,6 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
         {
             if(t == VIEW_TYPE_ITEM)
             {
-//                HomeFragmentState.lastPosition = 0
-//                HomeFragmentState.offset = 0
-
                 val photo = p!!
 
                 val owner = itemView.findViewById<TextView>(R.id.postOwner)
@@ -76,8 +73,6 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
 
                 //for visiting post owner's profile
                 ownerProfile.setOnClickListener{
-
-                    //HomeFragmentState.setVisit(photo.owner)
                     HomeFragmentState.shouldSave(true)
                     val intent = Intent(activity,ProfileVisitActivity::class.java)
                     intent.putExtra("visit",photo.owner)
@@ -91,10 +86,10 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
                 date.text = convertLongToTime(photo.date)
 
                 //location
-                val text= photo.location //Html.fromHtml("<i>"+photo.location+"</i>")
-                location.text = text //=photo.location
-
+                val text= photo.location
+                location.text = text
                 location.setOnClickListener {
+                    HomeFragmentState.shouldSave(true)
                     val communicator = activity as HomeToExploreCommunication
                     communicator.proslediLokaciju(location.text.toString())
                 }
@@ -108,7 +103,7 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
                 {
                     caption.setVisibility(View.VISIBLE)
                     caption.text = photo.caption
-                } //Html.fromHtml("<i>"+photo.caption+"</i>")
+                }
 
                 //list of likes
                 likes.text = photo.numberOfLikes.toString()
@@ -133,7 +128,7 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
                     //refreshing the list of likes
                     val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayoutLikes)
                     refresh.setOnRefreshListener {
-                        android.os.Handler(Looper.getMainLooper()).postDelayed({
+                        Handler(Looper.getMainLooper()).postDelayed({
 
                             loadLikes(view,photo)
                             refreshPost(itemView,photo)
@@ -145,7 +140,6 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
                     val dialog = BottomSheetDialog(activity)
                     dialog.setContentView(view)
                     dialog.behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
-                    //dialog.behavior.peekHeight = 1000
                     dialog.show()
 
                     refreshPost(itemView,photo)
@@ -170,10 +164,8 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
                             val lp = (commentsRv.layoutManager as? LinearLayoutManager)?.findFirstVisibleItemPosition()!!
                             val v = (commentsRv.layoutManager as? LinearLayoutManager)?.getChildAt(0)
                             val off = if(v == null) 0 else v.top - (commentsRv.layoutManager as? LinearLayoutManager)?.paddingTop!!
-//                            Log.d("position1",lp.toString()+" "+off.toString())
                             HomeFragmentState.lastPosition=lp
                             HomeFragmentState.offset = off
-//                            Log.d("position2", HomeFragmentState.lastPosition.toString()+" "+HomeFragmentState.offset.toString())
                         }
                     })
 
@@ -194,7 +186,7 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
                     //refreshing the list of comments
                     val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayoutComments)
                     refresh.setOnRefreshListener {
-                        android.os.Handler(Looper.getMainLooper()).postDelayed({
+                        Handler(Looper.getMainLooper()).postDelayed({
 
                             loadComments(view,photo)
                             refreshPost(itemView,photo)
@@ -206,7 +198,6 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
                     val dialog = BottomSheetDialog(activity)
                     dialog.setContentView(view)
                     dialog.behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
-                    //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
                     dialog.show()
                     refreshPost(itemView,photo)
                 }
@@ -304,7 +295,6 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
             ) {
                 if(response.body()?.error.toString()=="false")
                 {
-                    //Toast.makeText(activity,"Comment added",Toast.LENGTH_SHORT).show()
                     val newNumOfComments=response.body()?.message.toString().trim()
                     itemView.findViewById<TextView>(R.id.postComments).text = "View all ${newNumOfComments} comments"
                     view.findViewById<TextView>(R.id.addCommentText).text=""
@@ -337,19 +327,16 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
                 if(response.body()?.error.toString()=="false")
                 {
                     val state = response.body()?.message.toString()
-
                     if(state=="liked")
                     {
                         likedByMe.setBackgroundResource(R.drawable.liked)
                         photo.likedByMe = true
                     }
-
                     else
                     {
                         likedByMe.setBackgroundResource(R.drawable.unliked)
                         photo.likedByMe = false
                     }
-
                     refreshPost(itemView,photo)
                 }
                 else
@@ -381,7 +368,6 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
                     val typeToken = object : TypeToken<List<Like>>() {}.type
                     val likesList = Gson().fromJson<List<Like>>(listOfLikesStr, typeToken)
                     HomeFragmentState.likes = likesList
-
 
                     val rvLikes = view.findViewById<RecyclerView>(R.id.rv_likes)
                     if(likesList.isNotEmpty()) {
@@ -425,28 +411,23 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
                    HomeFragmentState.list(dataList)
                    if(newStats.numOfComments.toInt() != 0) comments.text="View all ${newStats.numOfComments} comments"
                    else comments.text="No comments yet. Add yours?"
-
                }
                 else
                {
                    Toast.makeText(activity,"Error refreshing",Toast.LENGTH_SHORT).show()
                }
             }
-
             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                 Toast.makeText(activity,"Something went wrong while refreshing",Toast.LENGTH_SHORT).show()
             }
-
         })
     }
 
     private fun showCommentsWhereWeLeftOff(photo : Photo, itemView: View)
     {
         HomeFragmentState.commentsOpened = false
-//                    Log.d("position3", HomeFragmentState.lastPosition.toString()+" "+HomeFragmentState.offset.toString())
 
         val view : View = LayoutInflater.from(context).inflate(R.layout.fragment_comment,null)
-//                    loadComments(view,photo)
         val commentsList = HomeFragmentState.comments!!
 
         val commentsRv = view.findViewById<RecyclerView>(R.id.rv_comments)
@@ -459,11 +440,9 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
         commentsRv.stopScroll()
         val lastPosition = HomeFragmentState.lastPosition
         val offset = HomeFragmentState.offset
-//                    Toast.makeText(activity,lastPosition.toString()+" "+offset.toString(),Toast.LENGTH_SHORT).show()
         HomeFragmentState.lastPosition = 0
         HomeFragmentState.offset = 0
         (commentsRv.layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(lastPosition,offset)
-
         commentsRv.addOnScrollListener(object : RecyclerView.OnScrollListener(){
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -476,7 +455,6 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
                 HomeFragmentState.offset = off
             }
         })
-
         //adding a new comment
         val addCommentButton = view.findViewById<ImageView>(R.id.addCommentBtn)
         val addCommentText = view.findViewById<EditText>(R.id.addCommentText)
@@ -494,7 +472,7 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
         //refreshing the list of comments
         val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayoutComments)
         refresh.setOnRefreshListener {
-            android.os.Handler(Looper.getMainLooper()).postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
 
                 loadComments(view,photo)
                 refreshPost(itemView,photo)
@@ -506,7 +484,6 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
         val dialog = BottomSheetDialog(activity)
         dialog.setContentView(view)
         dialog.behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
-        //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
         dialog.show()
         refreshPost(itemView,photo)
         (commentsRv.layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(lastPosition,offset)
@@ -517,7 +494,6 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
         HomeFragmentState.likesOpened = false
 
         val view : View = LayoutInflater.from(context).inflate(R.layout.fragment_like_section,null)
-//                    loadLikes(view,photo)
         val likesList = HomeFragmentState.likes!!
 
         val likesRv = view.findViewById<RecyclerView>(R.id.rv_likes)
@@ -527,13 +503,10 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
             recyclerView.setHasFixedSize(true)
             recyclerView.adapter = LikesAdapter(likesList,context,activity)
         }
-//                    rvLikes.adapter = LikesAdapter(likesList,context,activity)
-//                    rvLikes.layoutManager=LinearLayoutManager(context)
         likesRv.stopScroll()
         val lastPosition = HomeFragmentState.lastPosition
         val offset = HomeFragmentState.offset
         (likesRv.layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(lastPosition,offset)
-
         likesRv.addOnScrollListener(object : RecyclerView.OnScrollListener(){
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -550,7 +523,7 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
         //refreshing the list of likes
         val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayoutLikes)
         refresh.setOnRefreshListener {
-            android.os.Handler(Looper.getMainLooper()).postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
 
                 loadLikes(view,photo)
                 refreshPost(itemView,photo)
@@ -562,19 +535,8 @@ class HomePostAdapter(val photoList: MutableList<Photo?>, val context: Context, 
         val dialog = BottomSheetDialog(activity)
         dialog.setContentView(view)
         dialog.behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
-        //dialog.behavior.peekHeight = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
         dialog.show()
 
         refreshPost(itemView,photo)
-    }
-
-    private fun currentTimeToLong(): Long {
-        return System.currentTimeMillis()
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    private fun convertDateToLong(date: String): Long {
-        val df = SimpleDateFormat("dd/MM/yyyy  HH:mm")
-        return df.parse(date).time
     }
 }

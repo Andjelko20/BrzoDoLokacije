@@ -103,7 +103,6 @@ class HomeFragment : Fragment() {
             activity?.let{
                 val intent = Intent (it, ActivityAddPost::class.java)
                 it.startActivity(intent)
-//                it.finish()
             }
         }
 
@@ -140,7 +139,6 @@ class HomeFragment : Fragment() {
                 savePosition(lastPosition,topViewRv)
                 if(lastPosition==0 && topViewRv==0)
                     view.findViewById<FloatingActionButton>(R.id.refreshPostHome).setVisibility(View.GONE)
-//                Toast.makeText(requireActivity(),lastPosition.toString()+" "+topViewRv.toString(),Toast.LENGTH_SHORT).show()
                 if(!isLoading)
                 {
                     if(page+1 <= HomeFragmentState.returnMaxPages())
@@ -200,7 +198,6 @@ class HomeFragment : Fragment() {
     {
         view.findViewById<LinearLayout>(R.id.notFollowingAnyoneHomeFragment).setVisibility(View.GONE)
         page = 1
-//        Toast.makeText(requireActivity(),page.toString(),Toast.LENGTH_SHORT).show()
         val retrofit = Client(requireActivity()).buildService(Api::class.java)
         retrofit.getAll(page).enqueue(object: Callback<DefaultResponse>
         {
@@ -208,8 +205,6 @@ class HomeFragment : Fragment() {
                 if(response.body()?.error.toString()=="false")
                 {
                     val listOfPhotosStr: String = response.body()?.message.toString()
-//                    savedState = listOfPhotosStr
-//                    HomeFragmentState.saveFeed(savedState.toString())
 
                     val typeToken = object : TypeToken<PaginationResponse>() {}.type
                     val pagination = Gson().fromJson<PaginationResponse>(listOfPhotosStr, typeToken)
@@ -230,7 +225,6 @@ class HomeFragment : Fragment() {
                 }
                 else
                 {
-//                    Toast.makeText(requireActivity(),"You don't follow anyone",Toast.LENGTH_SHORT).show()
                     val praznaLista= mutableListOf<Photo?>();
                     feed=praznaLista;
                     HomeFragmentState.list(feed)
@@ -247,24 +241,17 @@ class HomeFragment : Fragment() {
                     view.findViewById<TextView>(R.id.endlessTextHomeFragment).isSelected = true
                 }
             }
-
             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                 Toast.makeText(requireActivity(),"Error loading images",Toast.LENGTH_SHORT).show()
             }
-
         })
     }
 
     private fun loadPhotos(sessionManager : SessionManager, view : View)
     {
-//        savedState = HomeFragmentState.retreiveFeed()
         feed = HomeFragmentState.getList()!!
         page = HomeFragmentState.savedPage()
-//        Toast.makeText(requireActivity(),page.toString(),Toast.LENGTH_SHORT).show()
-//        val listOfPhotosStr: String = savedState.toString()
         HomeFragmentState.shouldSave(false)
-//        val typeToken = object : TypeToken<MutableList<Photo>>() {}.type
-//        val photosList = Gson().fromJson<MutableList<Photo>>(listOfPhotosStr, typeToken)
         homePostsRv.apply {
             mylayoutManager = LinearLayoutManager(context) //activity
             recyclerView=view.findViewById(R.id.homePostsRv)
@@ -283,12 +270,9 @@ class HomeFragment : Fragment() {
     private fun loadMorePhotos(sessionManager : SessionManager,view : View)
     {
         page++
-        val last = sessionManager.fetchLast()
-        val lastOffset= sessionManager.fetchLastOffset()
         feed.add(null)
         myAdapter!!.notifyItemInserted(feed.size -1)
         ScrollToPosition(feed.size-1,0)
-//        Log.d("adapter", myAdapter.toString())
         val retrofit = Client(requireActivity()).buildService(Api::class.java)
         retrofit.getAll(page).enqueue(object: Callback<DefaultResponse>
         {
@@ -311,11 +295,10 @@ class HomeFragment : Fragment() {
                         val photosList  = pagination.posts
                         HomeFragmentState.changeMaxPages(pagination.numberOfPages)
                         var i = 0
-                        var j = 0
                         var flag = true
                         while(i < photosList!!.size)
                         {
-                            j=0
+                            var j=0
                             while(j < feed.size)
                             {
                                 if(photosList.get(i)!!.id == feed.get(j)!!.id)
@@ -332,19 +315,12 @@ class HomeFragment : Fragment() {
                                     recyclerView.stopScroll()
                                     myAdapter!!.notifyItemInserted(feed.size-1)
                                     recyclerView.setHasFixedSize(true)
-                                    //ScrollToPosition(last,lastOffset)
                                 }
                             }
                             flag = true
                             i++
                         }
                         HomeFragmentState.list(feed)
-//                        recyclerView.post {
-//                            recyclerView.stopScroll()
-//                            myAdapter!!.notifyDataSetChanged()
-//                            recyclerView.setHasFixedSize(true)
-//                            //ScrollToPosition(last,lastOffset)
-//                        }
                         isLoading=false
 
                     }, 2000)
@@ -354,7 +330,6 @@ class HomeFragment : Fragment() {
                     val p = feed.size -1
                     feed.removeAt(feed.size-1)
                     myAdapter!!.notifyItemRemoved(p)
-//                    isLoading=false
                 }
             }
 
@@ -363,7 +338,6 @@ class HomeFragment : Fragment() {
                 val p = feed.size -1
                 feed.removeAt(feed.size-1)
                 myAdapter!!.notifyItemRemoved(p)
-//                isLoading=false
             }
 
         })
@@ -378,26 +352,21 @@ class HomeFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-//        HomeFragmentState.saveFeed(savedState.toString())
         if(HomeFragmentState.isSaved())
         {
             savePosition(lastPosition,topViewRv)
             HomeFragmentState.page(page)
             savePosition(lastPosition,topViewRv)
             isLoading=false
-            //HomeFragmentState.shouldSave(false)
         }
-//        Log.d("saved","saved")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-//        HomeFragmentState.saveFeed(savedState.toString())
         HomeFragmentState.shouldSave(true)
         HomeFragmentState.page(page)
         savePosition(lastPosition,topViewRv)
         isLoading=false
-//        Log.d("saved","destroy")
     }
     private fun ScrollToPosition(position : Int, offset : Int)
     {

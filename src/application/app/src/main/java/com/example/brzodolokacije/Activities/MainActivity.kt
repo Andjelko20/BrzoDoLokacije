@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity(),HomeToExploreCommunication {
     private var backPressedTime: Long = 0
 
     private var homeFragment : HomeFragment? = null
-    private val homeKey : String = "homeFragment"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,54 +55,18 @@ class MainActivity : AppCompatActivity(),HomeToExploreCommunication {
             return
         }
 
-
         val wrapper: Context = ContextThemeWrapper(this, R.style.MyPopupMenu)
-//        if(savedInstanceState!=null)
-//        {
-//            homeFragment = supportFragmentManager.findFragmentByTag(homeKey) as HomeFragment
-//        }
-//        else
-//        {
-            homeFragment = HomeFragment()
-//        }
+
+        homeFragment = HomeFragment()
+
         options_meni.setVisibility(View.GONE)
         inboxIcon.setVisibility(View.VISIBLE)
         inboxIcon.setOnClickListener{
+            HomeFragmentState.shouldSave(true)
             val intent = Intent(this@MainActivity, ChatActivity::class.java)
             intent.putExtra("inbox","inbox")
             startActivity(intent)
         }
-//        options_meni.setOnClickListener{
-//            val popupMenu = PopupMenu(wrapper, it)
-//            popupMenu.setOnMenuItemClickListener { item ->
-//                when(item.itemId){
-//                    R.id.editProfileMeni ->{
-//                        val intent = Intent(this, ActivityEditProfile::class.java)
-//                        startActivity(intent)
-//                        true
-//                    }
-//                    R.id.logoutMeni ->{
-//                        logOut()
-//                        true
-//                    }
-//                    R.id.changePasswordMeni ->{
-//                        val intent = Intent(this, ChangePasswordActivity::class.java)
-//                        startActivity(intent)
-//                        true
-//                    }
-//                    R.id.deleteAccountMeni ->{
-//                        val intent = Intent(this, DeleteAccountActivity::class.java)
-//                        startActivity(intent)
-//                        true
-//                    }
-//                    else -> false
-//                }
-//
-//            }
-//            popupMenu.inflate(R.menu.meni)
-//            popupMenu.show()
-//        }
-
         val intent = getIntent()
         val provera = intent.getStringExtra("backToProfile");
         if (provera != null)
@@ -141,7 +104,6 @@ class MainActivity : AppCompatActivity(),HomeToExploreCommunication {
                 popupMenu.inflate(R.menu.meni)
                 popupMenu.show()
             }
-//            replaceFragment(ProfileFragment()) //vraca na profil ako smo isli na edit profila
             bubbleTabBar.visibility = View.INVISIBLE;
             bubbleTabBar2.visibility = View.VISIBLE;
         }
@@ -151,11 +113,11 @@ class MainActivity : AppCompatActivity(),HomeToExploreCommunication {
             options_meni.setVisibility(View.GONE)
             inboxIcon.setVisibility(View.VISIBLE)
             inboxIcon.setOnClickListener{
+                HomeFragmentState.shouldSave(true)
                 val intent = Intent(this@MainActivity, ChatActivity::class.java)
                 intent.putExtra("inbox","inbox")
                 startActivity(intent)
             }
-//            replaceFragment(HomeFragment()) //ide na home kad prvi put otvorimo main i kad se vratimo iz bilo kod drugog aktivitija
             bubbleTabBar.visibility = View.VISIBLE;
             bubbleTabBar2.visibility = View.INVISIBLE;
         }
@@ -167,21 +129,18 @@ class MainActivity : AppCompatActivity(),HomeToExploreCommunication {
                         replaceFragment(ExploreFragment())
                         options_meni.setVisibility(View.GONE)
                         inboxIcon.setVisibility(View.GONE)
-//                        replaceFragment(ExploreFragment())
                     }
-
                     R.id.home -> {
                         replaceFragment(homeFragment!!)
                         options_meni.setVisibility(View.GONE)
                         inboxIcon.setVisibility(View.VISIBLE)
                         inboxIcon.setOnClickListener{
+                            HomeFragmentState.shouldSave(true)
                             val intent = Intent(this@MainActivity, ChatActivity::class.java)
                             intent.putExtra("inbox","inbox")
                             startActivity(intent)
                         }
-//                        replaceFragment(homeFragment!!)
-                    } //ovde da proverim da l postoji sacuvano stanje
-
+                    }
                     R.id.profile -> {
                         replaceFragment(ProfileFragment())
                         inboxIcon.setVisibility(View.GONE)
@@ -211,7 +170,6 @@ class MainActivity : AppCompatActivity(),HomeToExploreCommunication {
                                     }
                                     else -> false
                                 }
-
                             }
                             popupMenu.inflate(R.menu.meni)
                             popupMenu.show()
@@ -231,21 +189,18 @@ class MainActivity : AppCompatActivity(),HomeToExploreCommunication {
                         replaceFragment(ExploreFragment())
                         options_meni.setVisibility(View.GONE)
                         inboxIcon.setVisibility(View.GONE)
-//                        replaceFragment(ExploreFragment())
                     }
-
                     R.id.home -> {
                         replaceFragment(homeFragment!!)
                         options_meni.setVisibility(View.GONE)
                         inboxIcon.setVisibility(View.VISIBLE)
                         inboxIcon.setOnClickListener{
+                            HomeFragmentState.shouldSave(true)
                             val intent = Intent(this@MainActivity, ChatActivity::class.java)
                             intent.putExtra("inbox","inbox")
                             startActivity(intent)
                         }
-//                        replaceFragment(homeFragment!!)
-                    } //ovde da proverim da li postoji sacuvano stanje
-
+                    }
                     R.id.profile -> {
                         replaceFragment(ProfileFragment())
                         inboxIcon.setVisibility(View.GONE)
@@ -275,23 +230,19 @@ class MainActivity : AppCompatActivity(),HomeToExploreCommunication {
                                     }
                                     else -> false
                                 }
-
                             }
                             popupMenu.inflate(R.menu.meni)
                             popupMenu.show()
                         }
                     }
-
                     else -> {}
                 }
-
             }
         })
     }
     override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
         super.onCreateContextMenu(menu, v, menuInfo)
         menuInflater.inflate(R.menu.meni, menu)
-        Log.d("Proveri2",menuInflater.inflate(R.menu.meni, menu).toString())
     }
 
 
@@ -313,13 +264,10 @@ class MainActivity : AppCompatActivity(),HomeToExploreCommunication {
         if (backPressedTime + 3000 > System.currentTimeMillis()) {
             super.onBackPressed()
             HomeFragmentState.shouldSave(false)
-//            HomeFragmentState.saveFeed("")
             HomeFragmentState.list(null)
             finishAffinity()
             finish()
-        } /*else {
-            Toast.makeText(this, "Press back again to leave the app.", Toast.LENGTH_SHORT).show()
-        }*/
+        }
         backPressedTime = System.currentTimeMillis()
     }
 
@@ -333,7 +281,6 @@ class MainActivity : AppCompatActivity(),HomeToExploreCommunication {
     fun logOut()
     {
         HomeFragmentState.shouldSave(false)
-//        HomeFragmentState.saveFeed("")
         HomeFragmentState.list(null)
         val sessionManager = SessionManager(this)
         val retrofit = Client(this).buildService(Api::class.java)
@@ -358,7 +305,6 @@ class MainActivity : AppCompatActivity(),HomeToExploreCommunication {
             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                 Toast.makeText(this@MainActivity,t.toString(), Toast.LENGTH_SHORT).show()
             }
-
         })
     }
 

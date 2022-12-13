@@ -13,14 +13,11 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.brzodolokacije.API.Api
-import com.example.brzodolokacije.Adapters.HomePostAdapter
 import com.example.brzodolokacije.Adapters.InboxAdapter
-import com.example.brzodolokacije.Adapters.MessageAdapter
 import com.example.brzodolokacije.Client.Client
 import com.example.brzodolokacije.Managers.SignalRListener
 import com.example.brzodolokacije.Models.DefaultResponse
 import com.example.brzodolokacije.ModelsDto.InboxDto
-import com.example.brzodolokacije.ModelsDto.MessageDto
 import com.example.brzodolokacije.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -46,8 +43,6 @@ class InboxFragment : Fragment() {
     private lateinit var chatList : MutableList<InboxDto>
     private lateinit var signalRListener : SignalRListener
 
-    private var myMessageAdapter : RecyclerView.Adapter<InboxAdapter.MainViewHolder>? = null
-    private var mylayoutManager : RecyclerView.LayoutManager? = null
     private lateinit var inboxRecyclerView : RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,13 +63,12 @@ class InboxFragment : Fragment() {
         val list : MutableList<InboxDto> = mutableListOf()
         signalRListener = SignalRListener.getInstance()
         chatList = list
+        inboxRecyclerView = view.findViewById(R.id.rvInbocChats)
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val rvInbox= view.findViewById<RecyclerView>(R.id.rvInbocChats)
 
         val exitInbox= view.findViewById<Button>(R.id.exitInbox)
         exitInbox.setOnClickListener{
@@ -82,7 +76,7 @@ class InboxFragment : Fragment() {
         }
 
         signalRListener.setDirectMessage(false)
-        signalRListener.setRecycleView(rvInbox)
+        signalRListener.setRecycleView(inboxRecyclerView)
         signalRListener.setContext(context)
         signalRListener.setActivity(requireActivity())
 
@@ -96,28 +90,19 @@ class InboxFragment : Fragment() {
                 if(response.body()?.error.toString() == "false")
                 {
                     val res = response.body()?.message.toString()
-                    //Log.d("inboxresponse", res.toString())
                     val typeToken = object : TypeToken<MutableList<InboxDto>>() {}.type
                     val inbox = Gson().fromJson<MutableList<InboxDto>>(res, typeToken)
                     chatList = inbox
                     signalRListener.setListInbox(chatList)
-                    //Log.d("inbox",inbox.toString())
-//                    rvInbox.layoutManager = LinearLayoutManager(context)
-//                    rvInbox.adapter = context?.let { InboxAdapter(chatList, it,requireActivity()) }
                 }
                 else
                 {
-                    val rvInbox= view.findViewById<RecyclerView>(R.id.rvInbocChats)
-                    rvInbox.layoutManager = LinearLayoutManager(context)
-                    rvInbox.setHasFixedSize(true)
-                    rvInbox.adapter = context?.let { InboxAdapter(chatList, it,requireActivity()) }
+                    Toast.makeText(requireActivity(), "An error occurred", Toast.LENGTH_SHORT).show()
                 }
             }
-
             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-                Log.d("inboxError","")
+                Toast.makeText(requireActivity(), "An error occurred", Toast.LENGTH_SHORT).show()
             }
-
         })
     }
 
