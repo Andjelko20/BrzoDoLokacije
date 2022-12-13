@@ -51,13 +51,14 @@ class ShowPostActivity : AppCompatActivity() {
         val intent = getIntent()
         val postIdStr = intent.getStringExtra("showPost")
         val profileVisit = intent.getStringExtra("profileVisit")
+        val fromExplore = intent.getStringExtra("backToExplore")
 //        Log.d("clicked id", postIdStr.toString())
 
         val postId = postIdStr?.toInt()
 
         val backButtonPostDetails = findViewById<Button>(R.id.backButtonPostDetails)
         backButtonPostDetails.setOnClickListener{
-            if(profileVisit == "profileVisit")
+            if(profileVisit == "profileVisit" || fromExplore == "backToExplore")
             {
                 finish()
             }

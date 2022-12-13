@@ -46,9 +46,10 @@ class PostsByLocationActivity : AppCompatActivity() {
         naslovLokacija.text = lokacija
 
         backButtonPostsByLocation.setOnClickListener{
-            val intent = Intent(this, MainActivity::class.java)
-//            intent.putExtra("backPressed", "returnToProfile");
-            startActivity(intent)
+//            val intent = Intent(this, MainActivity::class.java)
+////            intent.putExtra("backPressed", "returnToProfile");
+//            startActivity(intent)
+            finish()
         }
 
             optionsMeniZaPostove.setOnClickListener{
@@ -136,6 +137,7 @@ class PostsByLocationActivity : AppCompatActivity() {
                                 {
                                     val intent = Intent(it, ShowPostActivity::class.java)
                                     intent.putExtra("showPost", clickedId.toString());
+                                    intent.putExtra("backToExplore","backToExplore")
                                     startActivity(intent)
                                 }
                             }
