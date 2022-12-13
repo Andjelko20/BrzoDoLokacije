@@ -26,7 +26,7 @@ Lozinka za pristup je `123passwd123`
 #### Korisnik
 
 - Prijava / Registracija / Vracanje zaboravljenje sifre preko mejla
-- Menjanje imena i prezimena, opisa profila, korisnickog imena, lozinke i profilne slike `(known bug: ostaje stara profilna dok se ponovo ne pokrene aplikacija ili se menja automatski ako se u isto vreme promeni i username zbog ??? razloga, tako je samo korisniku ciji je profil dok drugi korisnici vide promenu, isto tako ce i image recognition da gleda novu profilnu, ona se ispravno ubaci na server i pozove ali se aplikacija tad zbuni, radilo je kako treba pre nego sto smo dodali prikaz objava na profilu)`
+- Menjanje imena i prezimena, opisa profila, korisnickog imena, lozinke i profilne slike `(known bug: ostaje stara profilna dok se ponovo ne pokrene aplikacija ili se menja automatski ako se u isto vreme promeni i username zbog ??? razloga, isto tako ce i image recognition da gleda novu profilnu, ona se ispravno ubaci na server i pozove ali se aplikacija tad zbuni, radilo je kako treba pre nego sto smo dodali prikaz objava na profilu)`
 - Lista objava korisika
 - Pinovane razlicite lokacije na kojima je bio korisnik
 - Lista pratilaca
