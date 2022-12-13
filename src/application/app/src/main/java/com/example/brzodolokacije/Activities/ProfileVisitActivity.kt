@@ -163,8 +163,6 @@ class ProfileVisitActivity : AppCompatActivity() {
                                                 ) {
 //                                                    Log.d("follows","greska menjanje br pratilaca")
                                                     findViewById<Button>(R.id.exitProfileVisit).setOnClickListener{
-                                                        val intent = Intent(this@ProfileVisitActivity,MainActivity::class.java)
-                                                        startActivity(intent)
                                                         finish()
                                                     }
                                                 }
@@ -179,8 +177,6 @@ class ProfileVisitActivity : AppCompatActivity() {
                                     ) {
                                         Toast.makeText(this@ProfileVisitActivity,"Something went wrong. Try again later",Toast.LENGTH_SHORT).show()
                                         findViewById<Button>(R.id.exitProfileVisit).setOnClickListener{
-                                            val intent = Intent(this@ProfileVisitActivity,MainActivity::class.java)
-                                            startActivity(intent)
                                             finish()
                                         }
                                     }
@@ -283,8 +279,6 @@ class ProfileVisitActivity : AppCompatActivity() {
                     {
                         Toast.makeText(this@ProfileVisitActivity,"Unable to get user info",Toast.LENGTH_SHORT).show()
                         findViewById<Button>(R.id.exitProfileVisit).setOnClickListener{
-                            val intent = Intent(this@ProfileVisitActivity,MainActivity::class.java)
-                            startActivity(intent)
                             finish()
                         }
                     }
@@ -293,8 +287,6 @@ class ProfileVisitActivity : AppCompatActivity() {
                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                     Toast.makeText(this@ProfileVisitActivity,"Something went wrong. Try again later.",Toast.LENGTH_SHORT).show()
                     findViewById<Button>(R.id.exitProfileVisit).setOnClickListener{
-                        val intent = Intent(this@ProfileVisitActivity,MainActivity::class.java)
-                        startActivity(intent)
                         finish()
                     }
                 }
