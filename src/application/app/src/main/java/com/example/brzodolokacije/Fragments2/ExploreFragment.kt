@@ -65,6 +65,8 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
     private var param1: String? = null
     private var param2: String? = null
 
+    private var hashMarker: HashMap<Marker,String>? = HashMap<Marker,String>()
+    private var myMarker: Marker? = null
     private lateinit var mMap : GoogleMap
     private lateinit var lastLocation : Location
     private lateinit var fusedLocationClient : FusedLocationProviderClient
@@ -271,14 +273,16 @@ class ExploreFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickLi
                 i = BitmapFactory.decodeStream(`in`)
                 handler.post {
                     val smallMarker = Bitmap.createScaledBitmap(i!!, 150, 150, false)
-                    mMap.addMarker(
+                    myMarker= mMap.addMarker(
                         MarkerOptions()
                             .position(longlat)
                             .icon(BitmapDescriptorFactory.fromBitmap(smallMarker!!))
                     )
+
+                    hashMarker?.put(myMarker!!,id)
                     mMap.setOnMarkerClickListener {
                         val intent = Intent(requireActivity(), ShowPostActivity::class.java)
-                        intent.putExtra("showPost", id);
+                        intent.putExtra("showPost", hashMarker?.get(it));
                         startActivity(intent)
                         true
                     }

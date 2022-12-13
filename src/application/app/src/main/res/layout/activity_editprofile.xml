@@ -64,6 +64,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editProfilePicture" />
 
+    <TextView
+        android:id="@+id/profilePicWarning"
+        android:layout_width="300sp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Profile picture must be in a form of an ID photo containing only one person"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/changePhotoLink"/>
+
     <Button
         android:id="@+id/saveChangesProfile"
         android:layout_width="wrap_content"
@@ -87,7 +98,7 @@
         app:layout_constraintBottom_toTopOf="@+id/saveChangesProfile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/changePhotoLink">
+        app:layout_constraintTop_toBottomOf="@+id/profilePicWarning">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/nameAndSurnameWrap"

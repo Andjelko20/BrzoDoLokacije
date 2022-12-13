@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,8 +23,6 @@ import com.example.brzodolokacije.ModelsDto.PinDto
 import com.example.brzodolokacije.R
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.GoogleMap.OnMapClickListener
-import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
@@ -53,6 +52,8 @@ class LocationsFragment : Fragment(),OnMapReadyCallback{
     private var param1: String? = null
     private var param2: String? = null
 
+    private var hashMarker: HashMap<Marker,String>? = HashMap<Marker,String>()
+    private var myMarker: Marker? = null
     private lateinit var mMap : GoogleMap
     private lateinit var lastLocation : Location
     private lateinit var fusedLocationClient : FusedLocationProviderClient
@@ -109,17 +110,23 @@ class LocationsFragment : Fragment(),OnMapReadyCallback{
                 i = BitmapFactory.decodeStream(`in`)
                 handler.post {
                     val smallMarker = Bitmap.createScaledBitmap(i!!, 150, 150, false)
-                    mMap.addMarker(
+                    myMarker = mMap.addMarker(
                         MarkerOptions()
                             .position(longlat)
                             .icon(BitmapDescriptorFactory.fromBitmap(smallMarker!!))
+
                     )
+                    hashMarker?.put(myMarker!!,id)
                     mMap.setOnMarkerClickListener {
+                        Log.d("it",hashMarker?.get(it).toString())
                         val intent = Intent(requireActivity(), ShowPostActivity::class.java)
-                        intent.putExtra("showPost", id);
+                        intent.putExtra("showPost", hashMarker?.get(it));
                         startActivity(intent)
                         true
                     }
+
+
+
 
 
 
