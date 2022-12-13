@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -20,6 +21,7 @@ namespace backend.Controllers
     {
         private readonly DataContext _context;
         private readonly IConfiguration _configuration;
+        private static readonly HttpClient _client = new HttpClient();
 
         public PostController(DataContext context, IConfiguration configuration)
         {
@@ -508,6 +510,54 @@ namespace backend.Controllers
                     error = true,
                     message = "Error"
                 });
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
+            if (user.Avatar.Contains("default.png") == false)
+            {
+                Byte[] b = System.IO.File.ReadAllBytes(user.Avatar);
+                var streamAvatar = new MemoryStream(b);
+                using var _x = picture.OpenReadStream();
+
+                var fileStreamContent = new StreamContent(_x);
+                fileStreamContent.Headers.ContentType = new MediaTypeHeaderValue("image/*");
+
+                var multipartFormContent = new MultipartFormDataContent();
+                multipartFormContent.Add(fileStreamContent, name: "pictures", fileName: picture.FileName);
+                fileStreamContent = new StreamContent(streamAvatar);
+                multipartFormContent.Add(fileStreamContent, name: "pictures", fileName: "slika.jpeg");
+
+                var url = _configuration.GetSection("Microservice").Value + "/compare";
+
+                string responseString = null;
+                try
+                {
+                    var response = await _client.PostAsync(url, multipartFormContent);
+                    response.EnsureSuccessStatusCode();
+                    responseString = await response.Content.ReadAsStringAsync();
+                }
+                catch (HttpRequestException e)
+                {
+                    Console.WriteLine("\nException Caught!");
+                    Console.WriteLine("Message :{0} ", e.Message);
+
+                    return BadRequest(new
+                    {
+                        error = true,
+                        message = "Error with microservice"
+                    });
+                }
+
+                if (responseString.Contains("true"))
+                {
+                    _context.Posts.Remove(post);
+                    await _context.SaveChangesAsync();
+                    return Ok(new
+                    {
+                        error = true,
+                        message = "Don't post a picture of yourself"
+                    });
+                }
+            }
+
             string path = CreatePathToDataRoot(post.Id, picture.FileName);
             var stream = new FileStream(path, FileMode.Create);
             await picture.CopyToAsync(stream);

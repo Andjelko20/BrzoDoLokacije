@@ -7,6 +7,7 @@ import com.example.brzodolokacije.Managers.AuthInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 
 class Client(context: Context) {
@@ -27,6 +28,9 @@ class Client(context: Context) {
     }
     private fun okhttpClient(context: Context): OkHttpClient {
         return OkHttpClient.Builder()
+            .connectTimeout(1,TimeUnit.MINUTES)
+            .readTimeout(1,TimeUnit.MINUTES)
+            .writeTimeout(1,TimeUnit.MINUTES)
             .addInterceptor(AuthInterceptor(context))
             .build()
     }
