@@ -49,8 +49,18 @@
         app:layout_constraintTop_toBottomOf="@+id/bubbleTabBarTopEditProfile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/addPicture"
         />
+
+    <TextView
+        android:id="@+id/addPicWarning"
+        android:layout_width="300sp"
+        android:layout_height="wrap_content"
+        android:text="You're not allowed to post a picture with yourself in it"
+        android:textSize="15sp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/previewPic"/>
 
     <Button
         android:id="@+id/addPicture"
@@ -59,11 +69,11 @@
         android:backgroundTint="@color/light_blue"
         android:text="Choose picture"
         android:onClick="pickPhotoFromGallery"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="10dp"
         app:icon="@drawable/dodajsliku_smaller"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/previewPic">
+        app:layout_constraintTop_toBottomOf="@id/addPicWarning">
 
     </Button>
 
