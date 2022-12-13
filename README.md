@@ -19,7 +19,7 @@ Lozinka za pristup je `123passwd123`
 - filip_bojovic : Sifra123
 - filip_andric : Sifra123
 
-Mejlovi su isto kao na teamsu
+Mejlovi su isti kao na teamsu
 
 ## App Functionality
 
