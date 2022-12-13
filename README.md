@@ -21,7 +21,7 @@ Figma prototip mozete videti na sledecem [linku](https://www.figma.com/file/X1pf
 #### Korisnik
 
 - Prijava / Registracija / Vracanje zaboravljenje sifre preko mejla
-- Menjanje imena i prezimena, opisa profila, korisnickog imena, lozinke i profilne slike `(known bug: ostaje stara profilna dok se ponovo ne pokrene aplikacija ili se menja automatski ako se u isto vreme promeni i username zbog ??? razloga)`
+- Menjanje imena i prezimena, opisa profila, korisnickog imena, lozinke i profilne slike `(known bug: ostaje stara profilna dok se ponovo ne pokrene aplikacija ili se menja automatski ako se u isto vreme promeni i username zbog ??? razloga, tako je samo korisniku ciji je profil dok drugi korisnici vide promenu, isto tako ce i image recognition da gleda novu profilnu, ona se ispravno ubaci na server i pozove ali se aplikacija tad zbuni)`
 - Lista objava korisika
 - Pinovane razlicite lokacije na kojima je bio Korisnik
 - Lista pratilaca
