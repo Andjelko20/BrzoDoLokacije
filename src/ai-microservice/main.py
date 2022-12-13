@@ -16,5 +16,7 @@ async def avatar(picture : UploadFile = File(...)):
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
     face_cascade = cv2.CascadeClassifier('frontal_face.xml')
     face_rects = face_cascade.detectMultiScale(img, scaleFactor=1.2, minNeighbors=3)
-    return {"numOfFaces":img}
-    #return {"status":False} # kad nije dobar format slike
+    if not isinstance(face_rects,tuple):
+        if face_rects.shape[0] == 1:
+            return {"status":True}
+    return {"status":False}
